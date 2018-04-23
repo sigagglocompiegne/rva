@@ -896,70 +896,140 @@ COMMENT ON VIEW r_voie.an_v_voie_rivoli_null
 -- ###                                                                                                                                              ###
 -- ####################################################################################################################################################
 
--- View: x_apps.xapps_geo_v_adresse
+-- View: x_apps.xapps_geo_vmr_adresse
 
--- DROP VIEW x_apps.xapps_geo_v_adresse;
+-- DROP VIEW x_apps.xapps_geo_vmr_adresse;
 
-CREATE OR REPLACE VIEW x_apps.xapps_geo_v_adresse AS 
- SELECT 
- p.id_adresse,
- p.id_voie,
- p.id_tronc,
- a.numero,
- a.repet,
- a.complement,
- a.etiquette,
- a.angle,
- v.libvoie_c,
- v.mot_dir,
- v.insee,
- k.codepostal,
- c.commune,
- v.rivoli,
- v.rivoli_cle,
- lta.valeur as position,
- ltb.valeur as dest_adr,
- ltc.valeur as etat_adr,
- i.refcad,
- i.nb_log,
- i.pc,
- ltd.valeur as groupee,
- lte.valeur as secondaire,
- ltf.valeur as src_adr,
- ltg.valeur as src_geom,
- p.src_date,
- p.date_sai,
- p.date_maj,
- a.observ,
- lth.valeur as diag_adr,
- lti.valeur as qual_adr,
- i.id_ext1,
- i.id_ext2,
- p.x_l93,
- p.y_l93,
- a.verif_base,
- p.geom
-   FROM r_objet.geo_objet_pt_adresse p
-   LEFT JOIN r_adresse.an_adresse a ON a.id_adresse = p.id_adresse
-   LEFT JOIN r_adresse.an_adresse_info i ON i.id_adresse = p.id_adresse   
-   LEFT JOIN r_voie.an_voie v ON v.id_voie = p.id_voie
-   LEFT JOIN r_administratif.lk_insee_codepostal as k ON v.insee = k.insee
-   LEFT JOIN r_osm.geo_osm_commune c ON v.insee = c.insee
-   LEFT JOIN r_objet.lt_position lta ON lta.code = p.position
-   LEFT JOIN r_adresse.lt_dest_adr ltb ON ltb.code = i.dest_adr
-   LEFT JOIN r_adresse.lt_etat_adr ltc ON ltc.code = i.etat_adr
-   LEFT JOIN r_adresse.lt_groupee ltd ON ltd.code = i.groupee
-   LEFT JOIN r_adresse.lt_secondaire lte ON lte.code = i.secondaire
-   LEFT JOIN r_adresse.lt_src_adr ltf ON ltf.code = a.src_adr
-   LEFT JOIN r_objet.lt_src_geom ltg ON ltg.code = p.src_geom
-   LEFT JOIN r_adresse.lt_diag_adr lth ON lth.code = a.diag_adr
-   LEFT JOIN r_adresse.lt_qual_adr lti ON lti.code = a.qual_adr;
-
+CREATE MATERIALIZED VIEW x_apps.xapps_geo_vmr_adresse AS 
+ WITH req_a AS (
+         SELECT p.id_adresse,
+            p.id_voie,
+            p.id_tronc,
+            a.numero,
+            a.repet,
+            a.complement,
+            a.etiquette,
+            a.angle,
+            v.libvoie_c,
+            v.insee,
+            v.mot_dir,
+            v.libvoie_a,
+            k.codepostal,
+            c.commune,
+            v.rivoli,
+            v.rivoli_cle,
+            lta.valeur AS "position",
+            ltb.valeur AS dest_adr,
+            ltc.valeur AS etat_adr,
+            i.refcad,
+            i.nb_log,
+            i.pc,
+            ltd.valeur AS groupee,
+            lte.valeur AS secondaire,
+            ltf.valeur AS src_adr,
+            ltg.valeur AS src_geom,
+            p.src_date,
+            p.date_sai,
+            p.date_maj,
+            a.observ,
+            lth.valeur AS diag_adr,
+            lti.valeur AS qual_adr,
+            i.id_ext1,
+            i.id_ext2,
+            p.x_l93,
+            p.y_l93,
+            st_x(st_transform(p.geom, 4326)) AS long,
+            st_y(st_transform(p.geom, 4326)) AS lat,
+            a.verif_base,
+            p.geom
+           FROM r_objet.geo_objet_pt_adresse p
+             LEFT JOIN r_adresse.an_adresse a ON a.id_adresse = p.id_adresse
+             LEFT JOIN r_adresse.an_adresse_info i ON i.id_adresse = p.id_adresse
+             LEFT JOIN r_voie.an_voie v ON v.id_voie = p.id_voie
+             LEFT JOIN r_administratif.lk_insee_codepostal k ON v.insee = k.insee::bpchar
+             LEFT JOIN r_osm.geo_osm_commune c ON v.insee = c.insee::bpchar
+             LEFT JOIN r_objet.lt_position lta ON lta.code::text = p."position"::text
+             LEFT JOIN r_adresse.lt_dest_adr ltb ON ltb.code::text = i.dest_adr::text
+             LEFT JOIN r_adresse.lt_etat_adr ltc ON ltc.code::text = i.etat_adr::text
+             LEFT JOIN r_adresse.lt_groupee ltd ON ltd.code::text = i.groupee::text
+             LEFT JOIN r_adresse.lt_secondaire lte ON lte.code::text = i.secondaire::text
+             LEFT JOIN r_adresse.lt_src_adr ltf ON ltf.code::text = a.src_adr::text
+             LEFT JOIN r_objet.lt_src_geom ltg ON ltg.code::text = p.src_geom::text
+             LEFT JOIN r_adresse.lt_diag_adr lth ON lth.code::text = a.diag_adr::text
+             LEFT JOIN r_adresse.lt_qual_adr lti ON lti.code::text = a.qual_adr::text
+        ), req_ah AS (
+         SELECT ah.id,
+            ah.id_adresse,
+            ((((((ah.numero::text ||
+                CASE
+                    WHEN ah.repet IS NULL OR ah.repet::text = ''::text THEN ''::character varying
+                    ELSE ah.repet
+                END::text) || ' '::text) || v.libvoie_c::text) || ' '::text) || ah.codepostal::text) || ' '::text) || ah.commune::text AS adresse_h,
+            ((ah.numero::text ||
+                CASE
+                    WHEN ah.repet IS NOT NULL THEN ah.repet
+                    ELSE ''::character varying
+                END::text) || ' '::text) || v.libvoie_c::text AS adresse_h1
+           FROM r_adresse.an_adresse_h ah
+             LEFT JOIN r_voie.an_voie v ON v.id_voie = ah.id_voie
+             JOIN ( SELECT an_adresse_h.id_adresse,
+                    max(an_adresse_h.date_sai) AS date_sai
+                   FROM r_adresse.an_adresse_h
+                  GROUP BY an_adresse_h.id_adresse) b_1 ON ah.id_adresse = b_1.id_adresse AND ah.date_sai = b_1.date_sai
+        )
+ SELECT req_a.id_adresse,
+    req_a.id_voie,
+    req_a.id_tronc,
+    req_a.numero,
+    req_a.repet,
+    req_a.complement,
+    req_a.etiquette,
+    req_a.angle,
+    req_a.libvoie_c,
+    req_a.insee,
+    req_a.mot_dir,
+    req_a.libvoie_a,
+    req_a.codepostal,
+    req_a.commune,
+    req_a.rivoli,
+    req_a.rivoli_cle,
+    req_a."position",
+    req_a.dest_adr,
+    req_a.etat_adr,
+    req_a.refcad,
+    req_a.nb_log,
+    req_a.pc,
+    req_a.groupee,
+    req_a.secondaire,
+    req_a.src_adr,
+    req_a.src_geom,
+    req_a.src_date,
+    req_a.date_sai,
+    req_a.date_maj,
+    req_a.observ,
+    req_a.diag_adr,
+    req_a.qual_adr,
+    req_a.id_ext1,
+    req_a.id_ext2,
+    req_a.x_l93,
+    req_a.y_l93,
+    req_a.long,
+    req_a.lat,
+    req_a.verif_base,
+    req_a.geom,
+    req_ah.adresse_h,
+    req_ah.adresse_h1
+   FROM req_a
+     LEFT JOIN req_ah ON req_a.id_adresse = req_ah.id_adresse
+WITH DATA;
 
 ALTER TABLE x_apps.xapps_geo_v_adresse
   OWNER TO postgres;
-COMMENT ON VIEW x_apps.xapps_geo_v_adresse
+GRANT ALL ON TABLE x_apps.xapps_geo_vmr_adresse TO postgres;
+GRANT ALL ON TABLE x_apps.xapps_geo_vmr_adresse TO groupe_sig;
+COMMENT ON MATERIALIZED VIEW x_apps.xapps_geo_vmr_adresse
   IS 'Vue complète et décodée des adresses destinée à l''exploitation applicative (générateur d''apps)';
+
 
 -- View: x_apps_public.xappspublic_geo_v_adresse
 
