@@ -162,6 +162,8 @@ Particularité(s) à noter :
 `r_adresse.an_v_adresse_commune` : Vue d'exploitation permettant de compter le nombre d''enregistrement d''adresse par commune
 
 `r_adresse.geo_v_adresse` : Vue éditable destinée à la modification des données relatives aux adresses
+* 4 triggers :
+  * `t_t1_geo_objet_pt_adresse` : insertion de la date du jour pour une instance d'insertion, de mise à jour ou de suppression (désactivité par défaut pour ce dernier dans la fonction trigger `r_objet.ft_geo_objet_pt_adresse()`)
 
 ---
 
