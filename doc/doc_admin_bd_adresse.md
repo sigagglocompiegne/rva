@@ -40,9 +40,9 @@ L'ensemble des classes d'objets de gestion sont stockés dans plusieurs schémas
 Particularité(s) à noter :
 * Une clé primaire existe sur le champ `id_adresse` lui-même contenant une séquence pour l'attribution automatique d'une référence adresse unique. 
 * Une clé étrangère exsiste sur la table de valeur `id_troncon` (lien vers un identifiant id_troncon existant de la table `r_objet.geo_objet_troncon`)
-* Une clé étrangère exsiste sur la table de valeur `id_voie` (identifiant de la voie nommée `r_voie.an_voie`)
-* Une clé étrangère exsiste sur la table de valeur `position` (précision du positionnement du point adresse `r_objet.lt_position`)
-* Une clé étrangère exsiste sur la table de valeur `src_geom` (source du référentiel géographique pour la saisie `r_objet.lt_src_geom`).
+* Une clé étrangère existe sur la table de valeur `id_voie` (identifiant de la voie nommée `r_voie.an_voie`)
+* Une clé étrangère existe sur la table de valeur `position` (précision du positionnement du point adresse `r_objet.lt_position`)
+* Une clé étrangère existe sur la table de valeur `src_geom` (source du référentiel géographique pour la saisie `r_objet.lt_src_geom`).
 * Un index est présent sur le champ geom
 * 1 trigger :
   * `t_t1_date_maj` : calcul des coordonnées X et Y avant l'insertion ou la mise à jour d'une géométrie ou des champs x_l93 et y_l93.  
