@@ -1236,9 +1236,9 @@ WHERE r_objet.geo_objet_pt_adresse.id_adresse = OLD.id_adresse;
 RETURN NEW;
 
 -- DELETE
-ELSIF (TG_OP = 'DELETE') THEN
-DELETE FROM r_objet.geo_objet_pt_adresse where id_adresse = OLD.id_adresse;
-RETURN OLD;
+-- ELSIF (TG_OP = 'DELETE') THEN
+-- DELETE FROM r_objet.geo_objet_pt_adresse where id_adresse = OLD.id_adresse;
+-- RETURN OLD;
 
 END IF;
 
