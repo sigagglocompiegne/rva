@@ -10,9 +10,9 @@ Afin d'améliorer la connaissance sur les adresses existantes, une Base Adresse 
 La base de données Adresse fonctionne de manière urbanisée. La géométrie du point d'adresse est gérée de manière indépendante et contient uniquement les informations de référence et d'appartenance à la voie et au tronçon de voie. Les données dites métiers sont gérées dans des tables alphanumériques spécifiques. Les libellés de voies sont concidérés comme un référentiel de voies (non géographique) et il est issu primitivement des informations du cadastre. Les informations purement liées à l'adresse (numéro, qualité, ...) sont gérées dans une table alphanumérique particulière ainsi que les données complémentaires qualifiant l'adresse (état, destination, nombre de logements, ...). Un suivi des adresses historiques a également été introduit.
 L'ensemble de cette base est modifiable via des vues simples en base de données et consultable via les applicatifs WebSIG à partir de vues matérialisées reconstituant les informations à l'adresse.
 
-## Dépendances (non critiques)
+## Dépendances
 
-Sans objet
+Cette base de donnnées est dépendante de la base de Voies. Une adresse ne peut pas être créée sans une référence à un tronçon de voie.
 
 
 ## Classes d'objets
@@ -47,8 +47,6 @@ Particularité(s) à noter :
 * 1 trigger :
   * `t_t1_date_maj` : calcul des coordonnées X et Y avant l'insertion ou la mise à jour d'une géométrie ou des champs x_l93 et y_l93.  
   
-Une adresse ne peut pas être créée sans qu'il y ait un tronçon de voirie.
-
 ---
 
    `r_objet.an_voie` : Table alphanumérique des voies à circulation terrestre nommées
