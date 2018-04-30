@@ -518,7 +518,9 @@ L'ensemble des fichiers a utilisé est placé ici `Y:\Ressources\4-Partage\3-Pro
 
 ## Modèle conceptuel simplifié
 
-![mcd](img/MCD.png)
+Les tables Adresse sont entourées en rouge.
+
+![mcd](img/MCD_adresse.png)
 
 ## Schéma fonctionnel
 
