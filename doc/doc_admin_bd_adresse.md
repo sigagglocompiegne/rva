@@ -425,11 +425,9 @@ Valeurs possibles :
 |1|Oui|
 |2|Non|
 
-
-
 ---
 
-`lt_typeref` : Liste des valeurs de l'attribut typeref de la donnée doc_urba
+`r_adresse.lt_qual_adr` : Liste des valeurs permettant de décrire un indice de qualité simplifié d'une adresse
 
 |Nom attribut | Définition | Type  | Valeurs par défaut |
 |:---|:---|:---|:---|    
@@ -444,19 +442,20 @@ Valeurs possibles :
 
 |Code|Valeur|
 |:---|:---|
-|01|PCI|
-|02|BD Parcellaire|
-|03|RPCU|
-|04|Référentiel local|
+|0|Non renseigné|
+|1|Bon|
+|2|Moyen|
+|3|Mauvais|
+|9|Autre|
 
 ---
 
-`lt_typesect` : Liste des valeurs de l'attribut typesect de la donnée zone_urba
+`r_adresse.lt_secondaire` : Liste des valeurs permettant de définir si une adresse est un accès secondaire
 
 |Nom attribut | Définition | Type  | Valeurs par défaut |
 |:---|:---|:---|:---|    
 |code|Code|character varying(2)| |
-|valeur|Valeur|character varying(100)| |
+|valeur|Valeur|character varying(80)| |
 
 
 Particularité(s) à noter :
@@ -466,20 +465,17 @@ Valeurs possibles :
 
 |Code|Valeur|
 |:---|:---|
-|ZZ|Non concerné|
-|01|Secteur ouvert à la construction|
-|02|Secteur réservé aux activités|
-|03|Secteur non ouvert à la construction, sauf exceptions prévues par la loi|
-|99|Zone non couverte par la carte communale|
+|0|Non renseigné|
+|1|Oui|
+|2|Non|
 
-`lt_typezone` : Liste des valeurs de l'attribut typezone de la donnée zone_urba
+`r_adresse.lt_src_adr` : Liste des valeurs permettant de décrire l'origine de l'adresse
 
 |Nom attribut | Définition | Type  | Valeurs par défaut |
 |:---|:---|:---|:---|    
 |code|Code|character varying(3)| |
 |valeur|Valeur|character varying(80)| |
 
-
 Particularité(s) à noter :
 * Une clé primaire existe sur le champ code 
 
@@ -487,72 +483,36 @@ Valeurs possibles :
 
 |Code|Valeur|
 |:---|:---|
-|U|Urbaine|
-|AUc|A urbaniser|
-|AUs|A urbaniser bloquée|
-|A|Agricole|
-|N|Naturel et forestière|
+|00|Non renseigné|
+|01|Cadastre|
+|02|OSM|
+|03|BAN|
+|04|Intercommunalité|
+|05|Commune|
+|99|Autre|
 
 ---
 
 ## Traitement automatisé mis en place (Workflow de l'ETL FME)
 
-Plusieurs Workflow ont été mis en place pour gérer à la fois l'intégration ou la mise à jour de nouvelles procédures d'urbanisme ainsi que la mise à jour de la partie applicative lors d'une nouvelle procédure, d'une mise à jour du cadastre, d'une servitude ou de la prise en compte d'une nouvelle information jugée utile non présente dans les documents d'urbanisme.
+### Gestion des procédures de contrôle des données Adresse
 
-Des fiches de procédures ont été réalisées, elles sont ici `Y:\Ressources\4-Partage\3-Procedures\Fiches` et intégrées dans le classeur des procédures.
+L'ensemble des fichiers a utilisé est placé ici `Y:\Ressources\4-Partage\3-Procedures\FME\prod\RVA`.
 
-### Gestion des procédures PLU
+**Vérification de la qualité des adresse** `RVA_ctrl_qualite_adresse.fmw`
 
-L'ensemble des fichiers a utilisé est placé ici `Y:\Ressources\4-Partage\3-Procedures\FME\prod\URB\PLU`.
+Ce traitement permet de :
+- croiser plusieurs sources de données Adresse pour évaluer d'éventuels oublis d'adresse,
+- croiser avec la base des voies pour vérifier la bonne affectation de l'adresse au tronçon et à la voie nommée
+- vérifier les cohérences àl 'intérieur de la base Adresse (ex : numméro + repet = etiquette, .....)
+- ...
 
-Une série de traitement a été mis en place pour gérer l'ensemble des cas généré par une procédure de mise à jour des données.
 
-**Intégration d'une procédure nouvellement approuvée** `00_PLU_integration_finale_executoire.fmw`
- 
-Ce traitement fait appel à des traitements secondaires :
-   - `\bloc\01_PLU_Prod_à_Archi_sup_Prod_executoire.fmw` : les données des tables de production `geo_p_` sont intégrées dans les tables d' archives `geo_a_` puis supprimées des tables de production `geo_p_`
-   - `\bloc\02_PLU_Test_à_Prod_sup_Test_executoire.fmw` : les données des tables de pré-production `geo_t_` sont intégrées dans les tables de production `geo_p_` puis supprimées des tables de pré-production `geo_t_`
-   - `\bloc\05_PLU_Export_Format_CNIG.fmw` : les données sont exportées au format CNIG correspondant ici `Y:\fichiers_ref\metiers\urba\docurba`
-   - à la fin du traitement les vues matérialisées applicatives, dans le schéma x_apps, concernées sont mises à jour (xapps_an_vmr_p_information, xapps_an_vmr_p_information_dpu, xapps_an_vmr_p_prescription, xapps_geo_vmr_p_zone_urba, xapps_an_vmr_parcelle_plu)
-   
-**Récupération d'une procédure annulée** `02_PLU_recuperation_annulation.fmw`
-
-Ce traitement fait appel à des traitements secondaires :
-   - `\bloc\03_PLU_Prod_à_Archi_sup_Prod_annulation.fmw` : les données des tables de production `geo_p_` sont intégrées dans les tables d'archives `geo_a_` puis supprimées des tables de production `geo_p_`
-   - `\bloc\04_PLU_Archi_à_Prod_sup_Archi_annulation.fmw` : les données des tables d'archives `geo_a_` sont intégrées dans les tables de production `geo_p_` puis supprimées des tables d'archive `geo_a_`
-   - à la fin du traitement les vues matérialisées applicatives, dans le schéma x_apps, concernées sont mises à jour (xapps_an_vmr_p_information, xapps_an_vmr_p_information_dpu, xapps_an_vmr_p_prescription, xapps_geo_vmr_p_zone_urba, xapps_an_vmr_parcelle_plu)
-   
-**Intégration de données reçues par un bureau d'étude** `03_PLU_integration_BE_shape_test.fmw`
-
-Les données reçues d'un bureau d'étude doivent être vérifier au préalable dans QGIS avant intégration dans les données de pré-production `geo_t_` via ce traitement. Une fois la vérification et les corrections réalisées, le traitement d'intégration d'une procédure approuvée peut-être lancé.
-
-**Préparation d'une nouvelle procédure à partir des données des tables production** `geo_p_`(pour les procédures gérées en interne) `011_PLU_Prod_à_Test_pour_modification.fmw`
-
-**Préparation d'une nouvelle procédure à partir des données des tables d'archive** `geo_a_`(pour les procédures gérées en interne) `012_PLU_Archi_à_test_pour_modification.fmw`
-
-### Gestion des procédures d'intégration des SUP et des informations jugées utiles (hors PLU)
-
-L'ensemble des fichiers a utilisé est placé ici `Y:\Ressources\4-Partage\3-Procedures\FME\prod\URB`.
-
-Une série de traitement a été mis en place pour créer des tables de références listant l'ensemble des parcelles avec les SUP et les informations jugées utiles (hors PLU) s'y appliquant. Ces procédures doivent être lancées uniquement lors d'une mise à jour du cadastre, d'une servitude, d'une information ou de l'intégration d'une nouvelle servitude ou informations.
-
-**Mise à jour complète après une intégration d'un nouveau millésime cadastrale** `00_MAJ_COMPLETE_SUP_INFO_UTILES.fmw`
- 
-Ce traitement fait appel à des traitements secondaires et intègre une série de requêtes directement exécutée dans la base de données :
-   - `\SUP\00_SUP_integration_globale.fmw`
-   Ce traitement fait appel à des traitements secondaires :
-       - `\bloc\01_SUP_mise_a_jour_liste_commune.fmw` : permet d'intégrer le fichier Excel par commune des SUP restant à intégrer (cette liste s'affiche dans la fiche de renseignement d'urbanisme). Le fichier est ici `R:\Projets\Metiers\1306URB-ARC-numSUP\2-PreEtude\servitude_par_commune_restant_a_integrer.xlsx`
-       - `\bloc\02_SUP_generer_table_idu_sup_GEO.fmw` : génère la table `m_urbanisme_reg.an_sup_geo` dans la base de données qui est liée dans GEO listant l'ensemble des parcelles et les SUP concernées. Dans le cas d'une nouvelle SUP, son traitement doit-être intégré dans ce WorkFlow et lancé individuellement.
-       - `\bloc\03_SUP_generer_table_AC4_protect_GEO.fmw` : génère la table `m_urbanisme_reg.an_sup_ac4_geo_protect` spécifique à la SUP AC4 (ZPPAUP) directement dans la base de données et liée à GEO
-   - `\Information_jugées_utiles\00_INFOJU_integration_globale.fmw` : 
-   Ce traitement fait appel à des traitements secondaires et refraichit en fin de processus l'ensemble des vues matérialisées des traitements PLU en base de données :
-       - `\bloc\01_INFO_JUGEE_UTILE_hors_plu.fmw` : génère des tables spécifiques aux informations dans la base de données qui sont liées à la vue matérialisée `x_apps.xapps_an_vmr_p_information` . Dans le cas d'une nouvelle information à traiter, elle doit-être intégrée dans ce WorkFlow et lancé individuellement.
-       - `\bloc\02_TAUX_FISCALITE_GEO.fmw` : génère la table `m_fiscalite.an_fisc_geo_taxe_amgt` formatant les données de la taxe d'aménagement par commune ou infra-communal dans la base de données et qui est liée dans GEO.
-       
-       
 ## Export Open Data
 
-Sans objet
+L'ensemble des fichiers a utilisé est placé ici `Y:\Ressources\4-Partage\3-Procedures\FME\prod\OPEN-DATA`.
+
+ - `RVA_adresse_metadonnees.fmw` : ce traitement exporte l'ensemble des données Adresse à de multiples formats téléchargeables via la fiche de métadonnées (csv, shape, kml, geojson, excel) et il est exécuté tous les jours à 21h00 sur le serveur sig-applis.
 
 ---
 
