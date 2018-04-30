@@ -4,7 +4,7 @@
 
 ## Principes
   * **généralité** :
-Afin d'améliorer la connaissance sur les adresses existantes, une Base Adresse Locale a été initiée sur l'Agglomération de la Région de Compiègne à partir d'un travail de regroupement des bases adresses existantes (IGN, cadastre,...) et d'un travail de vérification sur le terrain. Cette base s'est appuyée sur le standard d'échange BAL de l'AITF et elle est alimentée par les signalements des communes via une application WebSIG dédiée.
+Afin d'améliorer la connaissance sur les adresses existantes, une Base Adresse Locale a été initiée sur le Pays Compiégnois à partir d'un travail de regroupement des bases adresses existantes (IGN, cadastre,...) et d'un travail de vérification sur le terrain. Cette base s'est appuyée sur le standard d'échange BAL de l'AITF et elle est alimentée par les signalements des communes via une application WebSIG dédiée.
  
  * **résumé fonctionnel** :
 La base de données Adresse fonctionne de manière urbanisée. La géométrie du point d'adresse est gérée de manière indépendante et contient uniquement les informations de référence et d'appartenance à la voie et au tronçon de voie. Les données dites métiers sont gérées dans des tables alphanumériques spécifiques. Les libellés de voies sont concidérés comme un référentiel de voies (non géographique) et il est issu primitivement des informations du cadastre. Les informations purement liées à l'adresse (numéro, qualité, ...) sont gérées dans une table alphanumérique particulière ainsi que les données complémentaires qualifiant l'adresse (état, destination, nombre de logements, ...). Un suivi des adresses historiques a également été introduit.
@@ -17,57 +17,67 @@ Sans objet
 
 ## Classes d'objets
 
-L'ensemble des classes d'objets de gestion sont stockés dans plusieurs schémas r_objet (pour la géométrie des points d'adresse), r_voie (pour le référentiel de voies), r_adresse (pour les informations alphanumériques liées à l'adresse) ,et celles applicatives dans les schémas x_apps ou x_apps_public.
+L'ensemble des classes d'objets de gestion sont stockés dans plusieurs schémas r_objet (pour la géométrie des points d'adresse), r_voie (pour le référentiel de voies), r_adresse (pour les informations alphanumériques liées à l'adresse) ,et celles applicatives dans les schémas x_apps (pour les applications pro) ou x_apps_public (pour les applications grands publiques).
 
  ### classes d'objets de gestion :
   
-   `an_ads_commune` : table des attributs sur l'état de l'ADS ARC sur les communes.
+   `r_objet.geo_objet_pt_adresse` : table des points d'adresse.
    
 |Nom attribut | Définition | Type | Valeurs par défaut |
 |:---|:---|:---|:---|
-|insee|Code INSEE|character(5)| |
-|docurba|Présence d'un document d'urbanisme (PLUi,PLU,POS,CC)|boolean| |
-|ads_arc|Gestion de l'ADS par l'ARC|boolean| |
-|l_rev|Information sur la révision en cours ou non du document d'urbanisme|character varying(30)| |
-|l_daterev|Date de prescripiton de la révision|timestamp without time zone| |
+|id_adresse|Identifiant unique de l'objet point adresse|bigint|nextval('r_objet.geo_objet_pt_adresse_id_seq'::regclass)|
+|id_voie|Identifiant unique de l'objet voie|bigint| |
+|id_tronc|Identifiant unique de l'objet troncon|bigint| |
+|position|Type de position du point adresse|character varying(2)| |
+|x_l93|Coordonnée X en mètre|numeric| |
+|y_l93|Coordonnée Y en mètre|numeric| |
+|src_geom|Référentiel de saisie|character varying(2)|'00'::bpchar|
+|src_date|Année du millésime du référentiel de saisie|character varying(4)|'0000'::bpchar|
+|date_sai|Horodatage de l'intégration en base de l'objet|timestamp without time zone|now()|
+|date_maj|Horodatage de la mise à jour en base de l'objet|timestamp without time zone| |
+|geom|Géomètrie ponctuelle de l'objet|Point,2154| |
 
 Particularité(s) à noter :
-* Une clé primaire existe sur le champ insee
+* Une clé primaire existe sur le champ `id_adresse` lui-même contenant une séquence pour l'attribution automatique d'une référence adresse unique. 
+* Une clé étrangère exsiste sur la table de valeur `id_troncon` (lien vers un identifiant id_troncon existant de la table `r_objet.geo_objet_troncon`)
+* Une clé étrangère exsiste sur la table de valeur `id_voie` (identifiant de la voie nommée `r_voie.an_voie`)
+* Une clé étrangère exsiste sur la table de valeur `position` (précision du positionnement du point adresse `r_objet.lt_position`)
+* Une clé étrangère exsiste sur la table de valeur `src_geom` (source du référentiel géographique pour la saisie `r_objet.lt_src_geom`).
+* Un index est présent sur le champ geom
+* 1 trigger :
+  * `t_t1_date_maj` : calcul des coordonnées X et Y avant l'insertion ou la mise à jour d'une géométrie ou des champs x_l93 et y_l93.  
+  
+Une adresse ne peut pas être créée sans qu'il y ait un tronçon de voirie.
+
 ---
 
-   `an_doc_urba` : table issue du standard CNIG 2017  listant l'ensemble des procédures des documents d''urbanisme (y compris les communes en RNU)
+   `r_objet.an_voie` : Table alphanumérique des voies à circulation terrestre nommées
    
 |Nom attribut | Définition | Type | Valeurs par défaut |
 |:---|:---|:---|:---|
-|idurba|Identifiant du document d'urbanisme|character varying(30)| |
-|typedoc|Type du document concerné|character varying(4)| |
-|etat|Etat juridique du document|character varying(2)| |
-|nomproc|Codage de la version du document concerné|character varying(10)| |
-|l_nomprocn|N° d'ordre de la procédure|integer| |
-|datappro|Date d'approbation|character varying(8)| |
-|datefin|date de fin de validité|character varying(8)| |
-|siren|Code SIREN de l'intercommunalité|character varying(9)| |
-|nomreg|Nom du fichier de règlement|character varying(80)| |
-|urlreg|URL ou URI du fichier du règlement|character varying(254)| |
-|nomplan|Nom du fichier du plan scanné|character varying(80)| |
-|urlplan|URL ou URI du fichier du plan scanné|character varying(254)| |
-|urlpe|Lien d'accès à l'archive zip comprenant l'ensemble des pièces écrites|character varying(254)| |
-|siteweb|Site web du service d'accès|character varying(254)| |
-|typeref|Type de référentiel utilisé|character varying(2)| |
-|dateref|Date du référentiel de saisie|character varying(8)| |
-|l_moa_proc|Maitre d'ouvrage de la procédure|character varying(80)| |
-|l_moe_proc|Maitre d'oeuvre de la procédure|character varying(80)| |
-|l_moa_dmat|Maitre d'ouvrage de la dématérialisation|character varying(80)| |
-|l_moe_dmat|Maitre d'oeuvre de la dématérialisation|character varying(80)| |
-|l_observ|Observations|character varying(254)| |
-|l_parent|Identification des documents parents pour recherche des historiques entre version de documents (1 pour le premier document (élaboration, modif, mise à jour), 2 pour la révision (révision n°1, modif, mise à jour), 3 pour le 2nd révision, ...|integer||
+|id_voie|Identifiant unique de l'objet voie|bigint|nextval('r_voie.an_voie_id_seq'::regclass)|
+|type_voie|Type de la voie|character varying(2)|'01'::character varying|
+|nom_voie|Nom de la voie|character varying(80)| |
+|libvoie_c|Libellé complet de la voie (minuscule et caractère accentué)|character varying(100)| |
+|libvoie_a|Libellé abrégé de la voie (AFNOR)|character varying(100)| |
+|mot_dir|Mot directeur de la voie|character varying(100)| |
+|insee|Code insee|character(5)| |
+|rivoli|Code rivoli|character(4)| |
+|rivoli_cle|Clé rivoli|character(1)| |
+|observ|Observations|character varying(80)| |
+|src_voie|Référence utilisée pour le nom de la voie|character varying(100)| |
+|date_sai|Date de saisie dans la base de données|timestamp without time zone|now()|
+|date_maj|Date de la dernière mise à jour dans la base de données|timestamp without time zone| |
+|date_lib|Année du libellé la voie (soit l''année entière est saisie soit une partie en remplaçant les 0 par des x)|character(4)| |
+
 
 Particularité(s) à noter :
-* Une clé primaire existe sur le champ idurba
-* Une clé étrangère exsiste sur la table de valeur `lt_etat`
-* Une clé étrangère exsiste sur la table de valeur `lt_nomproc`
-* Une clé étrangère exsiste sur la table de valeur `lt_typedoc`
-* Une clé étrangère exsiste sur la table de valeur `lt_typeref`
+* Une clé primaire existe sur le champ `idvoie`
+* Une clé étrangère exsiste sur la table de valeur `type_voie` (liste de valeur `lt_type_voie` définissant les abréviations des types de voies)
+* Un index est présent sur le champ libvoie_c
+* 1 trigger :
+  * `t_date_maj` : insertion de la date du jour avant la mise à jour
+  
 ---
 
 `an_doc_urba_com` : table issue du standard CNIG 2017 d'appartenance d'une commune à une procédure définie.
