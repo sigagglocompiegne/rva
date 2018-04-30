@@ -57,51 +57,33 @@ Particularité(s) à noter :
   
 ---
 
-   `r_objet.an_voie` : Table alphanumérique des voies à circulation terrestre nommées
+   `r_objet.geo_objet_noeud` : Table des noeuds constituant le début et la fin d'un tronçon
    
 |Nom attribut | Définition | Type | Valeurs par défaut |
 |:---|:---|:---|:---|
-|id_voie|Identifiant unique de l'objet voie|bigint|nextval('r_voie.an_voie_id_seq'::regclass)|
-|type_voie|Type de la voie|character varying(2)|'01'::character varying|
-|nom_voie|Nom de la voie|character varying(80)| |
-|libvoie_c|Libellé complet de la voie (minuscule et caractère accentué)|character varying(100)| |
-|libvoie_a|Libellé abrégé de la voie (AFNOR)|character varying(100)| |
-|mot_dir|Mot directeur de la voie|character varying(100)| |
-|insee|Code insee|character(5)| |
-|rivoli|Code rivoli|character(4)| |
-|rivoli_cle|Clé rivoli|character(1)| |
-|observ|Observations|character varying(80)| |
-|src_voie|Référence utilisée pour le nom de la voie|character varying(100)| |
-|date_sai|Date de saisie dans la base de données|timestamp without time zone|now()|
-|date_maj|Date de la dernière mise à jour dans la base de données|timestamp without time zone| |
-|date_lib|Année du libellé la voie (soit l''année entière est saisie soit une partie en remplaçant les 0 par des x)|character(4)| |
+|id_noeud|Identifiant unique de l'objet noeud|bigint|nextval('r_objet.geo_objet_noeud_id_seq'::regclass)|
+|id_voie|Identifiant unique de l'objet voie|bigint| |
+|x_l93|Coordonnée X en mètre|numeric| |
+|y_l93|Coordonnée Y en mètre|numeric| |
+|z_ngf|Altimétrie ngf du noeud en mètre|numeric| |
+|observ|Observations|character varying(254)| |
+|date_sai|Horodatage de l'intégration en base de l'objet|timestamp without time zone|now()|
+|date_maj|Horodatage de la mise à jour en base de l'objet|timestamp without time zone| |
+|geom|Géomètrie ponctuelle de l'objet|Point,2154| |
 
 
 Particularité(s) à noter :
-* Une clé primaire existe sur le champ `idvoie`
-* Une clé étrangère exsiste sur la table de valeur `type_voie` (liste de valeur `lt_type_voie` définissant les abréviations des types de voies)
-* Un index est présent sur le champ libvoie_c
-* 1 trigger :
-  * `t_date_maj` : insertion de la date du jour avant la mise à jour
+* Une clé primaire existe sur le champ `id_noeud`
+* Une clé étrangère exsiste sur la table de valeur `id_voie` (table r_voie.an_voie des voies nommées)
+* Un index est présent sur le champ geom
   
 ---
 
-`r_adresse.an_adresse` : Table alphanumérique des adresses
+`r_voie.an_troncon` : Table alphanumérique des tronçons
 
 |Nom attribut | Définition | Type  | Valeurs par défaut |
 |:---|:---|:---|:---|  
-|id_adresse|Identifiant unique de l'objet point adresse|bigint| |
-|numero|Numéro de l'adresse|character varying(10)| |
-|repet|Indice de répétition de l'adresse|character varying(10)| |
-|complement|Complément d'adresse|character varying(80)| |
-|etiquette|Etiquette|character varying(10)| |
-|angle|Angle de l'écriture exprimé en degré, par rapport à l'horizontale, dans le sens trigonométrique|integer| |
-|observ|Observations|character varying(254)| |
-|src_adr|Origine de l'adresse|character varying(2)|'00'::bpchar|
-|diag_adr|Diagnostic qualité de l'adresse|character varying(2)|'00'::bpchar|
-|qual_adr|Indice de qualité simplifié de l'adresse|character varying(1)|'0'::character varying|
-|verif_base|Champ informant si l'adresse a été vérifié par rapport aux erreurs de bases (n°, tronçon, voie, correspondance BAN).
-Par défaut à non.|boolean|false|
+
 
 Particularité(s) à noter : aucune
 * Une clé primaire existe sur le champ `id_adresse`
@@ -111,20 +93,11 @@ Particularité(s) à noter : aucune
 
 ---
 
-`r_adresse.an_adresse_info` : Table alphanumérique des informations complémentaires des adresses
+`r_voie.an_troncon_h` : Table alphanumérique des tronçons historisés
 
 |Nom attribut | Définition | Type  | Valeurs par défaut |
 |:---|:---|:---|:---|
-|id_adresse|Identifiant unique de l'objet point adresse|bigint| |
-|dest_adr|Destination de l'adresse (habitation, commerce, ...)|character varying(2)|'00'::character varying|
-|etat_adr|Etat de la construction à l'adresse (non commencé, en cours, achevé, muré, supprimé ...)|character varying(2)|'00'::character varying|
-|refcad|Référence(s) cadastrale(s)|character varying(254)| |
-|nb_log|Nombre de logements|integer| |
-|pc|Numéro du permis de construire|character varying(30)| |
-|groupee|Adresse groupée (O/N)|character varying(1)|'0'::character varying|
-|secondaire|Adresse d'un accès secondaire (O/N)|character varying(1)|'0'::character varying|
-|id_ext1|Identifiant d'une adresse dans une base externe (1) pour appariemment|character varying(80)| |
-|id_ext2|Identifiant d'une adresse dans une base externe (2) pour appariemment|character varying(80)| |
+
 
 
 Particularité(s) à noter :
@@ -135,77 +108,34 @@ Particularité(s) à noter :
 
 ---
 
-`r_adresse.an_adresse_h` : Table alphanumérique des historisations des adresses suite à une renumérotation
+`r_voie.an_voie` : Table alphanumérique des voies nommmées
 
-|Nom attribut | Définition | Type  | Valeurs par défaut |
-|:---|:---|:---|:---|  
-|id|Identifiant unique de l'historisation|bigint|nextval('r_adresse.an_adresse_h_id_seq'::regclass)|
-|id_adresse|Identifiant unique de l'objet point adresse|bigint| |
-|id_voie|Identifiant unique de la voie|integer| |
-|numero|Numéro de l'adresse|character varying(10)| |
-|repet|Indice de répétition de l'adresse|character varying(10)| |
-|complement|Complément d'adresse|character varying(80)| |
-|etiquette|Etiquette|character varying(10)| |
-|codepostal|Code postal de l'adresse|character varying(5)| |
-|commune|Libellé de la commune|character varying(100)| |
-|date_arr|Date de l'arrêté de numérotation remplaçant le numéro historisé ici présent|timestamp without time zone| |
-|date_sai|Date de saisie de l'information dans la base|timestamp without time zone|now()|
-
-
-Particularité(s) à noter :
-* Une clé primaire existe sur le champ `id_adresse`
-
-`public.geo_rva_signal` : Table des signalements des Voies et Adresses saisies par les collectivités
-
-|Nom attribut | Définition | Type  | Valeurs par défaut |
-|:---|:---|:---|:---|  
-|id_signal|Identifiant unique de l'objet de signalement|integer|nextval('geo_rva_signal_id_seq'::regclass)|
-|insee|Code INSEE de la commune|character varying(5)| |
-|commune|Nom de la commune|character varying(80)| |
-|type_rva|Type de référentiel voie/adresse concerné par un signalement|character varying(1)| |
-|nat_signal|Nature du signalement|character varying(1)| |
-|acte_admin|Indication de la présence ou non d'un document administratif|boolean| |
-|observ|Commentaire texte libre pour décrire le signalement|character varying(1000)| |
-|op_sai|Nom du contributeur|character varying(254)| |
-|mail|Adresse mail de contact du contributeur|character varying(254)| |
-|traite_sig|Indication de l'état du traitement du signalement par le service SIG|character varying(1)| |
-|x_l93|Coordonnée X en mètre|numeric| |
-|y_l93|Coordonnée Y en mètre|numeric| |
-|date_sai|Horodatage de l'intégration en base de l'objet|timestamp without time zone|now()|
-|date_maj|Horodatage de la mise à jour en base de l'objet|timestamp without time zone| |
-|geom|Géomètrie ponctuelle de l'objet|USER-DEFINED| |
-|c_circu|Contraintes de circulation|character varying(50)| |
-|c_observ|Complément sur les contraintes de circulation|character varying(1000)| |
-|v_max|Contraintes de vitesse|character varying(3)| |
-
-
-Particularité(s) à noter :
-* Une clé primaire existe sur le champ `id_signal`
-* Index sur le champ `geom`
-* Une clé étrangère exsiste sur la table de valeur `nat_signal` de la table lt_nat_signal
-* Une clé étrangère exsiste sur la table de valeur `traite_sig` de la table lt_traite_sig
-* Une clé étrangère exsiste sur la table de valeur `type_rva` de la table lt_type_rva
-* 1 trigger :
-  * `t_t1_geo_rva_signal` : à l'insertion recherche du code insee et libellé de la commune, calcul des coordonnées X et Y, date du jour et force la valeur date de mise à jour à null et traite_sig = 1 (non traité). A la mise à jour recherche recherche du code insee et libellé de la commune, calcul des coordonnées X et Y, et date de mise jour = date du jour.
+Se référer à la documentation de la base Adresse pour plus de détail sur cette table.
 
 ---
 
-`r_adresse.an_v_adresse_bal_ban_commune` : Vue d'exploitation permettant de comparer le nombre d''enregistrement d''adresse par commune entre la BAL et la BAN
+`public.geo_rva_signal` : Table des signalements des Voies et Adresses saisies par les collectivités
 
-`r_adresse.an_v_adresse_bal_commune` : Vue d'exploitation permettant de compter le nombre d''enregistrement d''adresse par commune de la BAL
+Se référer à la documentation de la base Adresse pour plus de détail sur cette table.
 
-`r_adresse.an_v_adresse_bal_epci` : Vue d'exploitation permettant de compter le nombre d''enregistrement d''adresse par epci de la BAL
+---
 
-`r_adresse.an_v_adresse_ban_commune` : Vue d'exploitation permettant de compter le nombre d''enregistrement d''adresse par commune dans la BAN
+`m_voirie.an_voirie_circu` : Table alphanumérique des éléments de circulation de la voirie
 
-`r_adresse.an_v_adresse_commune` : Vue d'exploitation permettant de compter le nombre d''enregistrement d''adresse par commune
+---
 
-`r_adresse.geo_v_adresse` : Vue éditable destinée à la modification des données relatives aux adresses
-* 4 triggers :
-  * `t_t1_geo_objet_pt_adresse` : intégration ou mise à jour des données Adresse dans la table des points d'adresse pour une instance d'insertion, de mise à jour ou de suppression (désactivité par défaut pour ce dernier dans la fonction trigger `r_objet.ft_geo_objet_pt_adresse()`)
-  * `t_t2_an_adresse` : intégration ou mise à jour des données Adresse dans la table alphanumérique des adresses pour une instance d'insertion, de mise à jour ou de suppression (désactivité par défaut pour ce dernier dans la fonction trigger `r_adresse.ft_an_adresse()`)
-  * `t_t3_an_adresse_info` : intégration ou mise à jour des données Adresse dans la table alphanumérique des informations liées aux adresses pour une instance d'insertion, de mise à jour ou de suppression (désactivité par défaut pour ce dernier dans la fonction trigger `r_adresse.ft_an_adresse_info()`)
-  * `t_t4_an_adresse_h` : intégration des données Adresse historiques dans la table alphanumérique correspondante pour une instance de mise à jour
+`m_voirie.an_voirie_gest` : Table alphanumérique des éléments de gestion de la voirie
+
+---
+
+`m_voirie.geo_v_troncon_voirie` : 
+
+`r_voie.geo_v_troncon_voirie` : 
+
+`r_voie.an_v_voie_rivoli_null` : 
+
+`r_voie.an_v_voie_adr_rivoli_null` : 
+
 
 ---
 
