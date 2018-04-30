@@ -80,30 +80,52 @@ Particularité(s) à noter :
   
 ---
 
-`an_doc_urba_com` : table issue du standard CNIG 2017 d'appartenance d'une commune à une procédure définie.
+`r_adresse.an_adresse` : Table alphanumérique des adresses
 
 |Nom attribut | Définition | Type  | Valeurs par défaut |
 |:---|:---|:---|:---|  
-|idurba|Identifiant du document d'urbanisme|character varying(30)| |
-|insee|Code insee de la commune|character varying(5)| |
+|id_adresse|Identifiant unique de l'objet point adresse|bigint| |
+|numero|Numéro de l'adresse|character varying(10)| |
+|repet|Indice de répétition de l'adresse|character varying(10)| |
+|complement|Complément d'adresse|character varying(80)| |
+|etiquette|Etiquette|character varying(10)| |
+|angle|Angle de l'écriture exprimé en degré, par rapport à l'horizontale, dans le sens trigonométrique|integer| |
+|observ|Observations|character varying(254)| |
+|src_adr|Origine de l'adresse|character varying(2)|'00'::bpchar|
+|diag_adr|Diagnostic qualité de l'adresse|character varying(2)|'00'::bpchar|
+|qual_adr|Indice de qualité simplifié de l'adresse|character varying(1)|'0'::character varying|
+|verif_base|Champ informant si l'adresse a été vérifié par rapport aux erreurs de bases (n°, tronçon, voie, correspondance BAN).
+Par défaut à non.|boolean|false|
 
 Particularité(s) à noter : aucune
+* Une clé primaire existe sur le champ `id_adresse`
+* Une clé étrangère exsiste sur la table de valeur `diag_adr` (liste de valeur `lt_diag_adr` définissant le type de diagnostic de l'adresse)
+* Une clé étrangère exsiste sur la table de valeur `qual_adr` (liste de valeur `lt_qual_adr` définissant la qualité de l'adresse)
+* Une clé étrangère exsiste sur la table de valeur `src_adr` (liste de valeur `lt_src_adr` définissant les sources de l'adresse)
 
 ---
 
-`geo_a_habillage_lin` : (archive) Donnée géographique contenant l'habillage linéaire des documents d'urbanisme locaux (PLUi, PLU, CC) sur le modèle du standard CNIG 2017
+`r_adresse.an_adresse_info` : Table alphanumérique des informations complémentaires des adresses
 
 |Nom attribut | Définition | Type  | Valeurs par défaut |
-|:---|:---|:---|:---|  
-|idhab|Identifiant unique de l'habillage linéaire|character varying(10)| |
-|nattrac|Nature du tracé|character varying(40)| |
-|couleur|Couleur de l'élément graphique, sous forme RVB (255-255-000)|character varying(11)| |
-|idurba|Identifiant du document d'urbanisme|character varying(30)| |
-|l_insee|Code INSEE|character varying(5)| |
-|l_couleur|Couleur de l'élément graphique, sous forme HEXE (#000000)|character varying(7)| |
-|geom|Géométrie de l'objet|MultiLineString,2154| |
+|:---|:---|:---|:---|
+|id_adresse|Identifiant unique de l'objet point adresse|bigint| |
+|dest_adr|Destination de l'adresse (habitation, commerce, ...)|character varying(2)|'00'::character varying|
+|etat_adr|Etat de la construction à l'adresse (non commencé, en cours, achevé, muré, supprimé ...)|character varying(2)|'00'::character varying|
+|refcad|Référence(s) cadastrale(s)|character varying(254)| |
+|nb_log|Nombre de logements|integer| |
+|pc|Numéro du permis de construire|character varying(30)| |
+|groupee|Adresse groupée (O/N)|character varying(1)|'0'::character varying|
+|secondaire|Adresse d'un accès secondaire (O/N)|character varying(1)|'0'::character varying|
+|id_ext1|Identifiant d'une adresse dans une base externe (1) pour appariemment|character varying(80)| |
+|id_ext2|Identifiant d'une adresse dans une base externe (2) pour appariemment|character varying(80)| |
 
-Particularité(s) à noter : aucune
+
+Particularité(s) à noter :
+* Une clé primaire existe sur le champ `id_adresse`
+* Une clé étrangère exsiste sur la table de valeur `id_adresse` de la table geo_objet_pt_adresse
+* Une clé étrangère exsiste sur la table de valeur `groupee` (liste de valeur `lt_groupee` définissant si une adresse est considérée comme groupée)
+* Une clé étrangère exsiste sur la table de valeur `secondaire` (liste de valeur `lt_secondaire` définissant si une adresse est secondaire)
 
 ---
 
