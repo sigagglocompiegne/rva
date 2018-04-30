@@ -163,39 +163,23 @@ Particularité(s) à noter :
 
 `r_adresse.geo_v_adresse` : Vue éditable destinée à la modification des données relatives aux adresses
 
-`x_opendata.xopendata_an_v_bal` : Vue alphanumérique simplifiée des adresses au format d''échange BAL
+---
 
-`x_opendata.xopendata_geo_v_openadresse` : Vue destinée à la communication extérieure des données relatives aux adresses. Exclusion des adresses supprimées, non attribuées pour projet ou à confirmer
-
+### classes d'objets applicatives métiers sont classés dans le schéma x_apps :
+ 
+`x_apps.xapps_geo_vmr_adresse` : Vue matérialisée complète et décodée des adresses destinée à l'exploitation applicative  métier (générateur d'apps)
+ 
 `x_apps.xapps_an_v_adresse_h` : Vue d'exploitation permettant de lister les adresses historiques et supprimées (intégration dans la fiche adresse dans l''application GEO RVA et utilisation dans la recherche des anciennes adresses)
 
-`x_apps.xapps_geo_vmr_adresse` : Vue matérialisée complète et décodée des adresses destinée à l'exploitation applicative  métier (générateur d'apps)
+### classes d'objets applicatives grands publics sont classés dans le schéma x_apps_public :
 
 `x_apps_public.xappspublic_geo_v_adresse` : Vue complète et décodée des adresses destinée à l'exploitation applicative  publique (générateur d'apps)
 
-`geo_v_p_prescription_pct_arc` : Vue géographique des prescriptions ponctuelles PLU filtrée sur les communes de l'ARC pour la création du flux GeoServer DocUrba_ARC utilisée notamment dans l'application PLU Interactif
+### classes d'objets opendata sont classés dans le schéma x_opendata :
 
-`geo_v_p_prescription_surf_arc` : Vue géographique des prescriptions surfaciques PLU filtrée sur les communes de l'ARC pour la création du flux GeoServer DocUrba_ARC utilisée notamment dans l'application PLU Interactif
+`x_opendata.xopendata_an_v_bal` : Vue alphanumérique simplifiée des adresses au format d''échange BAL
 
-`geo_v_p_zone_urba_arc` : Vue géographique des zonages PLU filtrée sur les communes de l'ARC pour la création du flux GeoServer DocUrba_ARC utilisée notamment dans l'application PLU Interactif
-
----
-
- ### classes d'objets applicatives sont classés dans le schéma x_apps :
- 
- Les classes d'objets applicatives pour l'application de Renseignements d'urbanisme pour le Grand Public seront intégrés plus tard (en cours de réalisation et de tests fonctionnels).
- 
- **ATTENTION** : ces vues sont reformatées à chaque mise à jour de cadastre ou d'un document d'urbanisme dans un Workflow de l'ETL FME.
- 
-`xapps_an_vmr_p_information` : Vue matérialisée alphanumérique formatant une liste des parcelles avec les informations ponctuelles, surfaciques (hors DPU et ZAD), linénaires issues des documents d'urbanisme et d'autres informations jugées utiles issues d'autres données métiers (Natura 2000,ZICO, ZNIEFF, ...) impactant chaque parcelle. Cette vue est liée dans GEO pour récupération de ces informations dans la fiche de renseignements d'urbanisme (cf dossier GitHub correspondant à l'application).
-
-`xapps_an_vmr_p_information_dpu` : Vue matérialisée alphanumérique formatant une liste des parcelles avec l'information d'appartenance ou non à une DPU. Cette vue est liée dans GEO pour récupération de ces informations dans la fiche de renseignements d'urbanisme (cf dossier GitHub correspondant à l'application).
-
-`xapps_an_vmr_p_prescription` :  Vue matérialisée alphanumérique formatant une liste des parcelles avec les prescriptions ponctuelles, surfaciques, linénaires issues des documents d'urbanisme impactant chaque parcelle. Cette vue est liée dans GEO pour récupération de ces informations dans la fiche de renseignements d'urbanisme (cf dossier GitHub correspondant à l'application).
-
-`xapps_an_vmr_parcelle_plu` :  Vue matérialisée contenant les informations pré-formatés pour la constitution de la fiche d'information Renseignements d'urbanisme. Cette vue permet de récupérer pour chaque parcelle les informations du PLU et traiter les pbs liés aux zones entre commune et les zonages se touchant. 
-
-`xapps_geo_vmr_p_zone_urba` :  Vue matérialisée des zones du PLU servant dans les recherches par zonage ou type dans les applicatifs GEO. 
+`x_opendata.xopendata_geo_v_openadresse` : Vue destinée à la communication extérieure des données relatives aux adresses. Exclusion des adresses supprimées, non attribuées pour projet ou à confirmer
 
 ## Liste de valeurs
 
