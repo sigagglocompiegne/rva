@@ -163,7 +163,10 @@ Particularité(s) à noter :
 
 `r_adresse.geo_v_adresse` : Vue éditable destinée à la modification des données relatives aux adresses
 * 4 triggers :
-  * `t_t1_geo_objet_pt_adresse` : insertion de la date du jour pour une instance d'insertion, de mise à jour ou de suppression (désactivité par défaut pour ce dernier dans la fonction trigger `r_objet.ft_geo_objet_pt_adresse()`)
+  * `t_t1_geo_objet_pt_adresse` : intégration ou mise à jour des données Adresse dans la table des points d'adresse pour une instance d'insertion, de mise à jour ou de suppression (désactivité par défaut pour ce dernier dans la fonction trigger `r_objet.ft_geo_objet_pt_adresse()`)
+  * `t_t2_an_adresse` : intégration ou mise à jour des données Adresse dans la table alphanumérique des adresses pour une instance d'insertion, de mise à jour ou de suppression (désactivité par défaut pour ce dernier dans la fonction trigger `r_adresse.ft_an_adresse()`)
+  * `t_t3_an_adresse_info` : intégration ou mise à jour des données Adresse dans la table alphanumérique des informations liées aux adresses pour une instance d'insertion, de mise à jour ou de suppression (désactivité par défaut pour ce dernier dans la fonction trigger `r_adresse.ft_an_adresse_info()`)
+  * `t_t4_an_adresse_h` : intégration des données Adresse historiques dans la table alphanumérique correspondante pour une instance de mise à jour
 
 ---
 
