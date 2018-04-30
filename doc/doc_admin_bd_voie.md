@@ -5,11 +5,11 @@
 
 ## Principes
   * **généralité** :
-Afin d'améliorer la connaissance sur les adresses existantes, une Base Adresse Locale a été initiée sur le Pays Compiégnois à partir d'un travail de regroupement des bases adresses existantes (IGN, cadastre,...) et d'un travail de vérification sur le terrain. Cette base s'est appuyée sur le standard d'échange BAL de l'AITF et elle est alimentée par les signalements des communes via une application WebSIG dédiée.
+Afin d'améliorer la connaissance sur les voies existantes, une Base de Voies a été initiée sur le Pays Compiégnois à partir d'un travail de regroupement des bases de voies existantes (IGN, cadastre,...) et d'un travail de vérification sur le terrain. Cette base est alimentée par les signalements des communes via une application WebSIG dédiée. Elle est également liée à la Base des Adresses Locales.
  
  * **résumé fonctionnel** :
-La base de données Adresse fonctionne de manière urbanisée. La géométrie du point d'adresse est gérée de manière indépendante et contient uniquement les informations de référence et d'appartenance à la voie et au tronçon de voie. Les données dites métiers sont gérées dans des tables alphanumériques spécifiques. Les libellés de voies sont concidérés comme un référentiel de voies (non géographique) et il est issu primitivement des informations du cadastre. Les informations purement liées à l'adresse (numéro, qualité, ...) sont gérées dans une table alphanumérique particulière ainsi que les données complémentaires qualifiant l'adresse (état, destination, nombre de logements, ...). Un suivi des adresses historiques a également été introduit.
-L'ensemble de cette base est modifiable via des vues simples en base de données et consultable via les applicatifs WebSIG à partir de vues matérialisées reconstituant les informations à l'adresse.
+La base de données Voies fonctionne de manière urbanisée. La géométrie du tronçon de voies est gérée de manière indépendante et contient uniquement les informations de référence et d'appartenance à une voie nommée et à une commune. Les données dites métiers sont gérées dans des tables alphanumériques spécifiques. Il existe des informations liées à des données de références du tronçon et des informations liées aux métiers de la voirie (gestion et circulation). Un suivi des voies historiques a également été introduit.
+L'ensemble de cette base est modifiable via des vues simples en base de données et consultable via les applicatifs WebSIG à partir de vues matérialisées reconstituant les informations à la voie ou au tronçon.
 
 ## Dépendances (non critiques)
 
