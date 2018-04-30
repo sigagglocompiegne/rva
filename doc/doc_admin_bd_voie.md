@@ -22,34 +22,39 @@ L'ensemble des classes d'objets de gestion sont stockés dans plusieurs schémas
 
  ### classes d'objets de gestion :
   
-   `r_objet.geo_objet_pt_adresse` : table des points d'adresse.
+   `r_objet.geo_objet_troncon` : table des tronçons de voies.
    
 |Nom attribut | Définition | Type | Valeurs par défaut |
 |:---|:---|:---|:---|
-|id_adresse|Identifiant unique de l'objet point adresse|bigint|nextval('r_objet.geo_objet_pt_adresse_id_seq'::regclass)|
-|id_voie|Identifiant unique de l'objet voie|bigint| |
-|id_tronc|Identifiant unique de l'objet troncon|bigint| |
-|position|Type de position du point adresse|character varying(2)| |
-|x_l93|Coordonnée X en mètre|numeric| |
-|y_l93|Coordonnée Y en mètre|numeric| |
-|src_geom|Référentiel de saisie|character varying(2)|'00'::bpchar|
+|id_tronc|Identifiant unique de l'objet tronçon|bigint|nextval('r_objet.geo_objet_troncon_id_seq'::regclass)|
+|id_voie_g|Identifiant unique de l'objet voie à gauche du tronçon|bigint| |
+|id_voie_d|Identifiant unique de l'objet voie à droite du tronçon|bigint| |
+|insee_g|Code INSEE à gauche du tronçon|character varying(5)| |
+|insee_d|Code INSEE à droite du tronçon|character varying(5)| |
+|noeud_d|Identifiant du noeud de début du tronçon|bigint| |
+|noeud_f|Identifiant du noeud de fin de tronçon|bigint| |
+|pente|Pente exprimée en % et calculée à partir des altimétries des extrémités du tronçon|numeric| |
+|observ|Observations|character varying(254)| |
+|src_geom|Référentiel de saisie|character varying(5)|'00'::bpchar|
 |src_date|Année du millésime du référentiel de saisie|character varying(4)|'0000'::bpchar|
 |date_sai|Horodatage de l'intégration en base de l'objet|timestamp without time zone|now()|
 |date_maj|Horodatage de la mise à jour en base de l'objet|timestamp without time zone| |
-|geom|Géomètrie ponctuelle de l'objet|Point,2154| |
+|geom|Géomètrie linéaire de l'objet|LineString,2154| |
+|src_tronc|Source des informations au tronçon|character varying(100)| |
 
 Particularité(s) à noter :
-* Une clé primaire existe sur le champ `id_adresse` lui-même contenant une séquence pour l'attribution automatique d'une référence adresse unique. 
-* Une clé étrangère exsiste sur la table de valeur `id_troncon` (lien vers un identifiant id_troncon existant de la table `r_objet.geo_objet_troncon`)
-* Une clé étrangère exsiste sur la table de valeur `id_voie` (identifiant de la voie nommée `r_voie.an_voie`)
-* Une clé étrangère exsiste sur la table de valeur `position` (précision du positionnement du point adresse `r_objet.lt_position`)
-* Une clé étrangère exsiste sur la table de valeur `src_geom` (source du référentiel géographique pour la saisie `r_objet.lt_src_geom`).
+* Une clé primaire existe sur le champ `id_tronc` lui-même contenant une séquence pour l'attribution automatique d'une référence tronçon unique. 
+* Une clé étrangère existe sur la table de valeur `id_voie_d` (lien vers l'identifiant `id_voie` de la table `r_voie.an_voie`)
+* Une clé étrangère existe sur la table de valeur `id_voie_g` (lien vers l'identifiant `id_voie` de la table `r_voie.an_voie`)
+* Une clé étrangère existe sur la table de valeur `src_geom` (source du référentiel géographique pour la saisie `r_objet.lt_src_geom`).
+* Une clé étrangère existe sur la table de valeur `noeud_d` (table des objets noeuds `r_objet.geo_objet_noeud`).
+* Une clé étrangère existe sur la table de valeur `noeud_f` (table des objets noeuds `r_objet.geo_objet_noeud`).
 * Un index est présent sur le champ geom
-* 1 trigger :
-  * `t_t1_date_maj` : calcul des coordonnées X et Y avant l'insertion ou la mise à jour d'une géométrie ou des champs x_l93 et y_l93.  
+* 3 triggers :
+  * `t_t1_noeud_insert` : avant insertion ou mise à jour, recherche si il existe un noeud de épart ou de fin, sinon création des noeud du tronçon
+  * `t_t2_noeud_sup` : après suppression ou mise à jour, si il n'y a aucun noeud dans la table des noeuds alors on supprime tout, sinon suppression uniquement des noeuds ne faisant plus partie d'un début ou d'une fin.
+  * `t_t3_maj_insee_gd` : avant insertion ou mise à jour, recherche code insee et nom de la commune à droite et à gauche du tronçon.
   
-Une adresse ne peut pas être créée sans qu'il y ait un tronçon de voirie.
-
 ---
 
    `r_objet.an_voie` : Table alphanumérique des voies à circulation terrestre nommées
