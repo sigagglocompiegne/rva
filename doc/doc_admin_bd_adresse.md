@@ -149,6 +149,39 @@ Particularité(s) à noter :
 Particularité(s) à noter :
 * Une clé primaire existe sur le champ `id_adresse`
 
+`public.geo_rva_signal` : Table des signalements des Voies et Adresses saisies par les collectivités
+
+|Nom attribut | Définition | Type  | Valeurs par défaut |
+|:---|:---|:---|:---|  
+|id_signal|Identifiant unique de l'objet de signalement|integer|nextval('geo_rva_signal_id_seq'::regclass)|
+|insee|Code INSEE de la commune|character varying(5)| |
+|commune|Nom de la commune|character varying(80)| |
+|type_rva|Type de référentiel voie/adresse concerné par un signalement|character varying(1)| |
+|nat_signal|Nature du signalement|character varying(1)| |
+|acte_admin|Indication de la présence ou non d'un document administratif|boolean| |
+|observ|Commentaire texte libre pour décrire le signalement|character varying(1000)| |
+|op_sai|Nom du contributeur|character varying(254)| |
+|mail|Adresse mail de contact du contributeur|character varying(254)| |
+|traite_sig|Indication de l'état du traitement du signalement par le service SIG|character varying(1)| |
+|x_l93|Coordonnée X en mètre|numeric| |
+|y_l93|Coordonnée Y en mètre|numeric| |
+|date_sai|Horodatage de l'intégration en base de l'objet|timestamp without time zone|now()|
+|date_maj|Horodatage de la mise à jour en base de l'objet|timestamp without time zone| |
+|geom|Géomètrie ponctuelle de l'objet|USER-DEFINED| |
+|c_circu|Contraintes de circulation|character varying(50)| |
+|c_observ|Complément sur les contraintes de circulation|character varying(1000)| |
+|v_max|Contraintes de vitesse|character varying(3)| |
+
+
+Particularité(s) à noter :
+* Une clé primaire existe sur le champ `id_signal`
+* Index sur le champ `geom`
+* Une clé étrangère exsiste sur la table de valeur `nat_signal` de la table lt_nat_signal
+* Une clé étrangère exsiste sur la table de valeur `traite_sig` de la table lt_traite_sig
+* Une clé étrangère exsiste sur la table de valeur `type_rva` de la table lt_type_rva
+* 1 trigger :
+  * `t_t1_geo_rva_signal` : à l'insertion recherche du code insee et libellé de la commune, calcul des coordonnées X et Y, date du jour et force la valeur date de mise à jour à null et traite_sig = 1 (non traité). A la mise à jour recherche recherche du code insee et libellé de la commune, calcul des coordonnées X et Y, et date de mise jour = date du jour.
+
 ---
 
 `r_adresse.an_v_adresse_bal_ban_commune` : Vue d'exploitation permettant de comparer le nombre d''enregistrement d''adresse par commune entre la BAL et la BAN
@@ -358,7 +391,7 @@ Valeurs possibles :
 
 |Nom attribut | Définition | Type  | Valeurs par défaut |
 |:---|:---|:---|:---|    
-|code|Code|character(4)| |
+|code|Code|character(2)| |
 |valeur|Valeur|character varying(80)| |
 
 
@@ -415,7 +448,7 @@ Valeurs possibles :
 
 |Nom attribut | Définition | Type  | Valeurs par défaut |
 |:---|:---|:---|:---|
-|code|Code|character(2)||
+|code|Code|character(1)||
 |valeur|Valeur|character varying(80)||
 
 
@@ -436,7 +469,7 @@ Valeurs possibles :
 
 |Nom attribut | Définition | Type  | Valeurs par défaut |
 |:---|:---|:---|:---|    
-|code|Code|character varying(2)| |
+|code|Code|character varying(1)| |
 |valeur|Valeur|character varying(80)| |
 
 
@@ -459,7 +492,7 @@ Valeurs possibles :
 
 |Nom attribut | Définition | Type  | Valeurs par défaut |
 |:---|:---|:---|:---|    
-|code|Code|character varying(2)| |
+|code|Code|character varying(1)| |
 |valeur|Valeur|character varying(80)| |
 
 
@@ -474,11 +507,13 @@ Valeurs possibles :
 |1|Oui|
 |2|Non|
 
+---
+
 `r_adresse.lt_src_adr` : Liste des valeurs permettant de décrire l'origine de l'adresse
 
 |Nom attribut | Définition | Type  | Valeurs par défaut |
 |:---|:---|:---|:---|    
-|code|Code|character varying(3)| |
+|code|Code|character varying(2)| |
 |valeur|Valeur|character varying(80)| |
 
 Particularité(s) à noter :
@@ -495,6 +530,71 @@ Valeurs possibles :
 |04|Intercommunalité|
 |05|Commune|
 |99|Autre|
+
+---
+
+`public.lt_nat_signal` : Liste des valeurs permettant de décrire la nature du signalement sur le référentiel voie/adresse
+
+|Nom attribut | Définition | Type  | Valeurs par défaut |
+|:---|:---|:---|:---|    
+|code|Code|character varying(1)| |
+|valeur|Valeur|character varying(100)| |
+
+Particularité(s) à noter :
+* Une clé primaire existe sur le champ code 
+
+Valeurs possibles :
+
+|Code|Valeur|
+|:---|:---|
+|0|Non renseigné|
+|1|Création|
+|2|Modification|
+|3|Suppression|
+|9|Autre|
+
+---
+
+`public.lt_traite_sig` : Liste des valeurs permettant de décrire l''état du traitement du signalement par le service SIG
+
+|Nom attribut | Définition | Type  | Valeurs par défaut |
+|:---|:---|:---|:---|    
+|code|Code|character varying(1)| |
+|valeur|Valeur|character varying(80)| |
+
+Particularité(s) à noter :
+* Une clé primaire existe sur le champ code 
+
+Valeurs possibles :
+
+|Code|Valeur|
+|:---|:---|
+|0|Non renseigné|
+|1|Nouvelle demande|
+|2|Demande prise en compte|
+|3|Demande traitée|
+
+---
+
+
+`public.lt_type_rva` : Liste des valeurs permettant de décrire le type de référentiel voie/adresse concerné par un signalement
+
+|Nom attribut | Définition | Type  | Valeurs par défaut |
+|:---|:---|:---|:---|    
+|code|Code|character varying(1)| |
+|valeur|Valeur|character varying(80)| |
+
+Particularité(s) à noter :
+* Une clé primaire existe sur le champ code 
+
+Valeurs possibles :
+
+|Code|Valeur|
+|:---|:---|
+|0|Non renseigné|
+|1|Adresse|
+|2|Voie|
+|9|Autre|
 
 ---
 
