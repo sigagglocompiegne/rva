@@ -582,6 +582,6 @@ L'ensemble des fichiers a utilisé est placé ici `Y:\Ressources\4-Partage\3-Pro
 
 ## Schéma fonctionnel
 
-![schema_fonctionnel](img/schema_fonctionnel_voie.png)
+![schema_fonctionnel](img/schema_fonctionnel_voie_v1.png)
 
 
