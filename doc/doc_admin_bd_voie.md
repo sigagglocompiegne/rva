@@ -166,32 +166,34 @@ Particularité(s) à noter :
 
 ---
 
-`m_voirie.geo_v_troncon_voirie` : 
+`m_voirie.geo_v_troncon_voirie` : Vue éditable destinée à la modification des données relatives au troncon et à ses propriétés métiers de circulation et de gestion
 
-`r_voie.geo_v_troncon_voirie` : 
+`r_voie.geo_v_troncon_voirie` : Vue de synthèse de la base de voie (pas d''information métier voirie)
 
-`r_voie.an_v_voie_rivoli_null` : 
+`r_voie.an_v_voie_rivoli_null` : Vue d'exploitation permettant d'identifier les voies adressées sans code RIVOLI
 
-`r_voie.an_v_voie_adr_rivoli_null` : 
-
+`r_voie.an_v_voie_adr_rivoli_null` : Vue d'exploitation permettant d'identifier les voies sans code RIVOLI
 
 ---
 
 ### classes d'objets applicatives métiers sont classés dans le schéma x_apps :
  
-`x_apps.xapps_geo_vmr_adresse` : Vue matérialisée complète et décodée des adresses destinée à l'exploitation applicative  métier (générateur d'apps)
+`x_apps.xapps_an_v_troncon` : Vue non géographiques des tronçons (agréagation des tronçons pour statistique à la commune) (générateur d'apps). Cette vue matérialisée est rafraichit toutes les jours via un fichier batch sur la VM sig-sgbd.
  
-`x_apps.xapps_an_v_adresse_h` : Vue d'exploitation permettant de lister les adresses historiques et supprimées (intégration dans la fiche adresse dans l''application GEO RVA et utilisation dans la recherche des anciennes adresses)
+`x_apps.xapps_an_v_troncon_h` : Vue d'exploitation permettant de lister les adresses historiques et supprimées (intégration dans la fiche adresse dans l''application GEO RVA et utilisation dans la recherche des anciennes adresses)
+
+`x_apps.xapps_geo_v_troncon_voirie` : Vue matérilaisée complète et décodée des données relatives au troncon et à ses propriétés métiers de circulation et de gestion, destinée à l'exploitation applicative (générateur d'apps). Cette vue est rafraîchie automatiquement toutes les nuits. Au besoin un rafraîchissement ponctuel est possible.
+
+`x_apps.xapps_geo_v_voie` : Vue de synthèse des voies (agréagation des tronçons pour calcul) (générateur d'apps)
+Cette vue matérialisée est rafraichit toutes les jours via un fichier batch sur la VM sig-sgbd.
 
 ### classes d'objets applicatives grands publics sont classés dans le schéma x_apps_public :
 
-`x_apps_public.xappspublic_geo_v_adresse` : Vue complète et décodée des adresses destinée à l'exploitation applicative  publique (générateur d'apps)
+Sans objet
 
 ### classes d'objets opendata sont classés dans le schéma x_opendata :
 
-`x_opendata.xopendata_an_v_bal` : Vue alphanumérique simplifiée des adresses au format d''échange BAL
-
-`x_opendata.xopendata_geo_v_openadresse` : Vue destinée à la communication extérieure des données relatives aux adresses. Exclusion des adresses supprimées, non attribuées pour projet ou à confirmer
+Sans objet
 
 ## Liste de valeurs
 
