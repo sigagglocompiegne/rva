@@ -105,7 +105,7 @@ Sont décrites ici les Géotables et/ou Tables intégrées dans GEO pour les bes
 
 |Géotables ou Tables| Champs de jointure | Type |
 |:---|:---|:---|
-| xapps_an_v_adresse_h.id_adresse |id_adresse | 0..n (égal) |
+| xapps_an_v_adresse_h |id_adresse | 0..n (égal) |
 
    * particularité(s) : aucune
    
@@ -114,26 +114,61 @@ Sont décrites ici les Géotables et/ou Tables intégrées dans GEO pour les bes
 |Attributs| Champ calculé | Formatage |Renommage|Particularité/Usage|Utilisation|Exemple|
 |:---|:-:|:-:|:---|:---|:---|:---|
 |affiche_message |x|x|`null`||Fiche d'information sur la voie||
-|date_ins||x|Instauré le||Fiche de renseignements d'urbanisme||
-|urlfic||x|+ d'infos|Déclaré en lien. Texte de remplacement dans GEO : Document lié|Fiche de renseignements d'urbanisme||
+|long||x|Linéaire||Fiche d'information sur la voie||
 
    * filtres : aucun
    * relations :
 
 |Géotables ou Tables| Champs de jointure | Type |
 |:---|:---|:---|
-| r_bg_edigeo.PARCELLE (Parcelle (Alpha) V3 dans GEO | idu | 0 à n (égal) |
+| xapps_v_troncon_voirie | id_voie | 0 à n (égal) |
+| xapps_an_voie | id_voie | 1 (égal) |
 
    * particularité(s) : aucune
    
 (en cours de rédaction)
 
-## Table : `xapps_an_vmr_p_information`
+## Table : `xapps_geo_v_troncon_voirie`
 
 |Attributs| Champ calculé | Formatage |Renommage|Particularité/Usage|Utilisation|Exemple|
 |:---|:-:|:-:|:---|:---|:---|:---|
-|libelle||x|Libellé||Fiche de renseignements d'urbanisme||
-|lien|x|x|+ d'infos|Déclaré en lien. Affiche le lien du document si il existe autrement rien.Texte de remplacement dans GEO : Document lié|Fiche de renseignements d'urbanisme||
+|affiche_commune|x|x||Formate en HTML le titre Commune de |Fiche d'information sur un tronçon||
+|affiche_message |x|x|`null`|Format en HTML un message sur la donnée|Fiche d'information sur un tronçon||
+|affiche_result |x|x|`null`|Format en HTML un message sur la donnée|Fiche d'information sur un tronçon||
+|affiche_troncon  |x|x|`null`|Format en HTML l'affichage du n° du tronçon avec un titre|Résultat de la recherche Recherche avancée d'une voie||
+|c_circu||x|Types de restrictions||Fiche d'information sur un tronçon||
+|c_observ||x|Autres restrictions||Fiche d'information sur un tronçon||
+|date_extract ||x|Date d'extraction||Visible dans les résultats pour les recherches générant l'export des synthèses communales||
+|date_lib||x|Période de création du libellé de la voie||Fiche d'information sur un tronçon||
+|date_maj ||x|Date de mise à jour|Formate la date en dd/mm/yyyy|Fiche d'information sur un tronçon||
+|date_ouv ||x|Année d'ouverture à la circulation||Fiche d'information sur un tronçon||
+|date_rem ||x|Dernière année de remise en état de la chaussée||Fiche d'information sur un tronçon||
+|date_sai ||x|Date de saisie|Formate la date en dd/mm/yyyy|Fiche d'information sur un tronçon||
+|doman  ||x|Domanialité||Fiche d'information sur un tronçon||
+|fictif   ||x|Fictif (ne rentre pas en compte dans le calcul du linéaire de voie)||Fiche d'information sur un tronçon||
+|franchiss    ||x|Franchissement||Fiche d'information sur un tronçon||
+|hierarchie     ||x|Hiérarchie||Fiche d'information sur un tronçon||
+|id_tronc      ||x|Identifiant du tronçon||Fiche d'information sur un tronçon||
+|id_voie       ||x|Identifiant de la voie||Fiche d'information sur un tronçon||
+|insee        ||x|Code Insee||Fiche d'information sur un tronçon||
+|libvoie        ||x|Libellé de la voie||Fiche d'information sur un tronçon||
+|long        ||x|Longueur de la voie (en m)||Fiche d'information sur un tronçon||
+|long_troncon        ||x|Longueur du tronçon (en m)||Fiche d'information sur un tronçon||
+|nb_voie         ||x|Nombre de voies||Fiche d'information sur un tronçon||
+|noeud_d          ||x|Identifiant du noeud de départ||||
+|noeud_d          ||x|Identifiant du noeud de fin||||
+|num_statut          ||x|N° de statut||Fiche d'information sur un tronçon||
+|observ           ||x|Observation(s)||Fiche d'information sur un tronçon||
+|proprio            ||x|Propriétaire||Fiche d'information sur un tronçon||
+|rivoli             ||x|Code RIVOLI||Fiche d'information sur un tronçon||
+|sens_circu             ||x|Sens de circulation||Fiche d'information sur un tronçon||
+|statut_jur              ||x|Statut juridique||Fiche d'information sur un tronçon||
+|titre_info_bulle_troncon              |x|x||Formatage en HTML du titre pour les informations au tronçon dans l'info bulle |champ calculé `voie_info_bulle `||
+|titre_info_bulle_voie              |x|x||Formatage en HTML du titre pour les informations sur la voie dans l'info bulle |champ calculé `voie_info_bulle `||
+|type_circu               ||x|Type de circulation||Fiche d'information sur un tronçon||
+|type_tronc                ||x|Type de tronçon||Fiche d'information sur un tronçon||
+|v_max                ||x|Vitesse maximum||Fiche d'information sur un tronçon||
+|voie_info_bulle              |x|x||Formatage en HTML des informations du tronçonn et de la voie affichées dans l'info bulle du tronçon |Cartothèque||
 
    * filtres : aucun
    * relations :
@@ -145,6 +180,8 @@ Sont décrites ici les Géotables et/ou Tables intégrées dans GEO pour les bes
    * particularité(s) : aucune
    
 ## Table : `xapps_an_vmr_p_prescription`
+
+(en cours de rédaction)
 
 |Attributs| Champ calculé | Formatage |Renommage|Particularité/Usage|Utilisation|Exemple|
 |:---|:-:|:-:|:---|:---|:---|:---|
