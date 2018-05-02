@@ -227,13 +227,12 @@ Se référerer à la documentation de la base de données Adresse pour plus d'in
 
 ---
 
-`r_objet.lt_src_geom` : Liste des valeurs permettant de décrire le type de référentiel géométrique
+`r_voie.lt_franchiss` : Liste des valeurs permettant de décrire le type de franchissement
 
 |Nom attribut | Définition | Type  | Valeurs par défaut |
 |:---|:---|:---|:---|    
-|code|Code de la liste énumérée relative au type de référentiel géométrique|character varying(2)| |
-|valeur|Valeur de la liste énumérée relative au type de référentiel géométrique|character varying(254)| |
-
+|code|Code de la liste énumérée relative au type de franchissement du tronçon|character varying(2)| |
+|valeur|Valeur de la liste énumérée relative au type de franchissement du tronçon|character varying(254)| |
 
 Particularité(s) à noter :
 * Une clé primaire existe sur le champ code 
@@ -242,45 +241,27 @@ Valeurs possibles :
 
 |Code|Valeur|
 |:---|:---|
-|10|Cadastre|
-|11|PCI vecteur|
-|12|BD Parcellaire|
-|13|RPCU|
-|20|Ortho-images|
-|21|Orthophotoplan IGN|
-|22|Orthophotoplan partenaire|
-|23|Orthophotoplan local|
-|30|Filaire voirie|
-|31|Route BDTopo|
-|32|Route OSM|
-|40|Cartes|
-|41|Scan25|
-|50|Lever|
-|51|Plan topographique|
-|52|PCRS|
-|53|Trace GPS|
-|60|Geocodage|
-|71|Plan masse vectoriel|
-|72|Plan masse redessiné|
-|80|Thématique|
-|81|Document d'urbanisme|
-|82|Occupation du Sol|
-|83|Thèmes BDTopo|
-|99|Autre|
 |00|Non renseigné|
-|70|Plan masse|
-|61|Base Adresse Locale|
+|01|Pont|
+|02|Tunnel|
+|03|Passage à niveau sur voie ferrée|
+|04|Porche (passage sous un bâtiment)|
+|05|Escalier|
+|06|Passerelle|
+|99|Autre|
+|ZZ|Non concerné|
+
 
 ---
 
-`r_voie.lt_type_voie` : Liste des valeurs permettant de décrire le type de voie
+`r_voie.lt_hierarchie` : Liste des valeurs permettant de décrire le type de hiérarchie utilisée pour la représentation cartographique
 
 |Nom attribut | Définition | Type  | Valeurs par défaut |
 |:---|:---|:---|:---|    
-|code|Code de la liste énumérée relative au type de voie|character varying(2)| |
-|valeur|Valeur de la liste énumérée relative au type de voie|character varying(254)| |
-|definition|Definition de la liste énumérée relative au type de voie|character varying(254)| |
-
+|code|Code de la liste énumérée relative à la hierarchisation du troncon dans la trame viaire|character varying(2)| |
+|valeur|Valeur de la liste énumérée relative à la hierarchisation du troncon dans la trame viaire|character varying(80)| |
+|code_val|Couple Code-Valeur de la liste énumérée relative à la hierarchisation du troncon dans la trame viaire|character varying(80)| |
+|exemple|Exemple de troncon adapté à la catégorie|character varying(254)| |
 
 Particularité(s) à noter :
 * Une clé primaire existe sur le champ code 
@@ -289,64 +270,29 @@ Valeurs possibles :
 
 |Code|Valeur|
 |:---|:---|
-|01|R|Rue|
-|02|RTE|Route|
-|03|BD|Boulevard|
-|04|AV|Avenue|
-|05|CHE|Chemin|
-|06|ALL|Allée|
-|08|CAR|Carrefour|
-|09|IMP|Impasse|
-|10|LD|Lieu dit|
-|11|CITE|Cité|
-|12|CLOS|Clos|
-|13|COUR|Cour|
-|14|CRS|Cours|
-|15|CD|Chemin Départemental|
-|16|CR|Chemin rural|
-|17|CTRE|Centre|
-|18|D|Départementale|
-|19|GR|Grande Rue|
-|20|PARC|Parc|
-|21|N|Nationale|
-|22|PAS|Passage|
-|23|PRV|Parvis|
-|24|PL|Place|
-|25|PNT|Pont|
-|26|PRT|Petite Route|
-|27|PORT|Port|
-|28|PROM|Promenade|
-|29|QU|Quai|
-|30|RES|Résidence|
-|31|RLE|Ruelle|
-|32|RPT|Rond Point|
-|34|SQ|Square|
-|35|VC|Voie Communale|
-|36|VLA|Villa|
-|37|VOI|Voie|
-|38|VOIR|Voirie|
-|39|ZAC|ZAC|
-|40|CAV|Cavée|
-|41|CHS|Chaussée|
-|42|COTE|Côte|
-|43|CV|Chemin vicinal|
-|44|DOM|Domaine|
-|45|PLE|Passerelle|
-|33|ZZ|Sente(ier)|
-|00|Non renseigné|Non renseigné|
-|99|Autre|Autre|
-|ZZ|Non concerné|Non concerné|
-|46|LOT|Lotissement|
+|1|Voie d'interêt national ou régional|
+|2|Voie structurant l'aire urbaine|
+|3|Ceinture de desserte d'agglomération|
+|4|Voie de desserte urbaine|
+|5|Voie principale hors agglomération|
+|6|Voie principale communale|
+|7|Voie inter-quartier|
+|8|Voie de desserte locale|
+|9|Autre|
+|0|Non renseigné|
+|Z|Non concerné|
+
 
 ---
 
-`r_adresse.lt_dest_adr` : Liste des valeurs permettant de décrire la destination de l'adresse
+`r_adresse.lt_type_tronc` : Liste des valeurs permettant de décrire le type de tronçon
 
 |Nom attribut | Définition | Type  | Valeurs par défaut |
 |:---|:---|:---|:---|    
-|code|Code de la liste énumérée relative au type de voie|character varying(2)| |
-|valeur|Valeur de la liste énumérée relative au type de voie|character varying(80)| |
-|definition|Definition de la liste énumérée relative au type de voie|character varying(254)| |
+|code|Code de la liste énumérée relative au type de tronçon|character varying(2)| |
+|valeur|Valeur de la liste énumérée relative au type de tronçon|character varying(80)| |
+|code_val|Couple Code-Valeur de la liste énumérée relative au type de tronçon|character varying(80)| |
+|definition|Définition de la liste énumérée relative au type de tronçon|character varying(254)| |
 
 Particularité(s) à noter :
 * Une clé primaire existe sur le champ code 
@@ -355,13 +301,23 @@ Valeurs possibles :
 
 |Code|Valeur|
 |:---|:---|
-|00|Non renseigné||
-|01|Habitation|Appartement, maison ...|
-|02|Etablissement|Commerce, entreprise ...|
-|03|Equipement urbain|Stade, piscine ...|
-|04|Communauté|Maison de retraite, internat, gendarmerie, ...|
-|05|Habitation + Etablissement|Logements et commerces à la même adresse|
-|99|Autre|Parking, garage privés ...|
+|00|Non renseigné|
+|10|Troncon de type routier|
+|11|Autoroute|
+|12|Voie rapide/express|
+|13|Bretelle|
+|14|Route|
+|15|Chemin|
+|20|Troncon de type cyclable|
+|21|Voie cyclable|
+|30|Troncon de type piéton|
+|31|Sentier|
+|32|Passerelle|
+|33|Escalier|
+|40|Troncon hors réseau|
+|41|Parking|
+|99|Autre|
+|ZZ|Non concerné|
 
 ---
 
