@@ -285,7 +285,7 @@ Valeurs possibles :
 
 ---
 
-`r_adresse.lt_type_tronc` : Liste des valeurs permettant de décrire le type de tronçon
+`r_voie.lt_type_tronc` : Liste des valeurs permettant de décrire le type de tronçon
 
 |Nom attribut | Définition | Type  | Valeurs par défaut |
 |:---|:---|:---|:---|    
@@ -365,77 +365,12 @@ Valeurs possibles :
 
 ---
 
-`m_voirie.lt_groupee` : Liste des valeurs permettant de définir si une adresse est groupée ou non
+`m_voirie.lt_gestion` : Liste des valeurs permettant de définir le gestionnaire
 
 |Nom attribut | Définition | Type  | Valeurs par défaut |
 |:---|:---|:---|:---|
-|code|Code|character(1)||
-|valeur|Valeur|character varying(80)||
-
-
-Particularité(s) à noter :
-* Une clé primaire existe sur le champ code 
-
-Valeurs possibles :
-
-|Code|Valeur|
-|:---|:---|
-|0|Non renseigné|
-|1|Oui|
-|2|Non|
-
----
-
-`r_adresse.lt_qual_adr` : Liste des valeurs permettant de décrire un indice de qualité simplifié d'une adresse
-
-|Nom attribut | Définition | Type  | Valeurs par défaut |
-|:---|:---|:---|:---|    
-|code|Code|character varying(1)| |
-|valeur|Valeur|character varying(80)| |
-
-
-Particularité(s) à noter :
-* Une clé primaire existe sur le champ code 
-
-Valeurs possibles :
-
-|Code|Valeur|
-|:---|:---|
-|0|Non renseigné|
-|1|Bon|
-|2|Moyen|
-|3|Mauvais|
-|9|Autre|
-
----
-
-`r_adresse.lt_secondaire` : Liste des valeurs permettant de définir si une adresse est un accès secondaire
-
-|Nom attribut | Définition | Type  | Valeurs par défaut |
-|:---|:---|:---|:---|    
-|code|Code|character varying(1)| |
-|valeur|Valeur|character varying(80)| |
-
-
-Particularité(s) à noter :
-* Une clé primaire existe sur le champ code 
-
-Valeurs possibles :
-
-|Code|Valeur|
-|:---|:---|
-|0|Non renseigné|
-|1|Oui|
-|2|Non|
-
----
-
-`r_adresse.lt_src_adr` : Liste des valeurs permettant de décrire l'origine de l'adresse
-
-|Nom attribut | Définition | Type  | Valeurs par défaut |
-|:---|:---|:---|:---|    
-|code|Code|character varying(2)| |
-|valeur|Valeur|character varying(80)| |
+|code|Code de la liste énumérée relative au gestionnaire/propriétaire du tronçon|character varying(2)| |
+|valeur|Valeur de la liste énumérée relative au gestionnaire/propriétaire du tronçon|character varying(80)| |
 
 Particularité(s) à noter :
 * Une clé primaire existe sur le champ code 
@@ -445,21 +380,24 @@ Valeurs possibles :
 |Code|Valeur|
 |:---|:---|
 |00|Non renseigné|
-|01|Cadastre|
-|02|OSM|
-|03|BAN|
+|01|Etat|
+|02|Région|
+|03|Département|
 |04|Intercommunalité|
 |05|Commune|
+|06|Office HLM|
+|07|Privé|
 |99|Autre|
+|ZZ|Non concerné|
 
 ---
 
-`public.lt_nat_signal` : Liste des valeurs permettant de décrire la nature du signalement sur le référentiel voie/adresse
+`m_voirie.lt_sens_circu` : Liste des valeurs permettant de décrire le sens de circulation
 
 |Nom attribut | Définition | Type  | Valeurs par défaut |
 |:---|:---|:---|:---|    
-|code|Code|character varying(1)| |
-|valeur|Valeur|character varying(100)| |
+|code|Code de la liste énumérée relative au sens de circulation du tronçon|character varying(2)| |
+|valeur|Valeur de la liste énumérée relative au sens de circulation du tronçon|character varying(80)| |
 
 Particularité(s) à noter :
 * Une clé primaire existe sur le champ code 
@@ -468,20 +406,20 @@ Valeurs possibles :
 
 |Code|Valeur|
 |:---|:---|
-|0|Non renseigné|
-|1|Création|
-|2|Modification|
-|3|Suppression|
-|9|Autre|
+|00|Non renseigné|
+|01|Double sens|
+|02|Sens unique direct (sens de saisie du troncon)|
+|03|Sens unique inverse (sens de saisie du troncon)|
+|ZZ|Non concerné|
 
 ---
 
-`public.lt_traite_sig` : Liste des valeurs permettant de décrire l''état du traitement du signalement par le service SIG
+`m_voirie.lt_statut_jur` : Liste des valeurs permettant de définir le statut juridique
 
 |Nom attribut | Définition | Type  | Valeurs par défaut |
 |:---|:---|:---|:---|    
-|code|Code|character varying(1)| |
-|valeur|Valeur|character varying(80)| |
+|code|Code de la liste énumérée relative au statut juridique du tronçon|character varying(2)| |
+|valeur|Valeur de la liste énumérée relative au statut juridique du tronçon|character varying(254)| |
 
 Particularité(s) à noter :
 * Une clé primaire existe sur le champ code 
@@ -490,20 +428,30 @@ Valeurs possibles :
 
 |Code|Valeur|
 |:---|:---|
-|0|Non renseigné|
-|1|Nouvelle demande|
-|2|Demande prise en compte|
-|3|Demande traitée|
+|00|Non renseigné|
+|01|Autoroute|
+|02|Route Nationale|
+|03|Route Départementale|
+|04|Voie d'Interêt Communautaire|
+|05|Voie Communale|
+|06|Chemin Rural|
+|07|Chemin d'Exploitation|
+|08|Chemin Forestier|
+|09|Chemin de Halage|
+|10|Voie Privée|
+|11|Piste Cyclable|
+|12|Voie Verte|
+|99|Autre statut|
+|ZZ|Non concerné|
 
 ---
 
-
-`public.lt_type_rva` : Liste des valeurs permettant de décrire le type de référentiel voie/adresse concerné par un signalement
+`m_voirie.lt_type_circu` : Liste des valeurs permettant de décrire le type de circulation
 
 |Nom attribut | Définition | Type  | Valeurs par défaut |
 |:---|:---|:---|:---|    
-|code|Code|character varying(1)| |
-|valeur|Valeur|character varying(80)| |
+|code|Code de la liste énumérée relative au type de circulation sur un tronçon|character varying(2)| |
+|valeur|Valeur de la liste énumérée relative au type de circulation sur un tronçon|character varying(80)| |
 
 Particularité(s) à noter :
 * Une clé primaire existe sur le champ code 
@@ -512,10 +460,47 @@ Valeurs possibles :
 
 |Code|Valeur|
 |:---|:---|
-|0|Non renseigné|
-|1|Adresse|
-|2|Voie|
-|9|Autre|
+|00|Non renseigné|
+|01|Routier|
+|02|Cyclable|
+|03|Piéton|
+|04|Mixte à dominante routière|
+|05|Mixte à dominante cyclable|
+|06|Mixte à dominante piétonne|
+|07|Mixte sans dominante particulière|
+
+---
+
+`m_voirie.lt_v_max` : Liste des valeurs permettant de décrire la vitesse maximum autorisée
+
+|Nom attribut | Définition | Type  | Valeurs par défaut |
+|:---|:---|:---|:---|    
+|code|Code de la liste énumérée relative à la vitesse maximale autorisée pour un véhicule léger|character varying(3)| |
+|valeur|Valeur de la liste énumérée relative à la vitesse maximale autorisée pour un véhicule léger|character varying(80)| |
+
+Particularité(s) à noter :
+* Une clé primaire existe sur le champ code 
+
+Valeurs possibles :
+
+|Code|Valeur|
+|:---|:---|
+|000|Non renseigné|
+|010|10 km/h|
+|015|15 km/h|
+|020|20 km/h|
+|030|30 km/h|
+|040|40 km/h|
+|045|45 km/h|
+|050|50 km/h|
+|060|60 km/h|
+|070|70 km/h|
+|080|80 km/h|
+|090|90 km/h|
+|110|110 km/h|
+|130|130 km/h|
+|999|Autre vitesse|
+|ZZZ|Non concerné|
 
 ---
 
@@ -525,20 +510,68 @@ Valeurs possibles :
 
 L'ensemble des fichiers a utilisé est placé ici `Y:\Ressources\4-Partage\3-Procedures\FME\prod\RVA`.
 
-**Vérification de la qualité des adresse** `RVA_ctrl_qualite_adresse.fmw`
+**Vérification de la qualité des adresse** `RVA_ctrl_qualite_voie.fmw`
+
+Une table d'erreur a été initiée pour l'ensemble de ces contrôles `public.lt_erreur`
+|code|Code de la liste des erreurs suite à un contrôle qualité des données gérées par le service SIG|character varying(5)| |
+|base|Nom de la base concernée par le code erreur|character varying(20)| |
+|valeur|Valeur de la liste des erreurs suite à un contrôle qualité des données gérées par le service SIG|character varying(100)| |
+
+Valeurs possibles (non exhaustives) :
+
+|Code|Base|Valeur|
+|:---|:---|:---|
+|2008|RVA|Nombre de logements non saisi|
+|2009|RVA|Diagnostic de l'adresse non renseigné|
+|1000|RVA|Relation adresse tronçon|
+|1001|RVA|Relation adresse voie|
+|1002|RVA|Relation adresse cadastre|
+|2010|RVA|Incohérence entre le numéro et l'étiquette|
+|2012|RVA|Adresse non conforme avec une position trop précise|
+|1003|RVA|Adresse BAN non trouvée dans la BAL|
+|1004|RVA|Adresse BAL non trouvée dans la BAN|
+|2013|RVA|Adresse conforme d'habitation sans logement renseigné|
+|2014|RVA|Adresse secondaire avec au moins 1 logement|
+|2001|RVA|Référence cadastrale manquante ou mal saisie|
+|2015|RVA|Adresse conforme n'est pas groupée|
+|2016|RVA|Adresse à dégrouper non groupée|
+|2017|RVA|Diagnostic adresse incohérent avec une adresse groupée|
+|2018|RVA|Adresse qui ne doit pas comporter de logements|
+|3000|RVA|Mauvais code voie affecté au tronçon|
+|3001|RVA|Mauvais code insee affecté au tronçon|
+|3002|RVA|Code insee manquant|
+|3003|RVA|Nombre de voies manquante|
+|3004|RVA|Incohérence entre domanialité public et propriété|
+|3005|RVA|Incohérence entre domanialité privé et propriété|
+|3006|RVA|Incohérence entre statut juridique et gestionnaire|
+|3007|RVA|Incohérence entre le type de tronçon et la hiérarchie|
+|3008|RVA|Franchissement à Non renseigné|
+|3009|RVA|Tronçon non coupé |
+|3010|RVA|Tronçon non raccordé|
+|2011|RVA|Adresse conforme avec une position non précise|
+|2002|RVA|Mauvaise commune d'assignation|
+|2003|RVA|Id_voie manquant|
+|2004|RVA|Id_tronc manquant|
+|2005|RVA|Champ numéro vide|
+|2006|RVA|Mauvais indice de répétition|
+|2007|RVA|Angle non saisi|
+
 
 Ce traitement permet de :
-- croiser plusieurs sources de données Adresse pour évaluer d'éventuels oublis d'adresse,
-- croiser avec la base des voies pour vérifier la bonne affectation de l'adresse au tronçon et à la voie nommée
-- vérifier les cohérences àl 'intérieur de la base Adresse (ex : numméro + repet = etiquette, .....)
+- vérifier l'affectation des bons codes voies au tronçon,
+- vérifier l'affectation des bons codes insee au tronçon,
+- contrôler l'ensemble des champs de saisies (insee null, nb voie null, ...)
+- contrôler la domanialité par rapport aux propriétés foncières,
+- contrôler la cohérence du statut juridique par rapport au gestionnaire,
+- contrôler le type de tronçon par rapport à sa hiérarchie,
+- contrôle des géométries (si pas franchissement) sur raccord entre tronçon,
 - ...
-
 
 ## Export Open Data
 
 L'ensemble des fichiers a utilisé est placé ici `Y:\Ressources\4-Partage\3-Procedures\FME\prod\OPEN-DATA`.
 
- - `RVA_adresse_metadonnees.fmw` : ce traitement exporte l'ensemble des données Adresse à de multiples formats téléchargeables via la fiche de métadonnées (csv, shape, kml, geojson, excel) et il est exécuté tous les jours à 21h00 sur le serveur sig-applis.
+ - `RVA_voie_metadonnees.fmw` : ce traitement exporte l'ensemble des données Voie à de multiples formats téléchargeables via la fiche de métadonnées (csv, shape, kml, geojson, excel) et il est exécuté tous les jours à 21h30 sur le serveur sig-applis.
 
 ---
 
