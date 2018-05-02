@@ -83,13 +83,22 @@ Particularité(s) à noter :
 
 |Nom attribut | Définition | Type  | Valeurs par défaut |
 |:---|:---|:---|:---|  
+|id_tronc|Identifiant unique de l'objet tronçon|bigint| |
+|type_tronc|Type de troncon|character varying(2)|'00'::bpchar|
+|hierarchie|Niveau hierarchique du troncon dans la trame viaire|character varying(1)|'0'::bpchar|
+|franchiss|Indication d'un franchissement|character varying(2)|'ZZ'::bpchar|
+|nb_voie|Nombre de voies sur le tronçon|integer| |
+|projet|Indication de l'état de projet du tronçon|boolean|false|
+|fictif|Indication de la prise en compte du tronçon dans des calculs|boolean|false|
+|date_sai|Horodatage de l'intégration en base de l'objet|timestamp without time zone|now()|
+|date_maj|Horodatage de la mise à jour en base de l'objet|timestamp without time zone| |
 
 
 Particularité(s) à noter : aucune
-* Une clé primaire existe sur le champ `id_adresse`
-* Une clé étrangère exsiste sur la table de valeur `diag_adr` (liste de valeur `lt_diag_adr` définissant le type de diagnostic de l'adresse)
-* Une clé étrangère exsiste sur la table de valeur `qual_adr` (liste de valeur `lt_qual_adr` définissant la qualité de l'adresse)
-* Une clé étrangère exsiste sur la table de valeur `src_adr` (liste de valeur `lt_src_adr` définissant les sources de l'adresse)
+* Une clé primaire existe sur le champ `id_tronc`
+* Une clé étrangère exsiste sur la table de valeur `franchiss` (liste de valeur `lt_franchiss` définissant le type de franchissement en les tronçons)
+* Une clé étrangère exsiste sur la table de valeur `hierarchie` (liste de valeur `lt_hierarchie` définissant le niveau hiérarchique pour la représentation cartographique)
+* Une clé étrangère exsiste sur la table de valeur `type_tronc` (liste de valeur `lt_type_tronc` définissant le type de tronçon)
 
 ---
 
@@ -97,14 +106,14 @@ Particularité(s) à noter : aucune
 
 |Nom attribut | Définition | Type  | Valeurs par défaut |
 |:---|:---|:---|:---|
-
-
+|id|Identifiant unique de l'historisation|bigint|nextval('r_voie.an_troncon_h_id_seq'::regclass)|
+|id_tronc|Identifiant unique de l'objet tronçon|bigint| |
+|id_voie_g|Identifiant de l'objet voie gauche|bigint| |
+|id_voie_d|Identifiant de l'objet voie droite|bigint| |
+|date_sai|Date de saisie dans la base de données|timestamp without time zone|now()|
 
 Particularité(s) à noter :
-* Une clé primaire existe sur le champ `id_adresse`
-* Une clé étrangère exsiste sur la table de valeur `id_adresse` de la table geo_objet_pt_adresse
-* Une clé étrangère exsiste sur la table de valeur `groupee` (liste de valeur `lt_groupee` définissant si une adresse est considérée comme groupée)
-* Une clé étrangère exsiste sur la table de valeur `secondaire` (liste de valeur `lt_secondaire` définissant si une adresse est secondaire)
+* Une clé primaire existe sur le champ `id` avec une séquence d'incrémentation automatique (`r_voie.an_troncon_h_id_seq`)
 
 ---
 
@@ -122,9 +131,38 @@ Se référer à la documentation de la base Adresse pour plus de détail sur cet
 
 `m_voirie.an_voirie_circu` : Table alphanumérique des éléments de circulation de la voirie
 
+|Nom attribut | Définition | Type  | Valeurs par défaut |
+|:---|:---|:---|:---|
+
+
+Particularité(s) à noter :
+* Une clé primaire existe sur le champ `id` avec une séquence d'incrémentation automatique (`r_voie.an_troncon_h_id_seq`)
+
 ---
 
 `m_voirie.an_voirie_gest` : Table alphanumérique des éléments de gestion de la voirie
+
+|Nom attribut | Définition | Type  | Valeurs par défaut |
+|:---|:---|:---|:---|
+|id_tronc|Identifiant du tronçon|bigint| |
+|statut_jur|Statut juridique du tronçon de la voie|character varying(2)|'00'::bpchar|
+|num_statut|Numéro de statut du tronçon de la voie|character varying(10)| |
+|gestion|Gestionnaire du tronçon de la voie|character varying(2)|'00'::bpchar|
+|doman|Domanialité du tronçon|character varying(2)|'00'::bpchar|
+|proprio|Propriétaire du tronçon|character varying(2)|'00'::bpchar|
+|observ|Observations|character varying(254)| |
+|src_gest|Référence principale utilisée pour les éléments de gestion|character varying(100)| |
+|date_sai|Date de saisie dans la base de données|timestamp without time zone|now()|
+|date_maj|Date de la dernière mise à jour dans la base de données|timestamp without time zone| |
+|date_rem|Date de la dernière remise en état de la chaussée (soit l''année entière est saisie soit une partie en remplaçant les 0 par des x)|character(4)| |
+
+
+Particularité(s) à noter :
+* Une clé primaire existe sur le champ `id_tronc` avec une séquence d'incrémentation automatique
+* Une clé étrangère exsiste sur la table de valeur `id_tronc` (lien nécessaire avec la table de référence des tronçons `r_objet.geo_objet_troncon`)
+* Une clé étrangère exsiste sur la table de valeur `sens_circu` (liste de valeur `lt_hlt_sens_circuierarchie` définissant le sens de circulation)
+* Une clé étrangère exsiste sur la table de valeur `type_circu` (liste de valeur `lt_type_circu` définissant le type de circulation)
+* Une clé étrangère exsiste sur la table de valeur `v_max` (liste de valeur `lt_v_max` définissant la vitesse maximum autorisée sur le tronçon)
 
 ---
 
