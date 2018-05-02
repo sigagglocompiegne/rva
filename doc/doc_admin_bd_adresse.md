@@ -179,6 +179,25 @@ Particularité(s) à noter :
 * Une clé étrangère exsiste sur la table de valeur `type_rva` de la table lt_type_rva
 * 1 trigger :
   * `t_t1_geo_rva_signal` : à l'insertion recherche du code insee et libellé de la commune, calcul des coordonnées X et Y, date du jour et force la valeur date de mise à jour à null et traite_sig = 1 (non traité). A la mise à jour recherche recherche du code insee et libellé de la commune, calcul des coordonnées X et Y, et date de mise jour = date du jour.
+ 
+---
+
+`public.an_rva_signal_media` : table des médias structurée selon les recommandations de l'éditeur des applications métiers. Elle permet de stocker des documents joints (ici documents en lien avec le signalement d'une adresse ou d'une voie)
+
+|Nom attribut | Définition | Type  | Valeurs par défaut |
+|:---|:---|:---|:---|  
+|id|Identifiant interne (n° du signalement)|integer| |
+|media|Champ Média de GEO|text| |
+|miniature|Champ miniature de GEO|bytea| |
+|n_fichier|Nom du fichier|text| |
+|t_fichier|Type de média dans GEO|text| 
+
+
+Particularité(s) à noter :
+* Une clé primaire existe sur le champ `gid`
+* Index sur le champ `id`
+* 1 trigger :
+  * `t_t1_an_rva_signal_media_date_sai` : avant l'insertion calcul de la date du jour pour intégration comme date de saisie.
 
 ---
 
