@@ -35,9 +35,16 @@ Sans objet
 
 Sont décrites ici les Géotables et/ou Tables intégrées dans GEO pour les besoins de l'application. Les autres données servant d'habillage (pour la cartographie ou les recherches) sont listées dans les autres parties ci-après. Le tableau ci-dessous présente uniquement les changements (type de champ, formatage du résultat, ...) ou les ajouts (champs calculés, filtre, ...) non présents dans la donnée source. 
 
-## Table : `r_bg_edigeo.PARCELLE`
+## Table : `public.geo_rva_signal`
 
-Cette table est intégrée via le module GeoCadastre et est donc formatée par l'intégrateur. Aucune modification réalisée par l'ARC. Les relations forcées avec d'autres tables induites par cette intégration ne sont pas relatés dans cette documentation.
+|Attributs| Champ calculé | Formatage |Renommage|Particularité/Usage|Utilisation|Exemple|
+|:---|:-:|:-:|:---|:---|:---|:---|
+|acte_admin||x|Document administratif||Fiche de suivi d'un signalement voie/adresse||
+|affche_info|x|||Champ HTML formatant le type de traitement fait par le service SIG `{observ} || '<br>' || '<b>Suivi de la demande :</b> <br>' || CASE WHEN {traite_sig} = '1' THEN 'Nouvelle demande'
+WHEN {traite_sig} = '2' THEN 'Demande prise en compte'
+WHEN {traite_sig} = '3' THEN 'Demande traitée'
+ELSE 'Pas d''informations disponibles'
+END` |Fiche de suivi d'un signalement voie/adresse||
 
 ## Table : `r_bg_majic.NBAT_10 (Parcelle (Alpha) V3 dans GEO`
 
