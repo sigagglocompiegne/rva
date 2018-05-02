@@ -37,7 +37,7 @@ Sans objet
 
 Sont décrites ici les Géotables et/ou Tables intégrées dans GEO pour les besoins de l'application. Les autres données servant d'habillage (pour la cartographie ou les recherches) sont listées dans les autres parties ci-après. Le tableau ci-dessous présente uniquement les changements (type de champ, formatage du résultat, ...) ou les ajouts (champs calculés, filtre, ...) non présents dans la donnée source. 
 
-## Table : `public.geo_rva_signal`
+## GeoTable : `public.geo_rva_signal`
 
 |Attributs| Champ calculé | Formatage |Renommage|Particularité/Usage|Utilisation|Exemple|
 |:---|:-:|:-:|:---|:---|:---|:---|
@@ -56,37 +56,43 @@ Sont décrites ici les Géotables et/ou Tables intégrées dans GEO pour les bes
 |traite_sig     ||x|Suivi de la demande||Fiche de suivi d'un signalement voie/adresse||
 |type_rva     ||x|Type de signalement||Fiche de suivi d'un signalement voie/adresse||
 
-## Table : `r_bg_majic.NBAT_10 (Parcelle (Alpha) V3 dans GEO`
 
-Cette table est intégrée via le module GeoCadastre et est donc formatée par l'intégrateur. Aucune modification réalisée par l'ARC. Sur cette table est reliée l'ensemble des autres tables ou geotable issues de la base de données de l'ARC pour affichage dans la fiche de renseignements d'urbanisme.
-
-## Table : `an_v_docurba_valide`
+## GeoTable : `xapps_geo_vmr_adresse`
 
 |Attributs| Champ calculé | Formatage |Renommage|Particularité/Usage|Utilisation|Exemple|
 |:---|:-:|:-:|:---|:---|:---|:---|
-|datappro||x|Approbation|Formate la date du dernier en contrôle en dd/mm/yyyy|Fiche de renseignements d'urbanisme||
-|format_datappro|x|x||Formate la date du dernier en contrôle en dd/mm/yyyy (code sql)|champ calculé tableau_doc_vigueur pour test Fiche de renseignements d'urbanisme en HTML||
-|l_version||x|Version||Fiche de renseignements d'urbanisme||
-|tableau_doc_vigueur|x|x|null|Déclaré en HTML. Formate un tableau HTML contenant les éléments de la procédure actuelle|Test Fiche de renseignements d'urbanisme en HTML||
-|titre_ac4 |x|x|null|Déclaré en HTML. Formatage du titre pour la SUP AC4|Fiche de renseignements d'urbanisme||
-|titre_doc_urba_valide_html  |x|x|null|Déclaré en HTML. Formatage du titre pour la partie sur la procédure actuelle|Fiche de renseignements d'urbanisme||
-|titre_dpu_html |x|x|null|Déclaré en HTML. Formatage du titre pour la partie sur les DPU|Fiche de renseignements d'urbanisme||
-|titre_info_utile_html |x|x|null|Déclaré en HTML. Formatage du titre pour la partie sur les informations jugées utiles|Fiche de renseignements d'urbanisme||
-|titre_liste_sup_com |x|x|null|Déclaré en HTML. Formatage du titre pour la partie sur la liste des SUP devant encore être intégrées à la commune|Fiche de renseignements d'urbanisme||
-|titre_prescription_html  |x|x|null|Déclaré en HTML. Formatage du titre pour la partie sur les prescriptions|Fiche de renseignements d'urbanisme||
-|titre_sup_html   |x|x|null|Déclaré en HTML. Formatage du titre pour la partie sur les SUP intégrées|Fiche de renseignements d'urbanisme||
-|titre_sup_impact   |x|x|null|Déclaré en HTML. Formatage du sous-titre pour la partie sur les SUP intégrées|Fiche de renseignements d'urbanisme||
-|titre_taxe_amgt   |x|x|null|Déclaré en HTML. Formatage du titre pour la partie sur la taxe d'aménagement|Fiche de renseignements d'urbanisme||
-|titre_zonage_html   |x|x|null||Déclaré en HTML. Utilisée pour les anciennes fiches de renseignements d'urbanisme||
+|adresse|x|x|Adresse complète|Reconstitution (format HTML) de l'adresse complète avec la gestion des indices de répétition non rempli|Suggestion dans la Recherche dans la Base Adresse Locale et dans la fiche d'information Fiche adresse ||
+|adresse_apostrophe |x|x||Gestion de l'apostrophe pour la recherche d'adresse |Rechercher dans la Recherche dans la Base Adresse Locale ||
+|adresse_apostrophe_histo |x|x||Gestion de l'apostrophe pour la rechercge d'adresse hisrotisée|Rechercher dans la Recherche dans la Base Adresse Locale ||
+|affiche_adresse |x|x||Formate en HTML l'affichage de l'adresse|Afficher dans la Recherche dans la Base Adresse Locale ||
+|affiche_nouvelle_adresse |x|x||Formate en HTML l'affichage de la nouvelle adresse si l'adresse n'est pas supprimée|Afficher dans Recherche d'une ancienne adresse ||
+|affiche_result  |x|x||Formate le titre du résultat dans le menu Résultat (si adresse trouvée ou supprimée) |Afficher dans la Recherche dans la Base Adresse Locale ||
+|affiche_qual_adr  |x|x||Formate l'affichage de la qualité par rapport à l'adresse supprimée (`si supprimé affiche Conforme (supprimé) sinon la valeur de qual_adr`|Plus utilisée ||
+|angle_geo  |x|x||Multipli l'angle par -1 pour lagestion des étiquettes de n° de voies dans GEO|Cartothèque ||
+|complement   ||x|Complément| |Fiche d'information Fiche adresse et utilisé dans les champs calculés gérant l'affichage ou la recherche des adresses ||
+|date_maj    ||x|Date  de mise à jour| |Fiche d'information Fiche adresse ||
+|date_sai    ||x|Date de saisie| |Fiche d'information Fiche adresse ||
+|dest_adr    ||x|Destination| |Fiche d'information Fiche adresse ||
+|diag_adr     ||x|Diagnostic| |Fiche d'information Fiche adresse ||
+|etat_adr      ||x|Etat| |Fiche d'information Fiche adresse ||
+|groupee       ||x|Groupée| |Fiche d'information Fiche adresse ||
+|id_adresse        ||x|Identifiant||Fiche d'information Fiche adresse ||
+|id_tronc         ||x|Identifiant du tronçon de voie||Fiche d'information Fiche adresse ||
+|id_voie          ||x|Identifiant de la voie| |Fiche d'information Fiche adresse ||
+|infobulle           |x|x||Formatage en HTML du contenu de l'info bulle au survol d'une adresse |Cartothèque ||
+|lat           ||x|Latitude|Formatage en HTML du contenu de l'info bulle au survol d'une adresse |Cartothèque ||
+
+
+(en cours de rédaction)
 
    * filtres : aucun
    * relations :
 
 |Géotables ou Tables| Champs de jointure | Type |
 |:---|:---|:---|
-| r_bg_edigeo.PARCELLE (Parcelle (Alpha) V3 dans GEO | CCOCOM = insee | 1 (égal) |
+| xapps_an_v_adresse_h.id_adresse |id_adresse | 0..n (égal) |
 
-   * particularité(s) : les champs calculés permettant d'afficher les titres des différentes rubriques de la fiche de renseignements d'urbanisme ont été intégrés dans cette table, car c'est la seule a remonté toujours un enregistrement à chaque parcelle intérogée car elle appartient forcément à une commune avec ou sans procédure d'urbanisme en vigueur.
+   * particularité(s) : aucune
    
 ## Table : `xapps_an_vmr_p_information_dpu`
 
