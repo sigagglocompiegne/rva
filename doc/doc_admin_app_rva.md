@@ -40,7 +40,19 @@ Sont décrites ici les Géotables et/ou Tables intégrées dans GEO pour les bes
 |Attributs| Champ calculé | Formatage |Renommage|Particularité/Usage|Utilisation|Exemple|
 |:---|:-:|:-:|:---|:---|:---|:---|
 |acte_admin||x|Document administratif||Fiche de suivi d'un signalement voie/adresse||
-|affche_info|x|||Champ HTML formatant le type de traitement fait par le service SIG `{observ} || ''<br>'' || '<b>Suivi de la demande :</b> <br>' || CASE WHEN {traite_sig} = ''1'' THEN 'Nouvelle demande'' WHEN {traite_sig} = ''2'' THEN 'Demande prise en compte'' WHEN {traite_sig} = ''3'' THEN 'Demande traitée'' ELSE ''Pas d'informations disponibles'' END` |Fiche de suivi d'un signalement voie/adresse||
+|affche_info|x|x|`null`|Champ HTML formatant le type de traitement fait par le service SIG (décodage du champ `traite_sig`) |Fiche de suivi d'un signalement voie/adresse||
+|affiche_result |x|||Champ HTML formatant le type de traitement fait par le service SIG (décodage du champ `traite_sig`) |Affichage dans le menu résultat||
+|affiche_titre |x|||Titre  |Affichage du titre de la demande dans le menu résultat à partir de la recherche d'un signalement||
+|date_maj ||x|Date du traitement|Formate la date en dd/mm/yyyy |Fiche de suivi d'un signalement voie/adresse||
+|date_sai  ||x|Date du signalement|Formate la date en dd/mm/yyyy |Fiche de suivi d'un signalement voie/adresse||
+|id_signal  ||x|Signalement n°||Fiche de suivi d'un signalement voie/adresse||
+|insee  ||x|Code INSEE||Fiche de suivi d'un signalement voie/adresse||
+|mail   ||x|Email du contributeur||Fiche de suivi d'un signalement voie/adresse||
+|nat_signal   ||x|Nature du signalement||Fiche de suivi d'un signalement voie/adresse||
+|observ    ||x|Description du signalement||Fiche de suivi d'un signalement voie/adresse||
+|op_sai    ||x|Nom du contributeur||Fiche de suivi d'un signalement voie/adresse||
+|traite_sig     ||x|Suivi de la demande||Fiche de suivi d'un signalement voie/adresse||
+|type_rva     ||x|Type de signalement||Fiche de suivi d'un signalement voie/adresse||
 
 ## Table : `r_bg_majic.NBAT_10 (Parcelle (Alpha) V3 dans GEO`
 
