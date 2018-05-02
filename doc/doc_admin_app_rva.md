@@ -12,7 +12,7 @@
 
 |Public|Métier|Accès restreint|
 |:-:|:-:|:---|
-||X|Accès réservé aux personnels des communes et des EPCI ayant les droits d'accès. 2 profils cohabitent, ceux qui ont accès à la consultation de la matrice cadastrale et ceux qui ne l'ont pas.|
+||X|Accès réservé aux personnels des communes et des EPCI ayant les droits d'accès.|
 
 # Droit par profil de connexion
 
@@ -25,7 +25,7 @@ Sans Objet
 |Fonctionnalités|Lecture|Ecriture|Précisions|
 |:---|:-:|:-:|:---|
 |Toutes|x||L'ensemble des fonctionnalités (recherches, cartographie, fiches d'informations, ...) sont accessibles par tous les utilisateurs connectés.|
-|Modification géométrique - PPRi zonage (projet) - remarque|x||Cette fonctionnalité est uniquement visible par les utilisateurs inclus dans les groupes ADMIN et PPRI_EDIT|
+|Modification géométrique - Faire un signalement d'adresses ou de voies|x||Cette fonctionnalité est uniquement visible par les utilisateurs inclus dans les groupes ADMIN et RVA_EDIT|
 
 * **Autres profils**
 
