@@ -321,45 +321,35 @@ Valeurs possibles :
 
 ---
 
-`r_adresse.lt_diag_adr` : Liste des valeurs permettant de décrire un diagnostic qualité d'une adresse
+`m_voirie.lt_cont_circu` : Liste des valeurs permettant de décrire les contraintes de circulation
 
 |Nom attribut | Définition | Type  | Valeurs par défaut |
 |:---|:---|:---|:---|    
-|code|Code|character(2)| |
-|valeur|Valeur|character varying(80)| |
-
+|code|Code de la liste énumérée relative aux contraintes de circulation possible (hors vitesse)|character varying(3)| |
+|valeur|Valeur de la liste énumérée relative aux contraintes de circulation possible (hors vitesse)|character varying(80)| |
 
 Particularité(s) à noter :
 * Une clé primaire existe sur le champ code 
+* Cette table ne fait pas l'objet d'une relation via une clé étrangère sur la table de gestion des données circulation (`an_voirie_circu`). Elle est intégrée seulement à QGIS pour permettre une saisie multiple de contrainte dans un formulaire de saisie.
 
 Valeurs possibles :
 
 |Code|Valeur|
 |:---|:---|
-|00|Non renseigné|
-|11|Adresse conforme|
-|12|Adresse supprimée|
-|20|Adresse à améliorer (position, usage, dégrouper ...)|
-|21|Adresse à améliorer (position)|
-|22|Adresse à améliorer (usage)|
-|23|Adresse à améliorer (dégrouper)|
-|24|Adresse à améliorer (logement)|
-|25|Adresse à améliorer (état)|
-|31|Adresse non attribuée (projet)|
-|32|Adresse non numérotée|
-|33|Adresse à confirmer (existence, numéro ...)|
-|99|Autre|
+|10|Hauteur|
+|20|Largeur|
+|30|Poids|
+|40|Marchandises dangereuses|
+|50|Type de véhicule|
 
 ---
 
-`r_adresse.lt_etat_adr` : Liste des valeurs permettant de décrire l'état de la construction à l''adresse
+`m_voirie.lt_doman` : Liste des valeurs permettant de décrire le type de domanialité
 
 |Nom attribut | Définition | Type  | Valeurs par défaut |
 |:---|:---|:---|:---|
-|code|Code de la liste énumérée relative au type de voie|character varying(2)| |
-|valeur|Valeur de la liste énumérée relative au type de voie|character varying(80)| |
-|definition|Definition de la liste énumérée relative au type de voie|character varying(254)| |
-
+|code|Code de la liste énumérée relative à la domanialité du tronçon|character varying(2)| |
+|valeur|Valeur de la liste énumérée relative à la domanialité du tronçon|character varying(80)| |
 
 Particularité(s) à noter :
 * Une clé primaire existe sur le champ code 
@@ -368,17 +358,14 @@ Valeurs possibles :
 
 |Code|Sous code|Valeur|Référence législative|Référence réglementaire|
 |:---|:---|:---|:---|:---|
-|01|Non commencé|
-|02|En cours|
-|03|Achevé|
-|04|Muré|
-|05|Supprimé|
-|99|Autre|
+|01|Public|
+|02|Privé|
 |00|Non renseigné|
+|ZZ|Non concerné|
 
 ---
 
-`r_adresse.lt_groupee` : Liste des valeurs permettant de définir si une adresse est groupée ou non
+`m_voirie.lt_groupee` : Liste des valeurs permettant de définir si une adresse est groupée ou non
 
 |Nom attribut | Définition | Type  | Valeurs par défaut |
 |:---|:---|:---|:---|
