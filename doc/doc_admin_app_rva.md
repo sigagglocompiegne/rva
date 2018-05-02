@@ -68,7 +68,7 @@ Sont décrites ici les Géotables et/ou Tables intégrées dans GEO pour les bes
 |affiche_nouvelle_adresse |x|x||Formate en HTML l'affichage de la nouvelle adresse si l'adresse n'est pas supprimée|Afficher dans Recherche d'une ancienne adresse ||
 |affiche_result  |x|x||Formate le titre du résultat dans le menu Résultat (si adresse trouvée ou supprimée) |Afficher dans la Recherche dans la Base Adresse Locale ||
 |affiche_qual_adr  |x|x||Formate l'affichage de la qualité par rapport à l'adresse supprimée (`si supprimé affiche Conforme (supprimé) sinon la valeur de qual_adr`|Plus utilisée ||
-|angle_geo  |x|x||Multipli l'angle par -1 pour lagestion des étiquettes de n° de voies dans GEO|Cartothèque ||
+|angle_geo  |x|x||Multiplie l'angle par -1 pour lagestion des étiquettes de n° de voies dans GEO|Cartothèque ||
 |complement   ||x|Complément| |Fiche d'information Fiche adresse et utilisé dans les champs calculés gérant l'affichage ou la recherche des adresses ||
 |date_maj    ||x|Date  de mise à jour| |Fiche d'information Fiche adresse ||
 |date_sai    ||x|Date de saisie| |Fiche d'information Fiche adresse ||
@@ -80,10 +80,25 @@ Sont décrites ici les Géotables et/ou Tables intégrées dans GEO pour les bes
 |id_tronc         ||x|Identifiant du tronçon de voie||Fiche d'information Fiche adresse ||
 |id_voie          ||x|Identifiant de la voie| |Fiche d'information Fiche adresse ||
 |infobulle           |x|x||Formatage en HTML du contenu de l'info bulle au survol d'une adresse |Cartothèque ||
-|lat           ||x|Latitude|Formatage en HTML du contenu de l'info bulle au survol d'une adresse |Cartothèque ||
-
-
-(en cours de rédaction)
+|lat           ||x|Latitude| |Fiche d'information Fiche adresse ||
+|libvoie_c            ||x|Voie| |Fiche d'information Fiche adresse ||
+|long            ||x|Longitude| |Fiche d'information Fiche adresse ||
+|nb_log            ||x|Logement| |Fiche d'information Fiche adresse ||
+|numero             ||x|Numéro| |Fiche d'information Fiche adresse ||
+|numero_complet              |x|x|Numéro complet| Concaténisation du numéro et de l'indice de répétition|Filtre dans Recherche avancée d'une adresse ||
+|observ             ||x|Observations| |Fiche d'information Fiche adresse ||
+|pc              ||x|N° du permis de construire| |Fiche d'information Fiche adresse ||
+|qual_adr               ||x|Qualité| |Fiche d'information Fiche adresse ||
+|refcad               ||x|Parcelle(s)| |Fiche d'information Fiche adresse ||
+|repet                ||x|Indice de répétition| |Fiche d'information Fiche adresse ||
+|rivoli                 ||x|N° Rivoli| |Fiche d'information Fiche adresse ||
+|rivoli_cle                 ||x|Clé Rivoli| |Fiche d'information Fiche adresse ||
+|secondaire                 ||x|Accès secondaire| |Fiche d'information Fiche adresse ||
+|src_adr                  ||x|Source de l'adresse| |Fiche d'information Fiche adresse ||
+|src_date                  ||x|Date de la source de l'adresse| |Fiche d'information Fiche adresse ||
+|src_geom                   ||x|Référentiel de saisie| |Fiche d'information Fiche adresse ||
+|x_l93                    ||x|Coordonnée X en Lambert 93| |Fiche d'information Fiche adresse ||
+|y_l93                    ||x|Coordonnée Y en Lambert 93| |Fiche d'information Fiche adresse ||
 
    * filtres : aucun
    * relations :
@@ -94,11 +109,11 @@ Sont décrites ici les Géotables et/ou Tables intégrées dans GEO pour les bes
 
    * particularité(s) : aucune
    
-## Table : `xapps_an_vmr_p_information_dpu`
+## Table : `xapps_geo_v_voie`
 
 |Attributs| Champ calculé | Formatage |Renommage|Particularité/Usage|Utilisation|Exemple|
 |:---|:-:|:-:|:---|:---|:---|:---|
-|beneficiaire||x|Bénéficiaire||Fiche de renseignements d'urbanisme||
+|affiche_message |x|x|`null`||Fiche d'information sur la voie||
 |date_ins||x|Instauré le||Fiche de renseignements d'urbanisme||
 |urlfic||x|+ d'infos|Déclaré en lien. Texte de remplacement dans GEO : Document lié|Fiche de renseignements d'urbanisme||
 
@@ -110,6 +125,8 @@ Sont décrites ici les Géotables et/ou Tables intégrées dans GEO pour les bes
 | r_bg_edigeo.PARCELLE (Parcelle (Alpha) V3 dans GEO | idu | 0 à n (égal) |
 
    * particularité(s) : aucune
+   
+(en cours de rédaction)
 
 ## Table : `xapps_an_vmr_p_information`
 
