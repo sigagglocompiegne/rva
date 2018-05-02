@@ -40,7 +40,7 @@ Sont décrites ici les Géotables et/ou Tables intégrées dans GEO pour les bes
 |Attributs| Champ calculé | Formatage |Renommage|Particularité/Usage|Utilisation|Exemple|
 |:---|:-:|:-:|:---|:---|:---|:---|
 |acte_admin||x|Document administratif||Fiche de suivi d'un signalement voie/adresse||
-|affche_info|x|||Champ HTML formatant le type de traitement fait par le service SIG `{observ} || '<br>' || '<b>Suivi de la demande :</b> <br>' || CASE WHEN {traite_sig} = '1' THEN 'Nouvelle demande' WHEN {traite_sig} = '2' THEN 'Demande prise en compte' WHEN {traite_sig} = '3' THEN 'Demande traitée' ELSE 'Pas d''informations disponibles' END` |Fiche de suivi d'un signalement voie/adresse||
+|affche_info|x|||Champ HTML formatant le type de traitement fait par le service SIG `{observ} || ''<br>'' || '<b>Suivi de la demande :</b> <br>' || CASE WHEN {traite_sig} = ''1'' THEN 'Nouvelle demande'' WHEN {traite_sig} = ''2'' THEN 'Demande prise en compte'' WHEN {traite_sig} = ''3'' THEN 'Demande traitée'' ELSE ''Pas d'informations disponibles'' END` |Fiche de suivi d'un signalement voie/adresse||
 
 ## Table : `r_bg_majic.NBAT_10 (Parcelle (Alpha) V3 dans GEO`
 
