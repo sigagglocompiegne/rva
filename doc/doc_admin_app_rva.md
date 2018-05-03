@@ -291,46 +291,68 @@ Cette recherche permet à l'utilisateur de faire une recherche un équipement lo
 Elle est détaillée dans le répertoire GitHub `docurba`
 
 
-## Recherche (clic sur la carte) : `Parcelle(s) sélectionnée(s)`
+## Recherche (clic sur la carte) : `Recherche dans la Base Adresse Locale`
+
+Cette recherche permet à l'utilisateur de cliquer sur la carte et de remonter les informations de l'adresse.
+
+  * Configuration :
+
+Source : `xapps_geo_vmr_adresse`
+
+|Attribut|Afficher|Rechercher|Suggestion|Attribut de géométrie|Tri des résultats|
+|:---|:-:|:-:|:-:|:-:|:-:|
+|adresse_apostrophe||x||||
+|adresse_apostrophe_histo||x||||
+|affiche_result|x|||||
+|affiche_adresse|x|||||
+|Adresse complète|||x|||
+|Complément||x|x|||
+|geom||||x||
+
+(Calcul des suggestions par "Contient les mots entiers")
+(la détection des doublons n'est pas activée ici)
+
+ * Filtres : aucun
+
+ * Fiches d'information active : Fiche adresse
+ 
+## Recherche (clic sur la carte) : `Recherche tronçon`
 
 Cette recherche permet à l'utilisateur de cliquer sur la carte et de remonter les informations de la parcelle et d'accéder soit à la fiche de renseignement d'urbanisme ou de la fiche parcelle détaillée (si les droits).
 
   * Configuration :
 
-Source : `r_bg_edigeo.PARCELLE (Parcelle (Alpha) V3`
-
-Les champs affichés par défaut par le module intégrateur de l'éditeur ont été conservés ici.
+Source : `xapps_geo_v_troncon_voirie`
 
 |Attribut|Afficher|Rechercher|Suggestion|Attribut de géométrie|Tri des résultats|
 |:---|:-:|:-:|:-:|:-:|:-:|
-|Bg Emplacement|x|||||
-|Bg Full Address|x|||||
+|Libellé de la voie|x|x|x|||
+|Commune|x|||||
+|affiche_troncon|x|||||
+|geom||||x||
 
-L'attribut de géométrie (geom) utilisé est celui de la couche `Parcelle V3 (r_bg_edigeo.PARCELLE)`.
+(Calcul des suggestions par "Contient les mots entiers")
 (la détection des doublons n'est pas activée ici)
 
  * Filtres :
 
-|Nom|Obligatoire|Attribut|Condition|Valeur|Champ d'affichage (1)|Champ de valeurs (1)|Champ de tri (1)|Ajout autorisé (1)|Particularités|
-|:---|:-:|:---|:---|:---|:---|:---|:---|:-:|:---|
-|SECU|x|ccocom|est égale à une valeur du contexte `ccocom`|||||Ce champ est lié au profil utilisateur et contient le ou les code(s) insee lui permettant d'accéder aux données du cadastre de la ou des commune(s) en question|
+Sans objet
 
-(1) si liste de domaine
-
- * Fiches d'information active : Renseignements d'urbanisme, Renseignements d'urbanisme (non DGFIP)
+ * Fiches d'information active : Fiche d'information sur un tronçon
  
-## Recherche (clic sur la carte) : `PPRi zonage (projet) - remarque`
+## Recherche (clic sur la carte) : `Signalement voie/adresse`
 
-Cette recherche permet à l'utilisateur de cliquer sur la carte et de remonter les informations de la parcelle et d'accéder soit à la fiche de renseignement d'urbanisme ou de la fiche parcelle détaillée (si les droits).
+Cette recherche permet à l'utilisateur de cliquer sur la carte et de remonter les informations du signalement non traité par le service SIG
 
   * Configuration :
 
-Source : `m_urbanisme_reg.geo_sup_pm1_ppri_projet_rq (PPRi zonage (projet) - remarque)`
+Source : `xapps_geo_v_troncon_voirie`
 
 |Attribut|Afficher|Rechercher|Suggestion|Attribut de géométrie|Tri des résultats|
 |:---|:-:|:-:|:-:|:-:|:-:|
+|Commune|x|||||
 |affiche_result|x|||||
-|message|x|||||
+|geom||||x||
 
 (la détection des doublons n'est pas activée ici)
 
@@ -338,40 +360,58 @@ Source : `m_urbanisme_reg.geo_sup_pm1_ppri_projet_rq (PPRi zonage (projet) - rem
 
 Sans objet
 
-(1) si liste de domaine
+ * Fiches d'information active : Fiche de suivi d'un signalement voie/adresse
+ 
+## Recherche (clic sur la carte) : `Recherche avancée d'une voie`
 
- * Fiches d'information active : PPRi zonage (projet) - remarque
+Cette recherche permet à l'utilisateur de cliquer sur la carte et de remonter les informations d'une voie
+
+  * Configuration :
+
+Source : `xapps_geo_v_voie`
+
+|Attribut|Afficher|Rechercher|Suggestion|Attribut de géométrie|Tri des résultats|
+|:---|:-:|:-:|:-:|:-:|:-:|
+|Libellé de la voie|x|||||
+|geom||||x||
+
+(la détection des doublons n'est pas activée ici)
+
+ * Filtres :
+
+Sans objet
+
+ * Fiches d'information active : Fiche d'information sur la voie
+ 
+## Recherche (clic sur la carte) : `Parcelle(s) sélectionnée(s) (Parcelle (Alpha) V3)`
+
+Cette recherche permet à l'utilisateur de cliquer sur la carte et de remonter les informations de la parcelle
+Cette recherche est détaillée dans le répertoire GitHub `docurba`.
+
 
 ## Recherche : `Toutes les recherches cadastrales`
 
 L'ensemble des recherches cadastrales ont été formatées et intégrées par l'éditeur via son module GeoCadastre.
 Seul le nom des certaines recherches a été modifié par l'ARC pour plus de compréhension des utilisateurs.
 
-  * Configuration :
+Cette recherche est détaillée dans le répertoire GitHub `docurba`.
 
-Source : `r_bg_edigeo.PARCELLE (Parcelle (Alpha) V3`
 
-|Libellé d'origine|Nouveau libellé|
-|:---|:---|
-|Parcelles par adresse|Parcelles par adresse fiscale|
-|Parcelles par propriétaire|Parcelles par nom du propriétaire|
-|Parcelles par propriétairesde locaux|Parcelles par nom du propriétaire d'un local|
+## Recherche : `Rechercher un signalement par commune`
 
-## Recherche : `Par libellé de zone PLU`
-
-Cette recherche permet à l'utilisateur de faire une recherche sur les zonages d'une commune.
+Cette recherche permet à l'utilisateur de faire une recherche sur les signalements.
 
   * Configuration :
 
-Source : `x_apps_geo_vmr_p_zone_urba`
+Source : `geo_rva_signal`
 
 |Attribut|Afficher|Rechercher|Suggestion|Attribut de géométrie|Tri des résultats|
 |:---|:-:|:-:|:-:|:-:|:-:|
-|Zonage|x|||||
-|libellé de voie|x|||||
-|libelon|x|||||
+|affiche_titre|x|||||
+|affiche_result|x|x|x|||
 |geom||||x||
 
+(Calcul des suggestions par "Contient la chaine")
 (la détection des doublons n'est pas activée ici)
 
  * Filtres :
@@ -382,12 +422,12 @@ Source : `x_apps_geo_vmr_p_zone_urba`
 
 |Nom|Obligatoire|Attribut|Condition|Valeur|Champ d'affichage (1)|Champ de valeurs (1)|Champ de tri (1)|Ajout autorisé (1)|Particularités|
 |:---|:-:|:---|:---|:---|:---|:---|:---|:-:|:---|
-|Commune|x|insee|est égale à une valeur de liste de choix|Liste de domaine (Commune APC (sans filtre))|commune_m|insee|insee|||
-|zonage|x||Prédéfinis filtre à liste de choix|||||||
+|Commune|x|commune|Alphanumérique est égale à une valeur de liste de choix|Liste de domaine (Commune avec un signalement d'adresse)|commune|commune|commune|||
+|Traitement SIG||traite_sig|Alphanumérique est égale à une valeur de liste de choix|Liste de domaine (lt_traite_sig)|valeur|code|code|||
 
 (1) si liste de domaine
 
- * Fiches d'information active : Fiche détaillée POS-PLU-CC
+ * Fiches d'information active : Fiche de suivi d'un signalement voie/Adresse
  
 ## Recherche : `Par type de zone PLU`
 
@@ -625,17 +665,17 @@ Aucune
 
 Aucune
 
-## Modification géométrique : `PPRi (projet) - remarque`
+## Modification géométrique : `Faire un signalement d'adresses ou de voies`
 
-Cette recherche permet à l'utilisateur de saisir une remarque concernant le projet de nouveau PPRi (annotations provisoires).
+Cette recherche permet à l'utilisateur de saisir un sigbnalement concernant une voie ou une adresse.
 
   * Configuration :
   
-Source : `m_urbanisme_reg.geo_sup_pm1_ppri_projet_rq (PPRi zonage (projet) - remarque)`
+Source : `geo_rva_signal`
 
  * Filtres : aucun
  * Accrochage : aucun
- * Fiches d'information active : PPRi zonage (projet) - remarque
+ * Fiches d'information active : Fiche de suivi d'un signalement voie/adresse
  * Topologie : aucune 
  
  # La cartothèque
