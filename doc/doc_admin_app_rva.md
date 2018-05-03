@@ -513,32 +513,31 @@ Source : `xapps_geo_vmr_adresse`
 |Etiquette (etiquette)||||||
 |Angle (angle)||||||
 |Voie (libvoie_c)||||||
-|Insee||||||
-|Code postal||||||
-|Commune||||||
-|N° RIVOLI||||||
-|Clé Rivoli||||||
-|Position||||||
-|Destination||||||
-|Etat||||||
-|Parcelle(s)||||||
-|Logement||||||
-|Diagnostic||||||
-|Qualité||||||
-|N° du permis de construire||||||
-|Groupée||||||
-|Accès secondaire||||||
-|Source de l'adresse||||||
-|Référentiel de saisie||||||
-|Date de la source de l'adresse||||||
-|Date de saisie||||||
-|Date de mise à jour||||||
-|Observations||||||
-|Coordonnées X en Lambert 93||||||
-|Coordonnées Y en Lambert 93||||||
-|Latitude||||||
-|Longitude||||||
-|Angle||||||
+|Insee (insee)||||||
+|Code postal (codepostal)||||||
+|Commune (commune)||||||
+|N° RIVOLI (rivoli)||||||
+|Clé Rivoli (rivoli_cle)||||||
+|Position (position)||||||
+|Destination (dest_adr)||||||
+|Etat (etat_adr)||||||
+|Parcelle(s) (refcad)||||||
+|Logement (nb_log)||||||
+|Diagnostic (diag_adr)||||||
+|Qualité (qua_adr)||||||
+|N° du permis de construire (pc)||||||
+|Groupée (groupee)||||||
+|Accès secondaire (secondaire)||||||
+|Source de l'adresse (src_adr)||||||
+|Référentiel de saisie (src_geom)||||||
+|Date de la source de l'adresse (src_date)||||||
+|Date de saisie (date_sai)||||||
+|Date de mise à jour (date_maj)||||||
+|Observations (observ)||||||
+|Coordonnées X en Lambert 93 (x_l93)||||||
+|Coordonnées Y en Lambert 93 (y_l93)||||||
+|Latitude (lat)||||||
+|Longitude (long)||||||
 |geom||||x||
 
 (Calcul des suggestions par "Contient la chaine")
