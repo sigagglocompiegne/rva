@@ -1312,6 +1312,5 @@ Liste des recherches : Recherche dans la Base Adresse Locale, Recherche tronçon
 |Recherche par restrictions de circulation||
 ||Vitesse maximum autorisée|
 ||Autres restrictions de circulation|
-
 |(pas dans un groupe)|Exporter les données des tronçons|
 |(pas dans un groupe)|Exporter la liste des voies (avec linéaire)|
