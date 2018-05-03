@@ -1213,24 +1213,8 @@ Source : `geo_rva_signal`
 
 |Groupe|Sous-groupe|Visible dans la légende|Visible au démarrage|Détails visibles|Déplié par défaut|Geotable|Renommée|Issue d'une autre carte|Visible dans la légende|Visible au démarrage|Déplié par défaut|Couche sélectionnable|Couche accrochable|Catégorisation|Seuil de visibilité|Symbologie|Autres|
 |:---|:---|:-:|:-:|:-:|:-:|:---|:---|:-:|:-:|:-:|:-:|:-:|:---|:---|:---|:---|:---|
-|||||||geo_rva_signal|Suivi des signalements||x|x|x||x|traite_sig||Symbole signalement_rouge.svg pour Nvlle demande et signalement_orange.svg pour Prise en compte,taille 25|Interactivité avec le champ infobulle `'<u>Demande de signalement</u> '
-|| chr(10) ||
-CASE 
-WHEN {type_rva} = '1' THEN '<b>sur la base Adresse</b>'
-WHEN {type_rva} = '2' THEN '<b>sur la base Voie</b>'
-ELSE '<b>diverse</b>'
-END
-|| ' ' ||
-CASE 
-WHEN {nat_signal} = '1' THEN '<b>pour une création</b>'
-WHEN {nat_signal} = '2' THEN '<b>pour une modification</b>'
-WHEN {nat_signal} = '3' THEN '<b>pour une supression</b>'
-ELSE '<b>pour un autre motif</b>'
-END
-|| chr(10) ||
-'<u>Description de la demande</u>'
-|| chr(10) ||
-'<b>' || {observ} || '</b>'`|
+|||||||geo_rva_signal|Suivi des signalements||x|x|x||x|traite_sig||Symbole signalement_rouge.svg pour Nvlle demande et signalement_orange.svg pour Prise en compte,taille 25|Interactivité avec le champ infobulle `<u>Demande de signalement</u>|| chr(10) ||CASE WHEN {type_rva} = '1' THEN <b>sur la base Adresse</b>WHEN {type_rva} = '2' THEN <b>sur la base Voie</b> ELSE <b>diverse</b>END|| ' ' ||CASE WHEN {nat_signal} = '1' THEN <b>pour une création</b> WHEN {nat_signal} = '2' THEN <b>pour une modification</b>  WHEN {nat_signal} = '3' THEN <b>pour une supression</b> ELSE <b>pour un autre motif</b> END || chr(10) ||
+<u>Description de la demande</u> || chr(10) || <b> || {observ} || </b>`|
 
 
 # L'application
