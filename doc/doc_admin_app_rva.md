@@ -1213,8 +1213,17 @@ Source : `geo_rva_signal`
 
 |Groupe|Sous-groupe|Visible dans la légende|Visible au démarrage|Détails visibles|Déplié par défaut|Geotable|Renommée|Issue d'une autre carte|Visible dans la légende|Visible au démarrage|Déplié par défaut|Couche sélectionnable|Couche accrochable|Catégorisation|Seuil de visibilité|Symbologie|Autres|
 |:---|:---|:-:|:-:|:-:|:-:|:---|:---|:-:|:-:|:-:|:-:|:-:|:---|:---|:---|:---|:---|
-|||||||geo_rva_signal|Suivi des signalements||x|x|x||x|traite_sig||Symbole signalement_rouge.svg pour Nvlle demande et signalement_orange.svg pour Prise en compte,taille 25|Interactivité avec le champ infobulle `<u>Demande de signalement</u> \|| chr(10) \|| CASE WHEN {type_rva} = '1' THEN <b>sur la base Adresse</b>WHEN {type_rva} = '2' THEN <b>sur la base Voie</b> ELSE <b>diverse</b> END \|| ' ' \||CASE WHEN {nat_signal} = '1' THEN <b>pour une création</b> WHEN {nat_signal} = '2' THEN <b>pour une modification</b>  WHEN {nat_signal} = '3' THEN <b>pour une supression</b> ELSE <b>pour un autre motif</b> END \|| chr(10) \|| <u>Description de la demande</u> \|| chr(10) \|| <b> \|| {observ} \|| </b>`|
-
+|||||||geo_rva_signal|Suivi des signalements||x|x|x||x|traite_sig||Symbole signalement_rouge.svg pour Nvlle demande et signalement_orange.svg pour Prise en compte,taille 25|Interactivité avec le champ infobulle|
+|||||||geo_v_osm_commune_apc|Limite communale|||x||||||Contour marron épais||
+|Adresse||x|x|x|x|xapps_geo_vmr_adresse|Conformité||x|x|x|||affiche_qual_adr|0 à 1999è|Couleur par conformité|Interactivité avec le champ infobulle|
+|Adresse||x|x|x|x|xapps_geo_vmr_adresse|Points d'adresse||x|x|||||1999 à 10000è|Carré bleu de taille 5|Interactivité avec le champ infobulle (avec seuil de zoom de 1999 à 5000è)|
+|Voie||x|x|x|x|xapps_geo_v_voie|Voie (agrégée pour clic carte)|||x|||||0 à 100 000è|aucune symbologie||
+|Voie||x|x|x|x|xapps_geo_v_troncon_voirie|Tronçon (pour clic carte)|||x|||||0 à 100 000è|aucune symbologie||
+|Voie|Tronçons|x||||geo_objet_noeud|Noeuds||x|x|||x||0 à 50 000è|Point gris de taille 3||
+|Voie|Tronçons|x||||xapps_geo_v_troncon_voirie|Tronçons||x|x|||x||0 à 50 000è|trait de 0.5 noir||
+|Voie||x|x|x|x|xapps_geo_v_troncon_voirie|Statut juridique des voies||x|||||statut_jur|0 à 50000è|Couleur par statut|Interactivité avec le champ voie_info_bulle (avec seuil de zoom de 0 à 25000è)|
+|Voie||x|x|x|x|xapps_geo_v_troncon_voirie|Gestionnaire des voies||x|x|x|||gestion|0 à 50000è|Couleur par gestionnaire|Interactivité avec le champ voie_info_bulle (avec seuil de zoom de 0 à 25000è)|
+|Voie||x|x|x|x|xapps_geo_v_troncon_voirie|Domanialité||x|||||doman|0 à 50000è|Couleur par domanialité|Interactivité avec le champ voie_info_bulle (avec seuil de zoom de 0 à 25000è)|
 
 # L'application
 
@@ -1222,11 +1231,16 @@ Source : `geo_rva_signal`
 
 |Gabarit|Thème|Modules spé|Impression|Résultats|
 |:---|:---|:---|:---|:---|
-|Pro|Thème GeoCompiegnois 1.0.7|Bandeaux HTML,StreetView,GeoCadastre,Google Analytics,Page de connexion perso, coordonnées au survol|8 Modèles standards A4 et A3||
+|Pro|Thème GeoCompiegnois 1.0.7|StreetView,GeoCadastre (V3),Google Analytics,Page de connexion perso, Export Fonctionnalités (Adresse),Multimédia (signalement Voie/Adresse),javascript|8 Modèles standards A4 et A3||
 
 * Particularité de certains modules :
-  * Module introduction : aucun.
-  * Module javacript : aucun
+  * Module introduction : ce menu s'ouvre automatiquement à l'ouverture de l'application grâce un code dans le module javascript. Ce module contient une introduction sur l'application, et des liens vers des fiches d'aide.
+  * Module javacript : 
+  `var injector = angular.element('body').injector();
+var acfApplicationService = injector.get('acfApplicationService');
+acfApplicationService.whenLoaded(setTimeout(function(){
+$(".sidepanel-item.launcher-application").click();
+}, 100));`
   * Module Google Analytics : le n° ID est disponible sur le site de Google Analytics
 
 * Recherche globale :
