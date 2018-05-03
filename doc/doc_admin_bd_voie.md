@@ -211,6 +211,8 @@ Particularité(s) à noter :
 `x_apps.xapps_geo_v_voie` : Vue de synthèse des voies (agréagation des tronçons pour calcul) (générateur d'apps)
 Cette vue matérialisée est rafraichit toutes les jours via un fichier batch sur la VM sig-sgbd.
 
+`x_apps.xapps_an_commune` : Vue simple des communes du Pays Compiégnois pour lier un lien de téléchargement d'un fichier OpenData dans GEO.
+
 ### classes d'objets applicatives grands publics sont classés dans le schéma x_apps_public :
 
 Sans objet
