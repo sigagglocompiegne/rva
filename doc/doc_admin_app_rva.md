@@ -1086,7 +1086,19 @@ Source : `geo_rva_signal`
 |:---|:---|:---|:---|:---|:---|:---|
 |Gestion des signalement|traite_sig,type_rva,nat_signal,acte_admin,observ,op_sai,mail,date_sai,affiche_info|Par défaut|Vertical||||
 
- * Saisie : aucune
+ * Saisie :
+ 
+ Sont présent ici uniquement les attributs éditables ou disposant d'un mode de représentation spécifique.
+
+|Attribut|Obligatoire|Valeur par défaut|Liste de domaine|Représentation|
+|:---|:---|:---|:---|:---|
+|Type de signalement (type_rva)|x|0|Type de signalement|Liste de choix|
+|Nature du signalement (nat_signal)|x|0|Nature du signalement|Liste de choix|
+|Document administratif (acte_admin)|x|false||Boutons radios|
+|Description du signalement (observ)|x|||Champ texte à plusieurs lignes|
+|Nom du contributeur (op_sai)|x|%USER_LOGIN%|||
+|Email du contributeur (mail)|x|%USER_MAIL%|||
+|Suivi de la demande (traite_sig)|(non saisie par les utilisateurs)|1|Suivi de la demande d'un signalement|Liste de choix|
 
  * Modèle d'impression : aucun
 
