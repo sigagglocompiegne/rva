@@ -429,19 +429,18 @@ Source : `geo_rva_signal`
 
  * Fiches d'information active : Fiche de suivi d'un signalement voie/Adresse
  
-## Recherche : `Par type de zone PLU`
+## Recherche : `Recherche avancée d'une adresse`
 
-Cette recherche permet à l'utilisateur de faire une recherche sur les types de zones d'une commune.
+Cette recherche permet à l'utilisateur de faire une recherche guidée d'une adresse.
 
   * Configuration :
 
-Source : `x_apps_geo_vmr_p_zone_urba`
+Source : `xapps_geo_vmr_adresse`
 
 |Attribut|Afficher|Rechercher|Suggestion|Attribut de géométrie|Tri des résultats|
 |:---|:-:|:-:|:-:|:-:|:-:|
-|Zonage|x|||||
-|libellé de voie|x|||||
-|libelon|x|||||
+|affiche_result|x|||||
+|Adresse complète|x|||||
 |geom||||x||
 
 (la détection des doublons n'est pas activée ici)
@@ -454,24 +453,112 @@ Source : `x_apps_geo_vmr_p_zone_urba`
 
 |Nom|Obligatoire|Attribut|Condition|Valeur|Champ d'affichage (1)|Champ de valeurs (1)|Champ de tri (1)|Ajout autorisé (1)|Particularités|
 |:---|:-:|:---|:---|:---|:---|:---|:---|:-:|:---|
-|Commune|x|insee|est égale à une valeur de liste de choix|Liste de domaine (Commune APC (sans filtre))|commune_m|insee|insee|||
-|Type de zonage|x|typezone|est égale à une valeur de liste de choix|Liste de domaine (Type de zone PLU)|typezone_lib|typezone|typezone|||
+|Adresse par commune|x|commune|Prédéfinis à filtre à liste de choix|||||||
+|Adresse par voie|x|id_voie|Alphanumérique est égale à une valeur de liste de choix|Liste de domaine (Liste de voie)|affiche_voie|id_voie|mot_dir|||
+|Numéro complet de l'adresse||numero_complet|Prédéfinis à filtre à liste de choix|||||||
 
 (1) si liste de domaine
 
- * Fiches d'information active : Fiche détaillée POS-PLU-CC
+ * Fiches d'information active : Fiche adresse
  
-## Recherche : `Recherche avancée d'une adresse`
+## Recherche : `Recherche d'une ancienne adresse`
 
-Cette recherche permet à l'utilisateur de faire une recherche guidée d'une adresse contrairement à la recherche globale par saisie libre.
+Cette recherche permet à l'utilisateur de faire une recherche guidée d'une adresse historisée.
 
-Cette recherche a été créée pour l'application RVA. Le détail de celle-ci est donc à visualiser dans le répertoire GitHub rva au niveau de la documentation applicative.
- 
- ## Recherche : `Recherche avancée d'une voie`
+* Configuration :
 
-Cette recherche permet à l'utilisateur de faire une recherche guidée d'une voie contrairement à la recherche globale par saisie libre.
+Source : `xapps_an_v_adresse_h`
 
-Cette recherche a été créée pour l'application RVA. Le détail de celle-ci est donc à voisualiser dans le répertoire GitHub rva au niveau de la documentation applicative.
+|Attribut|Afficher|Rechercher|Suggestion|Attribut de géométrie|Tri des résultats|
+|:---|:-:|:-:|:-:|:-:|:-:|
+|affiche_ancienne_adresse|x|||||
+|affiche_nouvelle_adresse|x|||||
+|geom||||x||
+
+(la détection des doublons n'est pas activée ici)
+
+ * Filtres :
+
+|Groupe|Jointure|Filtres liés|
+|:---|:-:|:-:|
+|Groupe de filtres par défaut|`ET`|x|
+
+|Nom|Obligatoire|Attribut|Condition|Valeur|Champ d'affichage (1)|Champ de valeurs (1)|Champ de tri (1)|Ajout autorisé (1)|Particularités|
+|:---|:-:|:---|:---|:---|:---|:---|:---|:-:|:---|
+|Commune|x|commune|Prédéfinis à filtre à liste de choix|||||||
+|Voie|x|id_voie|Alphanumérique est égale à une valeur de liste de choix|Liste de domaine (Liste de voie)|affiche_voie|id_voie|mot_dir|||
+|Numéro||numero_complet|Prédéfinis à filtre à liste de choix|||||||
+
+(1) si liste de domaine
+
+ * Fiches d'information active : aucune
+
+ ## Recherche : `Recherche, export de la base Adresses (par commune et voie)`
+
+Cette recherche permet à l'utilisateur de faire une recherche guidée par commune et voie afin d'exporter l'ensemble des adresses.
+
+* Configuration :
+
+Source : `xapps_geo_vmr_adresse`
+
+|Attribut|Afficher|Rechercher|Suggestion|Attribut de géométrie|Tri des résultats|
+|:---|:-:|:-:|:-:|:-:|:-:|
+|identifiant (id_adresse)||||||
+|identifiant de la voie (id_voie)||||||
+|identifiant du tronçon de voie (id_tronc)||||||
+|Adresse complète (adresse)|x|x|x|||
+|Numéro (numero)||||||
+|Indice de répétition (repet)||||||
+|Complément (complement)||||||
+|Etiquette (etiquette)||||||
+|Angle (angle)||||||
+|Voie (libvoie_c)||||||
+|Insee||||||
+|Code postal||||||
+|Commune||||||
+|N° RIVOLI||||||
+|Clé Rivoli||||||
+|Position||||||
+|Destination||||||
+|Etat||||||
+|Parcelle(s)||||||
+|Logement||||||
+|Diagnostic||||||
+|Qualité||||||
+|N° du permis de construire||||||
+|Groupée||||||
+|Accès secondaire||||||
+|Source de l'adresse||||||
+|Référentiel de saisie||||||
+|Date de la source de l'adresse||||||
+|Date de saisie||||||
+|Date de mise à jour||||||
+|Observations||||||
+|Coordonnées X en Lambert 93||||||
+|Coordonnées Y en Lambert 93||||||
+|Latitude||||||
+|Longitude||||||
+|Angle||||||
+|geom||||x||
+
+(Calcul des suggestions par "Contient la chaine")
+(la détection des doublons n'est pas activée ici)
+
+ * Filtres :
+
+|Groupe|Jointure|Filtres liés|
+|:---|:-:|:-:|
+|Groupe de filtres par défaut|`ET`|x|
+
+|Nom|Obligatoire|Attribut|Condition|Valeur|Champ d'affichage (1)|Champ de valeurs (1)|Champ de tri (1)|Ajout autorisé (1)|Particularités|
+|:---|:-:|:---|:---|:---|:---|:---|:---|:-:|:---|
+|Commune|x|commune|Prédéfinis à filtre à liste de choix|||||||
+|Voie|x|id_voie|Alphanumérique est égale à une valeur de liste de choix|Liste de domaine (Liste de voie)|affiche_voie|id_voie|mot_dir|||
+|Numéro||numero_complet|Prédéfinis à filtre à liste de choix|||||||
+
+(1) si liste de domaine
+
+ * Fiches d'information active : aucune
 
 
 ## Fiche d'information : `Fiche adresse`
