@@ -56,6 +56,19 @@ Sont décrites ici les Géotables et/ou Tables intégrées dans GEO pour les bes
 |traite_sig     ||x|Suivi de la demande||Fiche de suivi d'un signalement voie/adresse||
 |type_rva     ||x|Type de signalement||Fiche de suivi d'un signalement voie/adresse||
 
+   * filtres :
+
+|Nom|Attribut| Au chargement | Type | Condition |Valeur|Description|
+|:---|:---|:-:|:---:|:---:|:---|:---|
+|Demande traitée|traite_sig|x|Alphanumérique|est différent de une valeur par défaut|3|Ne charge pas les demandes de signalements traitées par le service SIG,n'apparaît donc pas sur la carte|
+   
+   * relations :
+
+|Géotables ou Tables| Champs de jointure | Type |
+|:---|:---|:---|
+| an_rva_signal_media |id_signal = id | 0..n (égal) |
+
+   * particularité(s) : aucune
 
 ## GeoTable : `xapps_geo_vmr_adresse`
 
@@ -126,8 +139,6 @@ Sont décrites ici les Géotables et/ou Tables intégrées dans GEO pour les bes
 
    * particularité(s) : aucune
    
-(en cours de rédaction)
-
 ## GeoTable : `xapps_geo_v_troncon_voirie`
 
 |Attributs| Champ calculé | Formatage |Renommage|Particularité/Usage|Utilisation|Exemple|
@@ -208,23 +219,40 @@ Sont décrites ici les Géotables et/ou Tables intégrées dans GEO pour les bes
    * relations : aucune
    * particularité(s) : aucune
    
-## Table : `xapps_an_v_troncon`
+## Table : `xapps_an_voie`
 
 |Attributs| Champ calculé | Formatage |Renommage|Particularité/Usage|Utilisation|Exemple|
 |:---|:-:|:-:|:---|:---|:---|:---|
-|affche_message_doma  |x|x|Précautions d'usage||Plus utilisé||
-|affiche_message_gestionnaire  |x|x|Précautions d'usage||Plus utilisé||
-|affiche_message_statut   |x|x|Précautions d'usage||Plus utilisé||
-|affiche_result_doma   |x|x|Résumé. Formate l'export des données de synthèse par commune sur la domanialité des tronçons||Exporter la synthèse commune selon la domanialité||
-|affiche_result_gest    |x|x|Résumé. Formate l'export des données de synthèse par commune sur les gestionnaires des tronçons||Exporter la synthèse commune selon le gestionnaire||
-|affiche_result_statut     |x|x|Résumé. Formate l'export des données de synthèse par commune sur le statut juridique des tronçons||Exporter la synthèse commune selon le statut juridique||
-
-(en cours de rédaction)
+|affiche_titre   |x|x||Formate le résultat affiché dans le menu Résultat depuis la Recherche d'une voie|||
+|affiche_voie   |x|x||Format l'affichage de la voie avec le mot directeur |Plus utilisé||
+|affiche_voie_commune   |x|x||Formate l'affichage du libellé de la voie et de la commune dans le menu Résultat depuis la Recherche dans la Base Voie Locale |||
+|voie_apostrophe   |x|x||Replace l'apostrophe dans le libellé de la voie|Utiliser dans les recherches par voie||
 
    * filtres : aucun
    * relations : aucune
    * particularité(s) : aucune
    
+## Table : `xapps_an_v_adresse_h`
+
+|Attributs| Champ calculé | Formatage |Renommage|Particularité/Usage|Utilisation|Exemple|
+|:---|:-:|:-:|:---|:---|:---|:---|
+|adresse_h    ||x|Ancienne adresse||Fiche adresse||
+|affiche_ancienne_adresse    |x|x||Formate en HTML l'affichage d'une ancienne adresse si supprimée ou historisée  | Recherche d'une ancienne adresse||
+|date_arr   ||x|Arrêté communal du||Fiche adresse||
+|date_sai    ||x|Intégrée le||Fiche adresse||
+|numero_complet    |x|x||Concaténation du n° et l'indice de répétition  | Filtre pour la recherche avancée d'une adresse historique||
+
+   * filtres : aucun
+   * relations :
+
+|Géotables ou Tables| Champs de jointure | Type |
+|:---|:---|:---|
+| xapps_geo_v_adresse | id_adresse | 0 à n (égal) |
+| xapps_an_voie | id_voie | 1 (égal) |
+
+   * particularité(s) : aucune
+   
+(en cours de rédaction)
 
 # Les fonctionnalités
 
