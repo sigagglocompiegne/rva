@@ -252,7 +252,6 @@ Sont décrites ici les Géotables et/ou Tables intégrées dans GEO pour les bes
 
    * particularité(s) : aucune
    
-(en cours de rédaction)
 
 # Les fonctionnalités
 
@@ -264,51 +263,33 @@ Cette recherche permet à l'utilisateur de faire une recherche libre sur une adr
 
 Cette recherche a été créée pour l'application RVA. Le détail de celle-ci est donc à visualiser dans le répertoire GitHub rva au niveau de la documentation applicative.
 
-## Recherche globale : `Recherche dans la Base de Voie Locale`
+## Recherche globale : `Recherche d'une voie`
 
 Cette recherche permet à l'utilisateur de faire une recherche libre sur le libellé d'une voie.
 
-Cette recherche a été créée pour l'application RVA. Le détail de celle-ci est donc à visualiser dans le répertoire GitHub rva au niveau de la documentation applicative.
+* Configuration :
 
-## Recherche globale : `Localiser une commune de l'APC`
-
-Cette recherche permet à l'utilisateur de faire une recherche sur une commune du Pays Compiégnois.
-
-  * Configuration :
-
-Source : `geo_v_osm_commune_apc (pour recherche)`
+Source : `xapps_geo_v_voie`
 
 |Attribut|Afficher|Rechercher|Suggestion|Attribut de géométrie|Tri des résultats|
 |:---|:-:|:-:|:-:|:-:|:-:|
-|Commune M|x|x|x|||
+|affiche_titre|x|||||
+|voie_apostrophe||x||||
+|Libellé de la voie|||x|||
 |geom||||x||
 
-(Calcul des suggestions par "Contient la chaîne")
+(Calcul des suggestions par "Contient les mots entiers")
 (la détection des doublons n'est pas activée ici)
 
  * Filtres : aucun
 
- * Fiches d'information active : aucune
+ * Fiches d'information active : Fiche d'information sur la voie
  
 ## Recherche globale : `Localiser un équipement`
 
 Cette recherche permet à l'utilisateur de faire une recherche un équipement localisé dans une commune du Pays Compiégnois.
+Elle est détaillée dans le répertoire GitHub `docurba`
 
-  * Configuration :
-
-Source : `geo_plan_refpoi (usage APC)`
-
-|Attribut|Afficher|Rechercher|Suggestion|Attribut de géométrie|Tri des résultats|
-|:---|:-:|:-:|:-:|:-:|:-:|
-|recherche_poi|x|x|x|||
-|geom||||x||
-
-(Calcul des suggestions par "Contient les mots entiers (Postgres Full-TextSearch)")
-(la détection des doublons n'est pas activée ici)
-
- * Filtres : aucun
-
- * Fiches d'information active : Fiche équipement
 
 ## Recherche (clic sur la carte) : `Parcelle(s) sélectionnée(s)`
 
