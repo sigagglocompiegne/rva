@@ -252,6 +252,16 @@ Sont décrites ici les Géotables et/ou Tables intégrées dans GEO pour les bes
 
    * particularité(s) : aucune
    
+   
+## Table : `xapps_an_commune`
+
+|Attributs| Champ calculé | Formatage |Renommage|Particularité/Usage|Utilisation|Exemple|
+|:---|:-:|:-:|:---|:---|:---|:---|
+|affiche_lien_export_liste_voie_open_data     |x|x||Formate en HTML le lien de téléchargement vers le fichier OpenData de la liste des voies au format excel|Recherche Exporter la liste des voies (avec linéaire)||
+
+   * filtres : aucun
+   * relations : aucune
+   * particularité(s) : aucune
 
 # Les fonctionnalités
 
@@ -551,14 +561,512 @@ Source : `xapps_geo_vmr_adresse`
 
 |Nom|Obligatoire|Attribut|Condition|Valeur|Champ d'affichage (1)|Champ de valeurs (1)|Champ de tri (1)|Ajout autorisé (1)|Particularités|
 |:---|:-:|:---|:---|:---|:---|:---|:---|:-:|:---|
+|Adresse par commune|x|commune|Prédéfinis à filtre à liste de choix|||||||
+|Voie||id_voie|Alphanumérique est égale à une valeur de liste de choix|Liste de domaine (Liste de voie)|affiche_voie|id_voie|mot_dir|||
+
+(1) si liste de domaine
+
+ * Fiches d'information active : Fiche adresse
+
+## Recherche : `Recherche, export des adresses par qualité, diagnostic à la commune`
+
+Cette recherche permet à l'utilisateur de faire une recherche guidée par commune et par qualité et diagnostic afin d'exporter l'ensemble des adresses.
+
+* Configuration :
+
+Source : `xapps_geo_vmr_adresse`
+
+|Attribut|Afficher|Rechercher|Suggestion|Attribut de géométrie|Tri des résultats|
+|:---|:-:|:-:|:-:|:-:|:-:|
+|Numéro (numero)||||||
+|Indice de répétition (repet)||||||
+|Voie (libvoie_c)||||||
+|Complément (complement)||||||
+|Code postal (codepostal)||||||
+|Commune (commune)||||||
+|Adresse complète (adresse)|x|x|x|||
+|Position (position)||||||
+|Destination (dest_adr)||||||
+|Logement (nb_log)||||||
+|Etat (etat_adr)||||||
+|Diagnostic (diag_adr)||||||
+|Qualité (qua_adr)||||||
+|Groupée (groupee)||||||
+|Accès secondaire (secondaire)||||||
+|Parcelle(s)||||||
+|Observations (observ)||||||
+|Coordonnées X en Lambert 93 (x_l93)||||||
+|Coordonnées Y en Lambert 93 (y_l93)||||||
+|Latitude (lat)||||||
+|Longitude (long)||||||
+|geom||||x||
+
+(Calcul des suggestions par "Contient la chaine")
+(la détection des doublons n'est pas activée ici)
+
+ * Filtres :
+
+|Groupe|Jointure|Filtres liés|
+|:---|:-:|:-:|
+|Groupe de filtres par défaut|`ET`|x|
+
+|Nom|Obligatoire|Attribut|Condition|Valeur|Champ d'affichage (1)|Champ de valeurs (1)|Champ de tri (1)|Ajout autorisé (1)|Particularités|
+|:---|:-:|:---|:---|:---|:---|:---|:---|:-:|:---|
+|Adresse par commune|x|commune|Prédéfinis à filtre à liste de choix|||||||
+|Adresse par qualité||qua_adr|Prédéfinis à filtre à liste de choix|||||||
+|Adresse par diagnostic||diag_adr|Prédéfinis à filtre à liste de choix|||||||
+
+(1) si liste de domaine
+
+ * Fiches d'information active : Fiche adresse
+ 
+## Recherche : `Recherche, export des adresses par nombre de logements à la commune`
+
+Cette recherche permet à l'utilisateur de faire une recherche guidée par commune et nombre de logements afin d'exporter l'ensemble des adresses.
+
+* Configuration :
+
+Source : `xapps_geo_vmr_adresse`
+
+|Attribut|Afficher|Rechercher|Suggestion|Attribut de géométrie|Tri des résultats|
+|:---|:-:|:-:|:-:|:-:|:-:|
+|Numéro (numero)||||||
+|Indice de répétition (repet)||||||
+|Voie (libvoie_c)||||||
+|Complément (complement)||||||
+|Code postal (codepostal)||||||
+|Commune (commune)||||||
+|Adresse complète (adresse)|x|x|x|||
+|Position (position)||||||
+|Destination (dest_adr)||||||
+|Logement (nb_log)||||||
+|Etat (etat_adr)||||||
+|Diagnostic (diag_adr)||||||
+|Qualité (qua_adr)||||||
+|Groupée (groupee)||||||
+|Accès secondaire (secondaire)||||||
+|Parcelle(s)||||||
+|Observations (observ)||||||
+|Coordonnées X en Lambert 93 (x_l93)||||||
+|Coordonnées Y en Lambert 93 (y_l93)||||||
+|Latitude (lat)||||||
+|Longitude (long)||||||
+|geom||||x||
+
+(Calcul des suggestions par "Contient la chaine")
+(la détection des doublons n'est pas activée ici)
+
+ * Filtres :
+
+|Groupe|Jointure|Filtres liés|
+|:---|:-:|:-:|
+|Groupe de filtres par défaut|`ET`|x|
+
+|Nom|Obligatoire|Attribut|Condition|Valeur|Champ d'affichage (1)|Champ de valeurs (1)|Champ de tri (1)|Ajout autorisé (1)|Particularités|
+|:---|:-:|:---|:---|:---|:---|:---|:---|:-:|:---|
+|Adresse par commune|x|commune|Prédéfinis à filtre à liste de choix|||||||
+|Nombre de logements (=)||nb_log|Alphanumérique est égale à une valeur saisie|||||||
+|Nombre de logements (>=)||nb_log|Alphanumérique est supérieure ou égale à une valeur saisie|||||||
+|Nombre de logements (<=)||nb_log|Alphanumérique est inférieure ou égale à une valeur saisie|||||||
+
+(1) si liste de domaine
+
+ * Fiches d'information active : Fiche adresse
+ 
+## Recherche : `Recherche avancée d'une voie`
+
+Requêté détaillée dans la recherche au clic plus haut sur cette page.
+
+## Recherche : `Tronçon de voie par statut juridique`
+
+Cette recherche permet à l'utilisateur de faire une recherche sur les tronçons de voies par statut juridique.
+
+* Configuration :
+
+Source : `xapps_geo_v_troncon_voirie`
+
+|Attribut|Afficher|Rechercher|Suggestion|Attribut de géométrie|Tri des résultats|
+|:---|:-:|:-:|:-:|:-:|:-:|
+|Identifiant du tronçon (id_tronc)||||||
+|Libellé de la voie (libvoie)|x|||||
+|Code Insee (insee)||||||
+|Commune (commune)|x|||||
+|Type de tronçon (type_tronc)||||||
+|Hiérarchie (hierarchie)||||||
+|Franchissement (franchiss)||||||
+|Nombre de voies (nb_voie)||||||
+|Statut juridique (statut_jur)|x|x||||
+|N° de statut (num_statut)||||||
+|Gestion (gestion)||||||
+|Domanialité (doman)||||||
+|Propriétaire (proprio)||||||
+|Type de circulation (type_circu)||||||
+|Sens de circualtion (sens_ciruc)||||||
+|Vitesse maximun (v_max)||||||
+|Pente (pente)||||||
+|geom||||x||
+
+(la détection des doublons n'est pas activée ici)
+
+ * Filtres :
+
+|Groupe|Jointure|Filtres liés|
+|:---|:-:|:-:|
+|Groupe de filtres par défaut|`ET`|x|
+
+|Nom|Obligatoire|Attribut|Condition|Valeur|Champ d'affichage (1)|Champ de valeurs (1)|Champ de tri (1)|Ajout autorisé (1)|Particularités|
+|:---|:-:|:---|:---|:---|:---|:---|:---|:-:|:---|
+|Voie par commune|x|commune|Prédéfinis à filtre à liste de choix|||||||
+|Voie par statut juridique|x|statut_jur|Prédéfinis à filtre à liste de choix|||||||
+
+(1) si liste de domaine
+
+ * Fiches d'information active : Fiche d'information sur un tronçon
+
+## Recherche : `Exporter la synthèse communale selon le statut juridique`
+
+Cette recherche permet à l'utilisateur de faire une recherche et d'exporter les tronçons de voies par statut juridique.
+
+* Configuration :
+
+Source : `xapps_an_v_troncon`
+
+|Attribut|Afficher|Rechercher|Suggestion|Attribut de géométrie|Tri des résultats|
+|:---|:-:|:-:|:-:|:-:|:-:|
+|Insee (insee)||||||
+|Commune (commune)|x|||||
+|Résumé (affiche_result_statut)|x|||||
+|Précaution d'usage (affiche_message_statut)||||||
+|Extraction du (date_extract)||||||
+|Non renseigné (long_ts00)||||||
+|Autoroute (long_ts01)||||||
+|Route nationale (long_ts02)||||||
+|Route départementale (long_ts03)||||||
+|Voie d'intérêt Communautaire (long_ts04)||||||
+|Voie communale (long_ts05)||||||
+|Chemin rural (long_ts06)||||||
+|Chemin d'exploitation (long_ts07)||||||
+|Chemin forestier (long_ts08)||||||
+|Chemin de halage (long_ts09)||||||
+|Voie privée (long_ts10)||||||
+|Piste cyclable (long_ts11)||||||
+|Voie verte (long_ts12)||||||
+|Autre (long_ts99)||||||
+|geom||||x||
+
+(la détection des doublons n'est pas activée ici)
+
+ * Filtres :
+
+|Nom|Obligatoire|Attribut|Condition|Valeur|Champ d'affichage (1)|Champ de valeurs (1)|Champ de tri (1)|Ajout autorisé (1)|Particularités|
+|:---|:-:|:---|:---|:---|:---|:---|:---|:-:|:---|
 |Commune|x|commune|Prédéfinis à filtre à liste de choix|||||||
-|Voie|x|id_voie|Alphanumérique est égale à une valeur de liste de choix|Liste de domaine (Liste de voie)|affiche_voie|id_voie|mot_dir|||
-|Numéro||numero_complet|Prédéfinis à filtre à liste de choix|||||||
+
+(1) si liste de domaine
+
+ * Fiches d'information active : aucune
+ 
+## Recherche : `Tronçon de voie par domanialité`
+
+Cette recherche permet à l'utilisateur de faire une recherche sur les tronçons de voies par domanialité.
+
+* Configuration :
+
+Source : `xapps_geo_v_troncon_voirie`
+
+|Attribut|Afficher|Rechercher|Suggestion|Attribut de géométrie|Tri des résultats|
+|:---|:-:|:-:|:-:|:-:|:-:|
+|Identifiant du tronçon (id_tronc)||||||
+|Libellé de la voie (libvoie)|x|||||
+|Code Insee (insee)||||||
+|Commune (commune)|x|||||
+|Type de tronçon (type_tronc)||||||
+|Hiérarchie (hierarchie)||||||
+|Franchissement (franchiss)||||||
+|Nombre de voies (nb_voie)||||||
+|Statut juridique (statut_jur)||||||
+|N° de statut (num_statut)||||||
+|Gestion (gestion)||||||
+|Domanialité (doman)|x|x||||
+|Propriétaire (proprio)||||||
+|Type de circulation (type_circu)||||||
+|Sens de circualtion (sens_ciruc)||||||
+|Vitesse maximun (v_max)||||||
+|Pente (pente)||||||
+|geom||||x||
+
+(la détection des doublons n'est pas activée ici)
+
+ * Filtres :
+
+|Groupe|Jointure|Filtres liés|
+|:---|:-:|:-:|
+|Groupe de filtres par défaut|`ET`|x|
+
+|Nom|Obligatoire|Attribut|Condition|Valeur|Champ d'affichage (1)|Champ de valeurs (1)|Champ de tri (1)|Ajout autorisé (1)|Particularités|
+|:---|:-:|:---|:---|:---|:---|:---|:---|:-:|:---|
+|Voie par commune|x|commune|Prédéfinis à filtre à liste de choix|||||||
+|RVA - Domanialité|x|doman|Prédéfinis à filtre à liste de choix|||||||
+
+(1) si liste de domaine
+
+ * Fiches d'information active : Fiche d'information sur un tronçon
+ 
+## Recherche : `Exporter la synthèse communale selon la domanialité`
+
+Cette recherche permet à l'utilisateur de faire une recherche et d'exporter les tronçons de voies par domanialité.
+
+* Configuration :
+
+Source : `xapps_an_v_troncon`
+
+|Attribut|Afficher|Rechercher|Suggestion|Attribut de géométrie|Tri des résultats|
+|:---|:-:|:-:|:-:|:-:|:-:|
+|Insee (insee)||||||
+|Commune (commune)|x|||||
+|Résumé (affiche_result_statut)|x|||||
+|Précaution d'usage (affiche_message_statut)||||||
+|Extraction du (date_extract)||||||
+|Non renseigné (long_td00)||||||
+|Public (long_td01)||||||
+|Privé (long_td02)||||||
+|geom||||x||
+
+(la détection des doublons n'est pas activée ici)
+
+ * Filtres :
+
+|Nom|Obligatoire|Attribut|Condition|Valeur|Champ d'affichage (1)|Champ de valeurs (1)|Champ de tri (1)|Ajout autorisé (1)|Particularités|
+|:---|:-:|:---|:---|:---|:---|:---|:---|:-:|:---|
+|Commune|x|commune|Prédéfinis à filtre à liste de choix|||||||
+
+(1) si liste de domaine
+
+ * Fiches d'information active : aucune
+ 
+## Recherche : `Tronçon de voie par gestionnaire`
+
+Cette recherche permet à l'utilisateur de faire une recherche sur les tronçons de voies par gestionnaire.
+
+* Configuration :
+
+Source : `xapps_geo_v_troncon_voirie`
+
+|Attribut|Afficher|Rechercher|Suggestion|Attribut de géométrie|Tri des résultats|
+|:---|:-:|:-:|:-:|:-:|:-:|
+|Identifiant du tronçon (id_tronc)||||||
+|Libellé de la voie (libvoie)|x|||||
+|Code Insee (insee)||||||
+|Commune (commune)|x|||||
+|Type de tronçon (type_tronc)||||||
+|Hiérarchie (hierarchie)||||||
+|Franchissement (franchiss)||||||
+|Nombre de voies (nb_voie)||||||
+|Statut juridique (statut_jur)||||||
+|N° de statut (num_statut)||||||
+|Gestion (gestion)|x|x||||
+|Domanialité (doman)||||||
+|Propriétaire (proprio)||||||
+|Type de circulation (type_circu)||||||
+|Sens de circualtion (sens_ciruc)||||||
+|Vitesse maximun (v_max)||||||
+|Pente (pente)||||||
+|geom||||x||
+
+(la détection des doublons n'est pas activée ici)
+
+ * Filtres :
+
+|Groupe|Jointure|Filtres liés|
+|:---|:-:|:-:|
+|Groupe de filtres par défaut|`ET`|x|
+
+|Nom|Obligatoire|Attribut|Condition|Valeur|Champ d'affichage (1)|Champ de valeurs (1)|Champ de tri (1)|Ajout autorisé (1)|Particularités|
+|:---|:-:|:---|:---|:---|:---|:---|:---|:-:|:---|
+|Voie par commune|x|commune|Prédéfinis à filtre à liste de choix|||||||
+|RVA - Gestionnaire|x|gestion|Prédéfinis à filtre à liste de choix|||||||
+
+(1) si liste de domaine
+
+ * Fiches d'information active : Fiche d'information sur un tronçon
+ 
+## Recherche : `Exporter la synthèse communale selon le gestionnaire`
+
+Cette recherche permet à l'utilisateur de faire une recherche et d'exporter les tronçons de voies par gestionnaire.
+
+* Configuration :
+
+Source : `xapps_an_v_troncon`
+
+|Attribut|Afficher|Rechercher|Suggestion|Attribut de géométrie|Tri des résultats|
+|:---|:-:|:-:|:-:|:-:|:-:|
+|Insee (insee)||||||
+|Commune (commune)|x|||||
+|Résumé (affiche_result_statut)|x|||||
+|Précaution d'usage (affiche_message_statut)||||||
+|Extraction du (date_extract)||||||
+|Non renseigné (long_tg00)||||||
+|Etat (long_tg01)||||||
+|Région (long_tg02)||||||
+|Département (long_tg03)||||||
+|EPCI (long_tg04)||||||
+|Commune (long_tg05)||||||
+|Office HLM (long_tg06)||||||
+|Privé (long_tg07)||||||
+|Autre (long_tg08)||||||
+|geom||||x||
+
+(la détection des doublons n'est pas activée ici)
+
+ * Filtres :
+
+|Nom|Obligatoire|Attribut|Condition|Valeur|Champ d'affichage (1)|Champ de valeurs (1)|Champ de tri (1)|Ajout autorisé (1)|Particularités|
+|:---|:-:|:---|:---|:---|:---|:---|:---|:-:|:---|
+|Commune|x|commune|Prédéfinis à filtre à liste de choix|||||||
 
 (1) si liste de domaine
 
  * Fiches d'information active : aucune
 
+## Recherche : `Vitesse maximum autorisée`
+
+Cette recherche permet à l'utilisateur de faire une recherche sur les tronçons de voies selon la vitesse maximale autorisée.
+
+* Configuration :
+
+Source : `xapps_geo_v_troncon_voirie`
+
+|Attribut|Afficher|Rechercher|Suggestion|Attribut de géométrie|Tri des résultats|
+|:---|:-:|:-:|:-:|:-:|:-:|
+|Libellé de la voie (libvoie)|x|||||
+|Commune (commune)|x|||||
+|affiche_troncon|x|||||
+|Vitesse maximun (v_max)|x|||||
+|geom||||x||
+
+(la détection des doublons n'est pas activée ici)
+
+ * Filtres :
+
+|Nom|Obligatoire|Attribut|Condition|Valeur|Champ d'affichage (1)|Champ de valeurs (1)|Champ de tri (1)|Ajout autorisé (1)|Particularités|
+|:---|:-:|:---|:---|:---|:---|:---|:---|:-:|:---|
+|Vitesse|x|v_max|Alphanumérique est égale à une valeur de liste de choix|Liste de domaine (lt_v_max)|valeur|valeur|code|||
+
+(1) si liste de domaine
+
+ * Fiches d'information active : Fiche d'information sur un tronçon
+
+## Recherche : `Autres restrictions de circulation`
+
+Cette recherche permet à l'utilisateur de faire une recherche sur les tronçons de voies selon les restructions de circulation (hors vitesse).
+
+* Configuration :
+
+Source : `xapps_geo_v_troncon_voirie`
+
+|Attribut|Afficher|Rechercher|Suggestion|Attribut de géométrie|Tri des résultats|
+|:---|:-:|:-:|:-:|:-:|:-:|
+|Libellé de la voie (libvoie)|x|||||
+|Commune (commune)|x|||||
+|affiche_troncon|x|||||
+|Autres restrictions (c_observ)|x|||||
+|geom||||x||
+
+(la détection des doublons n'est pas activée ici)
+
+ * Filtres :
+
+|Nom|Obligatoire|Attribut|Condition|Valeur|Champ d'affichage (1)|Champ de valeurs (1)|Champ de tri (1)|Ajout autorisé (1)|Particularités|
+|:---|:-:|:---|:---|:---|:---|:---|:---|:-:|:---|
+|Restriction de circulation|x|c_circu|Alphanumérique est égale à une valeur de liste de choix|Liste de domaine (lt_cont_circu)|valeur|code|code|||
+
+(1) si liste de domaine
+
+ * Fiches d'information active : Fiche d'information sur un tronçon
+
+## Recherche : `Exporter la base de données des tronçons`
+
+Cette recherche permet à l'utilisateur de faire une recherche et d'exporter la base des tronçons par commune.
+
+* Configuration :
+
+Source : `xapps_geo_v_troncon_voirie`
+
+|Attribut|Afficher|Rechercher|Suggestion|Attribut de géométrie|Tri des résultats|
+|:---|:-:|:-:|:-:|:-:|:-:|
+|Libellé de la voie (libvoie)|x|x|x|||
+|Commune (commune)|x|||||
+|affiche_troncon|x|||||
+|Code rivoli (rivoli)||||||
+|Code Insee (insee)||||||
+|Identifiant du noeud de départ (noeud_d)||||||
+|Identifiant du noeud de fin (noeud_f)||||||
+|Type de tronçon (type_tronc)||||||
+|Hiérarchie (hierarchie)||||||
+|Franchissement (franchiss)||||||
+|Nombre de voies (nb_voie)||||||
+|Projet (projet)||||||
+|Fictif (ne rentre pas en compte dans le calcul du linéaire de voie) (fictif)||||||
+|Statut juridique (statut_jur)||||||
+|N° de statut (num_statut)||||||
+|Gestion (gestion)||||||
+|Domanialité (doman)||||||
+|Propriétaire (proprio)||||||
+|Type de circulation (type_circu)||||||
+|Sens de circulation (sens_circu)||||||
+|Vitesse maximum (v_max)||||||
+|Pente (pente)||||||
+|Observation(s) (observ)||||||
+|Source du référentiel de saisie (src_geom)||||||
+|Date de saisie (date_sai)||||||
+|Date de mise à jour (date_maj)||||||
+|Longueur du tronçon (en m) (long_troncon)||||||
+|Date d'extraction (date_extract)||||||
+|Période de création du libellé de la voie (date_lib)||||||
+|Types de restrictions (c_circu)||||||
+|Année d'ouverture à la circulation (date_ouv)||||||
+|Dernière année de remise en état de la chaussé (date_rem)||||||
+|Source des informations du tronçons (src_tronc)||||||
+|Libellé de la voie (libvoie_c)||||||
+|Longueur de la voie (en m) (long)||||||
+|geom||||x||
+
+(la détection des doublons n'est pas activée ici)
+
+ * Filtres :
+
+|Nom|Obligatoire|Attribut|Condition|Valeur|Champ d'affichage (1)|Champ de valeurs (1)|Champ de tri (1)|Ajout autorisé (1)|Particularités|
+|:---|:-:|:---|:---|:---|:---|:---|:---|:-:|:---|
+|Commune|x|commune|Prédéfinis par un filtre à liste de choix||||||
+
+(1) si liste de domaine
+
+ * Fiches d'information active : Fiche d'information sur un tronçon
+
+## Recherche : `Exporter la base de données des voies (avec linéaire)`
+
+Cette recherche permet à l'utilisateur de faire une recherche et d'exporter la base des voies par commune via un lien http directement sur le fichier OpenData exporté par FME.
+
+* Configuration :
+
+Source : `xapps_an_commune`
+
+|Attribut|Afficher|Rechercher|Suggestion|Attribut de géométrie|Tri des résultats|
+|:---|:-:|:-:|:-:|:-:|:-:|
+|affiche_lien_export_liste_voie_open_data|x|||||
+
+
+(la détection des doublons n'est pas activée ici)
+
+ * Filtres :
+
+|Nom|Obligatoire|Attribut|Condition|Valeur|Champ d'affichage (1)|Champ de valeurs (1)|Champ de tri (1)|Ajout autorisé (1)|Particularités|
+|:---|:-:|:---|:---|:---|:---|:---|:---|:-:|:---|
+|Commune|x|commune|Prédéfinis par un filtre à liste de choix||||||
+
+(1) si liste de domaine
+
+ * Fiches d'information active : aucune
 
 ## Fiche d'information : `Fiche adresse`
 
