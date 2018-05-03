@@ -1069,6 +1069,65 @@ Source : `xapps_an_commune`
  * Fiches d'information active : aucune
  * Particularité(s) : cette table est une simple vue dans la base de données Postgres avec la liste des communes du Pays Compiégnois permettant d'y lier un champ calculé contenant le lien de téléchargement du fichier OpenData. Cette vue permet d'assoir la recherche par commune et d'accéder à ce lien dans GEO au niveau du menu résultat.
 
+## Fiche d'information : `Fiche adresse`
+
+Source : `xapps_geo_vmr_adresse`
+
+* Statistique : aucune
+ 
+ * Représentation :
+ 
+|Mode d'ouverture|Taille|Agencement des sections|
+|:---|:---|:---|
+|dans le gabarit|530x650|Vertical|
+
+|Nom de la section|Attributs|Position label|Agencement attribut|Visibilité conditionnelle|Fichie liée|Ajout de données autorisé|
+|:---|:---|:---|:---|:---|:---|:---|
+|Adresse|adresse,nuemro,repet,libvoie_c,complement,codepostal, commune|Par défaut|Vertical||||
+|Historique des adresses (sous-section de Adresse)|adresse_h,date_arr,date_sai|Par défaut|Vertical||||
+|Qualité des adresses|||Vertical||||
+|Conformité (sous-section de Qualité des adresses)|diag_adr,qual_adr,etat_adr,observ|Par défaut|Vertical||||
+|Positionnement (sous-section de Qualité des adresses)|position,groupee,secondaire,refcad|Par défaut|Vertical||||
+|Destination de l'adresse|dest_adr,nb_log,pc|Par défaut|Vertical||||
+|Informations complémentaires|id_adresse,rivoli,insee|Par défaut|Vertical||||
+|Source|src_adr,src_geom|Par défaut|Vertical||||
+|Suivi des mises à jour|date_sai, date_maj|Par défaut|Vertical||||
+
+ * Saisie : aucune
+
+ * Modèle d'impression : Fiche standard + carte
+
+## Fiche d'information : `Fiche d'information sur la voie`
+
+Source : `xapps_geo_v_voie`
+
+* Statistique : aucune
+ 
+ * Représentation :
+ 
+|Mode d'ouverture|Taille|Agencement des sections|
+|:---|:---|:---|
+|dans le gabarit|700x650|Vertical|
+
+|Nom de la section|Attributs|Position label|Agencement attribut|Visibilité conditionnelle|Fichie liée|Ajout de données autorisé|
+|:---|:---|:---|:---|:---|:---|:---|
+|(vide)|affiche_voie_commune|Par défaut|Vertical||||
+|Caractéristique(s)|long,affiche_message|Par défaut|Vertical||||
+|Tronçon(s) composant la voie|long_troncon,statut_jur,doman,gestion,proprio|Par défaut|Vertical||Fiche d'information sur un tronçon (Accès à)||
+
+ * Saisie : aucune
+
+ * Modèle d'impression : aucun
+
+## Fiche d'information : `Fiche équipement`
+
+Détail dans le répertoire GitHub `docurba`
+
+## Fiche d'information : `Fiche parcelle` et `Fiche local`
+
+Source : `r_bg_majic.NBAT_10 (Parcelle (Alpha) V3)`
+
+Ces fiches sont liées au module GeoCadastre de l'éditeur et ne sont pas modifiable par l'ARC. 
 
 ## Fiche d'information : `Fiche de suivi d'un signalement voie/adresse`
 
@@ -1102,11 +1161,11 @@ Source : `geo_rva_signal`
 
  * Modèle d'impression : aucun
 
-## Fiche d'information : `Fiche équipement`
+## Fiche d'information : `Fiche d'information sur un tronçon`
 
-Source : `r_plan.geo_plan_refpoi (usage APC)`
+Source : `xapps_geo_v_troncon_voirie`
 
- * Statistique : aucune
+* Statistique : aucune
  
  * Représentation :
  
@@ -1116,169 +1175,19 @@ Source : `r_plan.geo_plan_refpoi (usage APC)`
 
 |Nom de la section|Attributs|Position label|Agencement attribut|Visibilité conditionnelle|Fichie liée|Ajout de données autorisé|
 |:---|:---|:---|:---|:---|:---|:---|
-|Etablissement|poi_lib|Par défaut|Vertical||INFORMATIONS / CONTACT||
+|Caractéristiques du tronçon|id_tronc,type de tronçon,hierarchie,franchiss,nb_voie,long_troncon,projet,fictif,observ|Par défaut|Vertical||||
+|Voie d'appartenance|id_voie,libvoie,rivoli,insee,commune|Par défaut|Vertical||||
+|Informations complémentaires sur la voie (sous-secteur de Voie d'appartenance)|long|Par défaut|Vertical||Fiche d'information sur la voie (+ d'infos)||
+|Historique des noms de voies (sous-secteur de Voie d'appartenance) |troncon_h,date_lib,date_sai |Par défaut|Vertical||||
+|Informations de gestion|statut_jur,num_statut,doman,gestion,proprio,date_rem|Par défaut|Vertical||||
+|Informations de circulation|date_ouv,type_circu,sens_circu,v_max,autres restriciton,pente|Par défaut|Vertical||||
+|Informations de suivi|date_sai,date_maj|Par défaut|Vertical||||
 
  * Saisie : aucune
 
  * Modèle d'impression : aucun
+
  
-## Fiche d'information : `Fiche détaillée POI`
-
-Source : `r_plan.an_plan_refcontactpoi`
-
- * Statistique : aucune
- 
- * Représentation :
- 
-|Mode d'ouverture|Taille|Agencement des sections|
-|:---|:---|:---|
-|dans le gabarit|530x650|Vertical|
-
-|Nom de la section|Attributs|Position label|Agencement attribut|Visibilité conditionnelle|Fichie liée|Ajout de données autorisé|
-|:---|:---|:---|:---|:---|:---|:---|
-|Etablissement|poi_lib,poi_alias|Par défaut|Vertical||||
-|Adresse|adr_compl|Par défaut|Vertical||||
-|Contact|tel, fax, mail|Par défaut|Vertical||||
-|Lien(s) internet|site,url1,url2|Par défaut|Vertical||||
-|Remarques|observ|Par défaut|Vertical||||
-
- * Saisie : aucune
-
- * Modèle d'impression : aucun
- * Particularité : cette fiche est liée à la fiche équipement, et n'est accessaible qu'à partir de celle-ci 
- 
-## Fiche d'information : `Fiche parcelle` et `Fiche local`
-
-Source : `r_bg_majic.NBAT_10 (Parcelle (Alpha) V3)`
-
-Ces fiches sont liées au module GeoCadastre de l'éditeur et ne sont pas modifiable par l'ARC. 
-
-## Fiche d'information : `Fiche détaillée POS-PLU-CC`
-
-Source : `x_apps_geo_vmr_p_zone_urba`
-
- * Statistique : aucune
- 
- * Représentation :
- 
-|Mode d'ouverture|Taille|Agencement des sections|
-|:---|:---|:---|
-|dans le gabarit|530x650|Vertical|
-
-|Nom de la section|Attributs|Position label|Agencement attribut|Visibilité conditionnelle|Fichie liée|Ajout de données autorisé|
-|:---|:---|:---|:---|:---|:---|:---|
-|Caractéristiques de la zone|LIBELLE (commune-BG),libelle,gestion_libelle_long,typezone,destdomi_lib,fermreco,l_surf_cal,l_observ|Par défaut|Vertical||||
-|Validité du document|datappro_date|Par défaut|Vertical||||
-|Accès au réglement|urlfic|Par défaut|Vertical||||
-
- * Saisie : aucune
-
- * Modèle d'impression : Fiche standard
- 
- ## Fiche d'information : `Fiche adresse` et `Fiche d'information sur la voie`
-
-Ces deux fiches sont issues de l'application RVA. Se référer au répertoire GitHub du même nom pour plus de précisions.
-
-## Fiche d'information : `PPRi zonage (projet) - remarque`
-
-Source : `m_urbanisme_reg.geo_sup_pm1_ppri_projet_rq (PPRi zonage (projet) - remarque)`
-
- * Statistique : aucune
- 
- * Représentation :
- 
-|Mode d'ouverture|Taille|Agencement des sections|
-|:---|:---|:---|
-|dans le gabarit|530x650|Vertical|
-
-|Nom de la section|Attributs|Position label|Agencement attribut|Visibilité conditionnelle|Fichie liée|Ajout de données autorisé|
-|:---|:---|:---|:---|:---|:---|:---|
-|Caractéristiques de l'annotation|id_rq,nom,tyep_rq,observ,date_sai,date_maj|Par défaut|Vertical||||
-
- * Saisie : aucune
-
- * Modèle d'impression : Fiche standard+carte
- 
-## Fiche d'information : `Renseignements d'urbanisme`
-
-Source : `r_bg_majic.NBAT_10 (Parcelle (Alpha) V3)`
-
- * Statistique : aucune
- 
- * Représentation :
- 
-|Mode d'ouverture|Taille|Agencement des sections|
-|:---|:---|:---|
-|dans le gabarit|600x650|Vertical|
-
-|Nom de la section|Attributs|Position label|Agencement attribut|Visibilité conditionnelle|Fichie liée|Ajout de données autorisé|
-|:---|:---|:---|:---|:---|:---|:---|
-|(vide)|affiche_commune|Masqué|Vertical||||
-|(vide)|titre_html|Masqué|Vertical||||
-|(vide)|section_parcelle|Masqué|Vertical||||
-|(vide)|tableau_proprio|Masqué|Vertical||||
-|(vide)|titre_doc_urba_valide_html|Masqué|Vertical||||
-|(vide)|tableau_doc_vigueur|Masqué|Vertical||||
-|(vide)|libelle(xapps_an_vmr_parcelle_plu),libelong,urlfic (xapps_an_vmr_parcelle_plu)|Masqué|Vertical||Fiche POS-PLU-CC||
-|(vide)|titre_prescription_html|Masqué|Vertical||||
-|(vide)|libelle(xapps_an_vmr_p_prescription),lien(xapps_an_vmr_p_prescription)|Masqué|Vertical||||
-|(vide)|titre_dpu_html|Masqué|Vertical||||
-|(vide)|application,beneficiaire,date_ins,urlfic(xapps_an_vmr_p_information_dpu)|Masqué|Vertical||||
-|(vide)|titre_info_utile_html|Masqué|Vertical||||
-|(vide)|libelle(xapps_an_vmr_p_information),lien(xapps_an_vmr_p_information)|Masqué|Vertical||||
-|(vide)|titre_sup_html,titre_sup_impact|Masqué|Vertical||||
-|(vide)|ligne_aff(an_sup_geo),l_url(an_sup_geo)|Masqué|Vertical||||
-|(vide)|titre_ac4|Masqué|Vertical||||
-|(vide)|message,protec,typeprotec(an_sup_ac4_geo_protect)|Masqué|Vertical||||
-|(vide)|titre_liste_sup_com|Masqué|Vertical||||
-|(vide)|titre_taxe_amgt|Masqué|Vertical||||
-|(vide)|affiche_taux,affiche_url(an_fisc_geo_taxe_amgt)|Masqué|Vertical||||
-
- * Saisie : aucune
-
- * Modèle d'impression : Fiche standard
- * Particularité : le champ calculé tableau_proprio a été intégré en plus de l'éditeur. Ce champ doit-être recréer à chaque mise à jour du module GeoCadastre et de la création de la structure dans GEO si besoin (champ HTML <b>{BG_FULL_NAME} /st de ligne/
-{BG_FULL_ADDRESS}</b>) et renommé Le ou les propriétaire(s).
-
-## Fiche d'information : `Renseignements d'urbanisme (non DGFIP)`
-
-Source : `r_bg_majic.NBAT_10 (Parcelle (Alpha) V3)`
-
- * Statistique : aucune
- 
- * Représentation :
- 
-|Mode d'ouverture|Taille|Agencement des sections|
-|:---|:---|:---|
-|dans le gabarit|600x650|Vertical|
-
-|Nom de la section|Attributs|Position label|Agencement attribut|Visibilité conditionnelle|Fichie liée|Ajout de données autorisé|
-|:---|:---|:---|:---|:---|:---|:---|
-|(vide)|affiche_commune|Masqué|Vertical||||
-|(vide)|titre_html|Masqué|Vertical||||
-|(vide)|section_parcelle|Masqué|Vertical||||
-|(vide)|titre_doc_urba_valide_html|Masqué|Vertical||||
-|(vide)|tableau_doc_vigueur|Masqué|Vertical||||
-|(vide)|libelle(xapps_an_vmr_parcelle_plu),libelong,urlfic (xapps_an_vmr_parcelle_plu)|Masqué|Vertical||Fiche POS-PLU-CC||
-|(vide)|titre_prescription_html|Masqué|Vertical||||
-|(vide)|libelle(xapps_an_vmr_p_prescription),lien(xapps_an_vmr_p_prescription)|Masqué|Vertical||||
-|(vide)|titre_dpu_html|Masqué|Vertical||||
-|(vide)|application,beneficiaire,date_ins,urlfic(xapps_an_vmr_p_information_dpu)|Masqué|Vertical||||
-|(vide)|titre_info_utile_html|Masqué|Vertical||||
-|(vide)|libelle(xapps_an_vmr_p_information),lien(xapps_an_vmr_p_information)|Masqué|Vertical||||
-|(vide)|titre_sup_html,titre_sup_impact|Masqué|Vertical||||
-|(vide)|ligne_aff(an_sup_geo),l_url(an_sup_geo)|Masqué|Vertical||||
-|(vide)|titre_ac4|Masqué|Vertical||||
-|(vide)|message,protec,typeprotec(an_sup_ac4_geo_protect)|Masqué|Vertical||||
-|(vide)|titre_liste_sup_com|Masqué|Vertical||||
-|(vide)|titre_taxe_amgt|Masqué|Vertical||||
-|(vide)|affiche_taux,affiche_url(an_fisc_geo_taxe_amgt)|Masqué|Vertical||||
-
- * Saisie : aucune
-
- * Modèle d'impression : Fiche standard
- * Particularité : cette fiche est identique à la fiche "Renseignement d'urbanisme" sauf qu'elle n'affiche pas le nom des propriétaires et n'est accessible uniquement pour les profils non DGI à partir des applicatifs GEO.
-
 ## Analyse :
 
 Aucune
