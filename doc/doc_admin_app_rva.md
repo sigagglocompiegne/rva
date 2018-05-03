@@ -1067,12 +1067,28 @@ Source : `xapps_an_commune`
 (1) si liste de domaine
 
  * Fiches d'information active : aucune
+ * Particularité(s) : cette table est une simple vue dans la base de données Postgres avec la liste des communes du Pays Compiégnois permettant d'y lier un champ calculé contenant le lien de téléchargement du fichier OpenData. Cette vue permet d'assoir la recherche par commune et d'accéder à ce lien dans GEO au niveau du menu résultat.
 
-## Fiche d'information : `Fiche adresse`
 
-Source : `xapps_geo_vmr_adresse`
+## Fiche d'information : `Fiche de suivi d'un signalement voie/adresse`
 
-Cette fiche est issus de l'application RVA. Consultez le répertoire rva sur GitHub pour plus de précisions.
+Source : `geo_rva_signal`
+
+* Statistique : aucune
+ 
+ * Représentation :
+ 
+|Mode d'ouverture|Taille|Agencement des sections|
+|:---|:---|:---|
+|dans le gabarit|530x700|Vertical|
+
+|Nom de la section|Attributs|Position label|Agencement attribut|Visibilité conditionnelle|Fichie liée|Ajout de données autorisé|
+|:---|:---|:---|:---|:---|:---|:---|
+|Gestion des signalement|traite_sig,type_rva,nat_signal,acte_admin,observ,op_sai,mail,date_sai,affiche_info|Par défaut|Vertical||||
+
+ * Saisie : aucune
+
+ * Modèle d'impression : aucun
 
 ## Fiche d'information : `Fiche équipement`
 
