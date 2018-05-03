@@ -1242,26 +1242,41 @@ acfApplicationService.whenLoaded(setTimeout(function(){
 $(".sidepanel-item.launcher-application").click();
 }, 100));`
   * Module Google Analytics : le n° ID est disponible sur le site de Google Analytics
+  * Module Export Fonctionnalité : ce module permet l'export des données issues de recherche
+
+|Type d'export|
+|:---|
+|D'après la liste|
+
+|Fonctionnalités exportables|
+|:---|
+|Recherche, export des adresses par nombre de logements à la commune|
+|Recherche, export des adresses par qualité, diagnostic à la commune|
+|Tronçon de voie par statut juridique|
+|Exporter la synthèse communale selon le gestionnaire|
+|Exporter la synthèse communale selon la domanialité|
+|Exporter la synthèse communale selon le statut juridique|
+|Exporter la base de données des tronçons|
+|Recherche, export de la base Adresses (par commune et voie)|
 
 * Recherche globale :
 
 |Noms|Tri|Nb de sugggestion|Texte d'invite|
 |:---|:---|:---|:---|
-|Recherche dans la Base Adresse Locale,Recherche dans la Base de Voie locale, Localiser une commune de l'APC, Localiser un équipement|alpha|20|Rechercher une adresse, une voie, une commune, un équipement, ...|
+|Recherche dans la Base Adresse Locale,Recherche d'une voie, Localiser un équipement|alpha|15|Rechercher une adresse, une voie,  un équipement, ...|
 
-* Carte : `Cadastre V4`
+* Carte : `RVA`
 
 Comportement au clic : (dés)active uniquement l'item cliqué
-Liste des recherches : Parcelle(s) sélectionnée(s) (description : GeoCadastre V3), PPRi zonage (projet) - remarque
+Liste des recherches : Recherche dans la Base Adresse Locale, Recherche tronçon, Signalement voie/adresse, Recherche avancée d'une voie, Parcelle(s) sélectionnée(s) (description : GeoCadastre V3)
 
 * Fonds de plan :
 
 |Nom|Au démarrage|opacité|
 |:---|:---|:---|
-|Cadastre|x|100%|
-|Plan de ville||100%|
-|Carte IGN 25000||100%|
-|Photographie aérienne 2013|x|70%|
+|Cadastre|x|80%|
+|Plan de ville|x|60%|
+|Photographie aérienne 2013|x|80%|
 
 * Fonctionnalités
 
@@ -1274,12 +1289,29 @@ Liste des recherches : Parcelle(s) sélectionnée(s) (description : GeoCadastre 
 ||Parcelles multicritères (V3)|
 ||Parcelles par nom du propriétaire d'un local (V3) (non disponible pour l'application URBANISME)|
 ||Parcelles par surface (V3)|
-|Recherche zone PLU||
-||Par libellé de zone PLU|
-||Par type de zone PLU|
-|Recherche avancée d'une voie ou d'une adresse||
+|Signalement||
+||Faire un signalement d'adresses ou de voies|
+||Recherche un signalement par commune|
+|Adresse (recherche avancée et export)||
 ||Recherche avancée d'une adresse|
+||Recherche d'une ancienne adresse|
+||Recherche, export de la base adresses (par commune et voie)|
+||Recherche, export des adresses par qualité, diagnostic à la commune|
+||Recherche, export des adresses par nombre de logements à la commune|
+|Voie (recherche avancée et export)||
 ||Recherche avancée d'une voie|
-|Modification d'objets||
-||PPRi (projet) - remarque|
+|Recherche par statut juridique (par tronçon)||
+||Tronçon de voie par statut juridique|
+||Exporter la synthèse communale selon le statut juridique|
+|Recherche par domanialité (par tronçon)||
+||Tronçon de voie par domanialité|
+||Exporter la synthèse communale selon la domanialité|
+|Recherche par gestionnaire (par tronçon)||
+||Tronçon de voie par gestionnaire|
+||Exporter la synthèse communale selon la gestionnaire|
+|Recherche par restrictions de circulation||
+||Vitesse maximum autorisée|
+||Autres restrictions de circulation|
 
+|(pas dans un groupe)|Exporter les données des tronçons|
+|(pas dans un groupe)|Exporter la liste des voies (avec linéaire)|
