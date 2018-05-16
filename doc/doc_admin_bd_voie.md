@@ -569,6 +569,11 @@ Ce traitement permet de :
 - contrôle des géométries (si pas franchissement) sur raccord entre tronçon,
 - ...
 
+## Projet QGIS pour la gestion
+
+Un projet QGIS a été réalisé pour la gestion interne des données. Il est stocké ici :
+Y:\Ressources\4-Partage\3-Procedures\QGIS\rva.qgs
+
 ## Export Open Data
 
 L'ensemble des fichiers a utilisé est placé ici `Y:\Ressources\4-Partage\3-Procedures\FME\prod\OPEN-DATA`.
