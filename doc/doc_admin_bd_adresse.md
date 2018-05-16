@@ -615,6 +615,11 @@ Valeurs possibles :
 
 ---
 
+## Projet QGIS pour la gestion
+
+Un projet QGIS a été réalisé pour la gestion interne des données. Il est stocké ici :
+Y:\Ressources\4-Partage\3-Procedures\QGIS\rva.qgs
+
 ## Traitement automatisé mis en place (Workflow de l'ETL FME)
 
 ### Gestion des procédures de contrôle des données Adresse
