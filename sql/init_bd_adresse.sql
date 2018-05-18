@@ -788,52 +788,61 @@ COMMENT ON VIEW r_adresse.geo_v_adresse
 
 
 
--- View: r_adresse.an_v_bal
+-- View: x_opendata.xopendata_an_v_bal
 
--- DROP VIEW r_adresse.an_v_bal;
+DROP VIEW x_opendata.xopendata_an_v_bal;
 
-CREATE OR REPLACE VIEW r_adresse.an_v_bal AS 
-SELECT
-  CASE
-    WHEN a.repet IS NULL AND a.complement IS NULL THEN concat(v.insee,'_',v.rivoli,'_',lpad(a.numero,5,'0'))
-    WHEN a.repet IS NOT NULL AND a.complement IS NULL THEN concat(v.insee,'_',v.rivoli,'_',lpad(a.numero,5,'0'),lower(trim(concat('_',left(a.repet,3)))))
-    WHEN a.repet IS NULL AND a.complement IS NOT NULL THEN concat(v.insee,'_',v.rivoli,'_',lpad(a.numero,5,'0'),lower(trim(concat('_',replace(a.complement,' ','')))))
-    WHEN a.repet IS NOT NULL AND a.complement IS NOT NULL THEN concat(v.insee,'_',v.rivoli,'_',lpad(a.numero,5,'0'),lower(trim(concat('_',left(a.repet,3), '_',replace(a.complement,' ','')))))
-  END AS cle_interop,
-p.id_adresse as uid_adresse,
-v.libvoie_c as voie_nom,
-a.numero,
-  CASE
-    WHEN a.repet IS NULL AND a.complement IS NULL THEN NULL
-    WHEN a.repet IS NOT NULL AND a.complement IS NULL THEN lower(trim(left(a.repet,3)))
-    WHEN a.repet IS NULL AND a.complement IS NOT NULL THEN lower(trim(replace(a.complement,' ','')))
-    WHEN a.repet IS NOT NULL AND a.complement IS NOT NULL THEN lower(trim(concat(left(a.repet,3), '_',replace(a.complement,' ',''))))
-  END AS suffixe,
-c.commune as commune_nom,
-lt_p.valeur as position,
-p.x_l93 as x,
-p.y_l93 as y,
-st_x(st_transform(p.geom,4326)) as long,
-st_y(st_transform(p.geom,4326)) as lat,
-lt_a.valeur as source,
-  CASE
-    WHEN p.date_maj IS NULL THEN date(p.date_sai) ELSE date(p.date_maj)
-  END as date_der_maj 
-FROM r_objet.geo_objet_pt_adresse p
-   LEFT JOIN r_adresse.an_adresse a ON a.id_adresse = p.id_adresse
-   LEFT JOIN r_adresse.lt_src_adr lt_a ON lt_a.code = a.src_adr
-   LEFT JOIN r_objet.lt_position lt_p ON lt_p.code = p.position      
-   LEFT JOIN r_voie.an_voie v ON v.id_voie = p.id_voie
-   LEFT JOIN r_osm.geo_osm_commune as c ON v.insee = c.insee
-WHERE a.diag_adr = '11'
-  OR left(a.diag_adr,1) = '2'
-  OR a.diag_adr = '32' 
-ORDER BY cle_interop;
+CREATE OR REPLACE VIEW x_opendata.xopendata_an_v_bal AS 
+ SELECT
+        lower(CASE
+            WHEN a.repet IS NULL AND a.complement IS NULL THEN concat(v.insee, '_', v.rivoli, '_', lpad(a.numero::text, 5, '0'::text))
+            WHEN a.repet IS NOT NULL AND a.complement IS NULL THEN concat(v.insee, '_', v.rivoli, '_', lpad(a.numero::text, 5, '0'::text), lower(btrim(concat('_', "left"(a.repet::text, 3)))))
+            WHEN a.repet IS NULL AND a.complement IS NOT NULL THEN concat(v.insee, '_', v.rivoli, '_', lpad(a.numero::text, 5, '0'::text), lower(btrim(concat('_', replace(a.complement::text, ' '::text, ''::text)))))
+            WHEN a.repet IS NOT NULL AND a.complement IS NOT NULL THEN concat(v.insee, '_', v.rivoli, '_', lpad(a.numero::text, 5, '0'::text), lower(btrim(concat('_', "left"(a.repet::text, 3), '_', replace(a.complement::text, ' '::text, ''::text)))))
+            ELSE NULL::text
+        END) AS cle_interop,
+    p.id_adresse AS uid_adresse,
+    v.libvoie_c AS voie_nom,
+    a.numero,
+        CASE
+            WHEN a.repet IS NULL AND a.complement IS NULL THEN NULL::text
+            WHEN a.repet IS NOT NULL AND a.complement IS NULL THEN lower(btrim("left"(a.repet::text, 3)))
+            WHEN a.repet IS NULL AND a.complement IS NOT NULL THEN lower(btrim(replace(a.complement::text, ' '::text, ''::text)))
+            WHEN a.repet IS NOT NULL AND a.complement IS NOT NULL THEN lower(btrim(concat("left"(a.repet::text, 3), '_', replace(a.complement::text, ' '::text, ''::text))))
+            ELSE NULL::text
+        END AS suffixe,
+    c.commune AS commune_nom,
+    lt_p.valeur AS "position",
+    p.x_l93 AS x,
+    p.y_l93 AS y,
+    st_x(st_transform(p.geom, 4326)) AS long,
+    st_y(st_transform(p.geom, 4326)) AS lat,
+    lt_a.valeur AS source,
+        CASE
+            WHEN p.date_maj IS NULL THEN to_char(date(p.date_sai),'YYYY-MM-DD')
+            ELSE to_char(date(p.date_maj),'YYYY-MM-DD')
+        END AS date_der_maj
+   FROM r_objet.geo_objet_pt_adresse p
+     LEFT JOIN r_adresse.an_adresse a ON a.id_adresse = p.id_adresse
+     LEFT JOIN r_adresse.lt_src_adr lt_a ON lt_a.code::text = a.src_adr::text
+     LEFT JOIN r_objet.lt_position lt_p ON lt_p.code::text = p."position"::text
+     LEFT JOIN r_voie.an_voie v ON v.id_voie = p.id_voie
+     LEFT JOIN r_osm.geo_osm_commune c ON v.insee = c.insee::bpchar
+  WHERE a.diag_adr::text = '11'::text OR "left"(a.diag_adr::text, 1) = '2'::text OR a.diag_adr::text = '32'::text
+  ORDER BY 
+        CASE
+            WHEN a.repet IS NULL AND a.complement IS NULL THEN concat(v.insee, '_', v.rivoli, '_', lpad(a.numero::text, 5, '0'::text))
+            WHEN a.repet IS NOT NULL AND a.complement IS NULL THEN concat(v.insee, '_', v.rivoli, '_', lpad(a.numero::text, 5, '0'::text), lower(btrim(concat('_', "left"(a.repet::text, 3)))))
+            WHEN a.repet IS NULL AND a.complement IS NOT NULL THEN concat(v.insee, '_', v.rivoli, '_', lpad(a.numero::text, 5, '0'::text), lower(btrim(concat('_', replace(a.complement::text, ' '::text, ''::text)))))
+            WHEN a.repet IS NOT NULL AND a.complement IS NOT NULL THEN concat(v.insee, '_', v.rivoli, '_', lpad(a.numero::text, 5, '0'::text), lower(btrim(concat('_', "left"(a.repet::text, 3), '_', replace(a.complement::text, ' '::text, ''::text)))))
+            ELSE NULL::text
+        END;
 
-
-ALTER TABLE r_adresse.an_v_bal
-  OWNER TO postgres;      
-COMMENT ON VIEW r_adresse.an_v_bal
+ALTER TABLE x_opendata.xopendata_an_v_bal
+  OWNER TO postgres;
+GRANT ALL ON TABLE x_opendata.xopendata_an_v_bal TO postgres;
+GRANT ALL ON TABLE x_opendata.xopendata_an_v_bal TO groupe_sig;
+COMMENT ON VIEW x_opendata.xopendata_an_v_bal
   IS 'Vue alphanumérique simplifiée des adresses au format d''échange BAL';
 
 
