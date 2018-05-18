@@ -828,7 +828,7 @@ CREATE OR REPLACE VIEW x_opendata.xopendata_an_v_bal AS
      LEFT JOIN r_objet.lt_position lt_p ON lt_p.code::text = p."position"::text
      LEFT JOIN r_voie.an_voie v ON v.id_voie = p.id_voie
      LEFT JOIN r_osm.geo_osm_commune c ON v.insee = c.insee::bpchar
-  WHERE (a.diag_adr::text = '11'::text OR "left"(a.diag_adr::text, 1) = '2'::text) AND a.diag_adr::text <> '31'::text AND a.diag_adr::text <> '32'::text
+  WHERE (a.diag_adr::text = '11'::text OR "left"(a.diag_adr::text, 1) = '2'::text) AND a.diag_adr::text <> '31'::text AND a.diag_adr::text <> '32'::text AND a.numero <> '00000'
   ORDER BY 
         CASE
             WHEN a.repet IS NULL AND a.complement IS NULL THEN concat(v.insee, '_', v.rivoli, '_', lpad(a.numero::text, 5, '0'::text))
@@ -844,9 +844,6 @@ GRANT ALL ON TABLE x_opendata.xopendata_an_v_bal TO postgres;
 GRANT ALL ON TABLE x_opendata.xopendata_an_v_bal TO groupe_sig;
 COMMENT ON VIEW x_opendata.xopendata_an_v_bal
   IS 'Vue alphanumérique simplifiée des adresses au format d''échange BAL';
-
-
-
 
 
 -- View: r_adresse.an_v_adresse_commune
