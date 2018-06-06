@@ -277,7 +277,47 @@ INSERT INTO public.lt_traite_sig(
 -- ####################################################################################################################################################
 
 
+-- View: public.geo_v_rva_signal
 
+-- DROP VIEW public.geo_v_rva_signal;
+
+CREATE OR REPLACE VIEW public.geo_v_rva_signal AS 
+ SELECT s.id_signal,
+    s.insee,
+    s.commune,
+    s.type_rva,
+    s.nat_signal,
+    s.acte_admin,
+    string_agg(((m.n_fichier || chr(10)) || 'http://geo.compiegnois.fr/documents/metiers/rva/signalement/'::text) || m.media, chr(10)) AS document,
+    s.observ,
+    s.op_sai,
+    s.mail,
+    s.traite_sig,
+    s.x_l93,
+    s.y_l93,
+    s.date_sai,
+    s.date_maj,
+    s.geom
+   FROM geo_rva_signal s
+     LEFT JOIN an_rva_signal_media m ON s.id_signal = m.id
+  GROUP BY s.id_signal, s.insee, s.commune, s.type_rva, s.nat_signal, s.acte_admin, s.observ, s.op_sai, s.mail, s.traite_sig, s.x_l93, s.y_l93, s.date_sai, s.date_maj, s.geom;
+
+ALTER TABLE public.geo_v_rva_signal
+  OWNER TO postgres;
+GRANT ALL ON TABLE public.geo_v_rva_signal TO postgres;
+GRANT ALL ON TABLE public.geo_v_rva_signal TO groupe_sig;
+COMMENT ON VIEW public.geo_v_rva_signal
+  IS 'Vue géographique éditable pour l''intégration des signalements dans la base de voies et adresses';
+
+-- Trigger: t1_geo_v_rva_signal_traite on public.geo_v_rva_signal
+
+-- DROP TRIGGER t1_geo_v_rva_signal_traite ON public.geo_v_rva_signal;
+
+CREATE TRIGGER t1_geo_v_rva_signal_traite
+  INSTEAD OF UPDATE
+  ON public.geo_v_rva_signal
+  FOR EACH ROW
+  EXECUTE PROCEDURE public.ft_geo_v_rva_signal_traite();
 
 
 
