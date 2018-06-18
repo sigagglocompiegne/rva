@@ -1738,8 +1738,42 @@ CASE WHEN NEW.type_circu IS NULL THEN '00' ELSE NEW.type_circu END,
 CASE WHEN NEW.sens_circu IS NULL THEN '00' ELSE NEW.sens_circu END,
 CASE WHEN NEW.v_max IS NULL THEN '000' ELSE NEW.v_max END,
 NEW.observ,
+
 NEW.c_circu,
-NEW.c_observ,
+CASE 
+WHEN NEW.c_observ like '%h:%' THEN replace(NEW.c_observ,'h:','H:')
+WHEN NEW.c_observ like '%hauteur:%' THEN replace(NEW.c_observ,'hauteur:','H:')
+WHEN NEW.c_observ like '%Hauteur:%' THEN replace(NEW.c_observ,'Hauteur:','H:')
+WHEN NEW.c_observ like '%HAUTEUR:%' THEN replace(NEW.c_observ,'HAUTEUR:','H:')
+WHEN NEW.c_observ like '%l:%' THEN replace(NEW.c_observ,'l:','L:')
+WHEN NEW.c_observ like '%largeur:%' THEN replace(NEW.c_observ,'largeur:','L:')
+WHEN NEW.c_observ like '%Largeur:%' THEN replace(NEW.c_observ,'Largeur:','L:')
+WHEN NEW.c_observ like '%LARGEUR:%' THEN replace(NEW.c_observ,'LARGEUR:','L:')
+WHEN NEW.c_observ like '%p:%' THEN replace(NEW.c_observ,'p:','P:')
+WHEN NEW.c_observ like '%poids:%' THEN replace(NEW.c_observ,'poids:','P:')
+WHEN NEW.c_observ like '%Poids:%' THEN replace(NEW.c_observ,'Poids:','P:')
+WHEN NEW.c_observ like '%POIDS:%' THEN replace(NEW.c_observ,'POIDS:','P:')
+WHEN NEW.c_observ like '%poid:%' THEN replace(NEW.c_observ,'poid:','P:')
+WHEN NEW.c_observ like '%Poid:%' THEN replace(NEW.c_observ,'Poid:','P:')
+WHEN NEW.c_observ like '%POID:%' THEN replace(NEW.c_observ,'POID:','P:')
+WHEN NEW.c_observ like '%tv:%' THEN replace(NEW.c_observ,'tv:','Tv:')
+WHEN NEW.c_observ like '%TV:%' THEN replace(NEW.c_observ,'TV:','Tv:')
+WHEN NEW.c_observ like '%type de véhicule:%' THEN replace(NEW.c_observ,'type de véhicule:','Tv:')
+WHEN NEW.c_observ like '%Type de véhicule:%' THEN replace(NEW.c_observ,'Type de véhicule:','Tv:')
+WHEN NEW.c_observ like '%type de véhicules:%' THEN replace(NEW.c_observ,'type de véhicules:','Tv:')
+WHEN NEW.c_observ like '%Type de véhicules:%' THEN replace(NEW.c_observ,'Type de véhicules:','Tv:')
+WHEN NEW.c_observ like '%TYPE DE VEHICULE:%' THEN replace(NEW.c_observ,'TYPE DE VEHICULE:','Tv:')
+WHEN NEW.c_observ like '%TYPE DE VEHICULES:%' THEN replace(NEW.c_observ,'TYPE DE VEHICULES:','Tv:')
+WHEN NEW.c_observ like '%type véhicules:%' THEN replace(NEW.c_observ,'type véhicules:','Tv:')
+WHEN NEW.c_observ like '%Type véhicules:%' THEN replace(NEW.c_observ,'Type véhicules:','Tv:')
+WHEN NEW.c_observ like '%TYPE VEHICULE:%' THEN replace(NEW.c_observ,'TYPE VEHICULE:','Tv:')
+WHEN NEW.c_observ like '%TYPE VEHICULES:%' THEN replace(NEW.c_observ,'TYPE VEHICULES:','Tv:')
+WHEN NEW.c_observ like '%.%' THEN replace(NEW.c_observ,'.',',')
+ELSE
+NEW.c_observ
+END
+,
+
 NEW.date_ouv
 ;
 NEW.id_tronc := v_id_tronc;
@@ -1757,7 +1791,41 @@ v_max=CASE WHEN NEW.v_max IS NULL THEN '000' ELSE NEW.v_max END,
 observ=NEW.observ,
 date_maj=now(),
 c_circu=NEW.c_circu,
-c_observ=NEW.c_observ,
+c_observ=
+CASE 
+WHEN NEW.c_observ like '%h:%' THEN replace(NEW.c_observ,'h:','H:')
+WHEN NEW.c_observ like '%hauteur:%' THEN replace(NEW.c_observ,'hauteur:','H:')
+WHEN NEW.c_observ like '%Hauteur:%' THEN replace(NEW.c_observ,'Hauteur:','H:')
+WHEN NEW.c_observ like '%HAUTEUR:%' THEN replace(NEW.c_observ,'HAUTEUR:','H:')
+WHEN NEW.c_observ like '%l:%' THEN replace(NEW.c_observ,'l:','L:')
+WHEN NEW.c_observ like '%largeur:%' THEN replace(NEW.c_observ,'largeur:','L:')
+WHEN NEW.c_observ like '%Largeur:%' THEN replace(NEW.c_observ,'Largeur:','L:')
+WHEN NEW.c_observ like '%LARGEUR:%' THEN replace(NEW.c_observ,'LARGEUR:','L:')
+WHEN NEW.c_observ like '%p:%' THEN replace(NEW.c_observ,'p:','P:')
+WHEN NEW.c_observ like '%poids:%' THEN replace(NEW.c_observ,'poids:','P:')
+WHEN NEW.c_observ like '%Poids:%' THEN replace(NEW.c_observ,'Poids:','P:')
+WHEN NEW.c_observ like '%POIDS:%' THEN replace(NEW.c_observ,'POIDS:','P:')
+WHEN NEW.c_observ like '%poid:%' THEN replace(NEW.c_observ,'poid:','P:')
+WHEN NEW.c_observ like '%Poid:%' THEN replace(NEW.c_observ,'Poid:','P:')
+WHEN NEW.c_observ like '%POID:%' THEN replace(NEW.c_observ,'POID:','P:')
+WHEN NEW.c_observ like '%tv:%' THEN replace(NEW.c_observ,'tv:','Tv:')
+WHEN NEW.c_observ like '%TV:%' THEN replace(NEW.c_observ,'TV:','Tv:')
+WHEN NEW.c_observ like '%type de véhicule:%' THEN replace(NEW.c_observ,'type de véhicule:','Tv:')
+WHEN NEW.c_observ like '%Type de véhicule:%' THEN replace(NEW.c_observ,'Type de véhicule:','Tv:')
+WHEN NEW.c_observ like '%type de véhicules:%' THEN replace(NEW.c_observ,'type de véhicules:','Tv:')
+WHEN NEW.c_observ like '%Type de véhicules:%' THEN replace(NEW.c_observ,'Type de véhicules:','Tv:')
+WHEN NEW.c_observ like '%TYPE DE VEHICULE:%' THEN replace(NEW.c_observ,'TYPE DE VEHICULE:','Tv:')
+WHEN NEW.c_observ like '%TYPE DE VEHICULES:%' THEN replace(NEW.c_observ,'TYPE DE VEHICULES:','Tv:')
+WHEN NEW.c_observ like '%type véhicules:%' THEN replace(NEW.c_observ,'type véhicules:','Tv:')
+WHEN NEW.c_observ like '%Type véhicules:%' THEN replace(NEW.c_observ,'Type véhicules:','Tv:')
+WHEN NEW.c_observ like '%TYPE VEHICULE:%' THEN replace(NEW.c_observ,'TYPE VEHICULE:','Tv:')
+WHEN NEW.c_observ like '%TYPE VEHICULES:%' THEN replace(NEW.c_observ,'TYPE VEHICULES:','Tv:')
+WHEN NEW.c_observ like '%.%' THEN replace(NEW.c_observ,'.',',')
+ELSE
+NEW.c_observ
+END
+ ,
+ 
 date_ouv=NEW.date_ouv
 WHERE m_voirie.an_voirie_circu.id_tronc = OLD.id_tronc;
 RETURN NEW;
