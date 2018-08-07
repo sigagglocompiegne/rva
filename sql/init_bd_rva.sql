@@ -2,7 +2,7 @@
 
 -- 2017/01/12 : FV / initialisation du code pour une donnée de signalement sur le Référentiel des Voies et Adresses (RVA)
 -- 2018/03/20 : GB / Intégration des modifications suite au groupe de travail RVA du 13 mars 2018
-
+-- 2018/08/07 : GB / Intégration des nouveaux rôles de connexionss et leurs privilèges
 -- ToDo
 
 -- gestion documentaire contrainte sous GEO
@@ -49,9 +49,11 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE public.geo_rva_signal
-  OWNER TO postgres;
-GRANT ALL ON TABLE public.geo_rva_signal TO postgres;
-GRANT ALL ON TABLE public.geo_rva_signal TO groupe_sig WITH GRANT OPTION;
+  OWNER TO sig_create;
+GRANT ALL ON TABLE public.geo_rva_signal TO sig_create;
+GRANT SELECT ON TABLE public.geo_rva_signal TO read_sig;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE public.geo_rva_signal TO edit_sig;
+
 COMMENT ON TABLE public.geo_rva_signal
   IS 'Donnée de signalement sur le réferentiel local voie et adresse (rva)';
 COMMENT ON COLUMN public.geo_rva_signal.id_signal IS 'Identifiant unique de l''objet de signalement';
@@ -92,10 +94,12 @@ CREATE SEQUENCE public.geo_rva_signal_id_seq
   MAXVALUE 9223372036854775807
   START 1
   CACHE 1;
-ALTER TABLE public.geo_rva_signal_id_seq
-  OWNER TO postgres;
-GRANT ALL ON SEQUENCE public.geo_rva_signal_id_seq TO postgres;
-GRANT ALL ON SEQUENCE public.geo_rva_signal_id_seq TO groupe_sig WITH GRANT OPTION;
+ALTER SEQUENCE public.geo_rva_signal_id_seq
+  OWNER TO sig_create;
+GRANT ALL ON SEQUENCE public.geo_rva_signal_id_seq TO sig_create;
+GRANT SELECT, USAGE ON SEQUENCE public.geo_rva_signal_id_seq TO public;
+
+
 ALTER TABLE public.geo_rva_signal ALTER COLUMN id_signal SET DEFAULT nextval('public.geo_rva_signal_id_seq'::regclass);
 
 
@@ -118,9 +122,11 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE public.an_rva_signal_media
-  OWNER TO postgres;
-GRANT ALL ON TABLE public.an_rva_signal_media TO postgres;
-GRANT ALL ON TABLE public.an_rva_signal_media TO groupe_sig WITH GRANT OPTION;
+  OWNER TO sig_create;
+GRANT ALL ON TABLE public.an_rva_signal_media TO sig_create;
+GRANT SELECT ON TABLE public.an_rva_signal_media TO read_sig;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE public.an_rva_signal_media TO edit_sig;
+
 COMMENT ON TABLE public.an_rva_signal_media
   IS 'Table documentaire liée au signalements sur le référentiel local voie et adresse (rva)';
 COMMENT ON COLUMN public.an_rva_signal_media.id_signal IS 'Identifiant du signalement';
@@ -154,9 +160,11 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE public.lt_type_rva
-  OWNER TO postgres;
-GRANT ALL ON TABLE public.lt_type_rva TO postgres;
-GRANT ALL ON TABLE public.lt_type_rva TO groupe_sig WITH GRANT OPTION;
+  OWNER TO sig_çreate;
+GRANT ALL ON TABLE public.lt_type_rva TO sig_create;
+GRANT SELECT ON TABLE public.lt_type_rva TO read_sig;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE public.lt_type_rva TO edit_sig;
+
 COMMENT ON TABLE public.lt_type_rva
   IS 'Code permettant de décrire le type de référentiel voie/adresse concerné par un signalement';
 COMMENT ON COLUMN public.lt_type_rva.code IS 'Code de la liste énumérée relative au type de référentiel voie/adresse concerné par un signalement';
@@ -186,9 +194,11 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE public.lt_nat_signal
-  OWNER TO postgres;
-GRANT ALL ON TABLE public.lt_nat_signal TO postgres;
-GRANT ALL ON TABLE public.lt_nat_signal TO groupe_sig WITH GRANT OPTION;
+  OWNER TO sig_create;
+GRANT ALL ON TABLE public.lt_nat_signal TO sig_create;
+GRANT SELECT ON TABLE public.lt_nat_signal TO read_sig;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE public.lt_nat_signal TO edit_sig;
+
 COMMENT ON TABLE public.lt_nat_signal
   IS 'Code permettant de décrire la nature du signalement sur le référentiel voie/adresse';
 COMMENT ON COLUMN public.lt_nat_signal.code IS 'Code de la liste énumérée relative à la nature du signalement sur le référentiel voie/adresse';
@@ -222,9 +232,11 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE public.lt_acte_admin
-  OWNER TO postgres;
-GRANT ALL ON TABLE public.lt_acte_admin TO postgres;
-GRANT ALL ON TABLE public.lt_acte_admin TO groupe_sig WITH GRANT OPTION;
+  OWNER TO sig_create;
+GRANT ALL ON TABLE public.lt_acte_admin TO sig_create;
+GRANT SELECT ON TABLE public.lt_acte_admin TO read_sig;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE public.lt_acte_admin TO edit_sig;
+
 COMMENT ON TABLE public.lt_acte_admin
   IS 'Code permettant de décrire la présence ou non d''un acte administratif lié au signalement';
 COMMENT ON COLUMN public.lt_acte_admin.code IS 'Code de la liste énumérée relative à la présence ou non d''un acte administratif lié au signalement';
@@ -254,9 +266,11 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE public.lt_traite_sig
-  OWNER TO postgres;
-GRANT ALL ON TABLE public.lt_traite_sig TO postgres;
-GRANT ALL ON TABLE public.lt_traite_sig TO groupe_sig WITH GRANT OPTION;
+  OWNER TO sig_create;
+GRANT ALL ON TABLE public.lt_traite_sig TO sig_create;
+GRANT SELECT ON TABLE public.lt_traite_sig TO read_sig;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE public.lt_traite_sig TO edit_sig;
+
 COMMENT ON TABLE public.lt_traite_sig
   IS 'Code permettant de décrire l''état du traitement du signalement par le service SIG';
 COMMENT ON COLUMN public.lt_traite_sig.code IS 'Code de la liste énumérée relative à l''état du traitement du signalement par le service SIG';
@@ -303,9 +317,10 @@ CREATE OR REPLACE VIEW public.geo_v_rva_signal AS
   GROUP BY s.id_signal, s.insee, s.commune, s.type_rva, s.nat_signal, s.acte_admin, s.observ, s.op_sai, s.mail, s.traite_sig, s.x_l93, s.y_l93, s.date_sai, s.date_maj, s.geom;
 
 ALTER TABLE public.geo_v_rva_signal
-  OWNER TO postgres;
-GRANT ALL ON TABLE public.geo_v_rva_signal TO postgres;
-GRANT ALL ON TABLE public.geo_v_rva_signal TO groupe_sig;
+GRANT ALL ON TABLE public.geo_v_rva_signal TO sig_create;
+GRANT SELECT ON TABLE public.geo_v_rva_signal TO read_sig;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE public.geo_v_rva_signal TO edit_sig;
+                                                                                                                                  
 COMMENT ON VIEW public.geo_v_rva_signal
   IS 'Vue géographique éditable pour l''intégration des signalements dans la base de voies et adresses';
 
@@ -419,7 +434,12 @@ $BODY$
   LANGUAGE plpgsql VOLATILE
   COST 100;
 ALTER FUNCTION public.ft_geo_rva_signal()
-  OWNER TO postgres;
+  OWNER TO sig_create;
+GRANT EXECUTE ON FUNCTION public.ft_geo_rva_signal() TO public;
+GRANT EXECUTE ON FUNCTION public.ft_geo_rva_signal() TO sig_create;
+GRANT EXECUTE ON FUNCTION public.ft_geo_rva_signal() TO create_sig;
+                                                                                                                     
+                                                                                                                                  
 COMMENT ON FUNCTION public.ft_geo_rva_signal() IS 'Fonction trigger pour mise à jour de la donnée de signalement du référentiel voie/adresse';
 
 
