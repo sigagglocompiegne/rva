@@ -28,7 +28,7 @@
 --		-- création d'un trigger sur la vuede saisie des adresses pour gérer l'intégration dans la table historique
 --		-- création de bloc pour séparer les vues de gestion, applicatives et open data
 -- 2018/04/12 : GB / Intégration des modifications sur les vues applicatives pour l'affichage côté utilisateur dans GEO
-
+-- 2018/08/07 : GB / Insertion des nouveaux rôles de connexion et leurs privilèges
 
 -- ***** pour les voies sans adresses (ex lieu dit), le numéro prend la valeur "99999"
 -- ToDo
@@ -49,10 +49,19 @@
 -- DROP SCHEMA r_adresse;
 
 CREATE SCHEMA r_adresse
-  AUTHORIZATION postgres;
+  AUTHORIZATION sig_create;
 
-GRANT ALL ON SCHEMA r_objet TO postgres;
-GRANT ALL ON SCHEMA r_objet TO groupe_sig WITH GRANT OPTION;
+GRANT USAGE ON SCHEMA r_adresse TO edit_sig;
+GRANT ALL ON SCHEMA r_adresse TO sig_create;
+GRANT ALL ON SCHEMA r_adresse TO create_sig;
+GRANT USAGE ON SCHEMA r_adresse TO read_sig;
+ALTER DEFAULT PRIVILEGES IN SCHEMA r_adresse
+GRANT ALL ON TABLES TO create_sig;
+ALTER DEFAULT PRIVILEGES IN SCHEMA r_adresse
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLES TO edit_sig;
+ALTER DEFAULT PRIVILEGES IN SCHEMA r_adresse
+GRANT SELECT ON TABLES TO read_sig;
+
 COMMENT ON SCHEMA r_adresse
   IS 'Référentiel Base Adresse Locale (BAL)';
   
@@ -91,9 +100,12 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE r_objet.geo_objet_pt_adresse
-  OWNER TO postgres;
-GRANT ALL ON TABLE r_objet.geo_objet_pt_adresse TO postgres;
-GRANT ALL ON TABLE r_objet.geo_objet_pt_adresse TO groupe_sig WITH GRANT OPTION;
+  OWNER TO sig_create;
+GRANT ALL ON TABLE r_objet.geo_objet_pt_adresse TO sig_create;
+GRANT SELECT ON TABLE r_objet.geo_objet_pt_adresse TO read_sig;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE r_objet.geo_objet_pt_adresse TO edit_sig;
+
+
 COMMENT ON TABLE r_objet.geo_objet_pt_adresse
   IS 'Classe décrivant la position d''une adresse';
 COMMENT ON COLUMN r_objet.geo_objet_pt_adresse.id_adresse IS 'Identifiant unique de l''objet point adresse';
@@ -127,10 +139,11 @@ CREATE SEQUENCE r_objet.geo_objet_pt_adresse_id_seq
   MAXVALUE 9223372036854775807
   START 1
   CACHE 1;
-ALTER TABLE r_objet.geo_objet_pt_adresse_id_seq
-  OWNER TO postgres;
-GRANT ALL ON SEQUENCE r_objet.geo_objet_pt_adresse_id_seq TO postgres;
-GRANT ALL ON SEQUENCE r_objet.geo_objet_pt_adresse_id_seq TO groupe_sig WITH GRANT OPTION;
+ALTER SEQUENCE r_objet.geo_objet_pt_adresse_id_seq
+  OWNER TO sig_create;
+GRANT ALL ON SEQUENCE r_objet.geo_objet_pt_adresse_id_seq TO sig_create;
+GRANT SELECT, USAGE ON SEQUENCE r_objet.geo_objet_pt_adresse_id_seq TO public;
+
 ALTER TABLE r_objet.geo_objet_pt_adresse ALTER COLUMN id_adresse SET DEFAULT nextval('r_objet.geo_objet_pt_adresse_id_seq'::regclass);
 
 
@@ -171,9 +184,10 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE r_adresse.an_adresse
-  OWNER TO postgres;
-GRANT ALL ON TABLE r_adresse.an_adresse TO groupe_sig WITH GRANT OPTION;
-GRANT ALL ON TABLE r_adresse.an_adresse TO postgres;
+  OWNER TO sig_create;
+GRANT ALL ON TABLE r_adresse.an_adresse TO sig_create;
+GRANT SELECT ON TABLE r_adresse.an_adresse TO read_sig;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE r_adresse.an_adresse TO edit_sig;
 
 COMMENT ON TABLE r_adresse.an_adresse
   IS 'Table alphanumérique des adresses';
@@ -202,10 +216,11 @@ CREATE SEQUENCE r_adresse.an_adresse_h_id_seq
   MAXVALUE 9223372036854775807
   START 1
   CACHE 1;
-ALTER TABLE r_adresse.an_adresse_h_id_seq
-  OWNER TO postgres;
-GRANT ALL ON SEQUENCE r_adresse.an_adresse_h_id_seq TO postgres;
-GRANT ALL ON SEQUENCE r_adresse.an_adresse_h_id_seq TO groupe_sig WITH GRANT OPTION;
+ALTER SEQUENCE r_adresse.an_adresse_h_id_seq
+  OWNER TO sig_create;
+GRANT ALL ON SEQUENCE r_adresse.an_adresse_h_id_seq TO sig_create;
+GRANT SELECT, USAGE ON SEQUENCE r_adresse.an_adresse_h_id_seq TO public;
+
 
 -- Table: r_adresse.an_adresse_h
 
@@ -231,9 +246,10 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE r_adresse.an_adresse_h
-  OWNER TO postgres;
-GRANT ALL ON TABLE r_adresse.an_adresse_h TO groupe_sig WITH GRANT OPTION;
-GRANT ALL ON TABLE r_adresse.an_adresse_h TO postgres;
+  OWNER TO sig_create;
+GRANT ALL ON TABLE r_adresse.an_adresse_h TO sig_create;
+GRANT SELECT ON TABLE r_adresse.an_adresse_h TO read_sig;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE r_adresse.an_adresse_h TO edit_sig;
 
 COMMENT ON TABLE r_adresse.an_adresse_h
   IS 'Table alphanumérique des historisations des adresses suite à une renumérotation';
@@ -277,9 +293,10 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE r_adresse.an_adresse_info
-  OWNER TO postgres;
-GRANT ALL ON TABLE r_adresse.an_adresse_info TO groupe_sig WITH GRANT OPTION;
-GRANT ALL ON TABLE r_adresse.an_adresse_info TO postgres;
+  OWNER TO sig_create;
+GRANT ALL ON TABLE r_adresse.an_adresse_info TO sig_create;
+GRANT SELECT ON TABLE r_adresse.an_adresse_info TO read_sig;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE r_adresse.an_adresse_info TO edit_sig;
 
 COMMENT ON TABLE r_adresse.an_adresse_info
   IS 'Table alphanumérique des informations complémentaires des adresses';
@@ -322,9 +339,11 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE r_objet.lt_position
-  OWNER TO postgres;
-GRANT ALL ON TABLE r_objet.lt_position TO postgres;
-GRANT ALL ON TABLE r_objet.lt_position TO groupe_sig WITH GRANT OPTION;
+  OWNER TO sig_create;
+GRANT ALL ON TABLE r_objet.lt_position TO sig_create;
+GRANT SELECT ON TABLE r_objet.lt_position TO read_sig;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE r_objet.lt_position TO edit_sig;
+
 COMMENT ON TABLE r_objet.lt_position
   IS 'Code permettant de décrire le type de position de l''adresse';
 COMMENT ON COLUMN r_objet.lt_position.code IS 'Code de la liste énumérée relative au type de position de l''adresse';
@@ -362,9 +381,11 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE r_adresse.lt_groupee
-  OWNER TO postgres;
-GRANT ALL ON TABLE r_adresse.lt_groupee TO postgres;
-GRANT ALL ON TABLE r_adresse.lt_groupee TO groupe_sig WITH GRANT OPTION;
+  OWNER TO sig_create;
+GRANT ALL ON TABLE r_adresse.lt_groupee TO sig_create;
+GRANT SELECT ON TABLE r_adresse.lt_groupee TO read_sig;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE r_adresse.lt_groupee TO edit_sig;
+
 COMMENT ON TABLE r_adresse.lt_groupee
   IS 'Code permettant de définir si une adresse est groupée ou non';
 COMMENT ON COLUMN r_adresse.lt_groupee.code IS 'Code de la liste énumérée relative à une adresse groupée ou non';
@@ -394,9 +415,11 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE r_adresse.lt_secondaire
-  OWNER TO postgres;
-GRANT ALL ON TABLE r_adresse.lt_secondaire TO postgres;
-GRANT ALL ON TABLE r_adresse.lt_secondaire TO groupe_sig WITH GRANT OPTION;
+OWNER TO sig_create;
+GRANT ALL ON TABLE r_adresse.lt_secondaire TO sig_create;
+GRANT SELECT ON TABLE r_adresse.lt_secondaire TO read_sig;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE r_adresse.lt_secondaire TO edit_sig;
+
 COMMENT ON TABLE r_adresse.lt_secondaire
   IS 'Code permettant de définir si une adresse est un accès secondaire';
 COMMENT ON COLUMN r_adresse.lt_secondaire.code IS 'Code de la liste énumérée relative à une adresse d''un accès secondaire ou non';
@@ -426,9 +449,11 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE r_adresse.lt_src_adr
-  OWNER TO postgres;
-GRANT ALL ON TABLE r_adresse.lt_src_adr TO postgres;
-GRANT ALL ON TABLE r_adresse.lt_src_adr TO groupe_sig WITH GRANT OPTION;
+  OWNER TO sig_create;
+GRANT ALL ON TABLE r_adresse.lt_src_adr TO sig_create;
+GRANT SELECT ON TABLE r_adresse.lt_src_adr TO read_sig;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE r_adresse.lt_src_adr TO edit_sig;
+
 COMMENT ON TABLE r_adresse.lt_src_adr
   IS 'Code permettant de décrire l''origine de l''adresse';
 COMMENT ON COLUMN r_adresse.lt_src_adr.code IS 'Code de la liste énumérée relative à la source de l''origine de l''adresse';
@@ -462,9 +487,11 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE r_adresse.lt_diag_adr
-  OWNER TO postgres;
-GRANT ALL ON TABLE r_adresse.lt_diag_adr TO postgres;
-GRANT ALL ON TABLE r_adresse.lt_diag_adr TO groupe_sig WITH GRANT OPTION;
+  OWNER TO sig_create;
+GRANT ALL ON TABLE r_adresse.lt_diag_adr TO sig_create;
+GRANT SELECT ON TABLE r_adresse.lt_diag_adr TO read_sig;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE r_adresse.lt_diag_adr TO edit_sig;
+
 COMMENT ON TABLE r_adresse.lt_diag_adr
   IS 'Code permettant de décrire un diagnostic qualité d''une adresse';
 COMMENT ON COLUMN r_adresse.lt_diag_adr.code IS 'Code de la liste énumérée relative au diagnostic qualité de l''adresse';
@@ -505,9 +532,11 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE r_adresse.lt_qual_adr
-  OWNER TO postgres;
-GRANT ALL ON TABLE r_adresse.lt_qual_adr TO postgres;
-GRANT ALL ON TABLE r_adresse.lt_qual_adr TO groupe_sig WITH GRANT OPTION;
+  OWNER TO sig_create;
+GRANT ALL ON TABLE r_adresse.lt_qual_adr TO sig_create;
+GRANT SELECT ON TABLE r_adresse.lt_qual_adr TO read_sig;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE r_adresse.lt_qual_adr TO edit_sig;
+
 COMMENT ON TABLE r_adresse.lt_qual_adr
   IS 'Code permettant de décrire un indice de qualité simplifié d''une adresse';
 COMMENT ON COLUMN r_adresse.lt_qual_adr.code IS 'Code de la liste énumérée relative à l''indice de qualité simplifié de l''adresse';
@@ -547,9 +576,11 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE r_adresse.lt_dest_adr
-  OWNER TO postgres;
-GRANT ALL ON TABLE r_adresse.lt_dest_adr TO postgres;
-GRANT ALL ON TABLE r_adresse.lt_dest_adr TO groupe_sig WITH GRANT OPTION;
+  OWNER TO sig_create;
+GRANT ALL ON TABLE r_adresse.lt_dest_adr TO sig_create;
+GRANT SELECT ON TABLE r_adresse.lt_dest_adr TO read_sig;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE r_adresse.lt_dest_adr TO edit_sig;
+
 COMMENT ON TABLE r_adresse.lt_dest_adr
   IS 'Code permettant de décrire la destination de l''adresse';
 COMMENT ON COLUMN r_adresse.lt_dest_adr.code IS 'Code de la liste énumérée relative à la destination de l''adresse';
@@ -585,9 +616,11 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE r_adresse.lt_etat_adr
-  OWNER TO postgres;
-GRANT ALL ON TABLE r_adresse.lt_etat_adr TO postgres;
-GRANT ALL ON TABLE r_adresse.lt_etat_adr TO groupe_sig WITH GRANT OPTION;
+  OWNER TO sig_create;
+GRANT ALL ON TABLE r_adresse.lt_etat_adr TO sig_create;
+GRANT SELECT ON TABLE r_adresse.lt_etat_adr TO read_sig;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE r_adresse.lt_etat_adr TO edit_sig;
+
 COMMENT ON TABLE r_adresse.lt_etat_adr
   IS 'Code permettant de décrire l''état de la construction à l''adresse';
 COMMENT ON COLUMN r_adresse.lt_etat_adr.code IS 'Code de la liste énumérée relative à l''état de la construction à l''adresse';
@@ -782,7 +815,11 @@ CREATE OR REPLACE VIEW r_adresse.geo_v_adresse AS
 
 
 ALTER TABLE r_adresse.geo_v_adresse
-  OWNER TO postgres;
+  OWNER TO sig_create;
+GRANT ALL ON TABLE r_adresse.geo_v_adresse TO sig_create;
+GRANT SELECT ON TABLE r_adresse.geo_v_adresse TO read_sig;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE r_adresse.geo_v_adresse TO edit_sig;
+
 COMMENT ON VIEW r_adresse.geo_v_adresse
   IS 'Vue éditable destinée à la modification des données relatives aux adresses';
 
@@ -839,9 +876,11 @@ CREATE OR REPLACE VIEW x_opendata.xopendata_an_v_bal AS
         END;
 
 ALTER TABLE x_opendata.xopendata_an_v_bal
-  OWNER TO postgres;
-GRANT ALL ON TABLE x_opendata.xopendata_an_v_bal TO postgres;
-GRANT ALL ON TABLE x_opendata.xopendata_an_v_bal TO groupe_sig;
+  OWNER TO sig_create;
+GRANT ALL ON TABLE x_opendata.xopendata_an_v_bal TO sig_create;
+GRANT SELECT ON TABLE x_opendata.xopendata_an_v_bal TO read_sig;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE x_opendata.xopendata_an_v_bal TO edit_sig;
+
 COMMENT ON VIEW x_opendata.xopendata_an_v_bal
   IS 'Vue alphanumérique simplifiée des adresses au format d''échange BAL';
 
@@ -858,7 +897,11 @@ GROUP BY a.insee, c.commune
 ORDER BY a.insee, c.commune;
 
 ALTER TABLE r_adresse.an_v_adresse_commune
-  OWNER TO postgres;      
+  OWNER TO sig_create;      
+GRANT ALL ON TABLE r_adresse.an_v_adresse_commune TO sig_create;
+GRANT SELECT ON TABLE r_adresse.an_v_adresse_commune TO read_sig;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE r_adresse.an_v_adresse_commune TO edit_sig;
+
 COMMENT ON VIEW r_adresse.an_v_adresse_commune
   IS 'Vue d''exploitation permettant de compter le nombre d''enregistrement d''adresse par commune';
 
@@ -876,7 +919,11 @@ WHERE v.rivoli IS NULL
 ORDER BY insee;
 
 ALTER TABLE r_voie.an_v_voie_adr_rivoli_null
-  OWNER TO postgres;      
+  OWNER TO sig_create;  
+GRANT ALL ON TABLE r_voie.an_v_voie_adr_rivoli_null TO sig_create;
+GRANT SELECT ON TABLE r_voie.an_v_voie_adr_rivoli_null TO read_sig;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE r_voie.an_v_voie_adr_rivoli_null TO edit_sig;
+
 COMMENT ON VIEW r_voie.an_v_voie_adr_rivoli_null
   IS 'Vue d''exploitation permettant d''identifier les voies adressées sans code RIVOLI';
   
@@ -892,7 +939,11 @@ WHERE v.rivoli IS NULL
 ORDER BY insee;
 
 ALTER TABLE r_voie.an_v_voie_rivoli_null
-  OWNER TO postgres;      
+  OWNER TO sig_create;
+GRANT ALL ON TABLE r_voie.an_v_voie_rivoli_null TO sig_create;
+GRANT SELECT ON TABLE r_voie.an_v_voie_rivoli_null TO read_sig;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE r_voie.an_v_voie_rivoli_null TO edit_sig;
+
 COMMENT ON VIEW r_voie.an_v_voie_rivoli_null
   IS 'Vue d''exploitation permettant d''identifier les voies sans code RIVOLI';
 
@@ -1031,9 +1082,11 @@ CREATE MATERIALIZED VIEW x_apps.xapps_geo_vmr_adresse AS
 WITH DATA;
 
 ALTER TABLE x_apps.xapps_geo_v_adresse
-  OWNER TO postgres;
-GRANT ALL ON TABLE x_apps.xapps_geo_vmr_adresse TO postgres;
-GRANT ALL ON TABLE x_apps.xapps_geo_vmr_adresse TO groupe_sig;
+  OWNER TO sig_create;
+GRANT ALL ON TABLE x_apps.xapps_geo_v_adresse TO sig_create;
+GRANT SELECT ON TABLE x_apps.xapps_geo_v_adresse TO read_sig;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE x_apps.xapps_geo_v_adresse TO edit_sig;
+									      
 COMMENT ON MATERIALIZED VIEW x_apps.xapps_geo_vmr_adresse
   IS 'Vue complète et décodée des adresses destinée à l''exploitation applicative (générateur d''apps)';
 
@@ -1099,7 +1152,11 @@ CREATE OR REPLACE VIEW x_apps_public.xappspublic_geo_v_adresse AS
 
 
 ALTER TABLE x_apps_public.xappspublic_geo_v_adresse
-  OWNER TO postgres;
+  OWNER TO sig_create;
+GRANT ALL ON TABLE x_apps_public.xappspublic_geo_v_adresse TO sig_create;
+GRANT SELECT ON TABLE x_apps_public.xappspublic_geo_v_adresse TO read_sig;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE x_apps_public.xappspublic_geo_v_adresse TO edit_sig;
+									      
 COMMENT ON VIEW x_apps_public.xappspublic_geo_v_adresse
   IS 'Vue complète et décodée des adresses destinée à l''exploitation applicative (générateur d''apps Grand public)';
 
@@ -1119,7 +1176,11 @@ LEFT JOIN
 	r_voie.an_voie v ON a.id_voie = v.id_voie;
 
 ALTER TABLE x_apps.xapps_an_v_adresse_h
-  OWNER TO postgres;      
+  OWNER TO sig_create;
+GRANT ALL ON TABLE x_apps.xapps_an_v_adresse_h TO sig_create;
+GRANT SELECT ON TABLE x_apps.xapps_an_v_adresse_h TO read_sig;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE x_apps.xapps_an_v_adresse_h TO edit_sig;
+									      
 COMMENT ON VIEW x_apps.xapps_an_v_adresse_h
   IS 'Vue d''exploitation permettant de lister l''historique des adresses (intégration dans la fiche adresse dans l''application GEO RVA';
 
@@ -1177,7 +1238,11 @@ ORDER BY cle_interop;
 
 
 ALTER TABLE x_opendata.xopendata_geo_v_openadresse
-  OWNER TO postgres;
+  OWNER TO sig_create;
+GRANT ALL ON TABLE x_opendata.xopendata_geo_v_openadresse TO sig_create;
+GRANT SELECT ON TABLE x_opendata.xopendata_geo_v_openadresse TO read_sig;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE x_opendata.xopendata_geo_v_openadresse TO edit_sig;
+		 
 COMMENT ON VIEW x_opendata.xopendata_geo_v_openadresse
   IS 'Vue destinée à la communication extérieure des données relatives aux adresses';
 
@@ -1254,7 +1319,12 @@ $BODY$
   LANGUAGE plpgsql VOLATILE
   COST 100;
 ALTER FUNCTION r_objet.ft_geo_objet_pt_adresse()
-  OWNER TO postgres;
+  OWNER TO sig_create;
+GRANT EXECUTE ON FUNCTION r_objet.ft_geo_objet_pt_adresse() TO public;
+GRANT EXECUTE ON FUNCTION r_objet.ft_geo_objet_pt_adresse() TO sig_create;
+GRANT EXECUTE ON FUNCTION r_objet.ft_geo_objet_pt_adresse() TO create_sig;
+
+		  
 COMMENT ON FUNCTION r_objet.ft_geo_objet_pt_adresse() IS 'Fonction trigger pour mise à jour de la classe objet point adresse';
 
 
@@ -1338,7 +1408,10 @@ $BODY$
   LANGUAGE plpgsql VOLATILE
   COST 100;
 ALTER FUNCTION r_adresse.ft_an_adresse()
-  OWNER TO postgres;
+  OWNER TO sig_create;
+GRANT EXECUTE ON FUNCTION r_adresse.ft_an_adresse() TO public;
+GRANT EXECUTE ON FUNCTION r_adresse.ft_an_adresse() TO sig_create;
+GRANT EXECUTE ON FUNCTION r_adresse.ft_an_adresse() TO create_sig;
 COMMENT ON FUNCTION r_adresse.ft_an_adresse() IS 'Fonction trigger pour mise à jour de la classe alphanumérique de référence de l''adresse';
 
 
@@ -1422,7 +1495,10 @@ $BODY$
   LANGUAGE plpgsql VOLATILE
   COST 100;
 ALTER FUNCTION r_adresse.ft_an_adresse_info()
-  OWNER TO postgres;
+  OWNER TO sig_create;
+GRANT EXECUTE ON FUNCTION r_adresse.ft_an_adresse_info() TO public;
+GRANT EXECUTE ON FUNCTION r_adresse.ft_an_adresse_info() TO sig_create;
+GRANT EXECUTE ON FUNCTION r_adresse.ft_an_adresse_info() TO create_sig;
 COMMENT ON FUNCTION r_adresse.ft_an_adresse_info() IS 'Fonction trigger pour mise à jour de la classe alphanumérique de complément de l''adresse';
 
 
@@ -1496,7 +1572,11 @@ $BODY$
   LANGUAGE plpgsql VOLATILE
   COST 100;
 ALTER FUNCTION r_adresse.ft_an_adresse_h()
-  OWNER TO postgres;
+  OWNER TO sig_create;
+GRANT EXECUTE ON FUNCTION r_adresse.ft_an_adresse_h() TO public;
+GRANT EXECUTE ON FUNCTION r_adresse.ft_an_adresse_h() TO sig_create;
+GRANT EXECUTE ON FUNCTION r_adresse.ft_an_adresse_h() TO create_sig;
+		  
 COMMENT ON FUNCTION r_adresse.ft_an_adresse_h() IS 'Fonction trigger pour insertion de l''historisation des adresses dans la classe d''objet an_adresse_h';
 
 
