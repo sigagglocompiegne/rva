@@ -38,6 +38,7 @@
 -- 2018/03/20 : GB / Intégration d'une partie VUES APPLICATIVES et intégration du codes SQL
 --		- création de bloc pour séparer les vues de gestion, applicatives et open data
 -- 2018/04/12 : GB / Adaptation des requêtes applicatives historiques dans le formatage des résultats pour l'utilisateur dans GEO
+-- 2018/08/07 : GB / Insertion des nouveaux rôles de connexion et leurs privilèges
 
 -- ToDo
 
@@ -57,10 +58,19 @@
 -- DROP SCHEMA r_objet;
 
 CREATE SCHEMA r_objet
-  AUTHORIZATION postgres;
+  AUTHORIZATION sig_create;
 
-GRANT ALL ON SCHEMA r_objet TO postgres;
-GRANT ALL ON SCHEMA r_objet TO groupe_sig WITH GRANT OPTION;
+GRANT USAGE ON SCHEMA r_objet TO edit_sig;
+GRANT ALL ON SCHEMA r_objet TO sig_create;
+GRANT ALL ON SCHEMA r_objet TO create_sig;
+GRANT USAGE ON SCHEMA r_objet TO read_sig;
+ALTER DEFAULT PRIVILEGES IN SCHEMA r_objet
+GRANT ALL ON TABLES TO create_sig;
+ALTER DEFAULT PRIVILEGES IN SCHEMA r_objet
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLES TO edit_sig;
+ALTER DEFAULT PRIVILEGES IN SCHEMA r_objet
+GRANT SELECT ON TABLES TO read_sig;
+
 COMMENT ON SCHEMA r_objet
   IS 'Schéma contenant les objets géographiques virtuels métiers (zonages, lots, entités administratives, ...). Les données métiers (alphanumériques) sont stockées dans le schéma correspondant, et le lien s''effectue via la référence géographique. Une donnée géographique spécifique à un seul métier, reste dans le schéma du métier.';
 
@@ -70,10 +80,19 @@ COMMENT ON SCHEMA r_objet
 -- DROP SCHEMA m_voirie;
 
 CREATE SCHEMA m_voirie
-  AUTHORIZATION postgres;
+  AUTHORIZATION sig_create;
+  
+GRANT USAGE ON SCHEMA m_voirie TO edit_sig;
+GRANT ALL ON SCHEMA m_voirie TO sig_create;
+GRANT ALL ON SCHEMA m_voirie TO create_sig;
+GRANT USAGE ON SCHEMA m_voirie TO read_sig;
+ALTER DEFAULT PRIVILEGES IN SCHEMA m_voirie
+GRANT ALL ON TABLES TO create_sig;
+ALTER DEFAULT PRIVILEGES IN SCHEMA m_voirie
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLES TO edit_sig;
+ALTER DEFAULT PRIVILEGES IN SCHEMA m_voirie
+GRANT SELECT ON TABLES TO read_sig;
 
-GRANT ALL ON SCHEMA m_voirie TO postgres;
-GRANT ALL ON SCHEMA m_voirie TO groupe_sig WITH GRANT OPTION;
 COMMENT ON SCHEMA m_voirie
   IS 'Données géographiques métiers sur la voirie';
 
@@ -82,10 +101,19 @@ COMMENT ON SCHEMA m_voirie
 -- DROP SCHEMA r_voie;
 
 CREATE SCHEMA r_voie
-  AUTHORIZATION postgres;
+AUTHORIZATION sig_create;
 
-GRANT ALL ON SCHEMA r_voie TO postgres;
-GRANT ALL ON SCHEMA r_voie TO groupe_sig WITH GRANT OPTION;
+GRANT USAGE ON SCHEMA r_voie TO edit_sig;
+GRANT ALL ON SCHEMA r_voie TO sig_create;
+GRANT ALL ON SCHEMA r_voie TO create_sig;
+GRANT USAGE ON SCHEMA r_voie TO read_sig;
+ALTER DEFAULT PRIVILEGES IN SCHEMA r_voie
+GRANT ALL ON TABLES TO create_sig;
+ALTER DEFAULT PRIVILEGES IN SCHEMA r_voie
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLES TO edit_sig;
+ALTER DEFAULT PRIVILEGES IN SCHEMA r_voie
+GRANT SELECT ON TABLES TO read_sig;
+
 COMMENT ON SCHEMA r_voie
   IS 'Référentiel local des voies';
   
@@ -94,13 +122,22 @@ COMMENT ON SCHEMA r_voie
 
 -- DROP SCHEMA r_plan;
 
-CREATE SCHEMA r_plan
-  AUTHORIZATION postgres;
+-- CREATE SCHEMA r_plan
+-- AUTHORIZATION sig_create;
 
-GRANT ALL ON SCHEMA r_plan TO postgres;
-GRANT ALL ON SCHEMA r_plan TO groupe_sig WITH GRANT OPTION;
-COMMENT ON SCHEMA r_plan
-  IS 'Données de référence pour le plan de ville dynamique';
+-- GRANT USAGE ON SCHEMA r_plan TO edit_sig;
+-- GRANT ALL ON SCHEMA r_plan TO sig_create;
+-- GRANT ALL ON SCHEMA r_plan TO create_sig;
+-- GRANT USAGE ON SCHEMA r_plan TO read_sig;
+-- ALTER DEFAULT PRIVILEGES IN SCHEMA r_plan
+-- GRANT ALL ON TABLES TO create_sig;
+-- ALTER DEFAULT PRIVILEGES IN SCHEMA r_plan
+-- GRANT INSERT, SELECT, UPDATE, DELETE ON TABLES TO edit_sig;
+-- ALTER DEFAULT PRIVILEGES IN SCHEMA r_plan
+-- GRANT SELECT ON TABLES TO read_sig;
+
+-- COMMENT ON SCHEMA r_plan
+--   IS 'Données de référence pour le plan de ville dynamique';
 
 
 -- ####################################################################################################################################################
@@ -143,9 +180,12 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE r_objet.geo_objet_troncon
-  OWNER TO postgres;
-GRANT ALL ON TABLE r_objet.geo_objet_troncon TO postgres;
-GRANT ALL ON TABLE r_objet.geo_objet_troncon TO groupe_sig WITH GRANT OPTION;
+  OWNER TO sig_create;
+GRANT ALL ON TABLE r_objet.geo_objet_troncon TO sig_create;
+GRANT SELECT ON TABLE r_objet.geo_objet_troncon TO read_sig;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE r_objet.geo_objet_troncon TO edit_sig;
+
+
 COMMENT ON TABLE r_objet.geo_objet_troncon
   IS 'Classe décrivant un troncon du filaire de voie à circulation terrestre';
 COMMENT ON COLUMN r_objet.geo_objet_troncon.id_tronc IS 'Identifiant unique de l''objet tronçon';
@@ -184,10 +224,12 @@ CREATE SEQUENCE r_objet.geo_objet_troncon_id_seq
   MAXVALUE 9223372036854775807
   START 0
   CACHE 1;
-ALTER TABLE r_objet.geo_objet_troncon_id_seq
-  OWNER TO postgres;
-GRANT ALL ON SEQUENCE r_objet.geo_objet_troncon_id_seq TO postgres;
-GRANT ALL ON SEQUENCE r_objet.geo_objet_troncon_id_seq TO groupe_sig WITH GRANT OPTION;
+ALTER SEQUENCE r_objet.geo_objet_troncon_id_seq
+  OWNER TO sig_create;
+GRANT ALL ON SEQUENCE r_objet.geo_objet_troncon_id_seq TO sig_create;
+GRANT SELECT, USAGE ON SEQUENCE r_objet.geo_objet_troncon_id_seq TO public;
+
+
 ALTER TABLE r_objet.geo_objet_troncon ALTER COLUMN id_tronc SET DEFAULT nextval('r_objet.geo_objet_troncon_id_seq'::regclass);
 
 
@@ -217,9 +259,11 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE r_objet.geo_objet_noeud
-  OWNER TO postgres;
-GRANT ALL ON TABLE r_objet.geo_objet_noeud TO postgres;
-GRANT ALL ON TABLE r_objet.geo_objet_noeud TO groupe_sig WITH GRANT OPTION;
+  OWNER TO sig_create;
+GRANT ALL ON TABLE r_objet.geo_objet_noeud TO sig_create;
+GRANT SELECT ON TABLE r_objet.geo_objet_noeud TO read_sig;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE r_objet.geo_objet_noeud TO edit_sig;
+
 COMMENT ON TABLE r_objet.geo_objet_noeud
   IS 'Classe décrivant un noeud du filaire de voie à circulation terrestre';
 COMMENT ON COLUMN r_objet.geo_objet_noeud.id_noeud IS 'Identifiant unique de l''objet noeud';
@@ -251,10 +295,11 @@ CREATE SEQUENCE r_objet.geo_objet_noeud_id_seq
   MAXVALUE 9223372036854775807
   START 0
   CACHE 1;
-ALTER TABLE r_objet.geo_objet_noeud_id_seq
-  OWNER TO postgres;
-GRANT ALL ON SEQUENCE r_objet.geo_objet_noeud_id_seq TO postgres;
-GRANT ALL ON SEQUENCE r_objet.geo_objet_noeud_id_seq TO groupe_sig WITH GRANT OPTION;
+ALTER SEQUENCE r_objet.geo_objet_noeud_id_seq
+  OWNER TO sig_create;
+GRANT ALL ON SEQUENCE r_objet.geo_objet_noeud_id_seq TO sig_create;
+GRANT SELECT, USAGE ON SEQUENCE r_objet.geo_objet_noeud_id_seq TO public;
+
 ALTER TABLE r_objet.geo_objet_noeud ALTER COLUMN id_noeud SET DEFAULT nextval('r_objet.geo_objet_noeud_id_seq'::regclass);
 
 
@@ -291,9 +336,10 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE r_voie.an_troncon
-  OWNER TO postgres;
-GRANT ALL ON TABLE r_voie.an_troncon TO groupe_sig WITH GRANT OPTION;
-GRANT ALL ON TABLE r_voie.an_troncon TO postgres;
+  OWNER TO sig_create;
+GRANT ALL ON TABLE r_voie.an_troncon TO sig_create;
+GRANT SELECT ON TABLE r_voie.an_troncon TO read_sig;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE r_voie.an_troncon TO edit_sig;
 
 COMMENT ON TABLE r_voie.an_troncon
   IS 'Table alphanumérique des troncons';
@@ -321,10 +367,11 @@ CREATE SEQUENCE r_voie.an_troncon_h_id_seq
   MAXVALUE 9223372036854775807
   START 1
   CACHE 1;
-ALTER TABLE r_voie.an_troncon_h_id_seq
-  OWNER TO postgres;
-GRANT ALL ON SEQUENCE r_voie.an_troncon_h_id_seq TO postgres;
-GRANT ALL ON SEQUENCE r_voie.an_troncon_h_id_seq TO groupe_sig WITH GRANT OPTION;
+ALTER SEQUENCE r_voie.an_troncon_h_id_seq
+  OWNER TO sig_create;
+GRANT ALL ON SEQUENCE r_voie.an_troncon_h_id_seq TO sig_create;
+GRANT SELECT, USAGE ON SEQUENCE r_voie.an_troncon_h_id_seq TO public;
+
 
 -- Table: r_voie.an_troncon_h
 
@@ -345,9 +392,10 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE r_voie.an_troncon_h
-  OWNER TO postgres;
-GRANT ALL ON TABLE r_voie.an_troncon_h TO groupe_sig WITH GRANT OPTION;
-GRANT ALL ON TABLE r_voie.an_troncon_h TO postgres;
+  OWNER TO sig_create;
+GRANT ALL ON TABLE r_voie.an_troncon_h TO sig_create;
+GRANT SELECT ON TABLE r_voie.an_troncon_h TO read_sig;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE r_voie.an_troncon_h TO edit_sig;
 
 COMMENT ON TABLE r_voie.an_troncon_h
   IS 'Table historique alphanumérique des troncons pour le suivi des noms de voies';
@@ -391,9 +439,10 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE r_voie.an_voie
-  OWNER TO postgres;
-GRANT ALL ON TABLE r_voie.an_voie TO groupe_sig WITH GRANT OPTION;
-GRANT ALL ON TABLE r_voie.an_voie TO postgres;
+  OWNER TO sig_create;
+GRANT ALL ON TABLE r_voie.an_voie TO sig_create;
+GRANT SELECT ON TABLE r_voie.an_voie TO read_sig;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE r_voie.an_voie TO edit_sig;
 
 COMMENT ON TABLE r_voie.an_voie
   IS 'Table alphanumérique des voies à circulation terrestre nommées';
@@ -429,9 +478,11 @@ CREATE SEQUENCE r_voie.an_voie_id_seq
   START 0
   CACHE 1;
 ALTER TABLE r_voie.an_voie_id_seq
-  OWNER TO postgres;
-GRANT ALL ON SEQUENCE r_voie.an_voie_id_seq TO postgres;
-GRANT ALL ON SEQUENCE r_voie.an_voie_id_seq TO groupe_sig WITH GRANT OPTION;
+  OWNER TO sig_create;
+GRANT ALL ON TABLE r_voie.an_voie_id_seq TO sig_create;
+GRANT SELECT ON TABLE r_voie.an_voie_id_seq TO read_sig;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE r_voie.an_voie_id_seq TO edit_sig;
+
 ALTER TABLE r_voie.an_voie ALTER COLUMN id_voie SET DEFAULT nextval('r_voie.an_voie_id_seq'::regclass);
 
 
@@ -467,10 +518,11 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE m_voirie.an_voirie_gest
-  OWNER TO postgres;
-GRANT ALL ON TABLE m_voirie.an_voirie_gest TO groupe_sig WITH GRANT OPTION;
-GRANT ALL ON TABLE m_voirie.an_voirie_gest TO postgres;
-GRANT ALL ON TABLE m_voirie.an_voirie_gest TO groupe_sig_stage WITH GRANT OPTION;
+  OWNER TO sig_create;
+GRANT ALL ON TABLE m_voirie.an_voirie_gest TO sig_create;
+GRANT SELECT ON TABLE m_voirie.an_voirie_gest TO read_sig;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE m_voirie.an_voirie_gest TO edit_sig;
+
 COMMENT ON TABLE m_voirie.an_voirie_gest
   IS 'Table alphanumérique des éléments de gestion de la voirie';
 COMMENT ON COLUMN m_voirie.an_voirie_gest.id_tronc IS 'Identifiant du tronçon';
@@ -513,10 +565,11 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE m_voirie.an_voirie_circu
-  OWNER TO postgres;
-GRANT ALL ON TABLE m_voirie.an_voirie_circu TO groupe_sig WITH GRANT OPTION;
-GRANT ALL ON TABLE m_voirie.an_voirie_circu TO postgres;
-GRANT ALL ON TABLE m_voirie.an_voirie_circu TO groupe_sig_stage WITH GRANT OPTION;
+  OWNER TO sig_create;
+GRANT ALL ON TABLE m_voirie.an_voirie_circu TO sig_create;
+GRANT SELECT ON TABLE m_voirie.an_voirie_circu TO read_sig;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE m_voirie.an_voirie_circu TO edit_sig;
+
 COMMENT ON TABLE m_voirie.an_voirie_circu
   IS 'Table alphanumérique des éléments de circulation de la voirie';
 COMMENT ON COLUMN m_voirie.an_voirie_circu.id_tronc IS 'Identifiant du tronçon';
@@ -561,9 +614,11 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE r_objet.lt_src_geom
-  OWNER TO postgres;
-GRANT ALL ON TABLE r_objet.lt_src_geom TO postgres;
-GRANT ALL ON TABLE r_objet.lt_src_geom TO groupe_sig WITH GRANT OPTION;
+  OWNER TO sig_create;
+GRANT ALL ON TABLE r_objet.lt_src_geom TO sig_create;
+GRANT SELECT ON TABLE r_objet.lt_src_geom TO read_sig;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE r_objet.lt_src_geom TO edit_sig;
+
 COMMENT ON TABLE r_objet.lt_src_geom
   IS 'Code permettant de décrire le type de référentiel géométrique';
 COMMENT ON COLUMN r_objet.lt_src_geom.code IS 'Code de la liste énumérée relative au type de référentiel géométrique';
@@ -619,9 +674,11 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE r_voie.lt_type_tronc
-  OWNER TO postgres;
-GRANT ALL ON TABLE r_voie.lt_type_tronc TO postgres;
-GRANT ALL ON TABLE r_voie.lt_type_tronc TO groupe_sig WITH GRANT OPTION;
+  OWNER TO sig_create;
+GRANT ALL ON TABLE r_voie.lt_type_tronc TO sig_create;
+GRANT SELECT ON TABLE r_voie.lt_type_tronc TO read_sig;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE r_voie.lt_type_tronc TO edit_sig;
+
 COMMENT ON TABLE r_voie.lt_type_tronc
   IS 'Code permettant de décrire le type de tronçon';
 COMMENT ON COLUMN r_voie.lt_type_tronc.code IS 'Code de la liste énumérée relative au type de tronçon';
@@ -670,9 +727,11 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE r_voie.lt_hierarchie
-  OWNER TO postgres;
-GRANT ALL ON TABLE r_voie.lt_hierarchie TO postgres;
-GRANT ALL ON TABLE r_voie.lt_hierarchie TO groupe_sig WITH GRANT OPTION;
+  OWNER TO sig_create;
+GRANT ALL ON TABLE r_voie.lt_hierarchie TO sig_create;
+GRANT SELECT ON TABLE r_voie.lt_hierarchie TO read_sig;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE r_voie.lt_hierarchie TO edit_sig;
+
 COMMENT ON TABLE r_voie.lt_hierarchie
   IS 'Code permettant de décrire la hierarchie du troncon dans la trame viaire';
 COMMENT ON COLUMN r_voie.lt_hierarchie.code IS 'Code de la liste énumérée relative à la hierarchisation du troncon dans la trame viaire';
@@ -712,9 +771,11 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE r_voie.lt_franchiss
-  OWNER TO postgres;
-GRANT ALL ON TABLE r_voie.lt_franchiss TO postgres;
-GRANT ALL ON TABLE r_voie.lt_franchiss TO groupe_sig WITH GRANT OPTION;
+  OWNER TO sig_create;
+GRANT ALL ON TABLE r_voie.lt_franchiss TO sig_create;
+GRANT SELECT ON TABLE r_voie.lt_franchiss TO read_sig;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE r_voie.lt_franchiss TO edit_sig;
+
 COMMENT ON TABLE r_voie.lt_franchiss
   IS 'Code permettant de décrire le type de franchissement du tronçon';
 COMMENT ON COLUMN r_voie.lt_franchiss.code IS 'Code de la liste énumérée relative au type de franchissement du tronçon';
@@ -751,9 +812,11 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE r_voie.lt_type_voie
-  OWNER TO postgres;
-GRANT ALL ON TABLE r_voie.lt_type_voie TO postgres;
-GRANT ALL ON TABLE r_voie.lt_type_voie TO groupe_sig WITH GRANT OPTION;
+  OWNER TO sig_create;
+GRANT ALL ON TABLE r_voie.lt_type_voie TO sig_create;
+GRANT SELECT ON TABLE r_voie.lt_type_voie TO read_sig;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE r_voie.lt_type_voie TO edit_sig;
+
 COMMENT ON TABLE r_voie.lt_type_voie
   IS 'Code permettant de décrire le type de voie';
 COMMENT ON COLUMN r_voie.lt_type_voie.code IS 'Code de la liste énumérée relative au type de voie';
@@ -840,9 +903,11 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE m_voirie.lt_statut_jur
-  OWNER TO postgres;
-GRANT ALL ON TABLE m_voirie.lt_statut_jur TO postgres;
-GRANT ALL ON TABLE m_voirie.lt_statut_jur TO groupe_sig WITH GRANT OPTION;
+  OWNER TO sig_create;
+GRANT ALL ON TABLE m_voirie.lt_statut_jur TO sig_create;
+GRANT SELECT ON TABLE m_voirie.lt_statut_jur TO read_sig;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE m_voirie.lt_statut_jur TO edit_sig;
+
 COMMENT ON TABLE m_voirie.lt_statut_jur
   IS 'Code permettant de décrire le statut juridique du tronçon';
 COMMENT ON COLUMN m_voirie.lt_statut_jur.code IS 'Code de la liste énumérée relative au statut juridique du tronçon';
@@ -884,9 +949,11 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE m_voirie.lt_gestion
-  OWNER TO postgres;
-GRANT ALL ON TABLE m_voirie.lt_gestion TO postgres;
-GRANT ALL ON TABLE m_voirie.lt_gestion TO groupe_sig WITH GRANT OPTION;
+  OWNER TO sig_create;
+GRANT ALL ON TABLE m_voirie.lt_gestion TO sig_create;
+GRANT SELECT ON TABLE m_voirie.lt_gestion TO read_sig;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE m_voirie.lt_gestion TO edit_sig;
+
 COMMENT ON TABLE m_voirie.lt_gestion
   IS 'Code permettant de décrire le gestionnaire/propriétaire du tronçon';
 COMMENT ON COLUMN m_voirie.lt_gestion.code IS 'Code de la liste énumérée relative au gestionnaire/propriétaire du tronçon';
