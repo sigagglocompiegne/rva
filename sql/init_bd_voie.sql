@@ -992,9 +992,11 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE m_voirie.lt_doman
-  OWNER TO postgres;
-GRANT ALL ON TABLE m_voirie.lt_doman TO postgres;
-GRANT ALL ON TABLE m_voirie.lt_doman TO groupe_sig WITH GRANT OPTION;
+  OWNER TO sig_create;
+GRANT ALL ON TABLE m_voirie.lt_doman TO sig_create;
+GRANT SELECT ON TABLE m_voirie.lt_doman TO read_sig;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE m_voirie.lt_doman TO edit_sig;
+
 COMMENT ON TABLE m_voirie.lt_doman
   IS 'Code permettant de décrire la domanialité du tronçon';
 COMMENT ON COLUMN m_voirie.lt_doman.code IS 'Code de la liste énumérée relative à la domanialité du tronçon';
@@ -1024,9 +1026,11 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE m_voirie.lt_type_circu
-  OWNER TO postgres;
-GRANT ALL ON TABLE m_voirie.lt_type_circu TO postgres;
-GRANT ALL ON TABLE m_voirie.lt_type_circu TO groupe_sig WITH GRANT OPTION;
+  OWNER TO sig_create;
+GRANT ALL ON TABLE m_voirie.lt_type_circu TO sig_create;
+GRANT SELECT ON TABLE m_voirie.lt_type_circu TO read_sig;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE m_voirie.lt_type_circu TO edit_sig;
+
 COMMENT ON TABLE m_voirie.lt_type_circu
   IS 'Code permettant de décrire la type_circulation sur le tronçon';
 COMMENT ON COLUMN m_voirie.lt_type_circu.code IS 'Code de la liste énumérée relative au type de circulation sur un tronçon';
@@ -1060,9 +1064,11 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE m_voirie.lt_sens_circu
-  OWNER TO postgres;
-GRANT ALL ON TABLE m_voirie.lt_sens_circu TO postgres;
-GRANT ALL ON TABLE m_voirie.lt_sens_circu TO groupe_sig WITH GRANT OPTION;
+  OWNER TO sig_create;
+GRANT ALL ON TABLE m_voirie.lt_sens_circu TO sig_create;
+GRANT SELECT ON TABLE m_voirie.lt_sens_circu TO read_sig;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE m_voirie.lt_sens_circu TO edit_sig;
+
 COMMENT ON TABLE m_voirie.lt_sens_circu
   IS 'Code permettant de décrire le sens de circulation du tronçon';
 COMMENT ON COLUMN m_voirie.lt_sens_circu.code IS 'Code de la liste énumérée relative au sens de circulation du tronçon';
@@ -1094,9 +1100,11 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE m_voirie.lt_cont_circu
-  OWNER TO postgres;
-GRANT ALL ON TABLE m_voirie.lt_cont_circu TO postgres;
-GRANT ALL ON TABLE m_voirie.lt_cont_circu TO groupe_sig WITH GRANT OPTION;
+  OWNER TO sig_create;
+GRANT ALL ON TABLE m_voirie.lt_cont_circu TO sig_create;
+GRANT SELECT ON TABLE m_voirie.lt_cont_circu TO read_sig;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE m_voirie.lt_cont_circu TO edit_sig;
+
 COMMENT ON TABLE m_voirie.lt_cont_circu
   IS 'Code permettant de décrire la vitesse maximale autorisée pour un véhicule léger';
 COMMENT ON COLUMN m_voirie.lt_cont_circu.code IS 'Code de la liste énumérée relative aux contraintes de circulation possible (hors vitesse)';
@@ -1128,9 +1136,11 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE m_voirie.lt_v_max
-  OWNER TO postgres;
-GRANT ALL ON TABLE m_voirie.lt_v_max TO postgres;
-GRANT ALL ON TABLE m_voirie.lt_v_max TO groupe_sig WITH GRANT OPTION;
+  OWNER TO sig_create;
+GRANT ALL ON TABLE m_voirie.lt_v_max TO sig_create;
+GRANT SELECT ON TABLE m_voirie.lt_v_max TO read_sig;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE m_voirie.lt_v_max TO edit_sig;
+
 COMMENT ON TABLE m_voirie.lt_v_max
   IS 'Code permettant de décrire la vitesse maximale autorisée pour un véhicule léger';
 COMMENT ON COLUMN m_voirie.lt_v_max.code IS 'Code de la liste énumérée relative à la vitesse maximale autorisée pour un véhicule léger';
@@ -1375,7 +1385,11 @@ CREATE OR REPLACE VIEW r_voie.geo_v_troncon_voie AS
    LEFT JOIN r_voie.an_voie vd ON vd.id_voie = t.id_voie_d;
 
 ALTER TABLE r_voie.geo_v_troncon_voie
-  OWNER TO postgres;
+  OWNER TO sig_create;
+GRANT ALL ON TABLE r_voie.geo_v_troncon_voie TO sig_create;
+GRANT SELECT ON TABLE r_voie.geo_v_troncon_voie TO read_sig;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE r_voie.geo_v_troncon_voie TO edit_sig;
+  
 COMMENT ON VIEW r_voie.geo_v_troncon_voie
   IS 'Vue de synthèse de la base de voie (pas d''information métier voirie)';
 
@@ -1395,7 +1409,11 @@ CREATE OR REPLACE VIEW m_voirie.geo_v_troncon_voirie AS
 
 
 ALTER TABLE m_voirie.geo_v_troncon_voirie
-  OWNER TO postgres;
+  OWNER TO sig_create;
+GRANT ALL ON TABLE m_voirie.geo_v_troncon_voirie TO sig_create;
+GRANT SELECT ON TABLE m_voirie.geo_v_troncon_voirie TO read_sig;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE m_voirie.geo_v_troncon_voirie TO edit_sig;
+
 COMMENT ON VIEW m_voirie.geo_v_troncon_voirie
   IS 'Vue éditable destinée à la modification des données relatives au troncon et à ses propriétés métiers de circulation et de gestion';
 
@@ -1417,7 +1435,11 @@ WHERE a.projet IS FALSE;
 
 
 ALTER TABLE r_plan.geo_v_plan_troncon
-  OWNER TO postgres;
+  OWNER TO sig_create;
+GRANT ALL ON TABLE r_plan.geo_v_plan_troncon TO sig_create;
+GRANT SELECT ON TABLE r_plan.geo_v_plan_troncon TO read_sig;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE r_plan.geo_v_plan_troncon TO edit_sig;
+
 COMMENT ON VIEW r_plan.geo_v_plan_troncon
   IS 'Vue du plan dynamique destinée au dessin des tronçons';
 
@@ -1438,7 +1460,11 @@ WHERE a.projet IS FALSE AND (t.id_voie_g IS NOT NULL OR t.id_voie_d IS NOT NULL)
 
 
 ALTER TABLE r_plan.geo_v_plan_lib_voie
-  OWNER TO postgres;
+  OWNER TO sig_create;
+GRANT ALL ON TABLE r_plan.geo_v_plan_lib_voie TO sig_create;
+GRANT SELECT ON TABLE r_plan.geo_v_plan_lib_voie TO read_sig;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE r_plan.geo_v_plan_lib_voie TO edit_sig;
+
 COMMENT ON VIEW r_plan.geo_v_plan_lib_voie
   IS 'Vue du plan dynamique destinée à l''étiquettage des noms des tronçons existants';
   
@@ -1456,7 +1482,11 @@ WHERE a.projet IS false AND (c.sens_circu = '02' OR c.sens_circu = '03');
 
 
 ALTER TABLE r_plan.geo_v_plan_sens_uniq
-  OWNER TO postgres;
+  OWNER TO sig_create;
+GRANT ALL ON TABLE r_plan.geo_v_plan_sens_uniq TO sig_create;
+GRANT SELECT ON TABLE r_plan.geo_v_plan_sens_uniq TO read_sig;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE r_plan.geo_v_plan_sens_uniq TO edit_sig;
+
 COMMENT ON VIEW r_plan.geo_v_plan_sens_uniq
   IS 'Vue du plan dynamique destinée à la matérialisation des flèches pour les sens uniques';
   
@@ -1474,7 +1504,11 @@ WHERE a.projet IS false AND (g.statut_jur = '01' OR g.statut_jur = '02' OR g.sta
 
 
 ALTER TABLE r_plan.geo_v_plan_cartouche
-  OWNER TO postgres;
+  OWNER TO sig_create;
+GRANT ALL ON TABLE r_plan.geo_v_plan_cartouche TO sig_create;
+GRANT SELECT ON TABLE r_plan.geo_v_plan_cartouche TO read_sig;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE r_plan.geo_v_plan_cartouche TO edit_sig;
+
 COMMENT ON VIEW r_plan.geo_v_plan_cartouche
   IS 'Vue du plan dynamique destinée à la matérialisation des cartouches pour les autoroutes, les routes nationales et départementales';
 
@@ -1501,9 +1535,11 @@ CREATE OR REPLACE VIEW r_voie.an_v_voie_adr_rivoli_null AS
   ORDER BY v.insee;
 
 ALTER TABLE r_voie.an_v_voie_adr_rivoli_null
-  OWNER TO postgres;
-GRANT ALL ON TABLE r_voie.an_v_voie_adr_rivoli_null TO postgres;
-GRANT ALL ON TABLE r_voie.an_v_voie_adr_rivoli_null TO groupe_sig;
+  OWNER TO sig_create;
+GRANT ALL ON TABLE r_voie.an_v_voie_adr_rivoli_null TO sig_create;
+GRANT SELECT ON TABLE r_voie.an_v_voie_adr_rivoli_null TO read_sig;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE r_voie.an_v_voie_adr_rivoli_null TO edit_sig;
+
 COMMENT ON VIEW r_voie.an_v_voie_adr_rivoli_null
   IS 'Vue d''exploitation permettant d''identifier les voies adressées sans code RIVOLI';
 
@@ -1527,9 +1563,11 @@ CREATE OR REPLACE VIEW r_voie.an_v_voie_rivoli_null AS
   ORDER BY v.insee;
 
 ALTER TABLE r_voie.an_v_voie_rivoli_null
-  OWNER TO postgres;
-GRANT ALL ON TABLE r_voie.an_v_voie_rivoli_null TO postgres;
-GRANT ALL ON TABLE r_voie.an_v_voie_rivoli_null TO groupe_sig;
+  OWNER TO sig_create;
+GRANT ALL ON TABLE r_voie.an_v_voie_rivoli_null TO sig_create;
+GRANT SELECT ON TABLE r_voie.an_v_voie_rivoli_null TO read_sig;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE r_voie.an_v_voie_rivoli_null TO edit_sig;
+
 COMMENT ON VIEW r_voie.an_v_voie_rivoli_null
   IS 'Vue d''exploitation permettant d''identifier les voies sans code RIVOLI';
 
@@ -1607,7 +1645,13 @@ $BODY$
   LANGUAGE plpgsql VOLATILE
   COST 100;
 ALTER FUNCTION r_objet.ft_geo_objet_troncon()
-  OWNER TO postgres;
+  OWNER TO sig_create;
+GRANT EXECUTE ON FUNCTION r_objet.ft_geo_objet_troncon() TO public;
+GRANT EXECUTE ON FUNCTION r_objet.ft_geo_objet_troncon() TO sig_create;
+GRANT EXECUTE ON FUNCTION r_objet.ft_geo_objet_troncon() TO create_sig;
+
+
+  
 COMMENT ON FUNCTION r_objet.ft_geo_objet_troncon() IS 'Fonction trigger pour mise à jour de la classe objet troncon de voirie';
 
 
@@ -1681,7 +1725,11 @@ $BODY$
   LANGUAGE plpgsql VOLATILE
   COST 100;
 ALTER FUNCTION r_voie.ft_an_troncon()
-  OWNER TO postgres;
+  OWNER TO sig_create;
+GRANT EXECUTE ON FUNCTION r_objet.ft_an_troncon() TO public;
+GRANT EXECUTE ON FUNCTION r_objet.ft_an_troncon() TO sig_create;
+GRANT EXECUTE ON FUNCTION r_objet.ft_an_troncon() TO create_sig;
+
 COMMENT ON FUNCTION r_voie.ft_an_troncon() IS 'Fonction trigger pour mise à jour de la classe alphanumérique de référence du troncon';
 
 
@@ -1763,7 +1811,11 @@ $BODY$
   LANGUAGE plpgsql VOLATILE
   COST 100;
 ALTER FUNCTION m_voirie.ft_an_troncon_h()
-  OWNER TO postgres;
+  OWNER TO sig_create;
+GRANT EXECUTE ON FUNCTION m_voirie.ft_an_troncon_h() TO public;
+GRANT EXECUTE ON FUNCTION m_voirie.ft_an_troncon_h() TO sig_create;
+GRANT EXECUTE ON FUNCTION m_voirie.ft_an_troncon_h() TO create_sig;
+
 COMMENT ON FUNCTION m_voirie.ft_an_troncon_h() IS 'Fonction trigger pour insertion de l''historisation des voies au tronçon dans la classe d''objet an_troncon_h';
 
 
@@ -1909,7 +1961,11 @@ $BODY$
   LANGUAGE plpgsql VOLATILE
   COST 100;
 ALTER FUNCTION m_voirie.ft_an_voirie_circu()
-  OWNER TO postgres;
+  OWNER TO sig_create;
+GRANT EXECUTE ON FUNCTION m_voirie.ft_an_voirie_circu() TO public;
+GRANT EXECUTE ON FUNCTION m_voirie.ft_an_voirie_circu() TO sig_create;
+GRANT EXECUTE ON FUNCTION m_voirie.ft_an_voirie_circu() TO create_sig;
+
 COMMENT ON FUNCTION m_voirie.ft_an_voirie_circu() IS 'Fonction trigger pour mise à jour de la classe métier sur la circulation';
 
 
@@ -1985,7 +2041,11 @@ $BODY$
   LANGUAGE plpgsql VOLATILE
   COST 100;
 ALTER FUNCTION m_voirie.ft_an_voirie_gest()
-  OWNER TO postgres;
+  OWNER TO sig_create;
+GRANT EXECUTE ON FUNCTION m_voirie.ft_an_voirie_gest() TO public;
+GRANT EXECUTE ON FUNCTION m_voirie.ft_an_voirie_gest() TO sig_create;
+GRANT EXECUTE ON FUNCTION m_voirie.ft_an_voirie_gest() TO create_sig;
+
 COMMENT ON FUNCTION m_voirie.ft_an_voirie_gest() IS 'Fonction trigger pour mise à jour de la classe métier sur la gestion de la voirie';
 
 
@@ -2035,10 +2095,11 @@ $BODY$
   LANGUAGE plpgsql VOLATILE
   COST 100;
 ALTER FUNCTION r_objet.r_troncon_maj_insee_gd()
-  OWNER TO postgres;
+  OWNER TO sig_create;
 GRANT EXECUTE ON FUNCTION r_objet.r_troncon_maj_insee_gd() TO public;
-GRANT EXECUTE ON FUNCTION r_objet.r_troncon_maj_insee_gd() TO postgres;
-GRANT EXECUTE ON FUNCTION r_objet.r_troncon_maj_insee_gd() TO groupe_sig WITH GRANT OPTION;
+GRANT EXECUTE ON FUNCTION r_objet.r_troncon_maj_insee_gd() TO sig_create;
+GRANT EXECUTE ON FUNCTION r_objet.r_troncon_maj_insee_gd() TO create_sig;
+
 COMMENT ON FUNCTION r_objet.r_troncon_maj_insee_gd() IS 'Fonction dont l''objet est de recupérer par croisement géographique, le code insee de la commune à partir de la vue référence r_osm.geo_osm_commune_oise dans le cas où  l''utilisateur laisse les champs insee_g et d "null"';
 
 
@@ -2096,7 +2157,10 @@ $BODY$
   LANGUAGE plpgsql VOLATILE
   COST 100;
 ALTER FUNCTION r_objet.noeud_insert()
-  OWNER TO postgres;
+  OWNER TO sig_create;
+GRANT EXECUTE ON FUNCTION r_objet.noeud_insert() TO public;
+GRANT EXECUTE ON FUNCTION r_objet.noeud_insert() TO sig_create;
+GRANT EXECUTE ON FUNCTION r_objet.noeud_insert() TO create_sig;
 
 -- ** TRIGGER **
   
@@ -2143,7 +2207,10 @@ $BODY$
   LANGUAGE plpgsql VOLATILE
   COST 100;
 ALTER FUNCTION r_objet.noeud_sup()
-  OWNER TO postgres;
+  OWNER TO sig_create;
+GRANT EXECUTE ON FUNCTION r_objet.noeud_sup() TO public;
+GRANT EXECUTE ON FUNCTION r_objet.noeud_sup() TO sig_create;
+GRANT EXECUTE ON FUNCTION r_objet.noeud_sup() TO create_sig;
 
 
 -- ** TRIGGER **
@@ -2197,9 +2264,12 @@ CREATE OR REPLACE VIEW x_apps.xapps_an_voie AS
   WHERE v.insee = c.insee::bpchar;
 
 ALTER TABLE x_apps.xapps_an_voie
-  OWNER TO postgres;
-GRANT ALL ON TABLE x_apps.xapps_an_voie TO postgres;
-GRANT ALL ON TABLE x_apps.xapps_an_voie TO groupe_sig;
+  OWNER TO sig_create;
+GRANT ALL ON TABLE x_apps.xapps_an_voie TO sig_create;
+GRANT SELECT ON TABLE x_apps.xapps_an_voie  TO read_sig;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE x_apps.xapps_an_voie  TO edit_sig;
+
+									   
 COMMENT ON VIEW x_apps.xapps_an_voie
   IS 'Vue d''exploitation des libellés de voie par commune';
 
@@ -2545,10 +2615,11 @@ CREATE MATERIALIZED VIEW x_apps.xapps_geo_v_troncon_voirie AS
 WITH DATA;
 
 ALTER TABLE x_apps.xapps_geo_v_troncon_voirie
-  OWNER TO postgres;
-GRANT ALL ON TABLE x_apps.xapps_geo_v_troncon_voirie TO postgres;
-GRANT ALL ON TABLE x_apps.xapps_geo_v_troncon_voirie TO groupe_sig;
-GRANT SELECT, UPDATE ON TABLE x_apps.xapps_geo_v_troncon_voirie TO groupe_sig_stage WITH GRANT OPTION;
+  OWNER TO sig_create;
+GRANT ALL ON TABLE x_apps.xapps_geo_v_troncon_voirie TO sig_create;
+GRANT SELECT ON TABLE x_apps.xapps_geo_v_troncon_voirie  TO read_sig;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE x_apps.xapps_geo_v_troncon_voirie  TO edit_sig;
+									   
 COMMENT ON MATERIALIZED VIEW x_apps.xapps_geo_v_troncon_voirie
   IS 'Vue matérilaisée complète et décodée des données relatives au troncon et à ses propriétés métiers de circulation et de gestion, destinée à l''exploitation applicative (générateur d''apps). Cette vue est rafraîchie automatiquement toutes les nuits. Au besoin un rafraîchissement ponctuel est possible.';
 
@@ -2603,10 +2674,11 @@ CREATE MATERIALIZED VIEW x_apps.xapps_geo_v_voie AS
 WITH DATA;
 
 ALTER TABLE x_apps.xapps_geo_v_voie
-  OWNER TO postgres;
-GRANT ALL ON TABLE x_apps.xapps_geo_v_voie TO postgres;
-GRANT ALL ON TABLE x_apps.xapps_geo_v_voie TO groupe_sig;
-GRANT SELECT, UPDATE ON TABLE x_apps.xapps_geo_v_voie TO groupe_sig_stage WITH GRANT OPTION;
+  OWNER TO sig_create;
+GRANT ALL ON TABLE x_apps.xapps_geo_v_voie TO sig_create;
+GRANT SELECT ON TABLE x_apps.xapps_geo_v_voie  TO read_sig;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE x_apps.xapps_geo_v_voie  TO edit_sig;
+							  
 COMMENT ON MATERIALIZED VIEW x_apps.xapps_geo_v_voie
   IS 'Vue de synthèse des voies (agréagation des tronçons pour calcul) (générateur d''apps)
 Cette vue matérialisée est rafraichit toutes les jours via un fichier batch sur la VM sig-sgbd.';
@@ -3692,9 +3764,11 @@ CREATE MATERIALIZED VIEW x_apps.xapps_an_v_troncon AS
 WITH DATA;
 
 ALTER TABLE x_apps.xapps_an_v_troncon
-  OWNER TO postgres;
-GRANT ALL ON TABLE x_apps.xapps_an_v_troncon TO postgres;
-GRANT ALL ON TABLE x_apps.xapps_an_v_troncon TO groupe_sig;
+  OWNER TO sig_create;
+GRANT ALL ON TABLE x_apps.xapps_an_v_troncon TO sig_create;
+GRANT SELECT ON TABLE x_apps.xapps_an_v_troncon  TO read_sig;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE x_apps.xapps_an_v_troncon  TO edit_sig;
+				     
 COMMENT ON MATERIALIZED VIEW x_apps.xapps_an_v_troncon
   IS 'Vue non géographiques des tronçons (agrégation des tronçons pour statistique à la commune) (générateur d''apps)
 Cette vue matérialisée est rafraichit toutes les jours via un fichier batch sur la VM sig-sgbd.';
@@ -3728,7 +3802,12 @@ LEFT JOIN
 ;
 
 ALTER TABLE x_apps.xapps_an_v_troncon_h
-  OWNER TO postgres;      
+  OWNER TO sig_create;  
+GRANT ALL ON TABLE x_apps.xapps_an_v_troncon_h TO sig_create;
+GRANT SELECT ON TABLE x_apps.xapps_an_v_troncon_h  TO read_sig;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE x_apps.xapps_an_v_troncon_h  TO edit_sig;
+				     
+				     
 COMMENT ON VIEW x_apps.xapps_an_v_troncon_h
   IS 'Vue d''exploitation permettant de lister l''historique des dénominations de voies au tronçon (intégration dans la fiche tronçon dans l''application GEO RVA';
 
