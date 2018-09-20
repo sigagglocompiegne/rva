@@ -1358,6 +1358,22 @@ BEGIN
 -- INSERT
 IF (TG_OP = 'INSERT') THEN
 
+-- gestion des erreurs relevés dans le formatage des données BAL par des exceptions (remontées dans QGIS)
+-- le code RIVOLI doit être renseigné (par défaut mettre 0000 dans la table des noms de voies)
+IF (SELECT rivoli FROM r_voie.an_voie WHERE id_voie = new.id_voie) is null THEN
+RAISE EXCEPTION 'Code RIVOLI non présent. Mettre ''0000'' dans le champ RIVOLI dans la table des noms de voies si le code RIVOLI n''existe pas';
+END IF;
+
+-- le champ numéro doit contenir uniquement des n°
+IF RTRIM(new.numero, '0123456789') <> '' THEN
+RAISE EXCEPTION 'Vous devez saisir uniquement des numéros dans le champ NUMERO';
+END IF;
+
+-- le champ numéro doit être identique + repet à l'étiquette
+IF (new.numero || CASE WHEN new.repet is null THEN '' ELSE new.repet END) <> new.etiquette THEN
+RAISE EXCEPTION 'Le champ d''étiquette n''est pas cohérent avec le numéro et l''indice de répétition';
+END IF;
+
 v_id_adresse := currval('r_objet.geo_objet_pt_adresse_id_seq'::regclass);
 INSERT INTO r_adresse.an_adresse (id_adresse, numero, repet, complement, etiquette, angle, observ, src_adr, diag_adr, qual_adr)
 SELECT v_id_adresse,
@@ -1371,10 +1387,28 @@ CASE WHEN NEW.src_adr IS NULL THEN '00' ELSE NEW.src_adr END,
 CASE WHEN NEW.diag_adr IS NULL THEN '00' ELSE NEW.diag_adr END,
 CASE WHEN NEW.diag_adr IS NULL THEN '0' ELSE LEFT(NEW.diag_adr,1) END;
 --NEW.id_adresse := v_id_adresse;
+
 RETURN NEW;
 
 -- UPDATE
 ELSIF (TG_OP = 'UPDATE') THEN
+
+-- gestion des erreurs relevés dans le formatage des données BAL par des exceptions (remontées dans QGIS)
+-- le code RIVOLI doit être renseigné (par défaut mettre 0000 dans la table des noms de voies)
+IF new.rivoli is null THEN
+RAISE EXCEPTION 'Code RIVOLI non présent. Mettre ''0000'' dans le champ RIVOLI dans la table des noms de voies si le code RIVOLI n''existe pas';
+END IF;
+
+-- le champ numéro doit contenir uniquement des n°
+IF RTRIM(new.numero, '0123456789') <> '' THEN
+RAISE EXCEPTION 'Vous devez saisir uniquement des numéros dans le champ NUMERO';
+END IF;
+
+-- le champ numéro doit être identique + repet à l'étiquette
+IF (new.numero || CASE WHEN new.repet is null THEN '' ELSE new.repet END) <> new.etiquette THEN
+RAISE EXCEPTION 'Le champ d''étiquette n''est pas cohérent avec le numéro et l''indice de répétition';
+END IF;
+
 UPDATE
 r_adresse.an_adresse
 SET
@@ -1413,7 +1447,6 @@ GRANT EXECUTE ON FUNCTION r_adresse.ft_an_adresse() TO public;
 GRANT EXECUTE ON FUNCTION r_adresse.ft_an_adresse() TO sig_create;
 GRANT EXECUTE ON FUNCTION r_adresse.ft_an_adresse() TO create_sig;
 COMMENT ON FUNCTION r_adresse.ft_an_adresse() IS 'Fonction trigger pour mise à jour de la classe alphanumérique de référence de l''adresse';
-
 
 -- ### trigger an_adresse
 
