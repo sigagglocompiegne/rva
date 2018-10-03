@@ -11,6 +11,10 @@ Afin d'améliorer la connaissance sur les voies existantes, une Base de Voies a 
 La base de données Voies fonctionne de manière urbanisée. La géométrie du tronçon de voies est gérée de manière indépendante et contient uniquement les informations de référence et d'appartenance à une voie nommée et à une commune. Les données dites métiers sont gérées dans des tables alphanumériques spécifiques. Il existe des informations liées à des données de références du tronçon et des informations liées aux métiers de la voirie (gestion et circulation). Un suivi des voies historiques a également été introduit.
 L'ensemble de cette base est modifiable via des vues simples en base de données et consultable via les applicatifs WebSIG à partir de vues matérialisées reconstituant les informations à la voie ou au tronçon.
 
+## Schéma fonctionnel
+
+![schema_fonctionnel](img/schema_fonctionnel_voie_v2.png)
+
 ## Dépendances (non critiques)
 
 Sans objet
@@ -587,8 +591,6 @@ L'ensemble des fichiers a utilisé est placé ici `Y:\Ressources\4-Partage\3-Pro
 ![mcd](img/MCD_voie_v1.png)
 ![mcd](img/MCD_voie_v2.png)
 
-## Schéma fonctionnel
 
-![schema_fonctionnel](img/schema_fonctionnel_voie_v2.png)
 
 
