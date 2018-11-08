@@ -240,7 +240,7 @@ CREATE TABLE r_adresse.an_adresse_h
   commune character varying(100), -- Libellé de la commune
   date_arr timestamp without time zone, -- Date de l'arrêté de numérotation remplaçant le numéro historisé ici présent
   date_sai timestamp without time zone NOT NULL DEFAULT now(), -- Date de saisie de l'information dans la base
-  CONSTRAINT an_adresse_h_pkey PRIMARY KEY (id_adresse)
+  CONSTRAINT an_adresse_h_pkey PRIMARY KEY (id)
 )
 WITH (
   OIDS=FALSE
