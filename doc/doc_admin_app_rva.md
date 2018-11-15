@@ -2,8 +2,6 @@
 
 # Documentation d'administration de l'application #
 
-(en cours de rédaction)
-
 # Généralité
 
 |Représentation| Nom de l'application |Résumé|
