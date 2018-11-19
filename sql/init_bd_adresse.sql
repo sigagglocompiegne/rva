@@ -1196,55 +1196,94 @@ COMMENT ON VIEW x_apps.xapps_an_v_adresse_h
 -- DROP VIEW x_opendata.xopendata_geo_v_openadresse;
 
 CREATE OR REPLACE VIEW x_opendata.xopendata_geo_v_openadresse AS 
-SELECT
-  CASE
-    WHEN a.repet IS NULL AND a.complement IS NULL THEN concat(v.insee,'_',v.rivoli,'_',lpad(a.numero,5,'0'))
-    WHEN a.repet IS NOT NULL AND a.complement IS NULL THEN concat(v.insee,'_',v.rivoli,'_',lpad(a.numero,5,'0'),lower(trim(concat('_',left(a.repet,3)))))
-    WHEN a.repet IS NULL AND a.complement IS NOT NULL THEN concat(v.insee,'_',v.rivoli,'_',lpad(a.numero,5,'0'),lower(trim(concat('_',replace(a.complement,' ','')))))
-    WHEN a.repet IS NOT NULL AND a.complement IS NOT NULL THEN concat(v.insee,'_',v.rivoli,'_',lpad(a.numero,5,'0'),lower(trim(concat('_',left(a.repet,3), '_',replace(a.complement,' ','')))))
-  END AS cle_interop,
-p.id_adresse as uid_adresse,
-a.numero,
-a.repet,
-a.complement,
-v.libvoie_c as voie,
-c.commune,
-v.insee,
-k.codepostal,
-v.rivoli,
-lt_p.valeur as position,
-p.x_l93 as x,
-p.y_l93 as y,
-st_x(st_transform(p.geom,4326)) as long,
-st_y(st_transform(p.geom,4326)) as lat,
-a.etiquette,
-a.angle,
-lt_a.valeur as source,
-  CASE
-    WHEN p.date_maj IS NULL THEN date(p.date_sai) ELSE date(p.date_maj)
-  END as date_der_maj,
-p.geom 
-FROM r_objet.geo_objet_pt_adresse p
-   LEFT JOIN r_adresse.an_adresse a ON a.id_adresse = p.id_adresse
-   LEFT JOIN r_adresse.lt_src_adr lt_a ON lt_a.code = a.src_adr
-   LEFT JOIN r_objet.lt_position lt_p ON lt_p.code = p.position      
-   LEFT JOIN r_voie.an_voie v ON v.id_voie = p.id_voie
-   LEFT JOIN r_osm.geo_osm_commune as c ON v.insee = c.insee
-   LEFT JOIN r_administratif.lk_insee_codepostal as k ON v.insee = k.insee
-WHERE a.diag_adr = '11'
-  OR left(a.diag_adr,1) = '2'
-  OR a.diag_adr = '32' 
-ORDER BY cle_interop;
-
+ SELECT
+        CASE
+            WHEN a.repet IS NULL AND a.complement IS NULL THEN concat(v.insee, '_',
+            CASE
+                WHEN v.rivoli IS NULL THEN '0000'::bpchar
+                ELSE v.rivoli
+            END, '_', lpad(a.numero::text, 5, '0'::text))
+            WHEN a.repet IS NOT NULL AND a.complement IS NULL THEN concat(v.insee, '_',
+            CASE
+                WHEN v.rivoli IS NULL THEN '0000'::bpchar
+                ELSE v.rivoli
+            END, '_', lpad(a.numero::text, 5, '0'::text), lower(btrim(concat('_', "left"(a.repet::text, 3)))))
+            WHEN a.repet IS NULL AND a.complement IS NOT NULL THEN concat(v.insee, '_',
+            CASE
+                WHEN v.rivoli IS NULL THEN '0000'::bpchar
+                ELSE v.rivoli
+            END, '_', lpad(a.numero::text, 5, '0'::text), lower(btrim(concat('_', replace(a.complement::text, ' '::text, ''::text)))))
+            WHEN a.repet IS NOT NULL AND a.complement IS NOT NULL THEN concat(v.insee, '_',
+            CASE
+                WHEN v.rivoli IS NULL THEN '0000'::bpchar
+                ELSE v.rivoli
+            END, '_', lpad(a.numero::text, 5, '0'::text), lower(btrim(concat('_', "left"(a.repet::text, 3), '_', replace(a.complement::text, ' '::text, ''::text)))))
+            ELSE NULL::text
+        END AS cle_interop,
+    p.id_adresse AS uid_adresse,
+    a.numero,
+    a.repet,
+    a.complement,
+    v.libvoie_c AS voie,
+    c.commune,
+    v.insee,
+    k.codepostal,
+    v.rivoli,
+    lt_p.valeur AS "position",
+    p.x_l93 AS x,
+    p.y_l93 AS y,
+    st_x(st_transform(p.geom, 4326)) AS long,
+    st_y(st_transform(p.geom, 4326)) AS lat,
+    a.etiquette,
+    a.angle,
+    lt_a.valeur AS source,
+        CASE
+            WHEN p.date_maj IS NULL THEN date(p.date_sai)
+            ELSE date(p.date_maj)
+        END AS date_der_maj,
+    p.geom
+   FROM r_objet.geo_objet_pt_adresse p
+     LEFT JOIN r_adresse.an_adresse a ON a.id_adresse = p.id_adresse
+     LEFT JOIN r_adresse.lt_src_adr lt_a ON lt_a.code::text = a.src_adr::text
+     LEFT JOIN r_objet.lt_position lt_p ON lt_p.code::text = p."position"::text
+     LEFT JOIN r_voie.an_voie v ON v.id_voie = p.id_voie
+     LEFT JOIN r_osm.geo_osm_commune c ON v.insee = c.insee::bpchar
+     LEFT JOIN r_administratif.lk_insee_codepostal k ON v.insee = k.insee::bpchar
+  WHERE a.diag_adr::text = '11'::text OR "left"(a.diag_adr::text, 1) = '2'::text OR a.diag_adr::text = '32'::text
+  ORDER BY
+        CASE
+            WHEN a.repet IS NULL AND a.complement IS NULL THEN concat(v.insee, '_',
+            CASE
+                WHEN v.rivoli IS NULL THEN '0000'::bpchar
+                ELSE v.rivoli
+            END, '_', lpad(a.numero::text, 5, '0'::text))
+            WHEN a.repet IS NOT NULL AND a.complement IS NULL THEN concat(v.insee, '_',
+            CASE
+                WHEN v.rivoli IS NULL THEN '0000'::bpchar
+                ELSE v.rivoli
+            END, '_', lpad(a.numero::text, 5, '0'::text), lower(btrim(concat('_', "left"(a.repet::text, 3)))))
+            WHEN a.repet IS NULL AND a.complement IS NOT NULL THEN concat(v.insee, '_',
+            CASE
+                WHEN v.rivoli IS NULL THEN '0000'::bpchar
+                ELSE v.rivoli
+            END, '_', lpad(a.numero::text, 5, '0'::text), lower(btrim(concat('_', replace(a.complement::text, ' '::text, ''::text)))))
+            WHEN a.repet IS NOT NULL AND a.complement IS NOT NULL THEN concat(v.insee, '_',
+            CASE
+                WHEN v.rivoli IS NULL THEN '0000'::bpchar
+                ELSE v.rivoli
+            END, '_', lpad(a.numero::text, 5, '0'::text), lower(btrim(concat('_', "left"(a.repet::text, 3), '_', replace(a.complement::text, ' '::text, ''::text)))))
+            ELSE NULL::text
+        END;
 
 ALTER TABLE x_opendata.xopendata_geo_v_openadresse
   OWNER TO sig_create;
 GRANT ALL ON TABLE x_opendata.xopendata_geo_v_openadresse TO sig_create;
-GRANT SELECT ON TABLE x_opendata.xopendata_geo_v_openadresse TO read_sig;
+GRANT ALL ON TABLE x_opendata.xopendata_geo_v_openadresse TO create_sig;
 GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE x_opendata.xopendata_geo_v_openadresse TO edit_sig;
-		 
+GRANT SELECT ON TABLE x_opendata.xopendata_geo_v_openadresse TO read_sig;
 COMMENT ON VIEW x_opendata.xopendata_geo_v_openadresse
-  IS 'Vue destinée à la communication extérieure des données relatives aux adresses';
+  IS 'Vue destinée à la communication extérieure des données relatives aux adresses. Exclusion des adresses supprimées, non attribuées pour projet ou à confirmer';
+
 
 -- ####################################################################################################################################################
 -- ###                                                                                                                                              ###
