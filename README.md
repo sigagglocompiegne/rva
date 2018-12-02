@@ -2,7 +2,7 @@
 
 # Voies et Adresses
 
-Ensemble des éléments constituant la mise en oeuvre d'une application WebSIG de signalement des voies et des adresses :
+Ensemble des éléments constituant la mise en oeuvre du projet de référentiel local des voies et adresses (base de données et application de signalement) :
 
 - [Script d'initialisation de la base de données Adresse](sql/init_bd_adresse.sql) 
 - [Script d'initialisation de la base de données Voie](sql/init_bd_voie.sql) 
