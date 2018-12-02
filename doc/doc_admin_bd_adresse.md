@@ -4,7 +4,7 @@
 
 ## Principes
   * **généralité** :
-Afin d'améliorer la justesse des adresses existantes, une Base Adresse Locale a été initiée sur le Pays Compiégnois à partir de vues immersives et par recoupement avec des bases adresses existantes (cadastre, RIL, ...) puis par un travail de vérification sur le terrain. Cette base s'est appuyée sur le standard d'échange BAL 1.1. de l'AITF et elle est alimentée par les signalements des communes via une application WebSIG dédiée.
+Afin d'améliorer la justesse des adresses existantes, une Base Adresse Locale a été initiée sur le Pays Compiégnois à partir de vues immersives, par recoupement avec des bases ou fichiers adresses existants (cadastre, RIL, ...) puis par une vérification cibée sur le terrain. Cette base s'est appuyée sur le standard d'échange BAL 1.1. de l'AITF et elle est alimentée par les signalements des communes via une application WebSIG dédiée.
  
  * **résumé fonctionnel** :
 La base de données Adresse fonctionne de manière urbanisée. La géométrie du point d'adresse est gérée de manière indépendante et contient uniquement les informations de référence et d'appartenance à la voie et au tronçon de voie. Les données dites métiers sont gérées dans des tables alphanumériques spécifiques. Les libellés de voies sont concidérés comme un référentiel de voies (non géographique) et il est issu primitivement des informations du cadastre (FANTOIR). Les informations purement liées à l'adresse (numéro, qualité, ...) sont gérées dans une table alphanumérique particulière ainsi que les données complémentaires qualifiant l'adresse (état, destination, nombre de logements, ...). Un suivi des adresses historiques a également été introduit.
