@@ -1585,11 +1585,11 @@ COMMENT ON VIEW r_voie.an_v_voie_rivoli_null
 
 -- #################################################################### FONCTION TRIGGER - GEO_OBJET_TRONCON ###################################################
 
--- Function: r_objet.ft_geo_objet_troncon()
+-- Function: r_objet.ft_m_geo_objet_troncon()
 
--- DROP FUNCTION r_objet.ft_geo_objet_troncon();
+-- DROP FUNCTION r_objet.ft_m_geo_objet_troncon();
 
-CREATE OR REPLACE FUNCTION r_objet.ft_geo_objet_troncon()
+CREATE OR REPLACE FUNCTION r_objet.ft_m_geo_objet_troncon()
   RETURNS trigger AS
 $BODY$
 
@@ -1644,15 +1644,15 @@ END;
 $BODY$
   LANGUAGE plpgsql VOLATILE
   COST 100;
-ALTER FUNCTION r_objet.ft_geo_objet_troncon()
+ALTER FUNCTION r_objet.ft_m_geo_objet_troncon()
   OWNER TO sig_create;
-GRANT EXECUTE ON FUNCTION r_objet.ft_geo_objet_troncon() TO public;
-GRANT EXECUTE ON FUNCTION r_objet.ft_geo_objet_troncon() TO sig_create;
-GRANT EXECUTE ON FUNCTION r_objet.ft_geo_objet_troncon() TO create_sig;
+GRANT EXECUTE ON FUNCTION r_objet.ft_m_geo_objet_troncon() TO public;
+GRANT EXECUTE ON FUNCTION r_objet.ft_m_geo_objet_troncon() TO sig_create;
+GRANT EXECUTE ON FUNCTION r_objet.ft_m_geo_objet_troncon() TO create_sig;
 
 
   
-COMMENT ON FUNCTION r_objet.ft_geo_objet_troncon() IS 'Fonction trigger pour mise à jour de la classe objet troncon de voirie';
+COMMENT ON FUNCTION r_objet.ft_m_geo_objet_troncon() IS 'Fonction trigger pour mise à jour de la classe objet troncon de voirie';
 
 
 
@@ -1664,17 +1664,17 @@ CREATE TRIGGER t_t1_geo_objet_troncon
   INSTEAD OF INSERT OR UPDATE OR DELETE
   ON m_voirie.geo_v_troncon_voirie
   FOR EACH ROW
-  EXECUTE PROCEDURE r_objet.ft_geo_objet_troncon();
+  EXECUTE PROCEDURE r_objet.ft_m_geo_objet_troncon();
 
 
 
 -- #################################################################### FONCTION TRIGGER - AN_TRONCON ###################################################
 
--- Function: r_voie.ft_an_troncon()
+-- Function: r_voie.ft_m_an_troncon()
 
--- DROP FUNCTION r_voie.ft_an_troncon();
+-- DROP FUNCTION r_voie.ft_m_an_troncon();
 
-CREATE OR REPLACE FUNCTION r_voie.ft_an_troncon()
+CREATE OR REPLACE FUNCTION r_voie.ft_m_an_troncon()
   RETURNS trigger AS
 $BODY$
 
@@ -1724,13 +1724,13 @@ END;
 $BODY$
   LANGUAGE plpgsql VOLATILE
   COST 100;
-ALTER FUNCTION r_voie.ft_an_troncon()
+ALTER FUNCTION r_voie.ft_m_an_troncon()
   OWNER TO sig_create;
-GRANT EXECUTE ON FUNCTION r_objet.ft_an_troncon() TO public;
-GRANT EXECUTE ON FUNCTION r_objet.ft_an_troncon() TO sig_create;
-GRANT EXECUTE ON FUNCTION r_objet.ft_an_troncon() TO create_sig;
+GRANT EXECUTE ON FUNCTION r_objet.ft_m_an_troncon() TO public;
+GRANT EXECUTE ON FUNCTION r_objet.ft_m_an_troncon() TO sig_create;
+GRANT EXECUTE ON FUNCTION r_objet.ft_m_an_troncon() TO create_sig;
 
-COMMENT ON FUNCTION r_voie.ft_an_troncon() IS 'Fonction trigger pour mise à jour de la classe alphanumérique de référence du troncon';
+COMMENT ON FUNCTION r_voie.ft_m_an_troncon() IS 'Fonction trigger pour mise à jour de la classe alphanumérique de référence du troncon';
 
 
 
@@ -1742,15 +1742,15 @@ CREATE TRIGGER t_t2_an_troncon
   INSTEAD OF INSERT OR UPDATE OR DELETE
   ON m_voirie.geo_v_troncon_voirie
   FOR EACH ROW
-  EXECUTE PROCEDURE r_voie.ft_an_troncon();
+  EXECUTE PROCEDURE r_voie.ft_m_an_troncon();
 
 -- #################################################################### FONCTION TRIGGER - AN_TRONCON_H ###################################################
 
--- Function: m_voirie.ft_an_troncon_h()
+-- Function: m_voirie.ft_m_an_troncon_h()
 
--- DROP FUNCTION m_voirie.ft_an_troncon_h();
+-- DROP FUNCTION m_voirie.ft_m_an_troncon_h();
 
-CREATE OR REPLACE FUNCTION m_voirie.ft_an_troncon_h()
+CREATE OR REPLACE FUNCTION m_voirie.ft_m_an_troncon_h()
   RETURNS trigger AS
 $BODY$
 
@@ -1810,13 +1810,13 @@ END;
 $BODY$
   LANGUAGE plpgsql VOLATILE
   COST 100;
-ALTER FUNCTION m_voirie.ft_an_troncon_h()
+ALTER FUNCTION m_voirie.ft_m_an_troncon_h()
   OWNER TO sig_create;
-GRANT EXECUTE ON FUNCTION m_voirie.ft_an_troncon_h() TO public;
-GRANT EXECUTE ON FUNCTION m_voirie.ft_an_troncon_h() TO sig_create;
-GRANT EXECUTE ON FUNCTION m_voirie.ft_an_troncon_h() TO create_sig;
+GRANT EXECUTE ON FUNCTION m_voirie.ft_m_an_troncon_h() TO public;
+GRANT EXECUTE ON FUNCTION m_voirie.ft_m_an_troncon_h() TO sig_create;
+GRANT EXECUTE ON FUNCTION m_voirie.ft_m_an_troncon_h() TO create_sig;
 
-COMMENT ON FUNCTION m_voirie.ft_an_troncon_h() IS 'Fonction trigger pour insertion de l''historisation des voies au tronçon dans la classe d''objet an_troncon_h';
+COMMENT ON FUNCTION m_voirie.ft_m_an_troncon_h() IS 'Fonction trigger pour insertion de l''historisation des voies au tronçon dans la classe d''objet an_troncon_h';
 
 
 
@@ -1829,17 +1829,17 @@ CREATE TRIGGER t_t3_an_troncon_h
   INSTEAD OF UPDATE
   ON m_voirie.geo_v_troncon_voirie
   FOR EACH ROW
-  EXECUTE PROCEDURE m_voirie.ft_an_troncon_h();
+  EXECUTE PROCEDURE m_voirie.ft_m_an_troncon_h();
 
 
 
 -- #################################################################### FONCTION TRIGGER - AN_VOIRIE_CIRCU ###################################################
 
--- Function: m_voirie.ft_an_voirie_circu()
+-- Function: m_voirie.ft_m_an_voirie_circu()
 
--- DROP FUNCTION m_voirie.ft_an_voirie_circu();
+-- DROP FUNCTION m_voirie.ft_m_an_voirie_circu();
 
-CREATE OR REPLACE FUNCTION m_voirie.ft_an_voirie_circu()
+CREATE OR REPLACE FUNCTION m_voirie.ft_m_an_voirie_circu()
   RETURNS trigger AS
 $BODY$
 
@@ -1960,13 +1960,13 @@ END;
 $BODY$
   LANGUAGE plpgsql VOLATILE
   COST 100;
-ALTER FUNCTION m_voirie.ft_an_voirie_circu()
+ALTER FUNCTION m_voirie.ft_m_an_voirie_circu()
   OWNER TO sig_create;
-GRANT EXECUTE ON FUNCTION m_voirie.ft_an_voirie_circu() TO public;
-GRANT EXECUTE ON FUNCTION m_voirie.ft_an_voirie_circu() TO sig_create;
-GRANT EXECUTE ON FUNCTION m_voirie.ft_an_voirie_circu() TO create_sig;
+GRANT EXECUTE ON FUNCTION m_voirie.ft_m_an_voirie_circu() TO public;
+GRANT EXECUTE ON FUNCTION m_voirie.ft_m_an_voirie_circu() TO sig_create;
+GRANT EXECUTE ON FUNCTION m_voirie.ft_m_an_voirie_circu() TO create_sig;
 
-COMMENT ON FUNCTION m_voirie.ft_an_voirie_circu() IS 'Fonction trigger pour mise à jour de la classe métier sur la circulation';
+COMMENT ON FUNCTION m_voirie.ft_m_an_voirie_circu() IS 'Fonction trigger pour mise à jour de la classe métier sur la circulation';
 
 
 
@@ -1978,17 +1978,17 @@ CREATE TRIGGER t_t2_an_voirie_circu
   INSTEAD OF INSERT OR UPDATE OR DELETE
   ON m_voirie.geo_v_troncon_voirie
   FOR EACH ROW
-  EXECUTE PROCEDURE m_voirie.ft_an_voirie_circu();
+  EXECUTE PROCEDURE m_voirie.ft_m_an_voirie_circu();
 
 
 
 -- #################################################################### FONCTION TRIGGER - AN_VOIRIE_GEST ###################################################
 
--- Function: m_voirie.ft_an_voirie_gest()
+-- Function: m_voirie.ft_m_an_voirie_gest()
 
--- DROP FUNCTION m_voirie.ft_an_voirie_gest();
+-- DROP FUNCTION m_voirie.ft_m_an_voirie_gest();
 
-CREATE OR REPLACE FUNCTION m_voirie.ft_an_voirie_gest()
+CREATE OR REPLACE FUNCTION m_voirie.ft_m_an_voirie_gest()
   RETURNS trigger AS
 $BODY$
 
@@ -2040,13 +2040,13 @@ END;
 $BODY$
   LANGUAGE plpgsql VOLATILE
   COST 100;
-ALTER FUNCTION m_voirie.ft_an_voirie_gest()
+ALTER FUNCTION m_voirie.ft_m_an_voirie_gest()
   OWNER TO sig_create;
-GRANT EXECUTE ON FUNCTION m_voirie.ft_an_voirie_gest() TO public;
-GRANT EXECUTE ON FUNCTION m_voirie.ft_an_voirie_gest() TO sig_create;
-GRANT EXECUTE ON FUNCTION m_voirie.ft_an_voirie_gest() TO create_sig;
+GRANT EXECUTE ON FUNCTION m_voirie.ft_m_an_voirie_gest() TO public;
+GRANT EXECUTE ON FUNCTION m_voirie.ft_m_an_voirie_gest() TO sig_create;
+GRANT EXECUTE ON FUNCTION m_voirie.ft_m_an_voirie_gest() TO create_sig;
 
-COMMENT ON FUNCTION m_voirie.ft_an_voirie_gest() IS 'Fonction trigger pour mise à jour de la classe métier sur la gestion de la voirie';
+COMMENT ON FUNCTION m_voirie.ft_m_an_voirie_gest() IS 'Fonction trigger pour mise à jour de la classe métier sur la gestion de la voirie';
 
 
 
@@ -2059,7 +2059,7 @@ CREATE TRIGGER t_t2_an_voirie_gest
   INSTEAD OF INSERT OR UPDATE OR DELETE
   ON m_voirie.geo_v_troncon_voirie
   FOR EACH ROW
-  EXECUTE PROCEDURE m_voirie.ft_an_voirie_gest();
+  EXECUTE PROCEDURE m_voirie.ft_m_an_voirie_gest();
 
 
 
@@ -2068,11 +2068,11 @@ CREATE TRIGGER t_t2_an_voirie_gest
 
 -- #################################################################### FONCTION TRIGGER - INSEE_G/D / MAJ TRONCON ###################################################
 
--- Function: r_objet.r_troncon_maj_insee_gd()
+-- Function: r_objet.ft_r_troncon_maj_insee_gd()
 
--- DROP FUNCTION r_objet.r_troncon_maj_insee_gd();
+-- DROP FUNCTION r_objet.ft_r_troncon_maj_insee_gd();
 
-CREATE OR REPLACE FUNCTION r_objet.r_troncon_maj_insee_gd()
+CREATE OR REPLACE FUNCTION r_objet.ft_r_troncon_maj_insee_gd()
   RETURNS trigger AS
 $BODY$BEGIN
 
@@ -2094,13 +2094,13 @@ END;
 $BODY$
   LANGUAGE plpgsql VOLATILE
   COST 100;
-ALTER FUNCTION r_objet.r_troncon_maj_insee_gd()
+ALTER FUNCTION r_objet.ft_r_troncon_maj_insee_gd()
   OWNER TO sig_create;
-GRANT EXECUTE ON FUNCTION r_objet.r_troncon_maj_insee_gd() TO public;
-GRANT EXECUTE ON FUNCTION r_objet.r_troncon_maj_insee_gd() TO sig_create;
-GRANT EXECUTE ON FUNCTION r_objet.r_troncon_maj_insee_gd() TO create_sig;
+GRANT EXECUTE ON FUNCTION r_objet.ft_r_troncon_maj_insee_gd() TO public;
+GRANT EXECUTE ON FUNCTION r_objet.ft_r_troncon_maj_insee_gd() TO sig_create;
+GRANT EXECUTE ON FUNCTION r_objet.ft_r_troncon_maj_insee_gd() TO create_sig;
 
-COMMENT ON FUNCTION r_objet.r_troncon_maj_insee_gd() IS 'Fonction dont l''objet est de recupérer par croisement géographique, le code insee de la commune à partir de la vue référence r_osm.geo_osm_commune_oise dans le cas où  l''utilisateur laisse les champs insee_g et d "null"';
+COMMENT ON FUNCTION r_objet.ft_r_troncon_maj_insee_gd() IS 'Fonction dont l''objet est de recupérer par croisement géographique, le code insee de la commune à partir de la vue référence r_osm.geo_osm_commune_oise dans le cas où  l''utilisateur laisse les champs insee_g et d "null"';
 
 
 
@@ -2114,17 +2114,17 @@ CREATE TRIGGER t_t3_maj_insee_gd
   BEFORE INSERT OR UPDATE OF insee_g, insee_d, geom
   ON r_objet.geo_objet_troncon
   FOR EACH ROW
-  EXECUTE PROCEDURE r_objet.r_troncon_maj_insee_gd();
+  EXECUTE PROCEDURE r_objet.ft_r_troncon_maj_insee_gd();
 
 
 -- #################################################################### FONCTION TRIGGER - INSERT GEOM NOEUD PAR OPERATION SUR TRONCON ###################################################
 
 
--- Function: r_objet.noeud_insert()
+-- Function: r_objet.ft_r_noeud_insert()
 
--- DROP FUNCTION r_objet.noeud_insert();
+-- DROP FUNCTION r_objet.ft_r_noeud_insert();
 
-CREATE OR REPLACE FUNCTION r_objet.noeud_insert()
+CREATE OR REPLACE FUNCTION r_objet.ft_r_noeud_insert()
   RETURNS trigger AS
 $BODY$
 
@@ -2156,11 +2156,11 @@ END;
 $BODY$
   LANGUAGE plpgsql VOLATILE
   COST 100;
-ALTER FUNCTION r_objet.noeud_insert()
+ALTER FUNCTION r_objet.ft_r_noeud_insert()
   OWNER TO sig_create;
-GRANT EXECUTE ON FUNCTION r_objet.noeud_insert() TO public;
-GRANT EXECUTE ON FUNCTION r_objet.noeud_insert() TO sig_create;
-GRANT EXECUTE ON FUNCTION r_objet.noeud_insert() TO create_sig;
+GRANT EXECUTE ON FUNCTION r_objet.ft_r_noeud_insert() TO public;
+GRANT EXECUTE ON FUNCTION r_objet.ft_r_noeud_insert() TO sig_create;
+GRANT EXECUTE ON FUNCTION r_objet.ft_r_noeud_insert() TO create_sig;
 
 -- ** TRIGGER **
   
@@ -2172,19 +2172,19 @@ CREATE TRIGGER t_t1_noeud_insert
   BEFORE INSERT OR UPDATE OF geom
   ON r_objet.geo_objet_troncon
   FOR EACH ROW
-  EXECUTE PROCEDURE r_objet.noeud_insert();
-COMMENT ON TRIGGER noeud_insert ON r_objet.geo_objet_troncon IS 'Déclencheur s''activant avant l''insertion ou la mise à jour et permettant de créer les noeuds du tronçon uniquement si il n''existe pas de noeuds déjà saisies. La mise à jour d''un tronçon en géométrie implique la suppression du noeud n''appartenant plus à aucun tronçon et la création d''un nouveau noeud si il en existe aucun.
+  EXECUTE PROCEDURE r_objet.ft_r_noeud_insert();
+COMMENT ON TRIGGER t_t1_noeud_insert ON r_objet.geo_objet_troncon IS 'Déclencheur s''activant avant l''insertion ou la mise à jour et permettant de créer les noeuds du tronçon uniquement si il n''existe pas de noeuds déjà saisies. La mise à jour d''un tronçon en géométrie implique la suppression du noeud n''appartenant plus à aucun tronçon et la création d''un nouveau noeud si il en existe aucun.
 Ce déclencheur nécessite un enregistrement à chaque saisie ou mise à jour.';
 
 
 -- #################################################################### FONCTION TRIGGER - SUP GEOM NOEUD PAR OPERATION SUR TRONCON ###################################################
 
 
--- Function: r_objet.noeud_sup()
+-- Function: r_objet.ft_r_noeud_sup()
 
--- DROP FUNCTION r_objet.noeud_sup();
+-- DROP FUNCTION r_objet.ft_r_noeud_sup();
 
-CREATE OR REPLACE FUNCTION r_objet.noeud_sup()
+CREATE OR REPLACE FUNCTION r_objet.ft_r_noeud_sup()
   RETURNS trigger AS
 $BODY$
 
@@ -2206,11 +2206,11 @@ END;
 $BODY$
   LANGUAGE plpgsql VOLATILE
   COST 100;
-ALTER FUNCTION r_objet.noeud_sup()
+ALTER FUNCTION r_objet.ft_r_noeud_sup()
   OWNER TO sig_create;
-GRANT EXECUTE ON FUNCTION r_objet.noeud_sup() TO public;
-GRANT EXECUTE ON FUNCTION r_objet.noeud_sup() TO sig_create;
-GRANT EXECUTE ON FUNCTION r_objet.noeud_sup() TO create_sig;
+GRANT EXECUTE ON FUNCTION r_objet.ft_r_noeud_sup() TO public;
+GRANT EXECUTE ON FUNCTION r_objet.ft_r_noeud_sup() TO sig_create;
+GRANT EXECUTE ON FUNCTION r_objet.ft_r_noeud_sup() TO create_sig;
 
 
 -- ** TRIGGER **
@@ -2223,8 +2223,8 @@ CREATE TRIGGER t_t2_noeud_sup
   AFTER UPDATE OF geom OR DELETE
   ON r_objet.geo_objet_troncon
   FOR EACH ROW
-  EXECUTE PROCEDURE r_objet.noeud_sup();
-COMMENT ON TRIGGER noeud_sup ON r_objet.geo_objet_troncon IS 'Déclencheur s''activant après la suppression ou la mise à jour des géométries des tronçons et permettant de supprimer les noeuds n''étant plus lié (alphanumériquement) à un tronçon.
+  EXECUTE PROCEDURE r_objet.ft_r_noeud_sup();
+COMMENT ON TRIGGER t_t2_noeud_sup ON r_objet.geo_objet_troncon IS 'Déclencheur s''activant après la suppression ou la mise à jour des géométries des tronçons et permettant de supprimer les noeuds n''étant plus lié (alphanumériquement) à un tronçon.
 Ce déclencheur nécessite un enregistrement à chaque suppression ou mise à jour.';
 
 
