@@ -2634,6 +2634,35 @@ CREATE MATERIALIZED VIEW x_apps.xapps_geo_v_voie AS
             t.geom
            FROM r_objet.geo_objet_troncon t,
             r_voie.an_troncon tr
+          WHERE t.id_tronc = tr.id_tronc AND t.id_voie_g = t.id_voie_d
+        UNION ALL
+         SELECT t.id_voie_g AS id_voie,
+            t.geom
+           FROM r_objet.geo_objet_troncon t,
+            r_voie.an_troncon tr
+          WHERE t.id_tronc = tr.id_tronc AND t.id_voie_g <> t.id_voie_d
+        UNION ALL
+         SELECT t.id_voie_d AS id_voie,
+            t.geom
+           FROM r_objet.geo_objet_troncon t,
+            r_voie.an_troncon tr
+          WHERE t.id_tronc = tr.id_tronc AND t.id_voie_g <> t.id_voie_d
+        UNION ALL
+         SELECT t.id_voie_d AS id_voie,
+            t.geom
+           FROM r_objet.geo_objet_troncon t,
+            r_voie.an_troncon tr
+          WHERE t.id_tronc = tr.id_tronc AND t.id_voie_g IS NULL AND t.id_voie_d IS NULL
+        ), req_nv AS (
+         SELECT an_voie.insee,
+            an_voie.id_voie,
+            an_voie.libvoie_c
+           FROM r_voie.an_voie
+        ), req_l AS (
+         SELECT t.id_voie_g AS id_voie,
+            t.geom
+           FROM r_objet.geo_objet_troncon t,
+            r_voie.an_troncon tr
           WHERE t.id_tronc = tr.id_tronc AND t.id_voie_g = t.id_voie_d AND tr.fictif = false
         UNION ALL
          SELECT t.id_voie_g AS id_voie,
@@ -2653,35 +2682,30 @@ CREATE MATERIALIZED VIEW x_apps.xapps_geo_v_voie AS
            FROM r_objet.geo_objet_troncon t,
             r_voie.an_troncon tr
           WHERE t.id_tronc = tr.id_tronc AND t.id_voie_g IS NULL AND t.id_voie_d IS NULL AND tr.fictif = false
-        ), req_nv AS (
-         SELECT an_voie.insee,
-            an_voie.id_voie,
-            an_voie.libvoie_c
-           FROM r_voie.an_voie
         )
  SELECT row_number() OVER () AS gid,
     now() AS date_extract,
     req_v.id_voie,
     req_nv.insee,
-    round(st_length(st_multi(st_union(req_v.geom))::geometry(MultiLineString,2154))::integer::numeric, 0)::integer AS long,
+    round(st_length(st_multi(st_union(req_l.geom))::geometry(MultiLineString,2154))::integer::numeric, 0)::integer AS long,
     req_nv.libvoie_c,
     st_linemerge(st_multi(st_union(req_v.geom))::geometry(MultiLineString,2154)) AS geom
    FROM req_v
      LEFT JOIN req_nv ON req_v.id_voie = req_nv.id_voie
+     LEFT JOIN req_l ON req_l.id_voie = req_v.id_voie
   WHERE req_v.id_voie IS NOT NULL
   GROUP BY req_v.id_voie, req_nv.libvoie_c, req_nv.insee
-  ORDER BY req_nv.libvoie_c
 WITH DATA;
 
 ALTER TABLE x_apps.xapps_geo_v_voie
   OWNER TO sig_create;
 GRANT ALL ON TABLE x_apps.xapps_geo_v_voie TO sig_create;
-GRANT SELECT ON TABLE x_apps.xapps_geo_v_voie  TO read_sig;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE x_apps.xapps_geo_v_voie  TO edit_sig;
-							  
+GRANT ALL ON TABLE x_apps.xapps_geo_v_voie TO create_sig;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE x_apps.xapps_geo_v_voie TO edit_sig;
+GRANT SELECT ON TABLE x_apps.xapps_geo_v_voie TO read_sig;
 COMMENT ON MATERIALIZED VIEW x_apps.xapps_geo_v_voie
   IS 'Vue de synthèse des voies (agréagation des tronçons pour calcul) (générateur d''apps)
-Cette vue matérialisée est rafraichit toutes les jours via un fichier batch sur la VM sig-sgbd.';
+Cette vue est rafraichie toutes les nuits par une tache CRON sur le serveur sig-sgbd.';
 
 -- Index: x_apps.idx_xapps_v_voie_id_voie
 
@@ -2691,6 +2715,8 @@ CREATE INDEX idx_xapps_v_voie_id_voie
   ON x_apps.xapps_geo_v_voie
   USING btree
   (id_voie);
+
+
 
 
 -- Materialized View: x_apps.xapps_an_v_troncon
