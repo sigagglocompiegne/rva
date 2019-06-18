@@ -30,6 +30,7 @@
 -- 2018/04/12 : GB / Intégration des modifications sur les vues applicatives pour l'affichage côté utilisateur dans GEO
 -- 2018/08/07 : GB / Insertion des nouveaux rôles de connexion et leurs privilèges
 -- 2019/04/16 : GB / Nouveau trigger sur la vue geo_v_adresse pour la gestion de la remontée des établissements au local si le pt d'adresse bouge
+-- 2019/06/18 : GB / Adaptation trigger sur la vue geo_v_adresse suite bug opérationnel sur les zones d'activité
 
 -- ***** pour les voies sans adresses (ex lieu dit), le numéro prend la valeur "99999"
 -- ToDo
@@ -1679,6 +1680,65 @@ $BODY$
 DECLARE v_idgeolf integer;
 BEGIN
 
+IF TG_OP='INSERT' THEN 
+
+-- gestion des intégrations des liens entre local/lot foncier eco lors d'une création ou d'un déplacement d'adresse
+
+	-- si mon adresse est créée est dans un local spécifique (geo_sa_local) mais non déjà référencée dans la table de relation , alors j'intègre dans la table de relation 
+	IF 
+		(
+			(SELECT count(*) FROM m_economie.geo_sa_local l , r_adresse.geo_v_adresse a
+			WHERE st_intersects(l.geom,new.geom)) > 0 
+			AND
+			(SELECT count(*) FROM m_economie.lk_localsiret l WHERE 
+			(
+			SELECT DISTINCT l.idgeoloc FROM m_economie.geo_sa_local l , r_adresse.geo_v_adresse a
+			WHERE st_intersects(l.geom,new.geom)
+			) = l.idgeoloc) = 0 
+		)
+	THEN
+		INSERT INTO m_economie.lk_localsiret (idgeoloc,siret)
+		SELECT DISTINCT l.idgeoloc,lk.siret FROM m_economie.geo_sa_local l , r_adresse.geo_v_adresse a , m_economie.lk_adresseetablissement lk
+		WHERE st_intersects(l.geom,new.geom) AND a.id_adresse = lk.idadresse AND a.id_adresse=new.id_adresse;
+
+	-- rafraichissement de la vue matérialisée des adresses qui sert à la vue matérialisée d'après
+	REFRESH MATERIALIZED VIEW x_apps.xapps_geo_vmr_adresse;
+	-- rafraichissement de la vue matérialisée
+	REFRESH MATERIALIZED VIEW x_apps.xapps_geo_vmr_etab_api;
+
+	END IF;
+
+	-- si mon adresse est créée est dans un lot foncier éco mais non déjà référencée dans la table de relation, alors j'intègre dans la table de relation 
+	IF 
+		(
+			(SELECT count(*) FROM r_objet.geo_objet_fon_lot l ,r_adresse.geo_v_adresse a
+			WHERE st_intersects(l.geom,new.geom) AND l.l_voca='20') > 0
+			AND
+			(SELECT count(*) FROM m_economie.lk_localsiret l WHERE 
+			(
+			SELECT DISTINCT l.idgeolf FROM r_objet.geo_objet_fon_lot l , r_adresse.geo_v_adresse a
+			WHERE st_intersects(l.geom,new.geom)
+			)
+			 = l.idgeoloc) = 0 
+		)
+	THEN
+		INSERT INTO m_economie.lk_localsiret (idgeoloc,siret)
+		SELECT DISTINCT l.idgeolf,lk.siret FROM r_objet.geo_objet_fon_lot l , r_adresse.geo_v_adresse a , m_economie.lk_adresseetablissement lk
+		WHERE st_intersects(l.geom,new.geom) AND a.id_adresse = lk.idadresse AND a.id_adresse=new.id_adresse;
+
+	-- rafraichissement de la vue matérialisée des adresses qui sert à la vue matérialisée d'après
+	REFRESH MATERIALIZED VIEW x_apps.xapps_geo_vmr_adresse;
+	-- rafraichissement de la vue matérialisée
+	REFRESH MATERIALIZED VIEW x_apps.xapps_geo_vmr_etab_api;
+
+	END IF;
+
+
+
+END IF;
+
+IF TG_OP='UPDATE' THEN 
+
 IF ST_Equals(new.geom,old.geom) = false THEN
 
 	-- gestion des intégrations des liens entre local/lot foncier eco lors d'une création ou d'un déplacement d'adresse
@@ -1725,16 +1785,17 @@ IF ST_Equals(new.geom,old.geom) = false THEN
 
 	END IF;
 
-	-- si mon adresse déplacée est dans un lot foncier éco et qu'avant oui, alors j'intègre dans la table de relation 
+	-- si mon adresse déplacée est dans un lot foncier éco différent ou qu'avant non, alors je supprime l'ancienne référebnce et j'intègre dans la table de relation 
 	IF 
 		(
-			(SELECT count(*) FROM r_objet.geo_objet_fon_lot l ,r_adresse.geo_v_adresse a
-			WHERE st_intersects(l.geom,new.geom) AND l.l_voca='20') > 0
-		AND
-			(SELECT count(*) FROM r_objet.geo_objet_fon_lot l ,r_adresse.geo_v_adresse a
-			WHERE st_intersects(l.geom,old.geom) AND l.l_voca='20') > 0
+			(SELECT DISTINCT l.idgeolf FROM r_objet.geo_objet_fon_lot l ,r_adresse.geo_v_adresse a
+			WHERE st_intersects(l.geom,new.geom) AND l.l_voca='20') 
+		<>
+			(SELECT DISTINCT l.idgeolf FROM r_objet.geo_objet_fon_lot l ,r_adresse.geo_v_adresse a
+			WHERE st_intersects(l.geom,old.geom) AND l.l_voca='20')
 		)
 	THEN
+	      
 		DELETE FROM m_economie.lk_localsiret where siret=
 		(SELECT DISTINCT lk.siret FROM r_objet.geo_objet_fon_lot l , r_adresse.geo_v_adresse a , m_economie.lk_adresseetablissement lk
 		WHERE st_intersects(l.geom,new.geom) AND a.id_adresse = lk.idadresse AND a.id_adresse=new.id_adresse)
@@ -1742,19 +1803,21 @@ IF ST_Equals(new.geom,old.geom) = false THEN
 		 and idgeoloc=
 		 (
 		SELECT DISTINCT l.idgeolf FROM r_objet.geo_objet_fon_lot l , r_adresse.geo_v_adresse a , m_economie.lk_adresseetablissement lk
-		WHERE st_intersects(l.geom,old.geom) AND a.id_adresse = lk.idadresse AND a.id_adresse=new.id_adresse
+		WHERE st_intersects(l.geom,old.geom) AND a.id_adresse = lk.idadresse AND a.id_adresse=old.id_adresse
 		 );
 		INSERT INTO m_economie.lk_localsiret (idgeoloc,siret)
 		SELECT DISTINCT l.idgeolf,lk.siret FROM r_objet.geo_objet_fon_lot l , r_adresse.geo_v_adresse a , m_economie.lk_adresseetablissement lk
 		WHERE st_intersects(l.geom,new.geom) AND a.id_adresse = lk.idadresse AND a.id_adresse=new.id_adresse;
-
+	
 	-- rafraichissement de la vue matérialisée des adresses qui sert à la vue matérialisée d'après
 	REFRESH MATERIALIZED VIEW x_apps.xapps_geo_vmr_adresse;
 	-- rafraichissement de la vue matérialisée
 	REFRESH MATERIALIZED VIEW x_apps.xapps_geo_vmr_etab_api;
 
-	END IF;
 
+	END IF;
+	
+END IF;
 END IF;
 
 
@@ -1768,7 +1831,7 @@ GRANT EXECUTE ON FUNCTION m_economie.ft_m_geo_objet_pt_adresse_local() TO public
 GRANT EXECUTE ON FUNCTION m_economie.ft_m_geo_objet_pt_adresse_local() TO sig_create;
 GRANT EXECUTE ON FUNCTION m_economie.ft_m_geo_objet_pt_adresse_local() TO create_sig;
 COMMENT ON FUNCTION m_economie.ft_m_geo_objet_pt_adresse_local() IS 'Fonction dont l''objet de rechercher les établissements dans le local ou dans les lots fonciers si celui-ci croise une adresse qui aurait été déplacé ou créer et de les intégrer dans la table lk_localsiret';
- 
+
 -- Trigger: t_t5_geo_objet_pt_adresse_local on r_adresse.geo_v_adresse
 
 -- DROP TRIGGER t_t5_geo_objet_pt_adresse_local ON r_adresse.geo_v_adresse;
