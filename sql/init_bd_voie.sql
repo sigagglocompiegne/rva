@@ -2274,17 +2274,19 @@ COMMENT ON VIEW x_apps.xapps_an_voie
   IS 'Vue d''exploitation des libellés de voie par commune';
 
 
--- Materialized View: x_apps.xapps_geo_v_troncon_voirie
+-- View: x_apps.xapps_geo_v_troncon_voirie
 
 -- DROP MATERIALIZED VIEW x_apps.xapps_geo_v_troncon_voirie;
 
-CREATE MATERIALIZED VIEW x_apps.xapps_geo_v_troncon_voirie AS 
+CREATE MATERIALIZED VIEW x_apps.xapps_geo_v_troncon_voirie
+TABLESPACE pg_default
+AS
  WITH req_v AS (
          SELECT t.id_tronc,
             t.id_voie_g AS id_voie,
-            v.libvoie_c AS libvoie,
-            v.date_lib,
-            v.rivoli,
+            v_1.libvoie_c AS libvoie,
+            v_1.date_lib,
+            v_1.rivoli,
             t.insee_g AS insee,
             com.commune,
             t.noeud_d,
@@ -2303,23 +2305,51 @@ CREATE MATERIALIZED VIEW x_apps.xapps_geo_v_troncon_voirie AS
             lti.valeur AS type_circu,
             ltj.valeur AS sens_circu,
             ltk.valeur AS v_max,
-            -- gestion de l'affichage des types de restrictions de circulation
-		CASE WHEN c.c_circu like '%10%' and c.c_observ like '%H:%' THEN 'Hauteur : ' || substring(c.c_observ,position('H:' in c_observ)+2,position('m' in c_observ)-position('H:' in c_observ)-1)|| '<br>' ELSE CASE WHEN c.c_circu like '%10%' THEN 'Hauteur : non renseignée <br>' ELSE '' END END
-                 ||
- 		CASE WHEN c.c_circu like '%20%' and c.c_observ like '%L:%' THEN 'Largeur : ' || 
-		       substring(c.c_observ,
-                       position('L:' in c_observ)+2, 
-                       CASE WHEN position('m' in c_observ)-position('L:' in c_observ)-1 < 0 THEN 
-				CASE WHEN substring(c.c_observ,position('L:' in c_observ)+2,4) like '%,%' THEN 4 ELSE 2 END
-		       ELSE position('m' in c_observ)-position('L:' in c_observ)-1 END)
-		|| '<br>' ELSE CASE WHEN c.c_circu like '%20%' THEN 'Largeur : non renseignée <br>' ELSE '' END END		
- 		||
- 		CASE WHEN c.c_circu like '%30%' and c.c_observ like '%P:%' THEN 'Poids : ' || substring(c.c_observ,position('P:' in c_observ)+2,position('t' in c_observ)-position('P:' in c_observ)-1) || '<br>' ELSE CASE WHEN c.c_circu like '%30%' THEN 'Poids : non renseigné <br>' ELSE '' END END
- 		||
- 		CASE WHEN c.c_circu like '%40%' THEN 'Interdit aux transports de matières dangereuses' ELSE '' END
- 		||
-		CASE WHEN c.c_circu like '%50%' and c.c_observ like '%Tv:%' THEN 'Type de véhicule : ' || substring(c.c_observ,position('Tv:' in c_observ)+3) || '<br>' ELSE CASE WHEN c.c_circu like '%50%' THEN 'Type de véhicule : non renseigné<br>' ELSE '' END END
-                  as c_circu,            
+            (((
+                CASE
+                    WHEN c.c_circu::text ~~ '%10%'::text AND c.c_observ::text ~~ '%H:%'::text THEN ('Hauteur : '::text || "substring"(c.c_observ::text, "position"(c.c_observ::text, 'H:'::text) + 2, "position"(c.c_observ::text, 'm'::text) - "position"(c.c_observ::text, 'H:'::text) - 1)) || '<br>'::text
+                    ELSE
+                    CASE
+                        WHEN c.c_circu::text ~~ '%10%'::text THEN 'Hauteur : non renseignée <br>'::text
+                        ELSE ''::text
+                    END
+                END ||
+                CASE
+                    WHEN c.c_circu::text ~~ '%20%'::text AND c.c_observ::text ~~ '%L:%'::text THEN ('Largeur : '::text || "substring"(c.c_observ::text, "position"(c.c_observ::text, 'L:'::text) + 2,
+                    CASE
+                        WHEN ("position"(c.c_observ::text, 'm'::text) - "position"(c.c_observ::text, 'L:'::text) - 1) < 0 THEN
+                        CASE
+                            WHEN "substring"(c.c_observ::text, "position"(c.c_observ::text, 'L:'::text) + 2, 4) ~~ '%,%'::text THEN 4
+                            ELSE 2
+                        END
+                        ELSE "position"(c.c_observ::text, 'm'::text) - "position"(c.c_observ::text, 'L:'::text) - 1
+                    END)) || '<br>'::text
+                    ELSE
+                    CASE
+                        WHEN c.c_circu::text ~~ '%20%'::text THEN 'Largeur : non renseignée <br>'::text
+                        ELSE ''::text
+                    END
+                END) ||
+                CASE
+                    WHEN c.c_circu::text ~~ '%30%'::text AND c.c_observ::text ~~ '%P:%'::text THEN ('Poids : '::text || "substring"(c.c_observ::text, "position"(c.c_observ::text, 'P:'::text) + 2, "position"(c.c_observ::text, 't'::text) - "position"(c.c_observ::text, 'P:'::text) - 1)) || '<br>'::text
+                    ELSE
+                    CASE
+                        WHEN c.c_circu::text ~~ '%30%'::text THEN 'Poids : non renseigné <br>'::text
+                        ELSE ''::text
+                    END
+                END) ||
+                CASE
+                    WHEN c.c_circu::text ~~ '%40%'::text THEN 'Interdit aux transports de matières dangereuses'::text
+                    ELSE ''::text
+                END) ||
+                CASE
+                    WHEN c.c_circu::text ~~ '%50%'::text AND c.c_observ::text ~~ '%Tv:%'::text THEN ('Type de véhicule : '::text || "substring"(c.c_observ::text, "position"(c.c_observ::text, 'Tv:'::text) + 3)) || '<br>'::text
+                    ELSE
+                    CASE
+                        WHEN c.c_circu::text ~~ '%50%'::text THEN 'Type de véhicule : non renseigné<br>'::text
+                        ELSE ''::text
+                    END
+                END AS c_circu,
             c.c_observ,
             c.date_ouv,
             g.date_rem,
@@ -2333,7 +2363,7 @@ CREATE MATERIALIZED VIEW x_apps.xapps_geo_v_troncon_voirie AS
             t.geom
            FROM r_objet.geo_objet_troncon t
              LEFT JOIN r_voie.an_troncon a ON a.id_tronc = t.id_tronc
-             LEFT JOIN r_voie.an_voie v ON v.id_voie = t.id_voie_g
+             LEFT JOIN r_voie.an_voie v_1 ON v_1.id_voie = t.id_voie_g
              LEFT JOIN m_voirie.an_voirie_gest g ON g.id_tronc = t.id_tronc
              LEFT JOIN m_voirie.an_voirie_circu c ON c.id_tronc = t.id_tronc
              LEFT JOIN r_osm.geo_osm_commune com ON t.insee_g::text = com.insee::text
@@ -2348,13 +2378,13 @@ CREATE MATERIALIZED VIEW x_apps.xapps_geo_v_troncon_voirie AS
              LEFT JOIN m_voirie.lt_type_circu lti ON lti.code::text = c.type_circu::text
              LEFT JOIN m_voirie.lt_sens_circu ltj ON ltj.code::text = c.sens_circu::text
              LEFT JOIN m_voirie.lt_v_max ltk ON ltk.code::text = c.v_max::text
-          WHERE t.id_voie_g = t.id_voie_d 
+          WHERE t.insee_g::text = t.insee_d::text
         UNION ALL
          SELECT t.id_tronc,
             t.id_voie_g AS id_voie,
-            v.libvoie_c AS libvoie,
-            v.date_lib,
-            v.rivoli,
+            v_1.libvoie_c AS libvoie,
+            v_1.date_lib,
+            v_1.rivoli,
             t.insee_g AS insee,
             com.commune,
             t.noeud_d,
@@ -2373,23 +2403,51 @@ CREATE MATERIALIZED VIEW x_apps.xapps_geo_v_troncon_voirie AS
             lti.valeur AS type_circu,
             ltj.valeur AS sens_circu,
             ltk.valeur AS v_max,
-            -- gestion de l'affichage des types de restrictions de circulation
-		CASE WHEN c.c_circu like '%10%' and c.c_observ like '%H:%' THEN 'Hauteur : ' || substring(c.c_observ,position('H:' in c_observ)+2,position('m' in c_observ)-position('H:' in c_observ)-1)|| '<br>' ELSE CASE WHEN c.c_circu like '%10%' THEN 'Hauteur : non renseignée <br>' ELSE '' END END
-                 ||
- 		CASE WHEN c.c_circu like '%20%' and c.c_observ like '%L:%' THEN 'Largeur : ' || 
-		       substring(c.c_observ,
-                       position('L:' in c_observ)+2, 
-                       CASE WHEN position('m' in c_observ)-position('L:' in c_observ)-1 < 0 THEN 
-				CASE WHEN substring(c.c_observ,position('L:' in c_observ)+2,4) like '%,%' THEN 4 ELSE 2 END
-		       ELSE position('m' in c_observ)-position('L:' in c_observ)-1 END)
-		|| '<br>' ELSE CASE WHEN c.c_circu like '%20%' THEN 'Largeur : non renseignée <br>' ELSE '' END END		
- 		||
- 		CASE WHEN c.c_circu like '%30%' and c.c_observ like '%P:%' THEN 'Poids : ' || substring(c.c_observ,position('P:' in c_observ)+2,position('t' in c_observ)-position('P:' in c_observ)-1) || '<br>' ELSE CASE WHEN c.c_circu like '%30%' THEN 'Poids : non renseigné <br>' ELSE '' END END
- 		||
- 		CASE WHEN c.c_circu like '%40%' THEN 'Interdit aux transports de matières dangereuses' ELSE '' END
- 		||
-		CASE WHEN c.c_circu like '%50%' and c.c_observ like '%Tv:%' THEN 'Type de véhicule : ' || substring(c.c_observ,position('Tv:' in c_observ)+3) || '<br>' ELSE CASE WHEN c.c_circu like '%50%' THEN 'Type de véhicule : non renseigné<br>' ELSE '' END END
-                  as c_circu,
+            (((
+                CASE
+                    WHEN c.c_circu::text ~~ '%10%'::text AND c.c_observ::text ~~ '%H:%'::text THEN ('Hauteur : '::text || "substring"(c.c_observ::text, "position"(c.c_observ::text, 'H:'::text) + 2, "position"(c.c_observ::text, 'm'::text) - "position"(c.c_observ::text, 'H:'::text) - 1)) || '<br>'::text
+                    ELSE
+                    CASE
+                        WHEN c.c_circu::text ~~ '%10%'::text THEN 'Hauteur : non renseignée <br>'::text
+                        ELSE ''::text
+                    END
+                END ||
+                CASE
+                    WHEN c.c_circu::text ~~ '%20%'::text AND c.c_observ::text ~~ '%L:%'::text THEN ('Largeur : '::text || "substring"(c.c_observ::text, "position"(c.c_observ::text, 'L:'::text) + 2,
+                    CASE
+                        WHEN ("position"(c.c_observ::text, 'm'::text) - "position"(c.c_observ::text, 'L:'::text) - 1) < 0 THEN
+                        CASE
+                            WHEN "substring"(c.c_observ::text, "position"(c.c_observ::text, 'L:'::text) + 2, 4) ~~ '%,%'::text THEN 4
+                            ELSE 2
+                        END
+                        ELSE "position"(c.c_observ::text, 'm'::text) - "position"(c.c_observ::text, 'L:'::text) - 1
+                    END)) || '<br>'::text
+                    ELSE
+                    CASE
+                        WHEN c.c_circu::text ~~ '%20%'::text THEN 'Largeur : non renseignée <br>'::text
+                        ELSE ''::text
+                    END
+                END) ||
+                CASE
+                    WHEN c.c_circu::text ~~ '%30%'::text AND c.c_observ::text ~~ '%P:%'::text THEN ('Poids : '::text || "substring"(c.c_observ::text, "position"(c.c_observ::text, 'P:'::text) + 2, "position"(c.c_observ::text, 't'::text) - "position"(c.c_observ::text, 'P:'::text) - 1)) || '<br>'::text
+                    ELSE
+                    CASE
+                        WHEN c.c_circu::text ~~ '%30%'::text THEN 'Poids : non renseigné <br>'::text
+                        ELSE ''::text
+                    END
+                END) ||
+                CASE
+                    WHEN c.c_circu::text ~~ '%40%'::text THEN 'Interdit aux transports de matières dangereuses'::text
+                    ELSE ''::text
+                END) ||
+                CASE
+                    WHEN c.c_circu::text ~~ '%50%'::text AND c.c_observ::text ~~ '%Tv:%'::text THEN ('Type de véhicule : '::text || "substring"(c.c_observ::text, "position"(c.c_observ::text, 'Tv:'::text) + 3)) || '<br>'::text
+                    ELSE
+                    CASE
+                        WHEN c.c_circu::text ~~ '%50%'::text THEN 'Type de véhicule : non renseigné<br>'::text
+                        ELSE ''::text
+                    END
+                END AS c_circu,
             c.c_observ,
             c.date_ouv,
             g.date_rem,
@@ -2403,7 +2461,7 @@ CREATE MATERIALIZED VIEW x_apps.xapps_geo_v_troncon_voirie AS
             t.geom
            FROM r_objet.geo_objet_troncon t
              LEFT JOIN r_voie.an_troncon a ON a.id_tronc = t.id_tronc
-             LEFT JOIN r_voie.an_voie v ON v.id_voie = t.id_voie_g
+             LEFT JOIN r_voie.an_voie v_1 ON v_1.id_voie = t.id_voie_g
              LEFT JOIN m_voirie.an_voirie_gest g ON g.id_tronc = t.id_tronc
              LEFT JOIN m_voirie.an_voirie_circu c ON c.id_tronc = t.id_tronc
              LEFT JOIN r_osm.geo_osm_commune com ON t.insee_g::text = com.insee::text
@@ -2418,13 +2476,13 @@ CREATE MATERIALIZED VIEW x_apps.xapps_geo_v_troncon_voirie AS
              LEFT JOIN m_voirie.lt_type_circu lti ON lti.code::text = c.type_circu::text
              LEFT JOIN m_voirie.lt_sens_circu ltj ON ltj.code::text = c.sens_circu::text
              LEFT JOIN m_voirie.lt_v_max ltk ON ltk.code::text = c.v_max::text
-          WHERE t.id_voie_g <> t.id_voie_d 
+          WHERE t.insee_g::text <> t.insee_d::text
         UNION ALL
          SELECT t.id_tronc,
             t.id_voie_d AS id_voie,
-            v.libvoie_c AS libvoie,
-            v.date_lib,
-            v.rivoli,
+            v_1.libvoie_c AS libvoie,
+            v_1.date_lib,
+            v_1.rivoli,
             t.insee_d AS insee,
             com.commune,
             t.noeud_d,
@@ -2443,23 +2501,51 @@ CREATE MATERIALIZED VIEW x_apps.xapps_geo_v_troncon_voirie AS
             lti.valeur AS type_circu,
             ltj.valeur AS sens_circu,
             ltk.valeur AS v_max,
-            -- gestion de l'affichage des types de restrictions de circulation
-		CASE WHEN c.c_circu like '%10%' and c.c_observ like '%H:%' THEN 'Hauteur : ' || substring(c.c_observ,position('H:' in c_observ)+2,position('m' in c_observ)-position('H:' in c_observ)-1)|| '<br>' ELSE CASE WHEN c.c_circu like '%10%' THEN 'Hauteur : non renseignée <br>' ELSE '' END END
-                 ||
- 		CASE WHEN c.c_circu like '%20%' and c.c_observ like '%L:%' THEN 'Largeur : ' || 
-		       substring(c.c_observ,
-                       position('L:' in c_observ)+2, 
-                       CASE WHEN position('m' in c_observ)-position('L:' in c_observ)-1 < 0 THEN 
-				CASE WHEN substring(c.c_observ,position('L:' in c_observ)+2,4) like '%,%' THEN 4 ELSE 2 END
-		       ELSE position('m' in c_observ)-position('L:' in c_observ)-1 END)
-		|| '<br>' ELSE CASE WHEN c.c_circu like '%20%' THEN 'Largeur : non renseignée <br>' ELSE '' END END		
- 		||
- 		CASE WHEN c.c_circu like '%30%' and c.c_observ like '%P:%' THEN 'Poids : ' || substring(c.c_observ,position('P:' in c_observ)+2,position('t' in c_observ)-position('P:' in c_observ)-1) || '<br>' ELSE CASE WHEN c.c_circu like '%30%' THEN 'Poids : non renseigné <br>' ELSE '' END END
- 		||
- 		CASE WHEN c.c_circu like '%40%' THEN 'Interdit aux transports de matières dangereuses' ELSE '' END
- 		||
-		CASE WHEN c.c_circu like '%50%' and c.c_observ like '%Tv:%' THEN 'Type de véhicule : ' || substring(c.c_observ,position('Tv:' in c_observ)+3) || '<br>' ELSE CASE WHEN c.c_circu like '%50%' THEN 'Type de véhicule : non renseigné<br>' ELSE '' END END
-                  as c_circu,
+            (((
+                CASE
+                    WHEN c.c_circu::text ~~ '%10%'::text AND c.c_observ::text ~~ '%H:%'::text THEN ('Hauteur : '::text || "substring"(c.c_observ::text, "position"(c.c_observ::text, 'H:'::text) + 2, "position"(c.c_observ::text, 'm'::text) - "position"(c.c_observ::text, 'H:'::text) - 1)) || '<br>'::text
+                    ELSE
+                    CASE
+                        WHEN c.c_circu::text ~~ '%10%'::text THEN 'Hauteur : non renseignée <br>'::text
+                        ELSE ''::text
+                    END
+                END ||
+                CASE
+                    WHEN c.c_circu::text ~~ '%20%'::text AND c.c_observ::text ~~ '%L:%'::text THEN ('Largeur : '::text || "substring"(c.c_observ::text, "position"(c.c_observ::text, 'L:'::text) + 2,
+                    CASE
+                        WHEN ("position"(c.c_observ::text, 'm'::text) - "position"(c.c_observ::text, 'L:'::text) - 1) < 0 THEN
+                        CASE
+                            WHEN "substring"(c.c_observ::text, "position"(c.c_observ::text, 'L:'::text) + 2, 4) ~~ '%,%'::text THEN 4
+                            ELSE 2
+                        END
+                        ELSE "position"(c.c_observ::text, 'm'::text) - "position"(c.c_observ::text, 'L:'::text) - 1
+                    END)) || '<br>'::text
+                    ELSE
+                    CASE
+                        WHEN c.c_circu::text ~~ '%20%'::text THEN 'Largeur : non renseignée <br>'::text
+                        ELSE ''::text
+                    END
+                END) ||
+                CASE
+                    WHEN c.c_circu::text ~~ '%30%'::text AND c.c_observ::text ~~ '%P:%'::text THEN ('Poids : '::text || "substring"(c.c_observ::text, "position"(c.c_observ::text, 'P:'::text) + 2, "position"(c.c_observ::text, 't'::text) - "position"(c.c_observ::text, 'P:'::text) - 1)) || '<br>'::text
+                    ELSE
+                    CASE
+                        WHEN c.c_circu::text ~~ '%30%'::text THEN 'Poids : non renseigné <br>'::text
+                        ELSE ''::text
+                    END
+                END) ||
+                CASE
+                    WHEN c.c_circu::text ~~ '%40%'::text THEN 'Interdit aux transports de matières dangereuses'::text
+                    ELSE ''::text
+                END) ||
+                CASE
+                    WHEN c.c_circu::text ~~ '%50%'::text AND c.c_observ::text ~~ '%Tv:%'::text THEN ('Type de véhicule : '::text || "substring"(c.c_observ::text, "position"(c.c_observ::text, 'Tv:'::text) + 3)) || '<br>'::text
+                    ELSE
+                    CASE
+                        WHEN c.c_circu::text ~~ '%50%'::text THEN 'Type de véhicule : non renseigné<br>'::text
+                        ELSE ''::text
+                    END
+                END AS c_circu,
             c.c_observ,
             c.date_ouv,
             g.date_rem,
@@ -2473,7 +2559,7 @@ CREATE MATERIALIZED VIEW x_apps.xapps_geo_v_troncon_voirie AS
             t.geom
            FROM r_objet.geo_objet_troncon t
              LEFT JOIN r_voie.an_troncon a ON a.id_tronc = t.id_tronc
-             LEFT JOIN r_voie.an_voie v ON v.id_voie = t.id_voie_d
+             LEFT JOIN r_voie.an_voie v_1 ON v_1.id_voie = t.id_voie_d
              LEFT JOIN m_voirie.an_voirie_gest g ON g.id_tronc = t.id_tronc
              LEFT JOIN m_voirie.an_voirie_circu c ON c.id_tronc = t.id_tronc
              LEFT JOIN r_osm.geo_osm_commune com ON t.insee_d::text = com.insee::text
@@ -2488,86 +2574,14 @@ CREATE MATERIALIZED VIEW x_apps.xapps_geo_v_troncon_voirie AS
              LEFT JOIN m_voirie.lt_type_circu lti ON lti.code::text = c.type_circu::text
              LEFT JOIN m_voirie.lt_sens_circu ltj ON ltj.code::text = c.sens_circu::text
              LEFT JOIN m_voirie.lt_v_max ltk ON ltk.code::text = c.v_max::text
-          WHERE t.id_voie_g <> t.id_voie_d 
-        UNION ALL
-         SELECT t.id_tronc,
-            t.id_voie_d AS id_voie,
-            v.libvoie_c AS libvoie,
-            v.date_lib,
-            v.rivoli,
-            t.insee_d AS insee,
-            com.commune,
-            t.noeud_d,
-            t.noeud_f,
-            ltb.valeur AS type_tronc,
-            ltc.valeur AS hierarchie,
-            ltd.valeur AS franchiss,
-            a.nb_voie,
-            a.projet,
-            a.fictif,
-            lte.valeur AS statut_jur,
-            g.num_statut,
-            ltg.valeur AS gestion,
-            ltf.valeur AS doman,
-            lth.valeur AS proprio,
-            lti.valeur AS type_circu,
-            ltj.valeur AS sens_circu,
-            ltk.valeur AS v_max,
-            -- gestion de l'affichage des types de restrictions de circulation
-		CASE WHEN c.c_circu like '%10%' and c.c_observ like '%H:%' THEN 'Hauteur : ' || substring(c.c_observ,position('H:' in c_observ)+2,position('m' in c_observ)-position('H:' in c_observ)-1)|| '<br>' ELSE CASE WHEN c.c_circu like '%10%' THEN 'Hauteur : non renseignée <br>' ELSE '' END END
-                 ||
- 		CASE WHEN c.c_circu like '%20%' and c.c_observ like '%L:%' THEN 'Largeur : ' || 
-		       substring(c.c_observ,
-                       position('L:' in c_observ)+2, 
-                       CASE WHEN position('m' in c_observ)-position('L:' in c_observ)-1 < 0 THEN 
-				CASE WHEN substring(c.c_observ,position('L:' in c_observ)+2,4) like '%,%' THEN 4 ELSE 2 END
-		       ELSE position('m' in c_observ)-position('L:' in c_observ)-1 END)
-		|| '<br>' ELSE CASE WHEN c.c_circu like '%20%' THEN 'Largeur : non renseignée <br>' ELSE '' END END		
- 		||
- 		CASE WHEN c.c_circu like '%30%' and c.c_observ like '%P:%' THEN 'Poids : ' || substring(c.c_observ,position('P:' in c_observ)+2,position('t' in c_observ)-position('P:' in c_observ)-1) || '<br>' ELSE CASE WHEN c.c_circu like '%30%' THEN 'Poids : non renseigné <br>' ELSE '' END END
- 		||
- 		CASE WHEN c.c_circu like '%40%' THEN 'Interdit aux transports de matières dangereuses' ELSE '' END
- 		||
-		CASE WHEN c.c_circu like '%50%' and c.c_observ like '%Tv:%' THEN 'Type de véhicule : ' || substring(c.c_observ,position('Tv:' in c_observ)+3) || '<br>' ELSE CASE WHEN c.c_circu like '%50%' THEN 'Type de véhicule : non renseigné<br>' ELSE '' END END
-                  as c_circu,
-            c.c_observ,
-            c.date_ouv,
-            g.date_rem,
-            t.pente,
-            t.observ,
-            lta.valeur AS src_geom,
-            t.src_date,
-            t.date_sai,
-            t.date_maj,
-            t.src_tronc,
-            t.geom
-           FROM r_objet.geo_objet_troncon t
-             LEFT JOIN r_voie.an_troncon a ON a.id_tronc = t.id_tronc
-             LEFT JOIN r_voie.an_voie v ON v.id_voie = t.id_voie_d
-             LEFT JOIN m_voirie.an_voirie_gest g ON g.id_tronc = t.id_tronc
-             LEFT JOIN m_voirie.an_voirie_circu c ON c.id_tronc = t.id_tronc
-             LEFT JOIN r_osm.geo_osm_commune com ON t.insee_d::text = com.insee::text
-             LEFT JOIN r_objet.lt_src_geom lta ON lta.code::text = t.src_geom::text
-             LEFT JOIN r_voie.lt_type_tronc ltb ON ltb.code::text = a.type_tronc::text
-             LEFT JOIN r_voie.lt_hierarchie ltc ON ltc.code::text = a.hierarchie::text
-             LEFT JOIN r_voie.lt_franchiss ltd ON ltd.code::text = a.franchiss::text
-             LEFT JOIN m_voirie.lt_statut_jur lte ON lte.code::text = g.statut_jur::text
-             LEFT JOIN m_voirie.lt_doman ltf ON ltf.code::text = g.doman::text
-             LEFT JOIN m_voirie.lt_gestion ltg ON ltg.code::text = g.gestion::text
-             LEFT JOIN m_voirie.lt_gestion lth ON lth.code::text = g.proprio::text
-             LEFT JOIN m_voirie.lt_type_circu lti ON lti.code::text = c.type_circu::text
-             LEFT JOIN m_voirie.lt_sens_circu ltj ON ltj.code::text = c.sens_circu::text
-             LEFT JOIN m_voirie.lt_v_max ltk ON ltk.code::text = c.v_max::text
-          WHERE t.id_voie_g IS NULL AND t.id_voie_d IS NULL 
-        ),
- req_lv as (
-       SELECT 
-	    gid,
-	    id_voie,
-	    long,
-	    libvoie_c
-       FROM x_apps.xapps_geo_v_voie
- )
+          WHERE t.insee_g::text <> t.insee_d::text
+        ), req_lv AS (
+         SELECT xapps_geo_v_voie.gid,
+            xapps_geo_v_voie.id_voie,
+            xapps_geo_v_voie.long,
+            xapps_geo_v_voie.libvoie_c
+           FROM x_apps.xapps_geo_v_voie
+        )
  SELECT row_number() OVER () AS gid,
     now() AS date_extract,
     req_v.id_tronc,
@@ -2593,7 +2607,7 @@ CREATE MATERIALIZED VIEW x_apps.xapps_geo_v_troncon_voirie AS
     req_v.type_circu,
     req_v.sens_circu,
     req_v.v_max,
-    req_v.c_circu, 
+    req_v.c_circu,
     req_v.c_observ,
     req_v.date_ouv,
     req_v.date_rem,
@@ -2609,20 +2623,21 @@ CREATE MATERIALIZED VIEW x_apps.xapps_geo_v_troncon_voirie AS
     req_lv.long,
     req_v.geom
    FROM req_v
-   LEFT JOIN req_lv ON req_v.id_voie = req_lv.id_voie
-   LEFT JOIN r_voie.an_voie v ON v.id_voie = req_v.id_voie
-   ORDER BY req_v.id_tronc
+     LEFT JOIN req_lv ON req_v.id_voie = req_lv.id_voie
+     LEFT JOIN r_voie.an_voie v ON v.id_voie = req_v.id_voie
+  ORDER BY req_v.id_tronc
 WITH DATA;
 
 ALTER TABLE x_apps.xapps_geo_v_troncon_voirie
-  OWNER TO sig_create;
-GRANT ALL ON TABLE x_apps.xapps_geo_v_troncon_voirie TO sig_create;
-GRANT SELECT ON TABLE x_apps.xapps_geo_v_troncon_voirie  TO read_sig;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE x_apps.xapps_geo_v_troncon_voirie  TO edit_sig;
-									   
-COMMENT ON MATERIALIZED VIEW x_apps.xapps_geo_v_troncon_voirie
-  IS 'Vue matérilaisée complète et décodée des données relatives au troncon et à ses propriétés métiers de circulation et de gestion, destinée à l''exploitation applicative (générateur d''apps). Cette vue est rafraîchie automatiquement toutes les nuits. Au besoin un rafraîchissement ponctuel est possible.';
+    OWNER TO sig_create;
 
+COMMENT ON MATERIALIZED VIEW x_apps.xapps_geo_v_troncon_voirie
+    IS 'Vue matérilaisée complète et décodée des données relatives au troncon et à ses propriétés métiers de circulation et de gestion, destinée à l''exploitation applicative (générateur d''apps). Cette vue est rafraîchie automatiquement toutes les nuits. Au besoin un rafraîchissement ponctuel est possible.';
+
+GRANT DELETE, UPDATE, SELECT, INSERT ON TABLE x_apps.xapps_geo_v_troncon_voirie TO edit_sig;
+GRANT ALL ON TABLE x_apps.xapps_geo_v_troncon_voirie TO sig_create;
+GRANT ALL ON TABLE x_apps.xapps_geo_v_troncon_voirie TO create_sig;
+GRANT SELECT ON TABLE x_apps.xapps_geo_v_troncon_voirie TO read_sig;
 
 -- Materialized View: x_apps.xapps_geo_v_voie
 
@@ -2719,15 +2734,17 @@ CREATE INDEX idx_xapps_v_voie_id_voie
 
 
 
--- Materialized View: x_apps.xapps_an_v_troncon
+-- View: x_apps.xapps_an_v_troncon
 
 -- DROP MATERIALIZED VIEW x_apps.xapps_an_v_troncon;
 
-CREATE MATERIALIZED VIEW x_apps.xapps_an_v_troncon AS 
+CREATE MATERIALIZED VIEW x_apps.xapps_an_v_troncon
+TABLESPACE pg_default
+AS
  WITH req_v_com AS (
-         SELECT geo_v_osm_commune_apc.insee,
-            geo_v_osm_commune_apc.commune_m AS commune
-           FROM r_osm.geo_v_osm_commune_apc
+         SELECT geo_vm_osm_commune_apc.insee,
+            geo_vm_osm_commune_apc.commune_m AS commune
+           FROM r_osm.geo_vm_osm_commune_apc
         ), req_v_t1 AS (
          SELECT t.insee_g AS insee,
             round(st_length(st_multi(st_union(t.geom))::geometry(MultiLineString,2154))::integer::numeric, 0)::integer AS long_t1
@@ -3790,15 +3807,16 @@ CREATE MATERIALIZED VIEW x_apps.xapps_an_v_troncon AS
 WITH DATA;
 
 ALTER TABLE x_apps.xapps_an_v_troncon
-  OWNER TO sig_create;
-GRANT ALL ON TABLE x_apps.xapps_an_v_troncon TO sig_create;
-GRANT SELECT ON TABLE x_apps.xapps_an_v_troncon  TO read_sig;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE x_apps.xapps_an_v_troncon  TO edit_sig;
-				     
+    OWNER TO sig_create;
+
 COMMENT ON MATERIALIZED VIEW x_apps.xapps_an_v_troncon
-  IS 'Vue non géographiques des tronçons (agrégation des tronçons pour statistique à la commune) (générateur d''apps)
+    IS 'Vue non géographiques des tronçons (agrégation des tronçons pour statistique à la commune) (générateur d''apps)
 Cette vue matérialisée est rafraichit toutes les jours via un fichier batch sur la VM sig-sgbd.';
 
+GRANT DELETE, UPDATE, SELECT, INSERT ON TABLE x_apps.xapps_an_v_troncon TO edit_sig;
+GRANT ALL ON TABLE x_apps.xapps_an_v_troncon TO sig_create;
+GRANT ALL ON TABLE x_apps.xapps_an_v_troncon TO create_sig;
+GRANT SELECT ON TABLE x_apps.xapps_an_v_troncon TO read_sig;
 
 -- View: x_apps.xapps_an_v_troncon_h
 
