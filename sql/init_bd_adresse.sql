@@ -31,6 +31,7 @@
 -- 2018/08/07 : GB / Insertion des nouveaux rôles de connexion et leurs privilèges
 -- 2019/04/16 : GB / Nouveau trigger sur la vue geo_v_adresse pour la gestion de la remontée des établissements au local si le pt d'adresse bouge
 -- 2019/06/18 : GB / Adaptation trigger sur la vue geo_v_adresse suite bug opérationnel sur les zones d'activité
+-- 2019/12/09 : GB / Adaptation trigger de contrôle saisie adresse sur égalité numéro + repet et étiquette
 
 -- ***** pour les voies sans adresses (ex lieu dit), le numéro prend la valeur "99999"
 -- ToDo
@@ -1390,9 +1391,7 @@ CREATE TRIGGER t_t1_geo_objet_pt_adresse
 
 CREATE OR REPLACE FUNCTION r_adresse.ft_m_an_adresse()
   RETURNS trigger AS
-$BODY$
-
-DECLARE v_id_adresse integer;
+$BODY$DECLARE v_id_adresse integer;
 
 BEGIN
 
@@ -1411,7 +1410,18 @@ RAISE EXCEPTION 'Vous devez saisir uniquement des numéros dans le champ NUMERO'
 END IF;
 
 -- le champ numéro doit être identique + repet à l'étiquette
-IF (new.numero || CASE WHEN new.repet is null THEN '' ELSE new.repet END) <> new.etiquette THEN
+IF (new.numero || CASE 
+	WHEN new.repet is null THEN ''  
+	WHEN new.repet = 'bis' THEN 'B' 
+	WHEN new.repet = 'ter' THEN 'T'
+	WHEN new.repet = 'quater' THEN 'Q'
+	WHEN new.repet = 'quinques' THEN 'C'
+	WHEN (new.repet = 'a' or new.repet = 'b' or new.repet = 'c'
+	or new.repet = 'd' or new.repet = 'e' or new.repet = 'f'
+	or new.repet = 'g' or new.repet = 'h' or new.repet = 'i'
+	or new.repet = 'j') THEN upper(new.repet)
+	ELSE new.repet 
+	END) <> new.etiquette THEN
 RAISE EXCEPTION 'Le champ d''étiquette n''est pas cohérent avec le numéro et l''indice de répétition';
 END IF;
 
@@ -1446,7 +1456,18 @@ RAISE EXCEPTION 'Vous devez saisir uniquement des numéros dans le champ NUMERO'
 END IF;
 
 -- le champ numéro doit être identique + repet à l'étiquette
-IF (new.numero || CASE WHEN new.repet is null THEN '' ELSE new.repet END) <> new.etiquette THEN
+IF (new.numero || CASE
+	WHEN new.repet is null THEN ''  
+	WHEN new.repet = 'bis' THEN 'B' 
+	WHEN new.repet = 'ter' THEN 'T'
+	WHEN new.repet = 'quater' THEN 'Q'
+	WHEN new.repet = 'quinques' THEN 'C'
+	WHEN (new.repet = 'a' or new.repet = 'b' or new.repet = 'c'
+	or new.repet = 'd' or new.repet = 'e' or new.repet = 'f'
+	or new.repet = 'g' or new.repet = 'h' or new.repet = 'i'
+	or new.repet = 'j') THEN upper(new.repet)
+	ELSE new.repet 
+	END) <> new.etiquette THEN
 RAISE EXCEPTION 'Le champ d''étiquette n''est pas cohérent avec le numéro et l''indice de répétition';
 END IF;
 
@@ -1488,6 +1509,7 @@ GRANT EXECUTE ON FUNCTION r_adresse.ft_m_an_adresse() TO public;
 GRANT EXECUTE ON FUNCTION r_adresse.ft_m_an_adresse() TO sig_create;
 GRANT EXECUTE ON FUNCTION r_adresse.ft_m_an_adresse() TO create_sig;
 COMMENT ON FUNCTION r_adresse.ft_m_an_adresse() IS 'Fonction trigger pour mise à jour de la classe alphanumérique de référence de l''adresse';
+
 
 -- ### trigger an_adresse
 
@@ -1587,10 +1609,6 @@ CREATE TRIGGER t_t3_an_adresse_info
   ON r_adresse.geo_v_adresse
   FOR EACH ROW                                                                                                                                                                       
   EXECUTE PROCEDURE r_adresse.ft_m_an_adresse_info();
-
-
-
-
 
 
 -- #################################################################### TRIGGER - XY_L93  ###################################################
