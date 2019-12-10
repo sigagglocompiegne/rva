@@ -1446,7 +1446,7 @@ ELSIF (TG_OP = 'UPDATE') THEN
 
 -- gestion des erreurs relevés dans le formatage des données BAL par des exceptions (remontées dans QGIS)
 -- le code RIVOLI doit être renseigné (par défaut mettre 0000 dans la table des noms de voies)
-IF new.rivoli is null THEN
+IF (SELECT rivoli FROM r_voie.an_voie WHERE id_voie = new.id_voie) is null THEN
 RAISE EXCEPTION 'Code RIVOLI non présent. Mettre ''0000'' dans le champ RIVOLI dans la table des noms de voies si le code RIVOLI n''existe pas';
 END IF;
 
