@@ -32,6 +32,7 @@
 -- 2019/04/16 : GB / Nouveau trigger sur la vue geo_v_adresse pour la gestion de la remontée des établissements au local si le pt d'adresse bouge
 -- 2019/06/18 : GB / Adaptation trigger sur la vue geo_v_adresse suite bug opérationnel sur les zones d'activité
 -- 2019/12/09 : GB / Adaptation trigger de contrôle saisie adresse sur égalité numéro + repet et étiquette
+-- 2019/12/13 : GB / Adaptation trigger de contrôle saisie adresse sur égalité numéro + repet et étiquette
 
 -- ***** pour les voies sans adresses (ex lieu dit), le numéro prend la valeur "99999"
 -- ToDo
@@ -1416,6 +1417,7 @@ IF (new.numero || CASE
 	WHEN new.repet = 'ter' THEN 'T'
 	WHEN new.repet = 'quater' THEN 'Q'
 	WHEN new.repet = 'quinques' THEN 'C'
+	WHEN new.repet = 'quinter' THEN 'Q'
 	WHEN (new.repet = 'a' or new.repet = 'b' or new.repet = 'c'
 	or new.repet = 'd' or new.repet = 'e' or new.repet = 'f'
 	or new.repet = 'g' or new.repet = 'h' or new.repet = 'i'
@@ -1462,6 +1464,7 @@ IF (new.numero || CASE
 	WHEN new.repet = 'ter' THEN 'T'
 	WHEN new.repet = 'quater' THEN 'Q'
 	WHEN new.repet = 'quinques' THEN 'C'
+	WHEN new.repet = 'quinter' THEN 'Q'
 	WHEN (new.repet = 'a' or new.repet = 'b' or new.repet = 'c'
 	or new.repet = 'd' or new.repet = 'e' or new.repet = 'f'
 	or new.repet = 'g' or new.repet = 'h' or new.repet = 'i'
