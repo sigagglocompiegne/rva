@@ -33,6 +33,7 @@
 -- 2019/06/18 : GB / Adaptation trigger sur la vue geo_v_adresse suite bug opérationnel sur les zones d'activité
 -- 2019/12/09 : GB / Adaptation trigger de contrôle saisie adresse sur égalité numéro + repet et étiquette
 -- 2019/12/13 : GB / Adaptation trigger de contrôle saisie adresse sur égalité numéro + repet et étiquette
+-- 2020/01/27 : GB / Intégration d'un trigger pour mettre à jour les '' en null dans la table an_adresse
 
 -- ***** pour les voies sans adresses (ex lieu dit), le numéro prend la valeur "99999"
 -- ToDo
@@ -1526,6 +1527,44 @@ CREATE TRIGGER t_t2_an_adresse
   FOR EACH ROW
   EXECUTE PROCEDURE r_adresse.ft_m_an_adresse();
 
+-- #################################################################### FONCTION TRIGGER - AN_ADRESSE (sur la table) ###################################################
+
+-- Function: r_adresse.ft_m_adresse_repetcomplement_null()
+
+-- DROP FUNCTION r_adresse.ft_m_adresse_repetcomplement_null();
+
+CREATE OR REPLACE FUNCTION r_adresse.ft_m_adresse_repetcomplement_null()
+  RETURNS trigger AS
+$BODY$
+
+begin
+
+ -- gestion des valeurs '' mise à jour une insertion
+ update r_adresse.an_adresse set repet = null where repet = '';        
+ update r_adresse.an_adresse set complement = null where complement = '';
+
+	return new; 
+end;
+
+$BODY$
+  LANGUAGE plpgsql VOLATILE
+  COST 100;
+ALTER FUNCTION r_adresse.ft_m_adresse_repetcomplement_null()
+  OWNER TO sig_create;
+GRANT EXECUTE ON FUNCTION r_adresse.ft_m_adresse_repetcomplement_null() TO public;
+GRANT EXECUTE ON FUNCTION r_adresse.ft_m_adresse_repetcomplement_null() TO sig_create;
+GRANT EXECUTE ON FUNCTION r_adresse.ft_m_adresse_repetcomplement_null() TO create_sig;
+COMMENT ON FUNCTION r_adresse.ft_m_adresse_repetcomplement_null() IS 'Fonction forçant le champ à null quand insertion ou mise à jour des attributs repet ou complement ''''';
+
+-- Trigger: t_t1_repetcomplement_null on r_adresse.an_adresse
+
+-- DROP TRIGGER t_t1_repetcomplement_null ON r_adresse.an_adresse;
+
+CREATE TRIGGER t_t1_repetcomplement_null
+  AFTER INSERT OR UPDATE
+  ON r_adresse.an_adresse
+  FOR EACH ROW
+  EXECUTE PROCEDURE r_adresse.ft_m_adresse_repetcomplement_null();
 
 
 -- #################################################################### FONCTION TRIGGER - AN_ADRESSE_INFO ###################################################
