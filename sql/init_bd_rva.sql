@@ -3,7 +3,7 @@
 -- 2017/01/12 : FV / initialisation du code pour une donnée de signalement sur le Référentiel des Voies et Adresses (RVA)
 -- 2018/03/20 : GB / Intégration des modifications suite au groupe de travail RVA du 13 mars 2018
 -- 2018/08/07 : GB / Intégration des nouveaux rôles de connexionss et leurs privilèges
--- ToDo
+-- 2020/09/23 : GB / Modification de la gestion des suppression des signalements (possible à partir de la vue de gestion à travers le projet QGIS mais pas à travers l'application WEB)
 
 -- gestion documentaire contrainte sous GEO
   
@@ -324,15 +324,6 @@ GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE public.geo_v_rva_signal TO edit_si
 COMMENT ON VIEW public.geo_v_rva_signal
   IS 'Vue géographique éditable pour l''intégration des signalements dans la base de voies et adresses';
 
--- Trigger: t1_geo_v_rva_signal_traite on public.geo_v_rva_signal
-
--- DROP TRIGGER t1_geo_v_rva_signal_traite ON public.geo_v_rva_signal;
-
-CREATE TRIGGER t1_geo_v_rva_signal_traite
-  INSTEAD OF UPDATE
-  ON public.geo_v_rva_signal
-  FOR EACH ROW
-  EXECUTE PROCEDURE public.ft_geo_v_rva_signal_traite();
 
 
 
@@ -455,6 +446,56 @@ CREATE TRIGGER t_geo_rva_signal
   EXECUTE PROCEDURE public.ft_geo_rva_signal();
 
 
+                                                                                                                                  -- FUNCTION: m_signalement.ft_m_geo_v_rva_signal_traite()
+
+-- DROP FUNCTION m_signalement.ft_m_geo_v_rva_signal_traite();
+
+CREATE OR REPLACE FUNCTION m_signalement.ft_m_geo_v_rva_signal_traite()
+    RETURNS trigger
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE NOT LEAKPROOF
+AS $BODY$
+
+BEGIN
+
+IF (TG_OP = 'UPDATE') THEN
+	UPDATE m_signalement.geo_rva_signal SET traite_sig = new.traite_sig WHERE id_signal = new.id_signal;
+END IF;
+
+IF (TG_OP = 'DELETE') THEN
+
+DELETE FROM m_signalement.geo_rva_signal WHERE id_signal = old.id_signal;
+
+END IF;
+
+
+	return new;
+END
+
+$BODY$;
+
+ALTER FUNCTION m_signalement.ft_m_geo_v_rva_signal_traite()
+    OWNER TO sig_create;
+
+GRANT EXECUTE ON FUNCTION m_signalement.ft_m_geo_v_rva_signal_traite() TO sig_create;
+
+GRANT EXECUTE ON FUNCTION m_signalement.ft_m_geo_v_rva_signal_traite() TO PUBLIC;
+
+GRANT EXECUTE ON FUNCTION m_signalement.ft_m_geo_v_rva_signal_traite() TO create_sig;
+
+
+
+-- Trigger: t_t1_geo_v_rva_signal_traite
+
+DROP TRIGGER t_t1_geo_v_rva_signal_traite ON m_signalement.geo_v_rva_signal;
+
+CREATE TRIGGER t_t1_geo_v_rva_signal_traite
+    INSTEAD OF UPDATE OR DELETE
+    ON m_signalement.geo_v_rva_signal
+    FOR EACH ROW
+    EXECUTE PROCEDURE m_signalement.ft_m_geo_v_rva_signal_traite();
+                                                                                                                                  
 
 -- ####################################################################################################################################################
 -- ###                                                                                                                                              ###
