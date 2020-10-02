@@ -2639,11 +2639,11 @@ GRANT ALL ON TABLE x_apps.xapps_geo_vmr_troncon_voirie TO sig_create;
 GRANT ALL ON TABLE x_apps.xapps_geo_vmr_troncon_voirie TO create_sig;
 GRANT SELECT ON TABLE x_apps.xapps_geo_vmr_troncon_voirie TO read_sig;
 
--- Materialized View: x_apps.xapps_geo_v_voie
+-- Materialized View: x_apps.xapps_geo_vmr_voie
 
--- DROP MATERIALIZED VIEW x_apps.xapps_geo_v_voie;
+-- DROP MATERIALIZED VIEW x_apps.xapps_geo_vmr_voie;
 
-CREATE MATERIALIZED VIEW x_apps.xapps_geo_v_voie AS 
+CREATE MATERIALIZED VIEW x_apps.xapps_geo_vmr_voie AS 
  WITH req_v AS (
          SELECT t.id_voie_g AS id_voie,
             t.geom
@@ -2712,13 +2712,13 @@ CREATE MATERIALIZED VIEW x_apps.xapps_geo_v_voie AS
   GROUP BY req_v.id_voie, req_nv.libvoie_c, req_nv.insee
 WITH DATA;
 
-ALTER TABLE x_apps.xapps_geo_v_voie
+ALTER TABLE x_apps.xapps_geo_vmr_voie
   OWNER TO sig_create;
-GRANT ALL ON TABLE x_apps.xapps_geo_v_voie TO sig_create;
-GRANT ALL ON TABLE x_apps.xapps_geo_v_voie TO create_sig;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE x_apps.xapps_geo_v_voie TO edit_sig;
-GRANT SELECT ON TABLE x_apps.xapps_geo_v_voie TO read_sig;
-COMMENT ON MATERIALIZED VIEW x_apps.xapps_geo_v_voie
+GRANT ALL ON TABLE x_apps.xapps_geo_vmr_voie TO sig_create;
+GRANT ALL ON TABLE x_apps.xapps_geo_vmr_voie TO create_sig;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE x_apps.xapps_geo_vmr_voie TO edit_sig;
+GRANT SELECT ON TABLE x_apps.xapps_geo_vmr_voie TO read_sig;
+COMMENT ON MATERIALIZED VIEW x_apps.xapps_geo_vmr_voie
   IS 'Vue de synthèse des voies (agréagation des tronçons pour calcul) (générateur d''apps)
 Cette vue est rafraichie toutes les nuits par une tache CRON sur le serveur sig-sgbd.';
 
@@ -2727,7 +2727,7 @@ Cette vue est rafraichie toutes les nuits par une tache CRON sur le serveur sig-
 -- DROP INDEX x_apps.idx_xapps_v_voie_id_voie;
 
 CREATE INDEX idx_xapps_v_voie_id_voie
-  ON x_apps.xapps_geo_v_voie
+  ON x_apps.xapps_geo_vmr_voie
   USING btree
   (id_voie);
 
@@ -2738,7 +2738,7 @@ CREATE INDEX idx_xapps_v_voie_id_voie
 
 -- DROP MATERIALIZED VIEW x_apps.xapps_an_v_troncon;
 
-CREATE MATERIALIZED VIEW x_apps.xapps_an_v_troncon
+CREATE MATERIALIZED VIEW x_apps.xapps_an_vmr_troncon
 TABLESPACE pg_default
 AS
  WITH req_v_com AS (
@@ -3806,17 +3806,17 @@ AS
      LEFT JOIN req_v_t3_s99 ON req_v_com.insee::text = req_v_t3_s99.insee::text
 WITH DATA;
 
-ALTER TABLE x_apps.xapps_an_v_troncon
+ALTER TABLE x_apps.xapps_an_vmr_troncon
     OWNER TO sig_create;
 
-COMMENT ON MATERIALIZED VIEW x_apps.xapps_an_v_troncon
+COMMENT ON MATERIALIZED VIEW x_apps.xapps_an_vmr_troncon
     IS 'Vue non géographiques des tronçons (agrégation des tronçons pour statistique à la commune) (générateur d''apps)
 Cette vue matérialisée est rafraichit toutes les jours via un fichier batch sur la VM sig-sgbd.';
 
-GRANT DELETE, UPDATE, SELECT, INSERT ON TABLE x_apps.xapps_an_v_troncon TO edit_sig;
-GRANT ALL ON TABLE x_apps.xapps_an_v_troncon TO sig_create;
-GRANT ALL ON TABLE x_apps.xapps_an_v_troncon TO create_sig;
-GRANT SELECT ON TABLE x_apps.xapps_an_v_troncon TO read_sig;
+GRANT DELETE, UPDATE, SELECT, INSERT ON TABLE x_apps.xapps_an_vmr_troncon TO edit_sig;
+GRANT ALL ON TABLE x_apps.xapps_an_vmr_troncon TO sig_create;
+GRANT ALL ON TABLE x_apps.xapps_an_vmr_troncon TO create_sig;
+GRANT SELECT ON TABLE x_apps.xapps_an_vmr_troncon TO read_sig;
 
 -- View: x_apps.xapps_an_v_troncon_h
 
