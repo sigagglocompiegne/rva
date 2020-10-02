@@ -2276,9 +2276,9 @@ COMMENT ON VIEW x_apps.xapps_an_voie
 
 -- View: x_apps.xapps_geo_v_troncon_voirie
 
--- DROP MATERIALIZED VIEW x_apps.xapps_geo_v_troncon_voirie;
+-- DROP MATERIALIZED VIEW x_apps.xapps_geo_vmr_troncon_voirie;
 
-CREATE MATERIALIZED VIEW x_apps.xapps_geo_v_troncon_voirie
+CREATE MATERIALIZED VIEW x_apps.xapps_geo_vmr_troncon_voirie
 TABLESPACE pg_default
 AS
  WITH req_v AS (
@@ -2628,16 +2628,16 @@ AS
   ORDER BY req_v.id_tronc
 WITH DATA;
 
-ALTER TABLE x_apps.xapps_geo_v_troncon_voirie
+ALTER TABLE x_apps.xapps_geo_vmr_troncon_voirie
     OWNER TO sig_create;
 
-COMMENT ON MATERIALIZED VIEW x_apps.xapps_geo_v_troncon_voirie
+COMMENT ON MATERIALIZED VIEW x_apps.xapps_geo_vmr_troncon_voirie
     IS 'Vue matérilaisée complète et décodée des données relatives au troncon et à ses propriétés métiers de circulation et de gestion, destinée à l''exploitation applicative (générateur d''apps). Cette vue est rafraîchie automatiquement toutes les nuits. Au besoin un rafraîchissement ponctuel est possible.';
 
-GRANT DELETE, UPDATE, SELECT, INSERT ON TABLE x_apps.xapps_geo_v_troncon_voirie TO edit_sig;
-GRANT ALL ON TABLE x_apps.xapps_geo_v_troncon_voirie TO sig_create;
-GRANT ALL ON TABLE x_apps.xapps_geo_v_troncon_voirie TO create_sig;
-GRANT SELECT ON TABLE x_apps.xapps_geo_v_troncon_voirie TO read_sig;
+GRANT DELETE, UPDATE, SELECT, INSERT ON TABLE x_apps.xapps_geo_vmr_troncon_voirie TO edit_sig;
+GRANT ALL ON TABLE x_apps.xapps_geo_vmr_troncon_voirie TO sig_create;
+GRANT ALL ON TABLE x_apps.xapps_geo_vmr_troncon_voirie TO create_sig;
+GRANT SELECT ON TABLE x_apps.xapps_geo_vmr_troncon_voirie TO read_sig;
 
 -- Materialized View: x_apps.xapps_geo_v_voie
 
