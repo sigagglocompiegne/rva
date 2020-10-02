@@ -34,6 +34,7 @@
 -- 2019/12/09 : GB / Adaptation trigger de contrôle saisie adresse sur égalité numéro + repet et étiquette
 -- 2019/12/13 : GB / Adaptation trigger de contrôle saisie adresse sur égalité numéro + repet et étiquette
 -- 2020/01/27 : GB / Intégration d'un trigger pour mettre à jour les '' en null dans la table an_adresse
+-- 2020/10/02 : GB / Modification de la fonction gérant l'insertion des données adresses dans le RAISE EXCEPTION liée à l'IDVOIE non connu et au CODE RIVOLI absent
 
 -- ***** pour les voies sans adresses (ex lieu dit), le numéro prend la valeur "99999"
 -- ToDo
@@ -1387,13 +1388,16 @@ CREATE TRIGGER t_t1_geo_objet_pt_adresse
 
 -- #################################################################### FONCTION TRIGGER - AN_ADRESSE ###################################################
 
--- Function: r_adresse.ft_m_an_adresse()
+-- FUNCTION: r_adresse.ft_m_an_adresse()
 
 -- DROP FUNCTION r_adresse.ft_m_an_adresse();
 
 CREATE OR REPLACE FUNCTION r_adresse.ft_m_an_adresse()
-  RETURNS trigger AS
-$BODY$DECLARE v_id_adresse integer;
+    RETURNS trigger
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE NOT LEAKPROOF
+AS $BODY$DECLARE v_id_adresse integer;
 
 BEGIN
 
@@ -1402,7 +1406,7 @@ IF (TG_OP = 'INSERT') THEN
 
 -- gestion des erreurs relevés dans le formatage des données BAL par des exceptions (remontées dans QGIS)
 -- le code RIVOLI doit être renseigné (par défaut mettre 0000 dans la table des noms de voies)
-IF (SELECT rivoli FROM r_voie.an_voie WHERE id_voie = new.id_voie) is null THEN
+IF (SELECT rivoli FROM r_voie.an_voie WHERE id_voie <> 0 AND id_voie = new.id_voie) is null THEN
 RAISE EXCEPTION 'Code RIVOLI non présent. Mettre ''0000'' dans le champ RIVOLI dans la table des noms de voies si le code RIVOLI n''existe pas';
 END IF;
 
@@ -1418,7 +1422,7 @@ IF (new.numero || CASE
 	WHEN new.repet = 'ter' THEN 'T'
 	WHEN new.repet = 'quater' THEN 'Q'
 	WHEN new.repet = 'quinques' THEN 'C'
-	WHEN new.repet = 'quinter' THEN 'Q'
+        WHEN new.repet = 'quinter' THEN 'Q'
 	WHEN (new.repet = 'a' or new.repet = 'b' or new.repet = 'c'
 	or new.repet = 'd' or new.repet = 'e' or new.repet = 'f'
 	or new.repet = 'g' or new.repet = 'h' or new.repet = 'i'
@@ -1449,7 +1453,8 @@ ELSIF (TG_OP = 'UPDATE') THEN
 
 -- gestion des erreurs relevés dans le formatage des données BAL par des exceptions (remontées dans QGIS)
 -- le code RIVOLI doit être renseigné (par défaut mettre 0000 dans la table des noms de voies)
-IF (SELECT rivoli FROM r_voie.an_voie WHERE id_voie = new.id_voie) is null THEN
+
+IF (SELECT rivoli FROM r_voie.an_voie WHERE id_voie <> 0 AND id_voie = new.id_voie) is null THEN
 RAISE EXCEPTION 'Code RIVOLI non présent. Mettre ''0000'' dans le champ RIVOLI dans la table des noms de voies si le code RIVOLI n''existe pas';
 END IF;
 
@@ -1465,12 +1470,8 @@ IF (new.numero || CASE
 	WHEN new.repet = 'ter' THEN 'T'
 	WHEN new.repet = 'quater' THEN 'Q'
 	WHEN new.repet = 'quinques' THEN 'C'
-	WHEN new.repet = 'quinter' THEN 'Q'
-	WHEN (new.repet = 'a' or new.repet = 'b' or new.repet = 'c'
-	or new.repet = 'd' or new.repet = 'e' or new.repet = 'f'
-	or new.repet = 'g' or new.repet = 'h' or new.repet = 'i'
-	or new.repet = 'j') THEN upper(new.repet)
-	ELSE new.repet 
+        WHEN new.repet = 'quinter' THEN 'Q'
+	ELSE upper(new.repet)
 	END) <> new.etiquette THEN
 RAISE EXCEPTION 'Le champ d''étiquette n''est pas cohérent avec le numéro et l''indice de répétition';
 END IF;
@@ -1494,25 +1495,28 @@ WHERE r_adresse.an_adresse.id_adresse = OLD.id_adresse;
 RETURN NEW;
 
 -- fonction supprimee depuis la vue
-/*
+
 -- DELETE
 ELSIF (TG_OP = 'DELETE') THEN
 DELETE FROM r_adresse.an_adresse where id_adresse = OLD.id_adresse;
 RETURN OLD;
-*/
+
 
 END IF;
 
 END;
-$BODY$
-  LANGUAGE plpgsql VOLATILE
-  COST 100;
+$BODY$;
+
 ALTER FUNCTION r_adresse.ft_m_an_adresse()
-  OWNER TO sig_create;
-GRANT EXECUTE ON FUNCTION r_adresse.ft_m_an_adresse() TO public;
+    OWNER TO sig_create;
+
 GRANT EXECUTE ON FUNCTION r_adresse.ft_m_an_adresse() TO sig_create;
 GRANT EXECUTE ON FUNCTION r_adresse.ft_m_an_adresse() TO create_sig;
-COMMENT ON FUNCTION r_adresse.ft_m_an_adresse() IS 'Fonction trigger pour mise à jour de la classe alphanumérique de référence de l''adresse';
+GRANT EXECUTE ON FUNCTION r_adresse.ft_m_an_adresse() TO PUBLIC;
+
+COMMENT ON FUNCTION r_adresse.ft_m_an_adresse()
+    IS 'Fonction trigger pour mise à jour de la classe alphanumérique de référence de l''adresse';
+
 
 
 -- ### trigger an_adresse
