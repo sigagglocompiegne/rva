@@ -1406,7 +1406,7 @@ IF (TG_OP = 'INSERT') THEN
 
 -- gestion des erreurs relevés dans le formatage des données BAL par des exceptions (remontées dans QGIS)
 -- le code RIVOLI doit être renseigné (par défaut mettre 0000 dans la table des noms de voies)
-IF (SELECT rivoli FROM r_voie.an_voie WHERE id_voie <> 0 AND id_voie = new.id_voie) is null THEN
+IF (new.rivoli IS NOT NULL OR new.rivoli = '') AND length(new.rivoli) <> 4 THEN
 RAISE EXCEPTION 'Code RIVOLI non présent. Mettre ''0000'' dans le champ RIVOLI dans la table des noms de voies si le code RIVOLI n''existe pas';
 END IF;
 
@@ -1454,8 +1454,8 @@ ELSIF (TG_OP = 'UPDATE') THEN
 -- gestion des erreurs relevés dans le formatage des données BAL par des exceptions (remontées dans QGIS)
 -- le code RIVOLI doit être renseigné (par défaut mettre 0000 dans la table des noms de voies)
 
-IF (SELECT rivoli FROM r_voie.an_voie WHERE id_voie <> 0 AND id_voie = new.id_voie) is null THEN
-RAISE EXCEPTION 'Code RIVOLI non présent. Mettre ''0000'' dans le champ RIVOLI dans la table des noms de voies si le code RIVOLI n''existe pas';
+IF (new.rivoli IS NOT NULL OR new.rivoli = '') AND length(new.rivoli) <> 4 THEN 
+RAISE EXCEPTION 'ok 2 Code RIVOLI non présent. Mettre ''0000'' dans le champ RIVOLI dans la table des noms de voies si le code RIVOLI n''existe pas';
 END IF;
 
 -- le champ numéro doit contenir uniquement des n°
@@ -1501,7 +1501,6 @@ ELSIF (TG_OP = 'DELETE') THEN
 DELETE FROM r_adresse.an_adresse where id_adresse = OLD.id_adresse;
 RETURN OLD;
 
-
 END IF;
 
 END;
@@ -1516,6 +1515,7 @@ GRANT EXECUTE ON FUNCTION r_adresse.ft_m_an_adresse() TO PUBLIC;
 
 COMMENT ON FUNCTION r_adresse.ft_m_an_adresse()
     IS 'Fonction trigger pour mise à jour de la classe alphanumérique de référence de l''adresse';
+
 
 
 
