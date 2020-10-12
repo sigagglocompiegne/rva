@@ -1392,7 +1392,7 @@ CREATE TRIGGER t_t1_geo_objet_pt_adresse
 
 -- DROP FUNCTION r_adresse.ft_m_an_adresse();
 
-CREATE OR REPLACE FUNCTION r_adresse.ft_m_an_adresse()
+CREATE FUNCTION r_adresse.ft_m_an_adresse()
     RETURNS trigger
     LANGUAGE 'plpgsql'
     COST 100
@@ -1406,7 +1406,7 @@ IF (TG_OP = 'INSERT') THEN
 
 -- gestion des erreurs relevés dans le formatage des données BAL par des exceptions (remontées dans QGIS)
 -- le code RIVOLI doit être renseigné (par défaut mettre 0000 dans la table des noms de voies)
-IF (new.rivoli IS NOT NULL OR new.rivoli = '') AND length(new.rivoli) <> 4 THEN
+IF (SELECT rivoli FROM r_voie.an_voie WHERE id_voie = new.id_voie AND new.id_voie IS NOT NULL ) is null THEN
 RAISE EXCEPTION 'Code RIVOLI non présent. Mettre ''0000'' dans le champ RIVOLI dans la table des noms de voies si le code RIVOLI n''existe pas';
 END IF;
 
@@ -1416,6 +1416,7 @@ RAISE EXCEPTION 'Vous devez saisir uniquement des numéros dans le champ NUMERO'
 END IF;
 
 -- le champ numéro doit être identique + repet à l'étiquette
+IF (new.numero <> '00000' AND new.numero <> '99999') THEN
 IF (new.numero || CASE 
 	WHEN new.repet is null THEN ''  
 	WHEN new.repet = 'bis' THEN 'B' 
@@ -1430,6 +1431,7 @@ IF (new.numero || CASE
 	ELSE new.repet 
 	END) <> new.etiquette THEN
 RAISE EXCEPTION 'Le champ d''étiquette n''est pas cohérent avec le numéro et l''indice de répétition';
+END IF;
 END IF;
 
 v_id_adresse := currval('r_objet.geo_objet_pt_adresse_id_seq'::regclass);
@@ -1464,6 +1466,7 @@ RAISE EXCEPTION 'Vous devez saisir uniquement des numéros dans le champ NUMERO'
 END IF;
 
 -- le champ numéro doit être identique + repet à l'étiquette
+IF (new.numero <> '00000' AND new.numero <> '99999') THEN
 IF (new.numero || CASE
 	WHEN new.repet is null THEN ''  
 	WHEN new.repet = 'bis' THEN 'B' 
@@ -1474,6 +1477,7 @@ IF (new.numero || CASE
 	ELSE upper(new.repet)
 	END) <> new.etiquette THEN
 RAISE EXCEPTION 'Le champ d''étiquette n''est pas cohérent avec le numéro et l''indice de répétition';
+END IF;
 END IF;
 
 UPDATE
@@ -1506,12 +1510,6 @@ END IF;
 END;
 $BODY$;
 
-ALTER FUNCTION r_adresse.ft_m_an_adresse()
-    OWNER TO sig_create;
-
-GRANT EXECUTE ON FUNCTION r_adresse.ft_m_an_adresse() TO sig_create;
-GRANT EXECUTE ON FUNCTION r_adresse.ft_m_an_adresse() TO create_sig;
-GRANT EXECUTE ON FUNCTION r_adresse.ft_m_an_adresse() TO PUBLIC;
 
 COMMENT ON FUNCTION r_adresse.ft_m_an_adresse()
     IS 'Fonction trigger pour mise à jour de la classe alphanumérique de référence de l''adresse';
