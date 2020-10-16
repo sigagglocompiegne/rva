@@ -36,6 +36,7 @@
 -- 2020/01/27 : GB / Intégration d'un trigger pour mettre à jour les '' en null dans la table an_adresse
 -- 2020/10/02 : GB / Modification de la fonction gérant l'insertion des données adresses dans le RAISE EXCEPTION liée à l'IDVOIE non connu et au CODE RIVOLI absent
 -- 2020/10/12 : GB / Adaptation du trigger pour insertion danbs la table an_adresse au niveau du contrôle entre le n° et l'étiquette (exclusion des n° 00000 et 99999 pour le contrôle)
+-- 2020/10/16 : GB / Intégration d'un trigger pour mise à jour automatique de la vue matérialisée des adresses accessibles dans les différentes applicatifs
 
 -- ***** pour les voies sans adresses (ex lieu dit), le numéro prend la valeur "99999"
 -- ToDo
