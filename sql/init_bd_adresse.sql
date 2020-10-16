@@ -1931,7 +1931,16 @@ END;
 
 $BODY$;
 
+ALTER FUNCTION r_adresse.ft_m_geo_v_adresse_vmr()
+    OWNER TO sig_create;
+			 
+COMMENT ON FUNCTION r_adresse.ft_m_geo_v_adresse_vmr()
+    IS 'Fonction permettant de rafraichir la vue matérialisée des adresses visibles dans les différentes applications.';
 
+GRANT EXECUTE ON FUNCTION r_adresse.ft_m_geo_v_adresse_vmr() TO edit_sig;
+GRANT EXECUTE ON FUNCTION r_adresse.ft_m_geo_v_adresse_vmr() TO sig_create;
+GRANT EXECUTE ON FUNCTION r_adresse.ft_m_geo_v_adresse_vmr() TO create_sig;
+GRANT EXECUTE ON FUNCTION r_adresse.ft_m_geo_v_adresse_vmr() TO PUBLIC;
 
 -- Trigger: t_t6_geo_v_adresse_vmr
 
@@ -1943,7 +1952,8 @@ CREATE TRIGGER t_t6_geo_v_adresse_vmr
     FOR EACH ROW
     EXECUTE PROCEDURE r_adresse.ft_m_geo_v_adresse_vmr();
 
-
+COMMENT ON TRIGGER t_t6_geo_v_adresse_vmr ON r_adresse.geo_v_adresse
+    IS 'Fonction trigger déclenchée à chaque intervention sur la vue des adresses permettant de rafraichir la vue matérialisée des adresses visibles dans les différentes applications.';
 			 
 			 
 -- ####################################################################################################################################################
