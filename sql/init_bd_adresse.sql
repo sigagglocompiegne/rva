@@ -832,6 +832,7 @@ COMMENT ON VIEW r_adresse.geo_v_adresse
 
 
 
+
 -- View: x_opendata.xopendata_an_v_bal
 
 -- DROP VIEW x_opendata.xopendata_an_v_bal;
@@ -1905,8 +1906,46 @@ CREATE TRIGGER t_t5_geo_objet_pt_adresse_local
   FOR EACH ROW
   EXECUTE PROCEDURE m_economie.ft_m_geo_objet_pt_adresse_local();
 
+-- #################################################################### FONCTION TRIGGER - geo_v_adresse ###################################################
+			 
+-- FUNCTION: r_adresse.ft_m_geo_v_adresse_vmr()
+
+-- DROP FUNCTION m_ecor_adressenomie.ft_m_geo_v_adresse_vmr();
+
+CREATE FUNCTION r_adresse.ft_m_geo_v_adresse_vmr()
+    RETURNS trigger
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE NOT LEAKPROOF
+AS $BODY$
+
+BEGIN
+-- rafraichissement de la vue matérialisée des adresses visibles dans les applications
+REFRESH MATERIALIZED VIEW x_apps.xapps_geo_vmr_adresse;
 
 
+return new;
+
+END;
+
+
+$BODY$;
+
+
+
+-- Trigger: t_t6_geo_v_adresse_vmr
+
+-- DROP TRIGGER t_t6_geo_v_adresse_vmr ON r_adresse.geo_v_adresse;
+
+CREATE TRIGGER t_t6_geo_v_adresse_vmr
+    INSTEAD OF INSERT OR DELETE OR UPDATE 
+    ON r_adresse.geo_v_adresse
+    FOR EACH ROW
+    EXECUTE PROCEDURE r_adresse.ft_m_geo_v_adresse_vmr();
+
+
+			 
+			 
 -- ####################################################################################################################################################
 -- ###                                                                                                                                              ###
 -- ###                                                                      BAC A SABLE                                                             ###
