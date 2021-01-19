@@ -1,4 +1,4 @@
-![picto](/doc/img/geocompiegnois20.png)
+![picto](https://github.com/sigagglocompiegne/rva/blob/master/doc/img/geocompiegnois20.png)
 
 # Voies et Adresses
 
