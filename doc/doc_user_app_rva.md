@@ -1,4 +1,4 @@
-![picto](/img/geocompiegnois20.png)
+![picto](../doc/img/geocompiegnois20.png)
 
 # Documentation utilisateur de l'application #
 
