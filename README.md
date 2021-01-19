@@ -1,4 +1,4 @@
-![picto](/doc/img/geocompiegnois_2020_reduit_v2.png)
+![picto](/doc/img/geocompiegnois20.png)
 
 # Voies et Adresses
 
