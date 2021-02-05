@@ -14,7 +14,7 @@
 
 |Représentation| Nom de l'application |Résumé|
 |:---|:---|:---|
-|![picto](/doc/img/picto_rva.png)|Voies-Adresses|Cette application est dédiée à la consultation des données détaillées des Voies et Adresses ainsi qu'à la possibilité d'insérer un signalement pour en améliorer le contenu.|
+|![picto](picto_rva.png)|Voies-Adresses|Cette application est dédiée à la consultation des données détaillées des Voies et Adresses ainsi qu'à la possibilité d'insérer un signalement pour en améliorer le contenu.|
 
 # Accès
 
