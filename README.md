@@ -14,8 +14,6 @@ Spécification du fichier d’échange relatif aux données concernant le réfé
 - [Documentation d'administration de la base Voie](doc/doc_admin_bd_voie.md) 
 - [Documentation d'administration de l'application](doc/doc_admin_app_rva.md)
 - [Documentation utilisateur de l'application](doc/doc_user_app_rva.md)
-- [Validateur des données OpenData format BAL](doc/doc_user_bal.md)
-
 
 ## Contexte
 
@@ -23,6 +21,10 @@ L’ARC est engagée dans un plan de modernisation numérique pour l’exercice 
 
 L’ARC privilégie donc une organisation dans laquelle l’Interface Homme Machine (IHM) du métier assure l’alimentation d’un entrepôt de données territoriales. Cette stratégie « agile » permet de répondre au plus près des besoins des services dans une trajectoire soutenable assurant à la fois une bonne maitrise des flux d’information et un temps d’acculturation au sein de l’organisation.
 
+## Voir aussi
+
+- [Validateur des données OpenData format BAL](doc/doc_user_bal.md)
+- [](https://github.com/etalab/bal)
 
 ## Jeu de données consolidé
 
