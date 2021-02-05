@@ -159,8 +159,8 @@ Ensemble des données décrivant les objets des points d'adresse
 |y_l93|Coordonnée Y en mètre|numeric| |
 |z_ngf|Altimétrie ngf du noeud en mètre|numeric| |
 |observ|Observations|character varying(254)| |
-|date_sai|Horodatage de l'intégration en base de l'objet|timestamp without time zone||
-|date_maj|Horodatage de la mise à jour en base de l'objet|timestamp without time zone| |
+|date_sai|Horodatage de l'intégration en base de l'objet|date||
+|date_maj|Horodatage de la mise à jour en base de l'objet|date| |
 
 
 ### Les identifiants
