@@ -65,11 +65,11 @@ L'encodage des caractères est en UTF8. Les différents supports sont téléchar
 
 Ensemble des données décrivant les objets des points d'adresse
 
-`geo_v_adresse` : point d'adresse
+`geo_v_adresse` : points d'adresse
 
 |Nom attribut|Définition|Type|Contraintes|
 |:---|:---|:---|:---|
-|idadresse|Identifiant local unique de l'adresse|integer|valeur vide interdite|
+|id_adresse|Identifiant local unique de l'adresse|integer|valeur vide interdite|
 |id_voie|Identifiant local unique de la voie|integer|valeur vide interdite|
 |id_tronc|Identifiant local unique du tronçon|integer|valeur vide interdite|   
 |numero|Numéro de l'adresse|character varying(10)| |
@@ -108,7 +108,7 @@ Ensemble des données décrivant les objets des points d'adresse
 |x_l93|Coordonnée X en mètre|numeric| |
 |y_l93|Coordonnée Y en mètre|numeric| |
 
-`geo_v_troncon` : tronçon de voies
+`geo_v_troncon` : tronçons de voies
 
 |Nom attribut|Définition|Type|Valeurs|Contraintes|
 |:---|:---|:---|:---|:---|
