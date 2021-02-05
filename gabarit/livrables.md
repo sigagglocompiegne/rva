@@ -31,6 +31,8 @@ Chaque point d'adresse est localisé le plus précisément possible (à l'entré
 La gestion des voies correspond à une logique de connaissance des caractéristiques des tronçons qui la compose. La modélisation des tronçons repose sur des principes de ruptures.
 Ces ruptures sont diverses et peuvent correspondre à des intersections, des coupures aux limites des communes, des changements d'usage, ... 
 
+Les mises à jour des données est réalisées à la fois par des signalements des communes, l'intégration par des mises à jour de référentiels extérieurs ou par des applications tierces utilisant la donnée des adresses.
+
 ## Système de coordonnées
 
 Les coordonnées seront exprimées en mètre avec trois chiffres après la virgule dans le système national en vigueur.
