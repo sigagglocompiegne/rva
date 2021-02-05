@@ -2,6 +2,8 @@
 
 # Prescriptions spécifiques (locales) pour la gestion des adresses et des voies
 
+(x) en cours de rédaction
+
 Spécification du fichier d’échange relatif aux données concernant le référentiel des adresses et des voies sur l'Agglomération de la Région de Compiègne et gérées par la collectivité. La base de données des adresses correspond à la base locale des adresses (BAL) à l'échelle du Pays Compiégnois. Cette BAL est diffusée au format d'échange en vigueur et alimente la base adresse nationale (BAN). 
 
 - [Lire la documentation du standard de la base des adresses locales et des voies](gabarit/livrables.md)
