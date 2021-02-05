@@ -57,6 +57,7 @@ L'encodage des caractères est en UTF8. Les différents supports sont téléchar
 |:---|:---|:---|:---|
 |geo_v_adresse|Localisation des points d'adresse |Patrimoine|Ponctuel|
 |geo_v_troncon|Localisation des tronçons de voies |Patrimoine|Linéaire|
+|geo_objet_noeud|Noeud du filaire de voie à circulation terrestre|Patrimoine|Ponctuel|
 
 
 ## Implémentation informatique
@@ -78,12 +79,12 @@ Ensemble des données décrivant les objets des points d'adresse
 |etiquette|Etiquette|character varying(10)| |
 |angle|Angle de l'écriture exprimé en degré|integer|Par rapport à l'horizontale, dans le sens trigonométrique|
 |observ|Observations|character varying(254)| |
-|src_adr|Origine de l'adresse|character varying(2)||
-|diag_adr|Diagnostic qualité de l'adresse|character varying(2)||
-|qual_adr|Indice de qualité simplifié de l'adresse|character varying(1)||
+|src_adr|Origine de l'adresse|character varying(2)|Liste de valeur lt_src_adr|
+|diag_adr|Diagnostic qualité de l'adresse|character varying(2)|Liste de valeur lt_diag_adr|
+|qual_adr|Indice de qualité simplifié de l'adresse|character varying(1)|Liste de valeur lt_qual_adr|
 |ld_compl|Nom du lieu-dit historique ou complémentaire|character varying(80)| |  
-|dest_adr|Destination de l'adresse (habitation, commerce, ...)|character varying(2)||
-|etat_adr|Etat de la construction à l'adresse (non commencé, en cours, achevé, muré, supprimé ...)|character varying(2)||
+|dest_adr|Destination de l'adresse (habitation, commerce, ...)|character varying(2)|Liste de valeur lt_dest_adr|
+|etat_adr|Etat de la construction à l'adresse (non commencé, en cours, achevé, muré, supprimé ...)|character varying(2)|Liste de valeur lt_etat_adr|
 |refcad|Référence(s) cadastrale(s)|character varying(254)| |
 |nb_log|Nombre de logements|integer| |
 |pc|Numéro du permis de construire|character varying(30)| |
@@ -99,11 +100,11 @@ Ensemble des données décrivant les objets des points d'adresse
 |codepostal|Code postal|character(5)| |
 |rivoli|Code rivoli - FANTOIR|character(4)| |
 |rivoli_cle|Clé rivoli|character(1)| |
-|position|Type de position du point adresse|character varying(2)| |
-|src_geom|Référentiel de saisie|character varying(2)||
+|position|Type de position du point adresse|character varying(2)|Liste de valeur lt_position|
+|src_geom|Référentiel de saisie|character varying(2)|Liste de valeur lt_src_geom|
 |src_date|Année du millésime du référentiel de saisie|character varying(4)||
 |date_sai|Horodatage de l'intégration en base de l'objet|timestamp without time zone||
-|date_maj|Horodatage de la mise à jour en base de l'objet|timestamp without time zone| |
+|date_maj|Horodatage de la mise à jour en base de l'objet|timestamp without time zone||
 |x_l93|Coordonnée X en mètre|numeric| |
 |y_l93|Coordonnée Y en mètre|numeric| |
 
@@ -119,21 +120,21 @@ Ensemble des données décrivant les objets des points d'adresse
 |noeud_d|Identifiant du noeud de début du tronçon|bigint| |
 |noeud_f|Identifiant du noeud de fin de tronçon|bigint| |
 |src_tronc|Source des informations au tronçon|character varying(100)| |
-|type_tronc|Type de troncon|character varying(2)||
-|hierarchie|Niveau hierarchique du troncon dans la trame viaire|character varying(1)||
-|franchiss|Indication d'un franchissement|character varying(2)|'ZZ'::bpchar|
+|type_tronc|Type de troncon|character varying(2)|Liste de valeur lt_type_tronc|
+|hierarchie|Niveau hierarchique du troncon dans la trame viaire|character varying(1)|Liste de valeur lt_hierarchie|
+|franchiss|Indication d'un franchissement|character varying(2)|Liste de valeur lt_franchiss|
 |nb_voie|Nombre de voies sur le tronçon|integer| |
-|projet|Indication de l'état de projet du tronçon|boolean|false|
-|fictif|Indication de la prise en compte du tronçon dans des calculs|boolean|false|
-|statut_jur|Statut juridique du tronçon de la voie|character varying(2)|'00'::bpchar|
+|projet|Indication de l'état de projet du tronçon|boolean||
+|fictif|Indication de la prise en compte du tronçon dans des calculs|boolean||
+|statut_jur|Statut juridique du tronçon de la voie|character varying(2)|Liste de valeur lt_statut_jur|
 |num_statut|Numéro de statut du tronçon de la voie|character varying(10)| |
-|gestion|Gestionnaire du tronçon de la voie|character varying(2)|'00'::bpchar|
-|doman|Domanialité du tronçon|character varying(2)|'00'::bpchar|
-|proprio|Propriétaire du tronçon|character varying(2)|'00'::bpchar|
+|gestion|Gestionnaire du tronçon de la voie|character varying(2)|Liste de valeur lt_gestion|
+|doman|Domanialité du tronçon|character varying(2)|Liste de valeur lt_doman|
+|proprio|Propriétaire du tronçon|character varying(2)|Liste de valeur lt_gestion|
 |date_rem|Date de la dernière remise en état de la chaussée (soit l''année entière est saisie soit une partie en remplaçant les 0 par des x)|character(4)| |
-|type_circu|Type de circulation principale|character varying(2)|'00'::bpchar|
-|sens_circu|Indique si le sens de circulation du tronçon|character varying(2)|'00'::bpchar|
-|v_max|Vitesse maximale autorisée pour un véhicule léger|character varying(3)|'000'::bpchar|
+|type_circu|Type de circulation principale|character varying(2)|Liste de valeur lt_type_circu|
+|sens_circu|Indique si le sens de circulation du tronçon|character varying(2)|Liste de valeur lt_sens_circu|
+|v_max|Vitesse maximale autorisée pour un véhicule léger|character varying(3)||
 |observ|Observations|character varying(254)| |
 |src_circu|Référence principale utilisée pour les éléments de circulation|character varying(100)| |
 |c_circu|Liste des codes des contraintes de circulation. Lien non dynamique avec la liste des valeurs lt_cont_circu. Incrémentation par GEO par défaut dans la table des signalements (public.geo_rva_signal) et dans l'attribut c_circu comme suit : 10;20 ... Ce champ devra être copier/coller via QGIS.|character varying(15)| |
@@ -145,7 +146,19 @@ Ensemble des données décrivant les objets des points d'adresse
 |date_sai|Horodatage de l'intégration en base de l'objet|timestamp without time zone||
 |date_maj|Horodatage de la mise à jour en base de l'objet|timestamp without time zone| |
 
-`geo_v_troncon` : noeud des tronçons de voies
+`geo_objet_noeud` : noeud des tronçons de voies
+
+|Nom attribut|Définition|Type|Valeurs|Contraintes|
+|:---|:---|:---|:---|:---|
+|id_noeud|Identifiant unique de l'objet noeud|bigint||
+|id_voie|Identifiant unique de l'objet voie|bigint| |
+|x_l93|Coordonnée X en mètre|numeric| |
+|y_l93|Coordonnée Y en mètre|numeric| |
+|z_ngf|Altimétrie ngf du noeud en mètre|numeric| |
+|observ|Observations|character varying(254)| |
+|date_sai|Horodatage de l'intégration en base de l'objet|timestamp without time zone||
+|date_maj|Horodatage de la mise à jour en base de l'objet|timestamp without time zone| |
+
 
 ### Les identifiants
 
