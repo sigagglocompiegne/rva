@@ -12,7 +12,7 @@ L'ensemble de cette base est modifiable via des vues simples en base de données
 
 ## Schéma fonctionnel
 
-![schema_fonctionnel](img/schema_fonctionnel_adresse_v2.png)
+![schema_fonctionnel](bdd/schema_fonctionnel_adresse_v2.png)
 
 ## Dépendances
 
@@ -622,7 +622,7 @@ Valeurs possibles :
 ## Projet QGIS pour la gestion
 
 Un projet QGIS a été réalisé pour la gestion interne des données. Il est stocké ici :
-Y:\Ressources\4-Partage\3-Procedures\QGIS\rva.qgs
+Y:\Ressources\4-Partage\3-Procedures\QGIS\RVA_1.2_3.10.qgs
 
 ## Traitement automatisé mis en place (Workflow de l'ETL FME)
 
@@ -649,7 +649,7 @@ L'ensemble des fichiers a utilisé est placé ici `Y:\Ressources\4-Partage\3-Pro
 
 ## Modèle conceptuel simplifié
 
-![mcd](img/MCD_adresse_v2.png)
+![mcd](bdd/MCD_adresse_v2.png)
 
 
 
