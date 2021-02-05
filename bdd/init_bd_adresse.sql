@@ -37,6 +37,7 @@
 -- 2020/10/02 : GB / Modification de la fonction gérant l'insertion des données adresses dans le RAISE EXCEPTION liée à l'IDVOIE non connu et au CODE RIVOLI absent
 -- 2020/10/12 : GB / Adaptation du trigger pour insertion danbs la table an_adresse au niveau du contrôle entre le n° et l'étiquette (exclusion des n° 00000 et 99999 pour le contrôle)
 -- 2020/10/16 : GB / Intégration d'un trigger pour mise à jour automatique de la vue matérialisée des adresses accessibles dans les différentes applicatifs
+-- 2021/02/05 : GB / Intégration des adaptations structurelles et fonctionnelles dues au format d'échange BAL version 1.2 (3 attributs complémentaires)
 
 -- ***** pour les voies sans adresses (ex lieu dit), le numéro prend la valeur "99999"
 -- ToDo
@@ -84,59 +85,6 @@ COMMENT ON SCHEMA r_adresse
 
 -- #################################################################### OBJET point_adresse #################################################################  
   
--- Table: r_objet.geo_objet_pt_adresse
-
--- DROP TABLE r_objet.geo_objet_pt_adresse;
-
-CREATE TABLE r_objet.geo_objet_pt_adresse
-(
-  id_adresse bigint NOT NULL, -- Identifiant unique de l'objet point adresse
-  id_voie bigint, -- Identifiant unique de l'objet voie
-  id_tronc bigint, -- Identifiant unique de l'objet troncon
-  position character varying(2) NOT NULL,-- Type de position du point adresse  
-  x_l93 numeric(8,2) NOT NULL, -- Coordonnée X en mètre
-  y_l93 numeric(9,2) NOT NULL, -- Coordonnée Y en mètre
-  src_geom character varying(2) NOT NULL DEFAULT '00' ::bpchar, -- Référentiel de saisie
-  src_date character varying(4) NOT NULL DEFAULT '0000' ::bpchar, -- Année du millésime du référentiel de saisie
-  date_sai timestamp without time zone NOT NULL DEFAULT now(), -- Horodatage de l'intégration en base de l'objet   
-  date_maj timestamp without time zone, -- Horodatage de la mise à jour en base de l'objet
-  geom geometry(Point,2154), -- Géométrie point de l'objet
-
-  CONSTRAINT geo_objet_adresse_pkey PRIMARY KEY (id_adresse)
-)
-WITH (
-  OIDS=FALSE
-);
-ALTER TABLE r_objet.geo_objet_pt_adresse
-  OWNER TO sig_create;
-GRANT ALL ON TABLE r_objet.geo_objet_pt_adresse TO sig_create;
-GRANT SELECT ON TABLE r_objet.geo_objet_pt_adresse TO read_sig;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE r_objet.geo_objet_pt_adresse TO edit_sig;
-
-
-COMMENT ON TABLE r_objet.geo_objet_pt_adresse
-  IS 'Classe décrivant la position d''une adresse';
-COMMENT ON COLUMN r_objet.geo_objet_pt_adresse.id_adresse IS 'Identifiant unique de l''objet point adresse';
-COMMENT ON COLUMN r_objet.geo_objet_pt_adresse.id_voie IS 'Identifiant unique de l''objet voie';
-COMMENT ON COLUMN r_objet.geo_objet_pt_adresse.id_tronc IS 'Identifiant unique de l''objet troncon';
-COMMENT ON COLUMN r_objet.geo_objet_pt_adresse.position IS 'Type de position du point adresse';
-COMMENT ON COLUMN r_objet.geo_objet_pt_adresse.x_l93 IS 'Coordonnée X en mètre';
-COMMENT ON COLUMN r_objet.geo_objet_pt_adresse.y_l93 IS 'Coordonnée Y en mètre';
-COMMENT ON COLUMN r_objet.geo_objet_pt_adresse.src_geom IS 'Référentiel de saisie';
-COMMENT ON COLUMN r_objet.geo_objet_pt_adresse.src_date IS 'Année du millésime du référentiel de saisie';
-COMMENT ON COLUMN r_objet.geo_objet_pt_adresse.date_sai IS 'Horodatage de l''intégration en base de l''objet';
-COMMENT ON COLUMN r_objet.geo_objet_pt_adresse.date_maj IS 'Horodatage de la mise à jour en base de l''objet';
-COMMENT ON COLUMN r_objet.geo_objet_pt_adresse.geom IS 'Géomètrie ponctuelle de l''objet';
-
--- Index: r_objet.geo_objet_pt_adresse_geom
-
--- DROP INDEX r_objet.geo_objet_pt_adresse_geom;
-
-CREATE INDEX sidx_geo_objet_adresse_geom
-  ON r_objet.geo_objet_pt_adresse
-  USING gist
-  (geom);
-
 -- Sequence: r_objet.geo_objet_pt_adresse_id_seq
 
 -- DROP SEQUENCE r_objet.geo_objet_pt_adresse_id_seq;
@@ -153,7 +101,97 @@ GRANT ALL ON SEQUENCE r_objet.geo_objet_pt_adresse_id_seq TO sig_create;
 GRANT SELECT, USAGE ON SEQUENCE r_objet.geo_objet_pt_adresse_id_seq TO public;
 
 ALTER TABLE r_objet.geo_objet_pt_adresse ALTER COLUMN id_adresse SET DEFAULT nextval('r_objet.geo_objet_pt_adresse_id_seq'::regclass);
+  
+-- Table: r_objet.geo_objet_pt_adresse
 
+-- DROP TABLE r_objet.geo_objet_pt_adresse;
+
+CREATE TABLE r_objet.geo_objet_pt_adresse
+(
+    id_adresse bigint NOT NULL DEFAULT nextval('r_objet.geo_objet_pt_adresse_id_seq'::regclass),
+    id_voie bigint,
+    id_tronc bigint,
+    "position" character varying(2) COLLATE pg_catalog."default" NOT NULL,
+    x_l93 numeric(8,2) NOT NULL,
+    y_l93 numeric(9,2) NOT NULL,
+    src_geom character varying(2) COLLATE pg_catalog."default" NOT NULL DEFAULT '00'::bpchar,
+    src_date character varying(4) COLLATE pg_catalog."default" NOT NULL DEFAULT '0000'::bpchar,
+    date_sai timestamp without time zone NOT NULL DEFAULT now(),
+    date_maj timestamp without time zone,
+    geom geometry(Point,2154),
+    CONSTRAINT geo_objet_adresse_pkey PRIMARY KEY (id_adresse),
+    CONSTRAINT geo_objet_adresse_id_tronc_fkey FOREIGN KEY (id_tronc)
+        REFERENCES r_objet.geo_objet_troncon (id_tronc) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE SET NULL,
+    CONSTRAINT geo_objet_adresse_lt_position_fkey FOREIGN KEY ("position")
+        REFERENCES r_objet.lt_position (code) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE SET NULL,
+    CONSTRAINT geo_objet_adresse_lt_src_geom_fkey FOREIGN KEY (src_geom)
+        REFERENCES r_objet.lt_src_geom (code) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE SET NULL
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE r_objet.geo_objet_pt_adresse
+    OWNER to sig_create;
+
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE r_objet.geo_objet_pt_adresse TO edit_sig;
+
+GRANT INSERT, SELECT, UPDATE ON TABLE r_objet.geo_objet_pt_adresse TO sig_create;
+
+GRANT ALL ON TABLE r_objet.geo_objet_pt_adresse TO create_sig;
+
+GRANT SELECT ON TABLE r_objet.geo_objet_pt_adresse TO read_sig;
+
+COMMENT ON TABLE r_objet.geo_objet_pt_adresse
+    IS 'Classe décrivant la position d''une adresse';
+
+COMMENT ON COLUMN r_objet.geo_objet_pt_adresse.id_adresse
+    IS 'Identifiant unique de l''objet point adresse';
+
+COMMENT ON COLUMN r_objet.geo_objet_pt_adresse.id_voie
+    IS 'Identifiant unique de l''objet voie';
+
+COMMENT ON COLUMN r_objet.geo_objet_pt_adresse.id_tronc
+    IS 'Identifiant unique de l''objet troncon';
+
+COMMENT ON COLUMN r_objet.geo_objet_pt_adresse."position"
+    IS 'Type de position du point adresse';
+
+COMMENT ON COLUMN r_objet.geo_objet_pt_adresse.x_l93
+    IS 'Coordonnée X en mètre';
+
+COMMENT ON COLUMN r_objet.geo_objet_pt_adresse.y_l93
+    IS 'Coordonnée Y en mètre';
+
+COMMENT ON COLUMN r_objet.geo_objet_pt_adresse.src_geom
+    IS 'Référentiel de saisie';
+
+COMMENT ON COLUMN r_objet.geo_objet_pt_adresse.src_date
+    IS 'Année du millésime du référentiel de saisie';
+
+COMMENT ON COLUMN r_objet.geo_objet_pt_adresse.date_sai
+    IS 'Horodatage de l''intégration en base de l''objet';
+
+COMMENT ON COLUMN r_objet.geo_objet_pt_adresse.date_maj
+    IS 'Horodatage de la mise à jour en base de l''objet';
+
+COMMENT ON COLUMN r_objet.geo_objet_pt_adresse.geom
+    IS 'Géomètrie ponctuelle de l''objet';
+-- Index: geo_objet_adresse_geom_idx
+
+-- DROP INDEX r_objet.geo_objet_adresse_geom_idx;
+
+CREATE INDEX geo_objet_adresse_geom_idx
+    ON r_objet.geo_objet_pt_adresse USING gist
+    (geom)
+    TABLESPACE pg_default;
 
 
 
@@ -184,7 +222,7 @@ CREATE TABLE r_adresse.an_adresse
   diag_adr character varying(2) NOT NULL DEFAULT '00' ::bpchar,-- Diagnostic qualité de l'adresse
   qual_adr character varying(1) DEFAULT '0',-- Indice de qualité simplifié de l'adresse
   verif_base boolean DEFAULT false, -- Champ informant si l'adresse a été vérifié par rapport aux erreurs de bases (n°, tronçon, voie, correspondance BAN)....
-
+  ld_compl character varying(80), -- Nom du lieu-dit historique ou complémentaire
     
   CONSTRAINT an_adresse_pkey PRIMARY KEY (id_adresse)
 )
@@ -211,6 +249,9 @@ COMMENT ON COLUMN r_adresse.an_adresse.diag_adr IS 'Diagnostic qualité de l''ad
 COMMENT ON COLUMN r_adresse.an_adresse.qual_adr IS 'Indice de qualité simplifié de l''adresse';
 COMMENT ON COLUMN r_adresse.an_adresse.verif_base IS 'Champ informant si l''adresse a été vérifié par rapport aux erreurs de bases (n°, tronçon, voie, correspondance BAN).
 Par défaut à non.';
+COMMENT ON COLUMN r_adresse.an_adresse.ld_compl
+    IS 'Nom du lieu-dit historique ou complémentaire';
+    
 
 -- #################################################################### an_adresse_h ###################################################################
 
@@ -294,7 +335,8 @@ CREATE TABLE r_adresse.an_adresse_info
   secondaire character varying(1) NOT NULL DEFAULT '0', -- Adresse d'un accès secondaire (O/N)
   id_ext1 character varying(80), -- Identifiant d''une adresse dans une base externe (1) pour appariemment
   id_ext2 character varying(80), -- Identifiant d''une adresse dans une base externe (2) pour appariemment
-    
+  insee_cd character varying(5), -- code Insee de la commune déléguée (en cas de fusion de commune)
+  nom_cd character varying(80), -- Libellé de la commune déléguée (en cas de fusion de commune)
   CONSTRAINT an_adresse_info_pkey PRIMARY KEY (id_adresse)
 )
 WITH (
@@ -318,7 +360,8 @@ COMMENT ON COLUMN r_adresse.an_adresse_info.groupee IS 'Adresse groupée (O/N)';
 COMMENT ON COLUMN r_adresse.an_adresse_info.secondaire IS 'Adresse d''un accès secondaire (O/N)';
 COMMENT ON COLUMN r_adresse.an_adresse_info.id_ext1 IS 'Identifiant d''une adresse dans une base externe (1) pour appariemment';
 COMMENT ON COLUMN r_adresse.an_adresse_info.id_ext2 IS 'Identifiant d''une adresse dans une base externe (2) pour appariemment';
-
+COMMENT ON COLUMN r_adresse.an_adresse_info.insee_cd IS 'code Insee de la commune déléguée (en cas de fusion de commune)';
+COMMENT ON COLUMN r_adresse.an_adresse_info.nom_cd IS 'Libellé de la commune déléguée (en cas de fusion de commune)';
 
 
 -- ####################################################################################################################################################
@@ -774,62 +817,70 @@ ALTER TABLE r_adresse.an_adresse_info
 
 -- DROP VIEW r_adresse.geo_v_adresse;
 
-CREATE OR REPLACE VIEW r_adresse.geo_v_adresse AS 
- SELECT 
- p.id_adresse,
- false::boolean as adresse_h,
- ''::character varying(10) as date_arr,
- p.id_voie,
- p.id_tronc,
- a.numero,
- a.repet,
- a.complement,
- a.etiquette,
- a.angle,
- v.libvoie_c,
- v.insee,
- k.codepostal,
- c.commune,
- v.rivoli,
- v.rivoli_cle,
- p.position,
- i.dest_adr,
- i.etat_adr,
- i.refcad,
- i.nb_log,
- i.pc,
- i.groupee,
- i.secondaire,
- a.src_adr,
- p.src_geom,
- p.src_date,
- p.date_sai,
- p.date_maj,
- a.observ,
- a.diag_adr,
- a.qual_adr,
- i.id_ext1,
- i.id_ext2,
- p.x_l93,
- p.y_l93,
- a.verif_base,
- p.geom
+CREATE OR REPLACE VIEW r_adresse.geo_v_adresse
+ AS
+ SELECT p.id_adresse,
+    false AS adresse_h,
+    ''::character varying(10) AS date_arr,
+    p.id_voie,
+    p.id_tronc,
+    a.numero,
+    a.repet,
+    a.complement,
+    a.ld_compl,
+    a.etiquette,
+    a.angle,
+    v.libvoie_c,
+    v.insee,
+    k.codepostal,
+    c.commune,
+    v.rivoli,
+    v.rivoli_cle,
+    p."position",
+    i.dest_adr,
+    i.etat_adr,
+    i.refcad,
+    i.nb_log,
+    i.pc,
+    i.groupee,
+    i.secondaire,
+    i.insee_cd,
+    i.nom_cd,
+    a.src_adr,
+    p.src_geom,
+    p.src_date,
+    p.date_sai,
+    p.date_maj,
+    a.observ,
+    a.diag_adr,
+    a.qual_adr,
+    i.id_ext1,
+    i.id_ext2,
+    p.x_l93,
+    p.y_l93,
+    a.verif_base,
+    p.geom
    FROM r_objet.geo_objet_pt_adresse p
-   LEFT JOIN r_adresse.an_adresse a ON a.id_adresse = p.id_adresse
-   LEFT JOIN r_adresse.an_adresse_info i ON i.id_adresse = p.id_adresse   
-   LEFT JOIN r_voie.an_voie v ON v.id_voie = p.id_voie
-   LEFT JOIN r_administratif.lk_insee_codepostal as k ON v.insee = k.insee
-   LEFT JOIN r_osm.geo_osm_commune as c ON v.insee = c.insee;
-
+     LEFT JOIN r_adresse.an_adresse a ON a.id_adresse = p.id_adresse
+     LEFT JOIN r_adresse.an_adresse_info i ON i.id_adresse = p.id_adresse
+     LEFT JOIN r_voie.an_voie v ON v.id_voie = p.id_voie
+     LEFT JOIN r_administratif.lk_insee_codepostal k ON v.insee = k.insee::bpchar
+     LEFT JOIN r_osm.geo_osm_commune c ON v.insee = c.insee::bpchar;
 
 ALTER TABLE r_adresse.geo_v_adresse
-  OWNER TO sig_create;
-GRANT ALL ON TABLE r_adresse.geo_v_adresse TO sig_create;
-GRANT SELECT ON TABLE r_adresse.geo_v_adresse TO read_sig;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE r_adresse.geo_v_adresse TO edit_sig;
-
+    OWNER TO sig_create;
 COMMENT ON VIEW r_adresse.geo_v_adresse
-  IS 'Vue éditable destinée à la modification des données relatives aux adresses';
+    IS 'Vue éditable destinée à la modification des données relatives aux adresses';
+
+GRANT DELETE, UPDATE, SELECT, INSERT ON TABLE r_adresse.geo_v_adresse TO edit_sig;
+GRANT ALL ON TABLE r_adresse.geo_v_adresse TO sig_create;
+GRANT ALL ON TABLE r_adresse.geo_v_adresse TO create_sig;
+GRANT SELECT ON TABLE r_adresse.geo_v_adresse TO read_sig;
+
+
+COMMENT ON TRIGGER t_t3_geo_v_adresse_vmr ON r_adresse.geo_v_adresse
+    IS 'Fonction trigger déclenchée à chaque intervention sur la vue des adresses permettant de rafraichir la vue matérialisée des adresses visibles dans les différentes applications.';
+
 
 
 
@@ -965,9 +1016,11 @@ COMMENT ON VIEW r_voie.an_v_voie_rivoli_null
 
 -- View: x_apps.xapps_geo_vmr_adresse
 
--- DROP VIEW x_apps.xapps_geo_vmr_adresse;
+-- DROP MATERIALIZED VIEW x_apps.xapps_geo_vmr_adresse;
 
-CREATE MATERIALIZED VIEW x_apps.xapps_geo_vmr_adresse AS 
+CREATE MATERIALIZED VIEW x_apps.xapps_geo_vmr_adresse
+TABLESPACE pg_default
+AS
  WITH req_a AS (
          SELECT p.id_adresse,
             p.id_voie,
@@ -975,6 +1028,7 @@ CREATE MATERIALIZED VIEW x_apps.xapps_geo_vmr_adresse AS
             a.numero,
             a.repet,
             a.complement,
+            a.ld_compl,
             a.etiquette,
             a.angle,
             v.libvoie_c,
@@ -1003,6 +1057,8 @@ CREATE MATERIALIZED VIEW x_apps.xapps_geo_vmr_adresse AS
             lti.valeur AS qual_adr,
             i.id_ext1,
             i.id_ext2,
+            i.insee_cd,
+            i.nom_cd,
             p.x_l93,
             p.y_l93,
             st_x(st_transform(p.geom, 4326)) AS long,
@@ -1090,14 +1146,22 @@ CREATE MATERIALIZED VIEW x_apps.xapps_geo_vmr_adresse AS
      LEFT JOIN req_ah ON req_a.id_adresse = req_ah.id_adresse
 WITH DATA;
 
-ALTER TABLE x_apps.xapps_geo_v_adresse
-  OWNER TO sig_create;
-GRANT ALL ON TABLE x_apps.xapps_geo_v_adresse TO sig_create;
-GRANT SELECT ON TABLE x_apps.xapps_geo_v_adresse TO read_sig;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE x_apps.xapps_geo_v_adresse TO edit_sig;
-									      
+ALTER TABLE x_apps.xapps_geo_vmr_adresse
+    OWNER TO sig_create;
+
 COMMENT ON MATERIALIZED VIEW x_apps.xapps_geo_vmr_adresse
-  IS 'Vue complète et décodée des adresses destinée à l''exploitation applicative (générateur d''apps)';
+    IS 'Vue complète et décodée des adresses destinée à l''exploitation applicative (générateur d''apps)
+Cette vue est rafraichie après toutes modifications de la vue de gestion geo_v_adresse';
+
+GRANT TRIGGER, REFERENCES, DELETE, UPDATE, SELECT, INSERT ON TABLE x_apps.xapps_geo_vmr_adresse TO edit_sig;
+GRANT ALL ON TABLE x_apps.xapps_geo_vmr_adresse TO sig_create;
+GRANT ALL ON TABLE x_apps.xapps_geo_vmr_adresse TO create_sig;
+GRANT TRIGGER, REFERENCES, DELETE, UPDATE, SELECT, INSERT ON TABLE x_apps.xapps_geo_vmr_adresse TO read_sig;
+
+CREATE INDEX idx_xapps_geo_vmr_adresse_id_adresse
+    ON x_apps.xapps_geo_vmr_adresse USING btree
+    (id_adresse)
+    TABLESPACE pg_default;
 
 
 -- View: x_apps_public.xappspublic_geo_v_adresse
@@ -1302,362 +1366,6 @@ COMMENT ON VIEW x_opendata.xopendata_geo_v_openadresse
 
 
 
--- #################################################################### FONCTION TRIGGER - GEO_OBJET_PT_ADRESSE ###################################################
-
--- Function: r_objet.ft_m_geo_objet_pt_adresse()
-
--- DROP FUNCTION r_objet.ft_m_geo_objet_pt_adresse();
-
-CREATE OR REPLACE FUNCTION r_objet.ft_m_geo_objet_pt_adresse()
-  RETURNS trigger AS
-$BODY$
-
-DECLARE v_id_adresse integer;
-
-BEGIN
-
--- INSERT
-IF (TG_OP = 'INSERT') THEN
-
-v_id_adresse := nextval('r_objet.geo_objet_pt_adresse_id_seq'::regclass);
-INSERT INTO r_objet.geo_objet_pt_adresse (id_adresse, id_voie, id_tronc, position, x_l93, y_l93, src_geom, src_date, date_sai, date_maj, geom)
-SELECT v_id_adresse,
-NEW.id_voie,
-NEW.id_tronc,
-CASE WHEN NEW.position IS NULL THEN '00' ELSE NEW.position END,
-NEW.x_l93,
-NEW.y_l93,
-CASE WHEN NEW.src_geom IS NULL THEN '00' ELSE NEW.src_geom END,
-CASE WHEN NEW.src_date IS NULL THEN '0000' ELSE NEW.src_date END,
-CASE WHEN NEW.date_sai IS NULL THEN now() ELSE now() END,
-NEW.date_maj,
-NEW.geom;
---NEW.id_adresse := v_id_adresse;
-RETURN NEW;
-
-
--- UPDATE
-ELSIF (TG_OP = 'UPDATE') THEN
-UPDATE
-r_objet.geo_objet_pt_adresse
-SET
-id_adresse=NEW.id_adresse,
-id_voie=NEW.id_voie,
-id_tronc=NEW.id_tronc,
-position=NEW.position,
-x_l93=NEW.x_l93,
-y_l93=NEW.y_l93,
-src_geom=CASE WHEN NEW.src_geom IS NULL THEN '00' ELSE NEW.src_geom END,
-src_date=CASE WHEN NEW.src_date IS NULL THEN '0000' ELSE NEW.src_date END,
-date_sai=OLD.date_sai,
-date_maj=now(),
-geom=NEW.geom
-WHERE r_objet.geo_objet_pt_adresse.id_adresse = OLD.id_adresse;
-RETURN NEW;
-
--- DELETE
--- ELSIF (TG_OP = 'DELETE') THEN
--- DELETE FROM r_objet.geo_objet_pt_adresse where id_adresse = OLD.id_adresse;
--- RETURN OLD;
-
-END IF;
-
-END;
-$BODY$
-  LANGUAGE plpgsql VOLATILE
-  COST 100;
-ALTER FUNCTION r_objet.ft_m_geo_objet_pt_adresse()
-  OWNER TO sig_create;
-GRANT EXECUTE ON FUNCTION r_objet.ft_m_geo_objet_pt_adresse() TO public;
-GRANT EXECUTE ON FUNCTION r_objet.ft_m_geo_objet_pt_adresse() TO sig_create;
-GRANT EXECUTE ON FUNCTION r_objet.ft_m_geo_objet_pt_adresse() TO create_sig;
-
-		  
-COMMENT ON FUNCTION r_objet.ft_m_geo_objet_pt_adresse() IS 'Fonction trigger pour mise à jour de la classe objet point adresse';
-
-
-
--- Trigger: r_objet.t_t1_geo_objet_pt_adresse on r_adresse.geo_v_adresse
-
--- DROP TRIGGER r_objet.t_t1_geo_objet_pt_adresse ON r_adresse.geo_v_adresse;
-
-CREATE TRIGGER t_t1_geo_objet_pt_adresse
-  INSTEAD OF INSERT OR UPDATE OR DELETE
-  ON r_adresse.geo_v_adresse
-  FOR EACH ROW
-  EXECUTE PROCEDURE r_objet.ft_m_geo_objet_pt_adresse();
-
-
-
--- #################################################################### FONCTION TRIGGER - AN_ADRESSE ###################################################
-
--- FUNCTION: r_adresse.ft_m_an_adresse()
-
--- DROP FUNCTION r_adresse.ft_m_an_adresse();
-
-CREATE FUNCTION r_adresse.ft_m_an_adresse()
-    RETURNS trigger
-    LANGUAGE 'plpgsql'
-    COST 100
-    VOLATILE NOT LEAKPROOF
-AS $BODY$DECLARE v_id_adresse integer;
-
-BEGIN
-
--- INSERT
-IF (TG_OP = 'INSERT') THEN
-
--- gestion des erreurs relevés dans le formatage des données BAL par des exceptions (remontées dans QGIS)
--- le code RIVOLI doit être renseigné (par défaut mettre 0000 dans la table des noms de voies)
-IF (SELECT rivoli FROM r_voie.an_voie WHERE id_voie = new.id_voie AND new.id_voie IS NOT NULL ) is null THEN
-RAISE EXCEPTION 'Code RIVOLI non présent. Mettre ''0000'' dans le champ RIVOLI dans la table des noms de voies si le code RIVOLI n''existe pas';
-END IF;
-
--- le champ numéro doit contenir uniquement des n°
-IF RTRIM(new.numero, '0123456789') <> '' THEN
-RAISE EXCEPTION 'Vous devez saisir uniquement des numéros dans le champ NUMERO';
-END IF;
-
--- le champ numéro doit être identique + repet à l'étiquette
-IF (new.numero <> '00000' AND new.numero <> '99999') THEN
-IF (new.numero || CASE 
-	WHEN new.repet is null THEN ''  
-	WHEN new.repet = 'bis' THEN 'B' 
-	WHEN new.repet = 'ter' THEN 'T'
-	WHEN new.repet = 'quater' THEN 'Q'
-	WHEN new.repet = 'quinques' THEN 'C'
-        WHEN new.repet = 'quinter' THEN 'Q'
-	WHEN (new.repet = 'a' or new.repet = 'b' or new.repet = 'c'
-	or new.repet = 'd' or new.repet = 'e' or new.repet = 'f'
-	or new.repet = 'g' or new.repet = 'h' or new.repet = 'i'
-	or new.repet = 'j') THEN upper(new.repet)
-	ELSE new.repet 
-	END) <> new.etiquette THEN
-RAISE EXCEPTION 'Le champ d''étiquette n''est pas cohérent avec le numéro et l''indice de répétition';
-END IF;
-END IF;
-
-v_id_adresse := currval('r_objet.geo_objet_pt_adresse_id_seq'::regclass);
-INSERT INTO r_adresse.an_adresse (id_adresse, numero, repet, complement, etiquette, angle, observ, src_adr, diag_adr, qual_adr)
-SELECT v_id_adresse,
-NEW.numero,
-LOWER(NEW.repet),
-NEW.complement,
-UPPER(REPLACE(REPLACE(REPLACE(REPLACE((NEW.etiquette),'bis','B'),'ter','T'),'quater','Q'),'quinquies','C')),
-CASE WHEN NEW.angle BETWEEN 90 AND 179 THEN NEW.angle + 180 WHEN NEW.angle BETWEEN 181 AND 270 THEN NEW.angle - 180 WHEN NEW.angle = 180 THEN 0 WHEN NEW.angle < 0 THEN NEW.angle + 360 ELSE NEW.angle END,
-NEW.observ,
-CASE WHEN NEW.src_adr IS NULL THEN '00' ELSE NEW.src_adr END,
-CASE WHEN NEW.diag_adr IS NULL THEN '00' ELSE NEW.diag_adr END,
-CASE WHEN NEW.diag_adr IS NULL THEN '0' ELSE LEFT(NEW.diag_adr,1) END;
---NEW.id_adresse := v_id_adresse;
-
-RETURN NEW;
-
--- UPDATE
-ELSIF (TG_OP = 'UPDATE') THEN
-
--- gestion des erreurs relevés dans le formatage des données BAL par des exceptions (remontées dans QGIS)
--- le code RIVOLI doit être renseigné (par défaut mettre 0000 dans la table des noms de voies)
-
-IF (new.rivoli IS NOT NULL OR new.rivoli = '') AND length(new.rivoli) <> 4 THEN 
-RAISE EXCEPTION 'ok 2 Code RIVOLI non présent. Mettre ''0000'' dans le champ RIVOLI dans la table des noms de voies si le code RIVOLI n''existe pas';
-END IF;
-
--- le champ numéro doit contenir uniquement des n°
-IF RTRIM(new.numero, '0123456789') <> '' THEN
-RAISE EXCEPTION 'Vous devez saisir uniquement des numéros dans le champ NUMERO';
-END IF;
-
--- le champ numéro doit être identique + repet à l'étiquette
-IF (new.numero <> '00000' AND new.numero <> '99999') THEN
-IF (new.numero || CASE
-	WHEN new.repet is null THEN ''  
-	WHEN new.repet = 'bis' THEN 'B' 
-	WHEN new.repet = 'ter' THEN 'T'
-	WHEN new.repet = 'quater' THEN 'Q'
-	WHEN new.repet = 'quinques' THEN 'C'
-        WHEN new.repet = 'quinter' THEN 'Q'
-	ELSE upper(new.repet)
-	END) <> new.etiquette THEN
-RAISE EXCEPTION 'Le champ d''étiquette n''est pas cohérent avec le numéro et l''indice de répétition';
-END IF;
-END IF;
-
-UPDATE
-r_adresse.an_adresse
-SET
-id_adresse=NEW.id_adresse,
-numero=NEW.numero,
-repet=LOWER(NEW.repet),
-complement=NEW.complement,
-etiquette=UPPER(REPLACE(REPLACE(REPLACE(REPLACE((NEW.etiquette),'bis','B'),'ter','T'),'quater','Q'),'quinquies','C')),
-angle=CASE WHEN NEW.angle BETWEEN 90 AND 179 THEN NEW.angle + 180 WHEN NEW.angle BETWEEN 181 AND 270 THEN NEW.angle - 180 WHEN NEW.angle = 180 THEN 0 WHEN NEW.angle < 0 THEN NEW.angle + 360 ELSE NEW.angle END,
-verif_base=NEW.verif_base,
-observ=NEW.observ,
-src_adr=CASE WHEN NEW.src_adr IS NULL THEN '00' ELSE NEW.src_adr END,
-diag_adr=CASE WHEN NEW.diag_adr IS NULL THEN '00' ELSE NEW.diag_adr END,
-qual_adr=CASE WHEN NEW.diag_adr IS NULL THEN '0' ELSE LEFT(NEW.diag_adr,1) END
-                                                                              
-WHERE r_adresse.an_adresse.id_adresse = OLD.id_adresse;
-RETURN NEW;
-
--- fonction supprimee depuis la vue
-
--- DELETE
-ELSIF (TG_OP = 'DELETE') THEN
-DELETE FROM r_adresse.an_adresse where id_adresse = OLD.id_adresse;
-RETURN OLD;
-
-END IF;
-
-END;
-$BODY$;
-
-
-COMMENT ON FUNCTION r_adresse.ft_m_an_adresse()
-    IS 'Fonction trigger pour mise à jour de la classe alphanumérique de référence de l''adresse';
-
-
-
-
--- ### trigger an_adresse
-
--- Trigger: r_adresse.t_t2_an_adresse on r_adresse.geo_v_adresse
-
--- DROP TRIGGER r_adresse.t_t2_an_adresse ON r_adresse.geo_v_adresse;
-
-CREATE TRIGGER t_t2_an_adresse
-  INSTEAD OF INSERT OR UPDATE OR DELETE
-  ON r_adresse.geo_v_adresse
-  FOR EACH ROW
-  EXECUTE PROCEDURE r_adresse.ft_m_an_adresse();
-
--- #################################################################### FONCTION TRIGGER - AN_ADRESSE (sur la table) ###################################################
-
--- Function: r_adresse.ft_m_adresse_repetcomplement_null()
-
--- DROP FUNCTION r_adresse.ft_m_adresse_repetcomplement_null();
-
-CREATE OR REPLACE FUNCTION r_adresse.ft_m_adresse_repetcomplement_null()
-  RETURNS trigger AS
-$BODY$
-
-begin
-
- -- gestion des valeurs '' mise à jour une insertion
- update r_adresse.an_adresse set repet = null where repet = '';        
- update r_adresse.an_adresse set complement = null where complement = '';
-
-	return new; 
-end;
-
-$BODY$
-  LANGUAGE plpgsql VOLATILE
-  COST 100;
-ALTER FUNCTION r_adresse.ft_m_adresse_repetcomplement_null()
-  OWNER TO sig_create;
-GRANT EXECUTE ON FUNCTION r_adresse.ft_m_adresse_repetcomplement_null() TO public;
-GRANT EXECUTE ON FUNCTION r_adresse.ft_m_adresse_repetcomplement_null() TO sig_create;
-GRANT EXECUTE ON FUNCTION r_adresse.ft_m_adresse_repetcomplement_null() TO create_sig;
-COMMENT ON FUNCTION r_adresse.ft_m_adresse_repetcomplement_null() IS 'Fonction forçant le champ à null quand insertion ou mise à jour des attributs repet ou complement ''''';
-
--- Trigger: t_t1_repetcomplement_null on r_adresse.an_adresse
-
--- DROP TRIGGER t_t1_repetcomplement_null ON r_adresse.an_adresse;
-
-CREATE TRIGGER t_t1_repetcomplement_null
-  AFTER INSERT OR UPDATE
-  ON r_adresse.an_adresse
-  FOR EACH ROW
-  EXECUTE PROCEDURE r_adresse.ft_m_adresse_repetcomplement_null();
-
-
--- #################################################################### FONCTION TRIGGER - AN_ADRESSE_INFO ###################################################
-
--- Function: r_adresse.ft_m_an_adresse_info()
-
--- DROP FUNCTION r_adresse.ft_m_an_adresse_info();
-
-CREATE OR REPLACE FUNCTION r_adresse.ft_m_an_adresse_info()
-  RETURNS trigger AS
-$BODY$
-
-DECLARE v_id_adresse integer;
-
-BEGIN
-
--- INSERT
-IF (TG_OP = 'INSERT') THEN
-
-v_id_adresse := currval('r_objet.geo_objet_pt_adresse_id_seq'::regclass);
-INSERT INTO r_adresse.an_adresse_info (id_adresse, dest_adr, etat_adr, refcad, nb_log, pc, groupee, secondaire, id_ext1, id_ext2)
-SELECT v_id_adresse, 
-CASE WHEN NEW.dest_adr IS NULL THEN '00' ELSE NEW.dest_adr END,
-CASE WHEN NEW.etat_adr IS NULL THEN '00' ELSE NEW.etat_adr END,
-UPPER(REPLACE(REPLACE(REPLACE(REPLACE((NEW.refcad),'-',';'),',',';'),'/',';'),'\',';')),
-NEW.nb_log,
-UPPER(NEW.pc),
-CASE WHEN NEW.groupee IS NULL THEN '0' ELSE NEW.groupee END,
-CASE WHEN NEW.secondaire IS NULL THEN '0' ELSE NEW.secondaire END,
-NEW.id_ext1,
-NEW.id_ext2;
-NEW.id_adresse := v_id_adresse;
-RETURN NEW;
-
--- UPDATE
-ELSIF (TG_OP = 'UPDATE') THEN
-UPDATE
-r_adresse.an_adresse_info
-SET
-id_adresse=NEW.id_adresse,
-dest_adr=CASE WHEN NEW.dest_adr IS NULL THEN '00' ELSE NEW.dest_adr END,
-etat_adr=CASE WHEN NEW.etat_adr IS NULL THEN '00' ELSE NEW.etat_adr END,
-refcad=UPPER(REPLACE(REPLACE(REPLACE(REPLACE((NEW.refcad),'-',';'),',',';'),'/',';'),'\',';')),
-nb_log=NEW.nb_log,
-pc=UPPER(NEW.pc),
-groupee=CASE WHEN NEW.groupee IS NULL THEN '0' ELSE NEW.groupee END,
-secondaire=CASE WHEN NEW.secondaire IS NULL THEN '0' ELSE NEW.secondaire END,
-id_ext1=NEW.id_ext1,
-id_ext2=NEW.id_ext2
-
-WHERE r_adresse.an_adresse_info.id_adresse = OLD.id_adresse;
-RETURN NEW;
-
--- fonction supprimee depuis la vue
-/*
--- DELETE
-ELSIF (TG_OP = 'DELETE') THEN
-DELETE FROM r_adresse.an_adresse_info where id_adresse = OLD.id_adresse;
-RETURN OLD;
-*/
-
-END IF;
-
-END;
-$BODY$
-  LANGUAGE plpgsql VOLATILE
-  COST 100;
-ALTER FUNCTION r_adresse.ft_m_an_adresse_info()
-  OWNER TO sig_create;
-GRANT EXECUTE ON FUNCTION r_adresse.ft_m_an_adresse_info() TO public;
-GRANT EXECUTE ON FUNCTION r_adresse.ft_m_an_adresse_info() TO sig_create;
-GRANT EXECUTE ON FUNCTION r_adresse.ft_m_an_adresse_info() TO create_sig;
-COMMENT ON FUNCTION r_adresse.ft_m_an_adresse_info() IS 'Fonction trigger pour mise à jour de la classe alphanumérique de complément de l''adresse';
-
-
--- ### trigger an_adresse_info
-
--- Trigger: r_adresse.t_t3_an_adresse_info on r_adresse.geo_v_adresse
-
--- DROP TRIGGER r_adresse.t_t2_an_adresse ON r_adresse.geo_v_adresse;
-
-CREATE TRIGGER t_t3_an_adresse_info
-  INSTEAD OF INSERT OR UPDATE OR DELETE
-  ON r_adresse.geo_v_adresse
-  FOR EACH ROW                                                                                                                                                                       
-  EXECUTE PROCEDURE r_adresse.ft_m_an_adresse_info();
-
-
 -- #################################################################### TRIGGER - XY_L93  ###################################################
 
 -- Trigger: t_t2_xy_l93 on r_objet.geo_objet_pt_adresse
@@ -1720,195 +1428,217 @@ COMMENT ON FUNCTION r_adresse.ft_m_an_adresse_h() IS 'Fonction trigger pour inse
 
 
 
+-- #################################################################### FONCTION TRIGGER - geo_v_adresse ###################################################
 
--- Trigger: r_adresse.t_t4_an_adresse_h on r_adresse.geo_v_adresse
+-- FUNCTION: r_adresse.ft_m_geo_adresse_gestion()
 
--- DROP TRIGGER r_adresse.t_t4_an_adresse_h ON r_adresse.geo_v_adresse;
+-- DROP FUNCTION r_adresse.ft_m_geo_adresse_gestion();
 
-CREATE TRIGGER t_t4_an_adresse_h
-  INSTEAD OF UPDATE
-  ON r_adresse.geo_v_adresse
-  FOR EACH ROW
-  EXECUTE PROCEDURE r_adresse.ft_m_an_adresse_h();
+CREATE FUNCTION r_adresse.ft_m_geo_adresse_gestion()
+    RETURNS trigger
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE NOT LEAKPROOF
+AS $BODY$
 
--- #################################################################### FONCTION TRIGGER - local / etablissement ###################################################
+DECLARE v_id_adresse integer;
 
--- Function: m_economie.ft_m_geo_objet_pt_adresse_local()
-
--- DROP FUNCTION m_economie.ft_m_geo_objet_pt_adresse_local();
-
-CREATE OR REPLACE FUNCTION m_economie.ft_m_geo_objet_pt_adresse_local()
-  RETURNS trigger AS
-$BODY$
-
-
-DECLARE v_idgeolf integer;
 BEGIN
 
-IF TG_OP='INSERT' THEN 
+-- INSERT
+IF (TG_OP = 'INSERT') THEN
 
--- gestion des intégrations des liens entre local/lot foncier eco lors d'une création ou d'un déplacement d'adresse
+-- récupération de l'identiant adresse dans une variable
+v_id_adresse := nextval('r_objet.geo_objet_pt_adresse_id_seq'::regclass);
 
-	-- si mon adresse est créée est dans un local spécifique (geo_sa_local) mais non déjà référencée dans la table de relation , alors j'intègre dans la table de relation 
-	IF 
-		(
-			(SELECT count(*) FROM m_economie.geo_sa_local l , r_adresse.geo_v_adresse a
-			WHERE st_intersects(l.geom,new.geom)) > 0 
-			AND
-			(SELECT count(*) FROM m_economie.lk_localsiret l WHERE 
-			(
-			SELECT DISTINCT l.idgeoloc FROM m_economie.geo_sa_local l , r_adresse.geo_v_adresse a
-			WHERE st_intersects(l.geom,new.geom)
-			) = l.idgeoloc) = 0 
-		)
-	THEN
-		INSERT INTO m_economie.lk_localsiret (idgeoloc,siret)
-		SELECT DISTINCT l.idgeoloc,lk.siret FROM m_economie.geo_sa_local l , r_adresse.geo_v_adresse a , m_economie.lk_adresseetablissement lk
-		WHERE st_intersects(l.geom,new.geom) AND a.id_adresse = lk.idadresse AND a.id_adresse=new.id_adresse;
+-- insertion dans la classe des objets
+INSERT INTO r_objet.geo_objet_pt_adresse (id_adresse, id_voie, id_tronc, position, x_l93, y_l93, src_geom, src_date, date_sai, date_maj, geom)
+SELECT v_id_adresse,
+NEW.id_voie,
+NEW.id_tronc,
+CASE WHEN NEW.position IS NULL THEN '00' ELSE NEW.position END,
+NEW.x_l93,
+NEW.y_l93,
+CASE WHEN NEW.src_geom IS NULL THEN '00' ELSE NEW.src_geom END,
+CASE WHEN NEW.src_date IS NULL THEN '0000' ELSE NEW.src_date END,
+CASE WHEN NEW.date_sai IS NULL THEN now() ELSE now() END,
+NEW.date_maj,
+NEW.geom;
 
-	-- rafraichissement de la vue matérialisée des adresses qui sert à la vue matérialisée d'après
-	REFRESH MATERIALIZED VIEW x_apps.xapps_geo_vmr_adresse;
-	-- rafraichissement de la vue matérialisée
-	REFRESH MATERIALIZED VIEW x_apps.xapps_geo_vmr_etab_api;
+-- insertion dans la classe des adresses
 
-	END IF;
-
-	-- si mon adresse est créée est dans un lot foncier éco mais non déjà référencée dans la table de relation, alors j'intègre dans la table de relation 
-	IF 
-		(
-			(SELECT count(*) FROM r_objet.geo_objet_fon_lot l ,r_adresse.geo_v_adresse a
-			WHERE st_intersects(l.geom,new.geom) AND l.l_voca='20') > 0
-			AND
-			(SELECT count(*) FROM m_economie.lk_localsiret l WHERE 
-			(
-			SELECT DISTINCT l.idgeolf FROM r_objet.geo_objet_fon_lot l , r_adresse.geo_v_adresse a
-			WHERE st_intersects(l.geom,new.geom)
-			)
-			 = l.idgeoloc) = 0 
-		)
-	THEN
-		INSERT INTO m_economie.lk_localsiret (idgeoloc,siret)
-		SELECT DISTINCT l.idgeolf,lk.siret FROM r_objet.geo_objet_fon_lot l , r_adresse.geo_v_adresse a , m_economie.lk_adresseetablissement lk
-		WHERE st_intersects(l.geom,new.geom) AND a.id_adresse = lk.idadresse AND a.id_adresse=new.id_adresse;
-
-	-- rafraichissement de la vue matérialisée des adresses qui sert à la vue matérialisée d'après
-	REFRESH MATERIALIZED VIEW x_apps.xapps_geo_vmr_adresse;
-	-- rafraichissement de la vue matérialisée
-	REFRESH MATERIALIZED VIEW x_apps.xapps_geo_vmr_etab_api;
-
-	END IF;
-
-
-
+-- gestion des erreurs relevés dans le formatage des données BAL par des exceptions (remontées dans QGIS)
+-- le code RIVOLI doit être renseigné (par défaut mettre 0000 dans la table des noms de voies)
+IF (SELECT rivoli FROM r_voie.an_voie WHERE id_voie = new.id_voie AND new.id_voie IS NOT NULL ) is null THEN
+RAISE EXCEPTION 'Code RIVOLI non présent. Mettre ''0000'' dans le champ RIVOLI dans la table des noms de voies si le code RIVOLI n''existe pas';
 END IF;
 
-IF TG_OP='UPDATE' THEN 
+-- le champ numéro doit contenir uniquement des n°
+IF RTRIM(new.numero, '0123456789') <> '' THEN
+RAISE EXCEPTION 'Vous devez saisir uniquement des numéros dans le champ NUMERO';
+END IF;
 
-IF ST_Equals(new.geom,old.geom) = false THEN
-
-	-- gestion des intégrations des liens entre local/lot foncier eco lors d'une création ou d'un déplacement d'adresse
-
-	-- si mon adresse déplacée est dans un local spécifique (geo_sa_local) alors qu'avant non, alors j'intègre dans la table de relation 
-	IF 
-		(
-			(SELECT count(*) FROM m_economie.geo_sa_local l , r_adresse.geo_v_adresse a
-			WHERE st_intersects(l.geom,new.geom)) > 0 
-		AND 
-			(SELECT count(*) FROM m_economie.geo_sa_local l , r_adresse.geo_v_adresse a
-			WHERE st_intersects(l.geom,old.geom)) = 0
-		)
-	THEN
-		INSERT INTO m_economie.lk_localsiret (idgeoloc,siret)
-		SELECT DISTINCT l.idgeoloc,lk.siret FROM m_economie.geo_sa_local l , r_adresse.geo_v_adresse a , m_economie.lk_adresseetablissement lk
-		WHERE st_intersects(l.geom,new.geom) AND a.id_adresse = lk.idadresse AND a.id_adresse=new.id_adresse;
-
-	-- rafraichissement de la vue matérialisée des adresses qui sert à la vue matérialisée d'après
-	REFRESH MATERIALIZED VIEW x_apps.xapps_geo_vmr_adresse;
-	-- rafraichissement de la vue matérialisée
-	REFRESH MATERIALIZED VIEW x_apps.xapps_geo_vmr_etab_api;
-
-	END IF;
-
-	-- si mon adresse déplacée est dans un lot foncier éco alors qu'avant non, alors j'intègre dans la table de relation 
-	IF 
-		(
-			(SELECT count(*) FROM r_objet.geo_objet_fon_lot l ,r_adresse.geo_v_adresse a
-			WHERE st_intersects(l.geom,new.geom) AND l.l_voca='20') > 0
-		AND
-			(SELECT count(*) FROM r_objet.geo_objet_fon_lot l ,r_adresse.geo_v_adresse a
-			WHERE st_intersects(l.geom,old.geom) AND l.l_voca='20') = 0
-		)
-	THEN
-		INSERT INTO m_economie.lk_localsiret (idgeoloc,siret)
-		SELECT DISTINCT l.idgeolf,lk.siret FROM r_objet.geo_objet_fon_lot l , r_adresse.geo_v_adresse a , m_economie.lk_adresseetablissement lk
-		WHERE st_intersects(l.geom,new.geom) AND a.id_adresse = lk.idadresse AND a.id_adresse=new.id_adresse;
-
-	-- rafraichissement de la vue matérialisée des adresses qui sert à la vue matérialisée d'après
-	REFRESH MATERIALIZED VIEW x_apps.xapps_geo_vmr_adresse;
-	-- rafraichissement de la vue matérialisée
-	REFRESH MATERIALIZED VIEW x_apps.xapps_geo_vmr_etab_api;
-
-	END IF;
-
-	-- si mon adresse déplacée est dans un lot foncier éco différent ou qu'avant non, alors je supprime l'ancienne référebnce et j'intègre dans la table de relation 
-	IF 
-		(
-			(SELECT DISTINCT l.idgeolf FROM r_objet.geo_objet_fon_lot l ,r_adresse.geo_v_adresse a
-			WHERE st_intersects(l.geom,new.geom) AND l.l_voca='20') 
-		<>
-			(SELECT DISTINCT l.idgeolf FROM r_objet.geo_objet_fon_lot l ,r_adresse.geo_v_adresse a
-			WHERE st_intersects(l.geom,old.geom) AND l.l_voca='20')
-		)
-	THEN
-	      
-		DELETE FROM m_economie.lk_localsiret where siret=
-		(SELECT DISTINCT lk.siret FROM r_objet.geo_objet_fon_lot l , r_adresse.geo_v_adresse a , m_economie.lk_adresseetablissement lk
-		WHERE st_intersects(l.geom,new.geom) AND a.id_adresse = lk.idadresse AND a.id_adresse=new.id_adresse)
-
-		 and idgeoloc=
-		 (
-		SELECT DISTINCT l.idgeolf FROM r_objet.geo_objet_fon_lot l , r_adresse.geo_v_adresse a , m_economie.lk_adresseetablissement lk
-		WHERE st_intersects(l.geom,old.geom) AND a.id_adresse = lk.idadresse AND a.id_adresse=old.id_adresse
-		 );
-		INSERT INTO m_economie.lk_localsiret (idgeoloc,siret)
-		SELECT DISTINCT l.idgeolf,lk.siret FROM r_objet.geo_objet_fon_lot l , r_adresse.geo_v_adresse a , m_economie.lk_adresseetablissement lk
-		WHERE st_intersects(l.geom,new.geom) AND a.id_adresse = lk.idadresse AND a.id_adresse=new.id_adresse;
-	
-	-- rafraichissement de la vue matérialisée des adresses qui sert à la vue matérialisée d'après
-	REFRESH MATERIALIZED VIEW x_apps.xapps_geo_vmr_adresse;
-	-- rafraichissement de la vue matérialisée
-	REFRESH MATERIALIZED VIEW x_apps.xapps_geo_vmr_etab_api;
-
-
-	END IF;
-	
+-- le champ numéro doit être identique + repet à l'étiquette
+IF (new.numero <> '00000' AND new.numero <> '99999') THEN
+IF (new.numero || CASE 
+	WHEN new.repet is null THEN ''  
+	WHEN new.repet = 'bis' THEN 'B' 
+	WHEN new.repet = 'ter' THEN 'T'
+	WHEN new.repet = 'quater' THEN 'Q'
+	WHEN new.repet = 'quinques' THEN 'C'
+        WHEN new.repet = 'quinter' THEN 'Q'
+	WHEN (new.repet = 'a' or new.repet = 'b' or new.repet = 'c'
+	or new.repet = 'd' or new.repet = 'e' or new.repet = 'f'
+	or new.repet = 'g' or new.repet = 'h' or new.repet = 'i'
+	or new.repet = 'j') THEN upper(new.repet)
+	ELSE new.repet 
+	END) <> new.etiquette THEN
+RAISE EXCEPTION 'Le champ d''étiquette n''est pas cohérent avec le numéro et l''indice de répétition';
 END IF;
 END IF;
 
+INSERT INTO r_adresse.an_adresse (id_adresse, numero, repet, complement, etiquette, angle, observ, src_adr, diag_adr, qual_adr,verif_base,ld_compl)
+SELECT v_id_adresse,
+NEW.numero,
+LOWER(NEW.repet),
+NEW.complement,
+UPPER(REPLACE(REPLACE(REPLACE(REPLACE((NEW.etiquette),'bis','B'),'ter','T'),'quater','Q'),'quinquies','C')),
+CASE WHEN NEW.angle BETWEEN 90 AND 179 THEN NEW.angle + 180 WHEN NEW.angle BETWEEN 181 AND 270 THEN NEW.angle - 180 WHEN NEW.angle = 180 THEN 0 WHEN NEW.angle < 0 THEN NEW.angle + 360 ELSE NEW.angle END,
+NEW.observ,
+CASE WHEN NEW.src_adr IS NULL THEN '00' ELSE NEW.src_adr END,
+CASE WHEN NEW.diag_adr IS NULL THEN '00' ELSE NEW.diag_adr END,
+CASE WHEN NEW.diag_adr IS NULL THEN '0' ELSE LEFT(NEW.diag_adr,1) END,
+false,
+NEW.ld_compl;
+
+-- insertion dans la classe des adresses informations
+
+INSERT INTO r_adresse.an_adresse_info (id_adresse, dest_adr, etat_adr, refcad, nb_log, pc, groupee, secondaire, id_ext1, id_ext2,insee_cd,nom_cd)
+SELECT v_id_adresse, 
+CASE WHEN NEW.dest_adr IS NULL THEN '00' ELSE NEW.dest_adr END,
+CASE WHEN NEW.etat_adr IS NULL THEN '00' ELSE NEW.etat_adr END,
+UPPER(REPLACE(REPLACE(REPLACE(REPLACE((NEW.refcad),'-',';'),',',';'),'/',';'),'\',';')),
+NEW.nb_log,
+UPPER(NEW.pc),
+CASE WHEN NEW.groupee IS NULL THEN '0' ELSE NEW.groupee END,
+CASE WHEN NEW.secondaire IS NULL THEN '0' ELSE NEW.secondaire END,
+NEW.id_ext1,
+NEW.id_ext2,
+NEW.insee_cd,
+NEW.nom_cd;
 
 RETURN NEW;
-END;$BODY$
-  LANGUAGE plpgsql VOLATILE
-  COST 100;
-ALTER FUNCTION m_economie.ft_m_geo_objet_pt_adresse_local()
-  OWNER TO sig_create;
-GRANT EXECUTE ON FUNCTION m_economie.ft_m_geo_objet_pt_adresse_local() TO public;
-GRANT EXECUTE ON FUNCTION m_economie.ft_m_geo_objet_pt_adresse_local() TO sig_create;
-GRANT EXECUTE ON FUNCTION m_economie.ft_m_geo_objet_pt_adresse_local() TO create_sig;
-COMMENT ON FUNCTION m_economie.ft_m_geo_objet_pt_adresse_local() IS 'Fonction dont l''objet de rechercher les établissements dans le local ou dans les lots fonciers si celui-ci croise une adresse qui aurait été déplacé ou créer et de les intégrer dans la table lk_localsiret';
 
--- Trigger: t_t5_geo_objet_pt_adresse_local on r_adresse.geo_v_adresse
+-- UPDATE
+ELSIF (TG_OP = 'UPDATE') THEN
 
--- DROP TRIGGER t_t5_geo_objet_pt_adresse_local ON r_adresse.geo_v_adresse;
+-- mise à jour de la classe des objets
+UPDATE
+r_objet.geo_objet_pt_adresse
+SET
+id_voie=NEW.id_voie,
+id_tronc=NEW.id_tronc,
+position=NEW.position,
+x_l93=NEW.x_l93,
+y_l93=NEW.y_l93,
+src_geom=CASE WHEN NEW.src_geom IS NULL THEN '00' ELSE NEW.src_geom END,
+src_date=CASE WHEN NEW.src_date IS NULL THEN '0000' ELSE NEW.src_date END,
+date_sai=OLD.date_sai,
+date_maj=now(),
+geom=NEW.geom
+WHERE id_adresse = NEW.id_adresse;
 
-CREATE TRIGGER t_t5_geo_objet_pt_adresse_local
-  INSTEAD OF INSERT OR UPDATE
-  ON r_adresse.geo_v_adresse
-  FOR EACH ROW
-  EXECUTE PROCEDURE m_economie.ft_m_geo_objet_pt_adresse_local();
+-- mise à jour de la classe des adresses
 
--- #################################################################### FONCTION TRIGGER - geo_v_adresse ###################################################
-			 
+-- gestion des erreurs relevés dans le formatage des données BAL par des exceptions (remontées dans QGIS)
+-- le code RIVOLI doit être renseigné (par défaut mettre 0000 dans la table des noms de voies)
+
+IF (new.rivoli IS NOT NULL OR new.rivoli = '') AND length(new.rivoli) <> 4 THEN 
+RAISE EXCEPTION 'ok 2 Code RIVOLI non présent. Mettre ''0000'' dans le champ RIVOLI dans la table des noms de voies si le code RIVOLI n''existe pas';
+END IF;
+
+-- le champ numéro doit contenir uniquement des n°
+IF RTRIM(new.numero, '0123456789') <> '' THEN
+RAISE EXCEPTION 'Vous devez saisir uniquement des numéros dans le champ NUMERO';
+END IF;
+
+-- le champ numéro doit être identique + repet à l'étiquette
+IF (new.numero <> '00000' AND new.numero <> '99999') THEN
+IF (new.numero || CASE
+	WHEN new.repet is null THEN ''  
+	WHEN new.repet = 'bis' THEN 'B' 
+	WHEN new.repet = 'ter' THEN 'T'
+	WHEN new.repet = 'quater' THEN 'Q'
+	WHEN new.repet = 'quinques' THEN 'C'
+        WHEN new.repet = 'quinter' THEN 'Q'
+	ELSE upper(new.repet)
+	END) <> new.etiquette THEN
+RAISE EXCEPTION 'Le champ d''étiquette n''est pas cohérent avec le numéro et l''indice de répétition';
+END IF;
+END IF;
+
+UPDATE
+r_adresse.an_adresse
+SET
+numero=NEW.numero,
+repet=LOWER(NEW.repet),
+complement=NEW.complement,
+etiquette=UPPER(REPLACE(REPLACE(REPLACE(REPLACE((NEW.etiquette),'bis','B'),'ter','T'),'quater','Q'),'quinquies','C')),
+angle=CASE WHEN NEW.angle BETWEEN 90 AND 179 THEN NEW.angle + 180 WHEN NEW.angle BETWEEN 181 AND 270 THEN NEW.angle - 180 WHEN NEW.angle = 180 THEN 0 WHEN NEW.angle < 0 THEN NEW.angle + 360 ELSE NEW.angle END,
+verif_base=NEW.verif_base,
+observ=NEW.observ,
+src_adr=CASE WHEN NEW.src_adr IS NULL THEN '00' ELSE NEW.src_adr END,
+diag_adr=CASE WHEN NEW.diag_adr IS NULL THEN '00' ELSE NEW.diag_adr END,
+qual_adr=CASE WHEN NEW.diag_adr IS NULL THEN '0' ELSE LEFT(NEW.diag_adr,1) END,
+ld_compl = NEW.ld_compl                                                                              
+WHERE id_adresse = NEW.id_adresse;
+
+-- mise à jour de la classe des adresses informations
+
+UPDATE
+r_adresse.an_adresse_info
+SET
+dest_adr=CASE WHEN NEW.dest_adr IS NULL THEN '00' ELSE NEW.dest_adr END,
+etat_adr=CASE WHEN NEW.etat_adr IS NULL THEN '00' ELSE NEW.etat_adr END,
+refcad=UPPER(REPLACE(REPLACE(REPLACE(REPLACE((NEW.refcad),'-',';'),',',';'),'/',';'),'\',';')),
+nb_log=NEW.nb_log,
+pc=UPPER(NEW.pc),
+groupee=CASE WHEN NEW.groupee IS NULL THEN '0' ELSE NEW.groupee END,
+secondaire=CASE WHEN NEW.secondaire IS NULL THEN '0' ELSE NEW.secondaire END,
+id_ext1=NEW.id_ext1,
+id_ext2=NEW.id_ext2,
+insee_cd=NEW.insee_cd,
+nom_cd=NEW.nom_cd
+WHERE id_adresse = NEW.id_adresse;
+
+RETURN NEW;
+
+--DELETE
+ELSIF (TG_OP = 'DELETE') THEN
+DELETE FROM r_objet.geo_objet_pt_adresse where id_adresse = OLD.id_adresse;
+DELETE FROM r_adresse.an_adresse where id_adresse = OLD.id_adresse;
+DELETE FROM r_adresse.an_adresse_info where id_adresse = OLD.id_adresse;
+RETURN OLD;
+
+END IF;
+
+END;
+$BODY$;
+
+ALTER FUNCTION r_adresse.ft_m_geo_adresse_gestion()
+    OWNER TO sig_create;
+
+GRANT EXECUTE ON FUNCTION r_adresse.ft_m_geo_adresse_gestion() TO sig_create;
+
+GRANT EXECUTE ON FUNCTION r_adresse.ft_m_geo_adresse_gestion() TO create_sig;
+
+GRANT EXECUTE ON FUNCTION r_adresse.ft_m_geo_adresse_gestion() TO PUBLIC;
+
+COMMENT ON FUNCTION r_adresse.ft_m_geo_adresse_gestion()
+    IS 'Fonction trigger pour gérer l''insertion et la mise à jour des données adresse';
+														 
+															 
+															 
 -- FUNCTION: r_adresse.ft_m_geo_v_adresse_vmr()
 
 -- DROP FUNCTION m_ecor_adressenomie.ft_m_geo_v_adresse_vmr();
@@ -1943,28 +1673,38 @@ GRANT EXECUTE ON FUNCTION r_adresse.ft_m_geo_v_adresse_vmr() TO sig_create;
 GRANT EXECUTE ON FUNCTION r_adresse.ft_m_geo_v_adresse_vmr() TO create_sig;
 GRANT EXECUTE ON FUNCTION r_adresse.ft_m_geo_v_adresse_vmr() TO PUBLIC;
 
--- Trigger: t_t6_geo_v_adresse_vmr
+-- CREATTION DES DECLENCHEURS		 
+			 
+CREATE TRIGGER t_t1_geo_adresse_gestion
+    INSTEAD OF INSERT OR DELETE OR UPDATE 
+    ON r_adresse.geo_v_adresse
+    FOR EACH ROW
+    EXECUTE PROCEDURE r_adresse.ft_m_geo_adresse_gestion();
 
--- DROP TRIGGER t_t6_geo_v_adresse_vmr ON r_adresse.geo_v_adresse;
 
-CREATE TRIGGER t_t6_geo_v_adresse_vmr
+CREATE TRIGGER t_t2_an_adresse_h
+    INSTEAD OF UPDATE 
+    ON r_adresse.geo_v_adresse
+    FOR EACH ROW
+    EXECUTE PROCEDURE r_adresse.ft_m_an_adresse_h();
+
+
+CREATE TRIGGER t_t3_geo_v_adresse_vmr
     INSTEAD OF INSERT OR DELETE OR UPDATE 
     ON r_adresse.geo_v_adresse
     FOR EACH ROW
     EXECUTE PROCEDURE r_adresse.ft_m_geo_v_adresse_vmr();
 
-COMMENT ON TRIGGER t_t6_geo_v_adresse_vmr ON r_adresse.geo_v_adresse
-    IS 'Fonction trigger déclenchée à chaque intervention sur la vue des adresses permettant de rafraichir la vue matérialisée des adresses visibles dans les différentes applications.';
-			 
-			 
--- ####################################################################################################################################################
--- ###                                                                                                                                              ###
--- ###                                                                      BAC A SABLE                                                             ###
--- ###                                                                                                                                              ###
--- ####################################################################################################################################################
-  
--- TRUNCATE TABLE r_objet.geo_objet_pt_adresse, r_adresse.an_adresse, r_adresse.an_adresse_info CASCADE;
--- ALTER SEQUENCE r_objet.geo_objet_pt_adresse_id_seq RESTART WITH 1;
+
+-- Trigger: t_t1_repetcomplement_null
+
+-- DROP TRIGGER t_t1_repetcomplement_null ON r_adresse.an_adresse;
+
+CREATE TRIGGER t_t1_repetcomplement_null
+    AFTER INSERT OR UPDATE 
+    ON r_adresse.an_adresse
+    FOR EACH ROW
+    EXECUTE PROCEDURE r_adresse.ft_m_adresse_repetcomplement_null();
 
 
 
