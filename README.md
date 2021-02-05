@@ -24,7 +24,7 @@ L’ARC privilégie donc une organisation dans laquelle l’Interface Homme Mach
 ## Voir aussi
 
 - [GitHub du Validateur de fichier "Base Adresse Locale"](https://github.com/etalab/bal)
-- [Validateur des données OpenData format BAL pour l'ARC](doc/doc_user_bal.md)
+- [Validateur des données OpenData format BAL pour l'ARC](bdd/doc_user_bal.md)
 
 
 ## Jeu de données consolidé
