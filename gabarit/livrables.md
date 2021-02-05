@@ -45,7 +45,8 @@ Sur le territoire métropolitain s'applique le système géodésique français l
 - Pour les voies : 
   - la saisie du tronçon correspond au centre de la chaussée que se soit une route, un chemin, une piste cyclable, une sente, ...
   - les tronçons sont jointifs en leur extrémité
-  - les tronçons sont découpés aux intersections, aux limites communales, et à chaque modification d'usage.
+  - les tronçons sont découpés aux intersections, aux limites communales, et à chaque modification d'usage
+  - les noeuds des extrémités de chaque tronçon est saisi en complément dans une classe d'objets spécifiques
 
 
 ## Format des fichiers
