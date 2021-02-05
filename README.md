@@ -4,9 +4,9 @@
 
 (x) en cours de rédaction
 
-Spécification du fichier d’échange relatif aux données concernant le référentiel des adresses et des voies sur l'Agglomération de la Région de Compiègne et gérées par la collectivité. La base de données des adresses correspond à la base locale des adresses (BAL) à l'échelle du Pays Compiégnois. Cette BAL est diffusée au format d'échange en vigueur et alimente la base adresse nationale (BAN). 
+Spécification du fichier d’échange relatif aux données concernant le référentiel des adresses (base adresse locale ou BAL) et des voies sur le Pays Compiégnois et gérées par l'Agglomération de la Région de Compiègne. Il existe également un format d'échange des données adresses au niveau national pour la diffusion de celles-ci. La BAL à l'échelle du Pays Compiégnois est ainsi diffusée dans ce format d'échange et alimente la base adresse nationale (BAN). 
 
-- [Lire la documentation du standard de la base des adresses locales et des voies](gabarit/livrables.md)
+- [Lire la documentation du standard local de la base des adresses locales et des voies](gabarit/livrables.md)
 - [Script d'initialisation de la base de données Adresse](bdd/init_bd_adresse.sql) 
 - [Script d'initialisation de la base de données Voie](bdd/init_bd_voie.sql) 
 - [Script d'initialisation des signalements Voies et Adresses](bdd/init_bd_rva.sql) 
@@ -25,6 +25,7 @@ L’ARC privilégie donc une organisation dans laquelle l’Interface Homme Mach
 
 - [GitHub du Validateur de fichier "Base Adresse Locale"](https://github.com/etalab/bal)
 - [Validateur des données OpenData format BAL pour l'ARC](bdd/doc_user_bal.md)
+- [Ressources nationales (dont spécification du format d'échange BAL version 1.2)](https://aitf-sig-topo.github.io/voies-adresses/)
 
 
 ## Jeu de données consolidé
