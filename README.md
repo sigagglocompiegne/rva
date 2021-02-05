@@ -10,10 +10,10 @@ Spécification du fichier d’échange relatif aux données concernant le réfé
 - [Script d'initialisation de la base de données Adresse](bdd/init_bd_adresse.sql) 
 - [Script d'initialisation de la base de données Voie](bdd/init_bd_voie.sql) 
 - [Script d'initialisation des signalements Voies et Adresses](bdd/init_bd_rva.sql) 
-- [Documentation d'administration de la base Adresse](doc/doc_admin_bd_adresse.md) 
-- [Documentation d'administration de la base Voie](doc/doc_admin_bd_voie.md) 
-- [Documentation d'administration de l'application](doc/doc_admin_app_rva.md)
-- [Documentation utilisateur de l'application](doc/doc_user_app_rva.md)
+- [Documentation d'administration de la base Adresse](bdd/doc_admin_bd_adresse.md) 
+- [Documentation d'administration de la base Voie](bdd/doc_admin_bd_voie.md) 
+- [Documentation d'administration de l'application](app/doc_admin_app_rva.md)
+- [Documentation utilisateur de l'application](app/doc_user_app_rva.md)
 
 ## Contexte
 
