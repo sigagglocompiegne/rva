@@ -165,7 +165,7 @@ Ensemble des données décrivant les objets des points d'adresse
 
 ### Les identifiants
 
-Les identifiants des adresses sont des identifiants non signifiants (un simple numéro incrémenté de 1 à chaque insertion).
+Les identifiants des adresses, des voies et des noeuds sont des identifiants non signifiants (un simple numéro incrémenté de 1 à chaque insertion).
 
 ### Liste de valeurs
 
