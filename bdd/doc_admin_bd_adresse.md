@@ -98,6 +98,7 @@ Particularité(s) à noter :
 |qual_adr|Indice de qualité simplifié de l'adresse|character varying(1)|'0'::character varying|
 |verif_base|Champ informant si l'adresse a été vérifié par rapport aux erreurs de bases (n°, tronçon, voie, correspondance BAN).
 Par défaut à non.|boolean|false|
+|ld_compl|Nom du lieu-dit historique ou complémentaire|character varying(80)||
 
 Particularité(s) à noter : aucune
 * Une clé primaire existe sur le champ `id_adresse`
@@ -121,6 +122,8 @@ Particularité(s) à noter : aucune
 |secondaire|Adresse d'un accès secondaire (O/N)|character varying(1)|'0'::character varying|
 |id_ext1|Identifiant d'une adresse dans une base externe (1) pour appariemment|character varying(80)| |
 |id_ext2|Identifiant d'une adresse dans une base externe (2) pour appariemment|character varying(80)| |
+|insee_cd|code Insee de la commune déléguée (en cas de fusion de commune)|character varying(80)| |
+|nom_cd|Libellé de la commune déléguée (en cas de fusion de commune)|character varying(80)| |
 
 
 Particularité(s) à noter :
@@ -216,12 +219,14 @@ Particularité(s) à noter :
 `r_adresse.an_v_adresse_commune` : Vue d'exploitation permettant de compter le nombre d''enregistrement d''adresse par commune
 
 `r_adresse.geo_v_adresse` : Vue éditable destinée à la modification des données relatives aux adresses
-* 4 triggers :
-  * `t_t1_geo_objet_pt_adresse` : intégration ou mise à jour des données Adresse dans la table des points d'adresse pour une instance d'insertion, de mise à jour ou de suppression (désactivité par défaut pour ce dernier dans la fonction trigger `r_objet.ft_geo_objet_pt_adresse()`)
-  * `t_t2_an_adresse` : intégration ou mise à jour des données Adresse dans la table alphanumérique des adresses pour une instance d'insertion, de mise à jour ou de suppression (désactivité par défaut pour ce dernier dans la fonction trigger `r_adresse.ft_an_adresse()`)
-  * `t_t3_an_adresse_info` : intégration ou mise à jour des données Adresse dans la table alphanumérique des informations liées aux adresses pour une instance d'insertion, de mise à jour ou de suppression (désactivité par défaut pour ce dernier dans la fonction trigger `r_adresse.ft_an_adresse_info()`)
-  * `t_t4_an_adresse_h` : intégration des données Adresse historiques dans la table alphanumérique correspondante pour une instance de mise à jour
 
+* 4 triggers :
+  * `t_t1_geo_adresse_gestion` : intégration ou mise à jour des données Adresse
+  * `t_t2_an_adresse_h` : intégration des données Adresse historiques dans la table alphanumérique correspondante pour une instance de mise à jour
+  * `t_t3_geo_v_adresse_vmr` : trigger permettant de rafraîchir la vue matérialisée des adresses visualisés par les utilisateurs dans les différentes applications
+  * `t_t1_repetcomplement_null` : trigger permettant d'initialisé certains attributs à null et non '' (problématyique de recherche textuel dans les applications)
+  * `t_t1_date_maj` : trigger permettant d'automatiser la date de mise à jour des données
+  * `t_t2_xy_l93` : trigger permettant d'automatiser la génération des coordonnées X et Y en Lambert 93
 ---
 
 ### classes d'objets applicatives métiers sont classés dans le schéma x_apps :
