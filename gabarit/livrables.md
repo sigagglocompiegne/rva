@@ -20,7 +20,7 @@
 
 ## Principe fonctionnel et modalités de mises à jour
 
-La gestion commune des adresses et des voies repose sur le simple principe qu'une adresse doit être conforme, donc disposer d'un numéro de voirie et d'un libellé de voie, donc rattachée à une voie normmée.
+La gestion commune des adresses et des voies repose sur le simple principe qu'une adresse doit être conforme, donc disposer d'un numéro de voirie et d'un libellé de voie, et rattachée à une voie nommée.
 La constitution d'une base adresse locale a démontré l'intérêt de réaliser en parallèle une base locale des voies pour la collectivité.
 
 Ce couple permet ainsi de rattacher chaque point d'adresse à un tronçon de voies et à une voie nommée. Les automatismes de gestion de la donnée ont été développés autour de ce principe.
@@ -44,7 +44,10 @@ Sur le territoire métropolitain s'applique le système géodésique français l
 
 - Pour les voies : 
   - la saisie du tronçon correspond au centre de la chaussée que se soit une route, un chemin, une piste cyclable, une sente, ...
-  - les tronçons sont jointifs en leur extrémité
+  - les tronçons doivent être connectés entre eux si ils sont contiguës dans la réalité du dessin saisi
+  
+  ![picto](topo_line_1.png)
+  
   - les tronçons sont découpés aux intersections, aux limites communales, et à chaque modification d'usage
   - les noeuds des extrémités de chaque tronçon est saisi en complément dans une classe d'objets spécifiques
 
