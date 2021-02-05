@@ -3,8 +3,6 @@
 
 # Validateur des données OpenDate format BAL #
 
-Les codes sources et la documentation détaillées se trouvent ![ici](https://github.com/etalab/outils-bal).
-
 Au niveau de l'Agglomération de la Région de Compiègne, l'exécutable a été placé ici Y:\Ressources\1-Applicatifs\BAL.
 
 1. Copier cet exécutable dans c:/temp ainsi que le fichier payscompiegnois_bal.csv stocké ici Y:\fichiers_ref\referentiel\adresse\bal
