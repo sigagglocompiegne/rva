@@ -14,9 +14,9 @@
 
 ## Gabarits
 
-- [Fichier hors gabarit à télécharger au format csv (non géographique)](/gabarit/bal_csv.zip)
-- [Fichier hors gabarit au format shape (géographique)](/gabarit/bal_shape.zip)
-- [Fichier gabarit Qgis 3.x (vierge) complet à télécharger](/gabarit/gabarit_qgis_bal.zip)
+- Fichier hors gabarit à télécharger au format csv (non géographique) (à venir)
+- Fichier hors gabarit au format shape (géographique) (à venir)
+- Fichier gabarit Qgis 3.x (vierge) complet à télécharger (à venir)
 
 ## Principe fonctionnel et modalités de mises à jour
 
