@@ -12,7 +12,7 @@ L'ensemble de cette base est modifiable via des vues simples en base de données
 
 ## Schéma fonctionnel
 
-![schema_fonctionnel](bdd/schema_fonctionnel_adresse_v2.png)
+![schema_fonctionnel](schema_fonctionnel_adresse_v2.png)
 
 ## Dépendances
 
@@ -649,7 +649,7 @@ L'ensemble des fichiers a utilisé est placé ici `Y:\Ressources\4-Partage\3-Pro
 
 ## Modèle conceptuel simplifié
 
-![mcd](bdd/MCD_adresse_v2.png)
+![mcd](MCD_adresse_v2.png)
 
 
 
