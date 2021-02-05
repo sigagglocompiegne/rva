@@ -7,9 +7,9 @@
 Spécification du fichier d’échange relatif aux données concernant le référentiel des adresses et des voies sur l'Agglomération de la Région de Compiègne et gérées par la collectivité. La base de données des adresses correspond à la base locale des adresses (BAL) à l'échelle du Pays Compiégnois. Cette BAL est diffusée au format d'échange en vigueur et alimente la base adresse nationale (BAN). 
 
 - [Lire la documentation du standard de la base des adresses locales et des voies](gabarit/livrables.md)
-- [Script d'initialisation de la base de données Adresse](sql/init_bd_adresse.sql) 
-- [Script d'initialisation de la base de données Voie](sql/init_bd_voie.sql) 
-- [Script d'initialisation des signalements Voies et Adresses](sql/init_bd_rva.sql) 
+- [Script d'initialisation de la base de données Adresse](bdd/init_bd_adresse.sql) 
+- [Script d'initialisation de la base de données Voie](bdd/init_bd_voie.sql) 
+- [Script d'initialisation des signalements Voies et Adresses](bdd/init_bd_rva.sql) 
 - [Documentation d'administration de la base Adresse](doc/doc_admin_bd_adresse.md) 
 - [Documentation d'administration de la base Voie](doc/doc_admin_bd_voie.md) 
 - [Documentation d'administration de l'application](doc/doc_admin_app_rva.md)
