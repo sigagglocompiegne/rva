@@ -23,7 +23,7 @@ L’ARC privilégie donc une organisation dans laquelle l’Interface Homme Mach
 
 ## Voir aussi
 
-- [GitHub du Validateur de fichier "Base Adresse Locale"](https://github.com/etalab/bal)
+- [GitHub du Validateur de fichier au format d'échange "Base Adresse Locale"](https://github.com/etalab/bal)
 - [Validateur des données OpenData format BAL pour l'ARC](bdd/doc_user_bal.md)
 - [Ressources nationales (dont spécification du format d'échange BAL version 1.2)](https://aitf-sig-topo.github.io/voies-adresses/)
 
