@@ -14,9 +14,9 @@
 
 ## Gabarits
 
-- Fichier hors gabarit à télécharger au format csv (non géographique) (à venir)
-- Fichier hors gabarit au format shape (géographique) (à venir)
-- Fichier gabarit Qgis 3.x (vierge) complet à télécharger (à venir)
+- Fichier hors gabarit des adresses à télécharger au format csv (non géographique) (à venir)
+- Fichier hors gabarit des adresses et des voies au format shape (géographique) (à venir)
+- Fichier gabarit des adresses et des voies Qgis 3.x (vierge) complet à télécharger (à venir)
 
 ## Principe fonctionnel et modalités de mises à jour
 
