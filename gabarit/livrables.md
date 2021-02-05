@@ -41,8 +41,9 @@ Sur le territoire métropolitain s'applique le système géodésique français l
 - Pour les adresses : tout objet est nécessairement inclu dans l'emprise des communes du Pays Compiégnois. Les points d'adresse doivent être inclus dans une parcelle cadastrale (sauf si la qualité du référentiel ne le permet pas) et positionnés au meilleur emplacement possible connu. 
 
 - Pour les voies : 
-  - la saisie du tronçon correspond au centre de la chaussée que ce soit une route, un chemin, une piste cyclable, une sente, ...
-
+  - la saisie du tronçon correspond au centre de la chaussée que se soit une route, un chemin, une piste cyclable, une sente, ...
+  - les tronçons sont jointifs en leur extrémité
+  - les tronçons sont découpés aux intersections, aux limites communales, et à chaque modification d'usage.
 
 
 ## Format des fichiers
@@ -66,9 +67,46 @@ Ensemble des données décrivant les objets des points d'adresse
 
 `geo_v_adresse` : point d'adresse
 
-|Nom attribut|Définition|Type|Valeurs|Contraintes|
-|:---|:---|:---|:---|:---|
-|idadresse|Identifiant local unique de l'adresse|integer||valeur vide interdite|
+|Nom attribut|Définition|Type|Contraintes|
+|:---|:---|:---|:---|
+|idadresse|Identifiant local unique de l'adresse|integer|valeur vide interdite|
+|id_voie|Identifiant local unique de la voie|integer|valeur vide interdite|
+|id_tronc|Identifiant local unique du tronçon|integer|valeur vide interdite|   
+|numero|Numéro de l'adresse|character varying(10)| |
+|repet|Indice de répétition de l'adresse|character varying(10)| |
+|complement|Complément d'adresse|character varying(80)| |
+|etiquette|Etiquette|character varying(10)| |
+|angle|Angle de l'écriture exprimé en degré|integer|Par rapport à l'horizontale, dans le sens trigonométrique|
+|observ|Observations|character varying(254)| |
+|src_adr|Origine de l'adresse|character varying(2)||
+|diag_adr|Diagnostic qualité de l'adresse|character varying(2)||
+|qual_adr|Indice de qualité simplifié de l'adresse|character varying(1)||
+|ld_compl|Nom du lieu-dit historique ou complémentaire|character varying(80)| |  
+
+|dest_adr|Destination de l'adresse (habitation, commerce, ...)|character varying(2)||
+|etat_adr|Etat de la construction à l'adresse (non commencé, en cours, achevé, muré, supprimé ...)|character varying(2)||
+|refcad|Référence(s) cadastrale(s)|character varying(254)| |
+|nb_log|Nombre de logements|integer| |
+|pc|Numéro du permis de construire|character varying(30)| |
+|groupee|Adresse groupée (O/N)|character varying(1)||
+|secondaire|Adresse d'un accès secondaire (O/N)|character varying(1)||
+|id_ext1|Identifiant d'une adresse dans une base externe (1) pour appariemment|character varying(80)| |
+|id_ext2|Identifiant d'une adresse dans une base externe (2) pour appariemment|character varying(80)| |
+|insee_cd|code Insee de la commune déléguée (en cas de fusion de commune)|character varying(5)| |
+|nom_cd|Libellé de la commune déléguée (en cas de fusion de commune)|character varying(80)| |
+|libvoie_c|Libellé complet de la voie (minuscule et caractère accentué)|character varying(100)| |
+|insee|Code insee rattachée à l'adresse|character(5)| |
+|commune|Libellé de la commune rattachée à l'adresse|character(5)| |
+|codepostal|Code postal|character(5)| |
+|rivoli|Code rivoli - FANTOIR|character(4)| |
+|rivoli_cle|Clé rivoli|character(1)| |
+|position|Type de position du point adresse|character varying(2)| |
+|src_geom|Référentiel de saisie|character varying(2)||
+|src_date|Année du millésime du référentiel de saisie|character varying(4)||
+|date_sai|Horodatage de l'intégration en base de l'objet|timestamp without time zone||
+|date_maj|Horodatage de la mise à jour en base de l'objet|timestamp without time zone| |
+|x_l93|Coordonnée X en mètre|numeric| |
+|y_l93|Coordonnée Y en mètre|numeric| |
 
 `geo_v_troncon` : tronçon de voies
 
