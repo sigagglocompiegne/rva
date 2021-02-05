@@ -25,7 +25,7 @@ La constitution d'une base adresse locale a démontré l'intérêt de réaliser 
 
 Ce couple permet ainsi de rattacher chaque point d'adresse à un tronçon de voies et à une voie nommée. Les automatismes de gestion de la donnée ont été développés autour de ce principe.
 
-La gestion des données des adresses est conforme au standard de l'AITF (association des ingénieurs territoriaux de france). Pour plus d'informations, vous pouvez consulter cette [page](). 
+La gestion des données des adresses est conforme au standard de l'AITF (association des ingénieurs territoriaux de france). Pour plus d'informations, vous pouvez consulter cette [page](https://aitf-sig-topo.github.io/voies-adresses/). 
 Chaque point d'adresse est localisé le plus précisément possible (à l'entrée piétonne pour la précision la plus fine) et rattaché à une voie.
 
 La gestion des voies correspond à une logique de connaissance des caractéristiques des tronçons qui la compose. La modélisation des tronçons repose sur des principes de ruptures.
@@ -38,10 +38,10 @@ Sur le territoire métropolitain s'applique le système géodésique français l
 
 ## Topologie
 
-- Tout objet est nécessairement inclu dans l'emprise des communes du Pays Compiégnois.
-- Pour les adresses :
+- Pour les adresses : tout objet est nécessairement inclu dans l'emprise des communes du Pays Compiégnois. Les points d'adresse doivent être inclus dans une parcelle cadastrale (sauf si la qualité du référentiel ne le permet pas) et positionnés au meilleur emplacement possible connu. 
 
-- Pour les voies :
+- Pour les voies : 
+  - la saisie du tronçon correspond au centre de la chaussée que ce soit une route, un chemin, une piste cyclable, une sente, ...
 
 
 
