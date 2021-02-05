@@ -82,7 +82,6 @@ Ensemble des données décrivant les objets des points d'adresse
 |diag_adr|Diagnostic qualité de l'adresse|character varying(2)||
 |qual_adr|Indice de qualité simplifié de l'adresse|character varying(1)||
 |ld_compl|Nom du lieu-dit historique ou complémentaire|character varying(80)| |  
-
 |dest_adr|Destination de l'adresse (habitation, commerce, ...)|character varying(2)||
 |etat_adr|Etat de la construction à l'adresse (non commencé, en cours, achevé, muré, supprimé ...)|character varying(2)||
 |refcad|Référence(s) cadastrale(s)|character varying(254)| |
@@ -112,8 +111,41 @@ Ensemble des données décrivant les objets des points d'adresse
 
 |Nom attribut|Définition|Type|Valeurs|Contraintes|
 |:---|:---|:---|:---|:---|
-|idtroncon|Identifiant local unique du tronçon de voie|integer||valeur vide interdite|
+|id_tronc|Identifiant local unique du tronçon de voie|bigint||valeur vide interdite|
+|id_voie_g|Identifiant unique de l'objet voie à gauche du tronçon|bigint| |
+|id_voie_d|Identifiant unique de l'objet voie à droite du tronçon|bigint| |
+|insee_g|Code INSEE à gauche du tronçon|character varying(5)| |
+|insee_d|Code INSEE à droite du tronçon|character varying(5)| |
+|noeud_d|Identifiant du noeud de début du tronçon|bigint| |
+|noeud_f|Identifiant du noeud de fin de tronçon|bigint| |
+|src_tronc|Source des informations au tronçon|character varying(100)| |
+|type_tronc|Type de troncon|character varying(2)||
+|hierarchie|Niveau hierarchique du troncon dans la trame viaire|character varying(1)||
+|franchiss|Indication d'un franchissement|character varying(2)|'ZZ'::bpchar|
+|nb_voie|Nombre de voies sur le tronçon|integer| |
+|projet|Indication de l'état de projet du tronçon|boolean|false|
+|fictif|Indication de la prise en compte du tronçon dans des calculs|boolean|false|
+|statut_jur|Statut juridique du tronçon de la voie|character varying(2)|'00'::bpchar|
+|num_statut|Numéro de statut du tronçon de la voie|character varying(10)| |
+|gestion|Gestionnaire du tronçon de la voie|character varying(2)|'00'::bpchar|
+|doman|Domanialité du tronçon|character varying(2)|'00'::bpchar|
+|proprio|Propriétaire du tronçon|character varying(2)|'00'::bpchar|
+|date_rem|Date de la dernière remise en état de la chaussée (soit l''année entière est saisie soit une partie en remplaçant les 0 par des x)|character(4)| |
+|type_circu|Type de circulation principale|character varying(2)|'00'::bpchar|
+|sens_circu|Indique si le sens de circulation du tronçon|character varying(2)|'00'::bpchar|
+|v_max|Vitesse maximale autorisée pour un véhicule léger|character varying(3)|'000'::bpchar|
+|observ|Observations|character varying(254)| |
+|src_circu|Référence principale utilisée pour les éléments de circulation|character varying(100)| |
+|c_circu|Liste des codes des contraintes de circulation. Lien non dynamique avec la liste des valeurs lt_cont_circu. Incrémentation par GEO par défaut dans la table des signalements (public.geo_rva_signal) et dans l'attribut c_circu comme suit : 10;20 ... Ce champ devra être copier/coller via QGIS.|character varying(15)| |
+|date_ouv|Date d'ouverture du tronçon à la circulation (soit l'année entière est saisie soit une partie en remplaçant les 0 par des x)|character(4)| |
+|pente|Pente exprimée en % et calculée à partir des altimétries des extrémités du tronçon|numeric| |
+|observ|Observations|character varying(254)| |
+|src_geom|Référentiel de saisie|character varying(5)||
+|src_date|Année du millésime du référentiel de saisie|character varying(4)||
+|date_sai|Horodatage de l'intégration en base de l'objet|timestamp without time zone||
+|date_maj|Horodatage de la mise à jour en base de l'objet|timestamp without time zone| |
 
+`geo_v_troncon` : noeud des tronçons de voies
 
 ### Les identifiants
 
