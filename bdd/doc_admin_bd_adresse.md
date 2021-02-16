@@ -241,9 +241,7 @@ Particularité(s) à noter :
 
 ### classes d'objets opendata sont classés dans le schéma x_opendata :
 
-`x_opendata.xopendata_an_v_bal` : Vue alphanumérique simplifiée des adresses au format d''échange BAL
-
-`x_opendata.xopendata_geo_v_openadresse` : Vue destinée à la communication extérieure des données relatives aux adresses. Exclusion des adresses supprimées, non attribuées pour projet ou à confirmer
+`x_opendata.xopendata_an_v_bal_12` : Vue alphanumérique simplifiée des adresses au format d''échange BAL version 1.2
 
 ## Liste de valeurs
 
