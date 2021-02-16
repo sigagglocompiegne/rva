@@ -82,6 +82,7 @@ Ensemble des données décrivant les objets des points d'adresse
 |numero|Numéro de l'adresse|character varying(10)| |
 |repet|Indice de répétition de l'adresse|character varying(10)| |
 |complement|Complément d'adresse|character varying(80)| |
+|ld_compl|Lieu-dit historique ou complémentaire|character varying(80)| |
 |etiquette|Etiquette|character varying(10)| |
 |angle|Angle de l'écriture exprimé en degré|integer|Par rapport à l'horizontale, dans le sens trigonométrique|
 |observ|Observations|character varying(254)| |
@@ -111,8 +112,11 @@ Ensemble des données décrivant les objets des points d'adresse
 |src_date|Année du millésime du référentiel de saisie|character varying(4)||
 |date_sai|Horodatage de l'intégration en base de l'objet|timestamp without time zone||
 |date_maj|Horodatage de la mise à jour en base de l'objet|timestamp without time zone||
-|x_l93|Coordonnée X en mètre|numeric| |
-|y_l93|Coordonnée Y en mètre|numeric| |
+|x_l93|Coordonnée X en mètre|numeric(8,2)| |
+|y_l93|Coordonnée Y en mètre|numeric(9,2)| |
+|long|Coordonnée Longitude (WGS84)|numeric(8,7)| |
+|lat|Coordonnée latitude (WGS84)|numeric(9,7)| |
+
 
 `geo_v_troncon` : tronçons de voies
 
