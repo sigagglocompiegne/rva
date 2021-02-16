@@ -11,5 +11,5 @@ Au niveau de l'Agglomération de la Région de Compiègne, l'exécutable a été
 4. Lancez la ligne de commande `bal-win.exe validate payscompiegnois_bal.csv`
 5. Si tout est ok, vous devez visualier les différents messages ci-dessous, si non la liste des erreurs apparaît.
 
-![picto](/doc/img/bal_valid.png)
+![picto](bal_valid.png)
 
