@@ -12,7 +12,7 @@ L'ensemble de cette base est modifiable via des vues simples en base de données
 
 ## Schéma fonctionnel
 
-![schema_fonctionnel](schema_fonctionnel_adresse_v2.png)
+![schema_fonctionnel](schema_fonctionnel_adresse_v3.png)
 
 ## Dépendances
 
