@@ -48,8 +48,9 @@ Particularité(s) à noter :
 * Une clé étrangère existe sur la table de valeur `position` (précision du positionnement du point adresse `r_objet.lt_position`)
 * Une clé étrangère existe sur la table de valeur `src_geom` (source du référentiel géographique pour la saisie `r_objet.lt_src_geom`).
 * Un index est présent sur le champ geom
-* 1 trigger :
-  * `t_t1_date_maj` : calcul des coordonnées X et Y avant l'insertion ou la mise à jour d'une géométrie ou des champs x_l93 et y_l93.  
+* 2 triggers :
+  * `t_t1_date_maj` : trigger permettant d'automatiser la date de mise à jour des données
+  * `t_t2_xy_l93` : trigger permettant d'automatiser la génération des coordonnées X et Y en Lambert 93 
   
 ---
 
@@ -77,8 +78,9 @@ Particularité(s) à noter :
 * Une clé primaire existe sur le champ `idvoie`
 * Une clé étrangère exsiste sur la table de valeur `type_voie` (liste de valeur `lt_type_voie` définissant les abréviations des types de voies)
 * Un index est présent sur le champ libvoie_c
-* 1 trigger :
-  * `t_date_maj` : insertion de la date du jour avant la mise à jour
+* 2 triggers :
+  * `t1_verif_rivoli` : vérification sur la saisie du code RIVOLI
+  * `t2_date_maj` : insertion de la date du jour avant la mise à jour
   
 ---
 
@@ -105,6 +107,9 @@ Particularité(s) à noter : aucune
 * Une clé étrangère exsiste sur la table de valeur `diag_adr` (liste de valeur `lt_diag_adr` définissant le type de diagnostic de l'adresse)
 * Une clé étrangère exsiste sur la table de valeur `qual_adr` (liste de valeur `lt_qual_adr` définissant la qualité de l'adresse)
 * Une clé étrangère exsiste sur la table de valeur `src_adr` (liste de valeur `lt_src_adr` définissant les sources de l'adresse)
+* 1 trigger :
+  * `t_t1_repetcomplement_null` : trigger permettant d'initialisé certains attributs à null et non '' (problématyique de recherche textuel dans les applications)
+
 
 ---
 
@@ -224,9 +229,7 @@ Particularité(s) à noter :
   * `t_t1_geo_adresse_gestion` : intégration ou mise à jour des données Adresse
   * `t_t2_an_adresse_h` : intégration des données Adresse historiques dans la table alphanumérique correspondante pour une instance de mise à jour
   * `t_t3_geo_v_adresse_vmr` : trigger permettant de rafraîchir la vue matérialisée des adresses visualisés par les utilisateurs dans les différentes applications
-  * `t_t1_repetcomplement_null` : trigger permettant d'initialisé certains attributs à null et non '' (problématyique de recherche textuel dans les applications)
-  * `t_t1_date_maj` : trigger permettant d'automatiser la date de mise à jour des données
-  * `t_t2_xy_l93` : trigger permettant d'automatiser la génération des coordonnées X et Y en Lambert 93
+
 ---
 
 ### classes d'objets applicatives métiers sont classés dans le schéma x_apps :
