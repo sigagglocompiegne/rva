@@ -39,6 +39,7 @@
 --		- création de bloc pour séparer les vues de gestion, applicatives et open data
 -- 2018/04/12 : GB / Adaptation des requêtes applicatives historiques dans le formatage des résultats pour l'utilisateur dans GEO
 -- 2018/08/07 : GB / Insertion des nouveaux rôles de connexion et leurs privilèges
+-- 2021-02-16 : GB / Intertion fonction trigger de vérification du saisie code RIVOLI sur classe an_voie
 
 -- ToDo
 
@@ -2241,11 +2242,77 @@ Ce déclencheur nécessite un enregistrement à chaque suppression ou mise à jo
 
 -- #################################################################### TRIGGER - AN_VOIE date_maj  ###################################################
 
--- Trigger: t_date_maj on r_voie.an_voie
+									   
+-- FUNCTION: r_voie.ft_m_an_voie_gestion()
 
--- DROP TRIGGER t_date_maj on r_voie.an_voie;
+-- DROP FUNCTION r_voie.ft_m_an_voie_gestion();
 
-CREATE TRIGGER t_date_maj
+CREATE FUNCTION r_voie.ft_m_an_voie_gestion()
+    RETURNS trigger
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE NOT LEAKPROOF
+AS $BODY$
+
+BEGIN
+
+-- INSERT OR UPDATE
+IF (TG_OP = 'INSERT') OR (TG_OP = 'UPDATE') THEN
+
+-- le code RIVOLI doit être renseigné et pas à 0000 dans la classe an_voie
+IF NEW.rivoli IS null OR NEW.rivoli = '0000' OR NEW.rivoli = '' THEN
+RAISE EXCEPTION 'Code RIVOLI null ou égal à 0000. Veuillez corriger votre saisie.';
+END IF;
+
+-- si saisie d'un rivoli provisoire, doit correspondre au x +1
+IF NEW.rivoli like 'x%' THEN
+
+IF NEW.rivoli <> 'x' || (SELECT max(substring(rivoli from 2 for 3))::integer +1 FROM r_voie.an_voie WHERE rivoli like 'x%' AND insee = NEW.insee) THEN
+RAISE EXCEPTION 'Code RIVOLI non correct. Vous n''avez pas saisi le n° d''ordre correspondant';
+END IF;
+
+END IF;
+
+-- si doublon dans le code RIVOLI erreur
+IF NEW.rivoli IN (SELECT rivoli FROM r_voie.an_voie WHERE insee = NEW.insee) THEN
+RAISE EXCEPTION 'Vous saisissez un code RIVOLI déjà présent sur la commune. Veuillez vérifier votre saisie pour poursuivre.';
+END IF;
+
+END IF;
+
+RETURN NEW;
+
+END;
+$BODY$;
+
+ALTER FUNCTION r_voie.ft_m_an_voie_gestion()
+    OWNER TO sig_create;
+
+GRANT EXECUTE ON FUNCTION r_voie.ft_m_an_voie_gestion() TO sig_create;
+
+GRANT EXECUTE ON FUNCTION r_voie.ft_m_an_voie_gestion() TO create_sig;
+
+GRANT EXECUTE ON FUNCTION r_voie.ft_m_an_voie_gestion() TO PUBLIC;
+
+COMMENT ON FUNCTION r_voie.ft_m_an_voie_gestion()
+    IS 'Fonction trigger pour vérifier si la saisie des codes RIVOLI est correcte';
+									   
+									   
+-- Trigger: t1_verif_rivoli
+
+-- DROP TRIGGER t1_verif_rivoli ON r_voie.an_voie;
+
+CREATE TRIGGER t1_verif_rivoli
+    BEFORE INSERT OR UPDATE 
+    ON r_voie.an_voie
+    FOR EACH ROW
+    EXECUTE PROCEDURE r_voie.ft_m_an_voie_gestion();									   
+									   
+-- Trigger: t2_date_maj on r_voie.an_voie
+
+-- DROP TRIGGER t2_date_maj on r_voie.an_voie;
+
+CREATE TRIGGER t2_date_maj
   BEFORE UPDATE
   ON r_voie.an_voie
   FOR EACH ROW
