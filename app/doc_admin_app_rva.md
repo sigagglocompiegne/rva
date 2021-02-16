@@ -89,6 +89,7 @@ Sont décrites ici les Géotables et/ou Tables intégrées dans GEO pour les bes
 |affiche_qual_adr  |x|x||Formate l'affichage de la qualité par rapport à l'adresse supprimée (`si supprimé affiche Conforme (supprimé) sinon la valeur de qual_adr`|Plus utilisée ||
 |angle_geo  |x|x||Multiplie l'angle par -1 pour lagestion des étiquettes de n° de voies dans GEO|Cartothèque ||
 |complement   ||x|Complément| |Fiche d'information Fiche adresse et utilisé dans les champs calculés gérant l'affichage ou la recherche des adresses ||
+|ld_compl   ||x|Lieu-dit historique ou complémentaire| |Fiche d'information Fiche adresse ||
 |date_maj    ||x|Date  de mise à jour| |Fiche d'information Fiche adresse ||
 |date_sai    ||x|Date de saisie| |Fiche d'information Fiche adresse ||
 |dest_adr    ||x|Destination| |Fiche d'information Fiche adresse ||
@@ -99,10 +100,12 @@ Sont décrites ici les Géotables et/ou Tables intégrées dans GEO pour les bes
 |id_tronc         ||x|Identifiant du tronçon de voie||Fiche d'information Fiche adresse ||
 |id_voie          ||x|Identifiant de la voie| |Fiche d'information Fiche adresse ||
 |infobulle           |x|x||Formatage en HTML du contenu de l'info bulle au survol d'une adresse |Cartothèque ||
+|insee_cd   ||x|Code insee de la commune déléguée|Fiche d'information Fiche adresse ||
 |lat           ||x|Latitude| |Fiche d'information Fiche adresse ||
 |libvoie_c            ||x|Voie| |Fiche d'information Fiche adresse ||
 |long            ||x|Longitude| |Fiche d'information Fiche adresse ||
 |nb_log            ||x|Logement| |Fiche d'information Fiche adresse ||
+|nom_cd   ||x|Nom de la commune déléguée|Fiche d'information Fiche adresse ||
 |numero             ||x|Numéro| |Fiche d'information Fiche adresse ||
 |numero_complet              |x|x|Numéro complet| Concaténisation du numéro et de l'indice de répétition|Filtre dans Recherche avancée d'une adresse ||
 |observ             ||x|Observations| |Fiche d'information Fiche adresse ||
@@ -526,12 +529,14 @@ Source : `xapps_geo_vmr_adresse`
 |Numéro (numero)||||||
 |Indice de répétition (repet)||||||
 |Complément (complement)||||||
+|Lieu-dit historique ou complémentaire (ld_compl)||||||
 |Etiquette (etiquette)||||||
 |Angle (angle)||||||
 |Voie (libvoie_c)||||||
 |Insee (insee)||||||
 |Code postal (codepostal)||||||
 |Commune (commune)||||||
+|Commune déléguée (nom_cd)||||||
 |N° RIVOLI (rivoli)||||||
 |Clé Rivoli (rivoli_cle)||||||
 |Position (position)||||||
@@ -588,8 +593,10 @@ Source : `xapps_geo_vmr_adresse`
 |Indice de répétition (repet)||||||
 |Voie (libvoie_c)||||||
 |Complément (complement)||||||
+|Lieu-dit historique ou complémentaire (ld_complt)||||||
 |Code postal (codepostal)||||||
 |Commune (commune)||||||
+|Commune déléguée (nom_cd)||||||
 |Adresse complète (adresse)|x|x|x|||
 |Position (position)||||||
 |Destination (dest_adr)||||||
@@ -640,8 +647,10 @@ Source : `xapps_geo_vmr_adresse`
 |Indice de répétition (repet)||||||
 |Voie (libvoie_c)||||||
 |Complément (complement)||||||
+|Lieu-dit historique ou complémentaire (ld_complt)||||||
 |Code postal (codepostal)||||||
 |Commune (commune)||||||
+|Commune déléguée (nom_cd)||||||
 |Adresse complète (adresse)|x|x|x|||
 |Position (position)||||||
 |Destination (dest_adr)||||||
@@ -1089,7 +1098,7 @@ Source : `xapps_geo_vmr_adresse`
 
 |Nom de la section|Attributs|Position label|Agencement attribut|Visibilité conditionnelle|Fichie liée|Ajout de données autorisé|
 |:---|:---|:---|:---|:---|:---|:---|
-|Adresse|adresse,nuemro,repet,libvoie_c,complement,codepostal, commune|Par défaut|Vertical||||
+|Adresse|adresse,nuemro,repet,libvoie_c,complement,lieu-dit historique ou complémentaire,codepostal, commune, commune déléguée|Par défaut|Vertical||||
 |Historique des adresses (sous-section de Adresse)|adresse_h,date_arr,date_sai|Par défaut|Vertical||||
 |Qualité des adresses|||Vertical||||
 |Conformité (sous-section de Qualité des adresses)|diag_adr,qual_adr,etat_adr,observ|Par défaut|Vertical||||
