@@ -2240,7 +2240,7 @@ Ce déclencheur nécessite un enregistrement à chaque suppression ou mise à jo
 
 
 
--- #################################################################### TRIGGER - AN_VOIE date_maj  ###################################################
+-- #################################################################### TRIGGER - AN_VOIE rivoli  ###################################################
 
 									   
 -- FUNCTION: r_voie.ft_m_an_voie_gestion()
@@ -2274,8 +2274,10 @@ END IF;
 END IF;
 
 -- si doublon dans le code RIVOLI erreur
+IF NEW.rivoli <> OLD.rivoli THEN
 IF NEW.rivoli IN (SELECT rivoli FROM r_voie.an_voie WHERE insee = NEW.insee) THEN
 RAISE EXCEPTION 'Vous saisissez un code RIVOLI déjà présent sur la commune. Veuillez vérifier votre saisie pour poursuivre.';
+END IF;
 END IF;
 
 END IF;
@@ -2319,6 +2321,8 @@ CREATE TRIGGER t2_date_maj
   EXECUTE PROCEDURE public.r_timestamp_maj();
 
 
+				    
+				    
   
   
 -- ####################################################################################################################################################
