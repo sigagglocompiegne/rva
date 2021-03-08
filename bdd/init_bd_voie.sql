@@ -2265,12 +2265,14 @@ RAISE EXCEPTION 'Code RIVOLI null ou égal à 0000. Veuillez corriger votre sais
 END IF;
 
 -- si saisie d'un rivoli provisoire, doit correspondre au x +1
+									   
+IF NEW.rivoli <> OLD.rivoli THEN
 IF NEW.rivoli like 'x%' THEN
 
 IF NEW.rivoli <> 'x' || (SELECT max(substring(rivoli from 2 for 3))::integer +1 FROM r_voie.an_voie WHERE rivoli like 'x%' AND insee = NEW.insee) THEN
 RAISE EXCEPTION 'Code RIVOLI non correct. Vous n''avez pas saisi le n° d''ordre correspondant';
 END IF;
-
+END IF;
 END IF;
 
 -- si doublon dans le code RIVOLI erreur
