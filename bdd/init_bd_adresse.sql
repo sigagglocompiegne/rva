@@ -1284,7 +1284,7 @@ CREATE OR REPLACE VIEW x_opendata.xopendata_an_v_bal_12
     c.commune AS commune_nom,
     af.insee_cd AS commune_deleguee_insee,
     af.nom_cd AS commune_deleguee_nom,
-    v.libvoie_c AS voie_nom,
+    trim(v.libvoie_c)::character varying(100) AS voie_nom,
     a.ld_compl AS lieudit_complement_nom,
     a.numero,
         CASE
