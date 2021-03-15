@@ -37,8 +37,10 @@
 -- 2020/10/02 : GB / Modification de la fonction gérant l'insertion des données adresses dans le RAISE EXCEPTION liée à l'IDVOIE non connu et au CODE RIVOLI absent
 -- 2020/10/12 : GB / Adaptation du trigger pour insertion danbs la table an_adresse au niveau du contrôle entre le n° et l'étiquette (exclusion des n° 00000 et 99999 pour le contrôle)
 -- 2020/10/16 : GB / Intégration d'un trigger pour mise à jour automatique de la vue matérialisée des adresses accessibles dans les différentes applicatifs
--- 2021/02/05 : GB / Intégration des adaptations structurelles et fonctionnelles dues au format d'échange BAL version 1.2 (3 attributs complémentaires)
+-- 2021/02/05 : GB / Intégration des adaptations structurelles et fonctionnelles dues au format d'échange BAL version 1.2 (3 attributs complémentaires + modification de la vue export OpenData)
 -- 2021/02/16 : GB / Modification des fonctions triggers de la vue de gestion et de la classe an_voie pour mieux vérifier la saisie des codes RIVOLI issus du FANTOIR et gérer les RIVOLI provisoires
+-- 2021/03/15 : GB / Modification des droits
+-- 2021/03/15 : GB / Suppression des vues relevant les adresses sans CODE RIVOLI suite standard BAL 1.2 affectant un RIVOLI temporaire
 
 -- ***** pour les voies sans adresses (ex lieu dit), le numéro prend la valeur "99999"
 -- ToDo
@@ -61,16 +63,19 @@
 CREATE SCHEMA r_adresse
   AUTHORIZATION sig_create;
 
-GRANT USAGE ON SCHEMA r_adresse TO edit_sig;
-GRANT ALL ON SCHEMA r_adresse TO sig_create;
 GRANT ALL ON SCHEMA r_adresse TO create_sig;
-GRANT USAGE ON SCHEMA r_adresse TO read_sig;
+
+ALTER DEFAULT PRIVILEGES IN SCHEMA r_adresse
+GRANT ALL ON TABLES TO sig_create;
+
+ALTER DEFAULT PRIVILEGES IN SCHEMA r_adresse
+GRANT SELECT ON TABLES TO sig_read;
+
 ALTER DEFAULT PRIVILEGES IN SCHEMA r_adresse
 GRANT ALL ON TABLES TO create_sig;
+
 ALTER DEFAULT PRIVILEGES IN SCHEMA r_adresse
-GRANT INSERT, SELECT, UPDATE, DELETE ON TABLES TO edit_sig;
-ALTER DEFAULT PRIVILEGES IN SCHEMA r_adresse
-GRANT SELECT ON TABLES TO read_sig;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLES TO sig_edit;
 
 COMMENT ON SCHEMA r_adresse
   IS 'Référentiel Base Adresse Locale (BAL)';
@@ -97,9 +102,10 @@ CREATE SEQUENCE r_objet.geo_objet_pt_adresse_id_seq
   START 1
   CACHE 1;
 ALTER SEQUENCE r_objet.geo_objet_pt_adresse_id_seq
-  OWNER TO sig_create;
-GRANT ALL ON SEQUENCE r_objet.geo_objet_pt_adresse_id_seq TO sig_create;
-GRANT SELECT, USAGE ON SEQUENCE r_objet.geo_objet_pt_adresse_id_seq TO public;
+    OWNER TO create_sig;
+
+GRANT ALL ON SEQUENCE r_objet.geo_objet_pt_adresse_id_seq TO PUBLIC;
+GRANT ALL ON SEQUENCE r_objet.geo_objet_pt_adresse_id_seq TO create_sig;
 
 ALTER TABLE r_objet.geo_objet_pt_adresse ALTER COLUMN id_adresse SET DEFAULT nextval('r_objet.geo_objet_pt_adresse_id_seq'::regclass);
   
@@ -140,15 +146,12 @@ WITH (
 TABLESPACE pg_default;
 
 ALTER TABLE r_objet.geo_objet_pt_adresse
-    OWNER to sig_create;
+    OWNER to create_sig;
 
-GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE r_objet.geo_objet_pt_adresse TO edit_sig;
-
-GRANT INSERT, SELECT, UPDATE ON TABLE r_objet.geo_objet_pt_adresse TO sig_create;
-
+GRANT ALL ON TABLE r_objet.geo_objet_pt_adresse TO sig_create;
+GRANT SELECT ON TABLE r_objet.geo_objet_pt_adresse TO sig_read;
 GRANT ALL ON TABLE r_objet.geo_objet_pt_adresse TO create_sig;
-
-GRANT SELECT ON TABLE r_objet.geo_objet_pt_adresse TO read_sig;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE r_objet.geo_objet_pt_adresse TO sig_edit;
 
 COMMENT ON TABLE r_objet.geo_objet_pt_adresse
     IS 'Classe décrivant la position d''une adresse';
@@ -231,10 +234,12 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE r_adresse.an_adresse
-  OWNER TO sig_create;
+    OWNER to create_sig;
+
 GRANT ALL ON TABLE r_adresse.an_adresse TO sig_create;
-GRANT SELECT ON TABLE r_adresse.an_adresse TO read_sig;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE r_adresse.an_adresse TO edit_sig;
+GRANT SELECT ON TABLE r_adresse.an_adresse TO sig_read;
+GRANT ALL ON TABLE r_adresse.an_adresse TO create_sig;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE r_adresse.an_adresse TO sig_edit;
 
 COMMENT ON TABLE r_adresse.an_adresse
   IS 'Table alphanumérique des adresses';
@@ -267,9 +272,10 @@ CREATE SEQUENCE r_adresse.an_adresse_h_id_seq
   START 1
   CACHE 1;
 ALTER SEQUENCE r_adresse.an_adresse_h_id_seq
-  OWNER TO sig_create;
-GRANT ALL ON SEQUENCE r_adresse.an_adresse_h_id_seq TO sig_create;
-GRANT SELECT, USAGE ON SEQUENCE r_adresse.an_adresse_h_id_seq TO public;
+    OWNER TO create_sig;
+
+GRANT ALL ON SEQUENCE r_adresse.an_adresse_h_id_seq TO PUBLIC;
+GRANT ALL ON SEQUENCE r_adresse.an_adresse_h_id_seq TO create_sig;
 
 
 -- Table: r_adresse.an_adresse_h
@@ -296,10 +302,12 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE r_adresse.an_adresse_h
-  OWNER TO sig_create;
+    OWNER to create_sig;
+
 GRANT ALL ON TABLE r_adresse.an_adresse_h TO sig_create;
-GRANT SELECT ON TABLE r_adresse.an_adresse_h TO read_sig;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE r_adresse.an_adresse_h TO edit_sig;
+GRANT SELECT ON TABLE r_adresse.an_adresse_h TO sig_read;
+GRANT ALL ON TABLE r_adresse.an_adresse_h TO create_sig;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE r_adresse.an_adresse_h TO sig_edit;
 
 COMMENT ON TABLE r_adresse.an_adresse_h
   IS 'Table alphanumérique des historisations des adresses suite à une renumérotation';
@@ -344,10 +352,12 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE r_adresse.an_adresse_info
-  OWNER TO sig_create;
+    OWNER to create_sig;
+
 GRANT ALL ON TABLE r_adresse.an_adresse_info TO sig_create;
-GRANT SELECT ON TABLE r_adresse.an_adresse_info TO read_sig;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE r_adresse.an_adresse_info TO edit_sig;
+GRANT SELECT ON TABLE r_adresse.an_adresse_info TO sig_read;
+GRANT ALL ON TABLE r_adresse.an_adresse_info TO create_sig;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE r_adresse.an_adresse_info TO sig_edit;
 
 COMMENT ON TABLE r_adresse.an_adresse_info
   IS 'Table alphanumérique des informations complémentaires des adresses';
@@ -391,10 +401,12 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE r_objet.lt_position
-  OWNER TO sig_create;
+    OWNER to create_sig;
+
 GRANT ALL ON TABLE r_objet.lt_position TO sig_create;
-GRANT SELECT ON TABLE r_objet.lt_position TO read_sig;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE r_objet.lt_position TO edit_sig;
+GRANT SELECT ON TABLE r_objet.lt_position TO sig_read;
+GRANT ALL ON TABLE r_objet.lt_position TO create_sig;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE r_objet.lt_position TO sig_edit;
 
 COMMENT ON TABLE r_objet.lt_position
   IS 'Code permettant de décrire le type de position de l''adresse';
@@ -433,10 +445,12 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE r_adresse.lt_groupee
-  OWNER TO sig_create;
+    OWNER to create_sig;
+
 GRANT ALL ON TABLE r_adresse.lt_groupee TO sig_create;
-GRANT SELECT ON TABLE r_adresse.lt_groupee TO read_sig;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE r_adresse.lt_groupee TO edit_sig;
+GRANT SELECT ON TABLE r_adresse.lt_groupee TO sig_read;
+GRANT ALL ON TABLE r_adresse.lt_groupee TO create_sig;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE r_adresse.lt_groupee TO sig_edit;
 
 COMMENT ON TABLE r_adresse.lt_groupee
   IS 'Code permettant de définir si une adresse est groupée ou non';
@@ -467,10 +481,12 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE r_adresse.lt_secondaire
-OWNER TO sig_create;
+    OWNER to create_sig;
+
 GRANT ALL ON TABLE r_adresse.lt_secondaire TO sig_create;
-GRANT SELECT ON TABLE r_adresse.lt_secondaire TO read_sig;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE r_adresse.lt_secondaire TO edit_sig;
+GRANT SELECT ON TABLE r_adresse.lt_secondaire TO sig_read;
+GRANT ALL ON TABLE r_adresse.lt_secondaire TO create_sig;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE r_adresse.lt_secondaire TO sig_edit;
 
 COMMENT ON TABLE r_adresse.lt_secondaire
   IS 'Code permettant de définir si une adresse est un accès secondaire';
@@ -501,10 +517,12 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE r_adresse.lt_src_adr
-  OWNER TO sig_create;
+    OWNER to create_sig;
+
 GRANT ALL ON TABLE r_adresse.lt_src_adr TO sig_create;
-GRANT SELECT ON TABLE r_adresse.lt_src_adr TO read_sig;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE r_adresse.lt_src_adr TO edit_sig;
+GRANT SELECT ON TABLE r_adresse.lt_src_adr TO sig_read;
+GRANT ALL ON TABLE r_adresse.lt_src_adr TO create_sig;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE r_adresse.lt_src_adr TO sig_edit;
 
 COMMENT ON TABLE r_adresse.lt_src_adr
   IS 'Code permettant de décrire l''origine de l''adresse';
@@ -539,10 +557,12 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE r_adresse.lt_diag_adr
-  OWNER TO sig_create;
+    OWNER to create_sig;
+
 GRANT ALL ON TABLE r_adresse.lt_diag_adr TO sig_create;
-GRANT SELECT ON TABLE r_adresse.lt_diag_adr TO read_sig;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE r_adresse.lt_diag_adr TO edit_sig;
+GRANT SELECT ON TABLE r_adresse.lt_diag_adr TO sig_read;
+GRANT ALL ON TABLE r_adresse.lt_diag_adr TO create_sig;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE r_adresse.lt_diag_adr TO sig_edit;
 
 COMMENT ON TABLE r_adresse.lt_diag_adr
   IS 'Code permettant de décrire un diagnostic qualité d''une adresse';
@@ -584,10 +604,12 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE r_adresse.lt_qual_adr
-  OWNER TO sig_create;
+    OWNER to create_sig;
+
 GRANT ALL ON TABLE r_adresse.lt_qual_adr TO sig_create;
-GRANT SELECT ON TABLE r_adresse.lt_qual_adr TO read_sig;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE r_adresse.lt_qual_adr TO edit_sig;
+GRANT SELECT ON TABLE r_adresse.lt_qual_adr TO sig_read;
+GRANT ALL ON TABLE r_adresse.lt_qual_adr TO create_sig;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE r_adresse.lt_qual_adr TO sig_edit;
 
 COMMENT ON TABLE r_adresse.lt_qual_adr
   IS 'Code permettant de décrire un indice de qualité simplifié d''une adresse';
@@ -628,10 +650,12 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE r_adresse.lt_dest_adr
-  OWNER TO sig_create;
+    OWNER to create_sig;
+
 GRANT ALL ON TABLE r_adresse.lt_dest_adr TO sig_create;
-GRANT SELECT ON TABLE r_adresse.lt_dest_adr TO read_sig;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE r_adresse.lt_dest_adr TO edit_sig;
+GRANT SELECT ON TABLE r_adresse.lt_dest_adr TO sig_read;
+GRANT ALL ON TABLE r_adresse.lt_dest_adr TO create_sig;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE r_adresse.lt_dest_adr TO sig_edit;
 
 COMMENT ON TABLE r_adresse.lt_dest_adr
   IS 'Code permettant de décrire la destination de l''adresse';
@@ -668,10 +692,12 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE r_adresse.lt_etat_adr
-  OWNER TO sig_create;
+    OWNER to create_sig;
+
 GRANT ALL ON TABLE r_adresse.lt_etat_adr TO sig_create;
-GRANT SELECT ON TABLE r_adresse.lt_etat_adr TO read_sig;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE r_adresse.lt_etat_adr TO edit_sig;
+GRANT SELECT ON TABLE r_adresse.lt_etat_adr TO sig_read;
+GRANT ALL ON TABLE r_adresse.lt_etat_adr TO create_sig;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE r_adresse.lt_etat_adr TO sig_edit;
 
 COMMENT ON TABLE r_adresse.lt_etat_adr
   IS 'Code permettant de décrire l''état de la construction à l''adresse';
@@ -869,14 +895,14 @@ CREATE OR REPLACE VIEW r_adresse.geo_v_adresse
      LEFT JOIN r_osm.geo_osm_commune c ON v.insee = c.insee::bpchar;
 
 ALTER TABLE r_adresse.geo_v_adresse
-    OWNER TO sig_create;
+    OWNER TO create_sig;
 COMMENT ON VIEW r_adresse.geo_v_adresse
     IS 'Vue éditable destinée à la modification des données relatives aux adresses';
 
-GRANT DELETE, UPDATE, SELECT, INSERT ON TABLE r_adresse.geo_v_adresse TO edit_sig;
 GRANT ALL ON TABLE r_adresse.geo_v_adresse TO sig_create;
+GRANT SELECT ON TABLE r_adresse.geo_v_adresse TO sig_read;
 GRANT ALL ON TABLE r_adresse.geo_v_adresse TO create_sig;
-GRANT SELECT ON TABLE r_adresse.geo_v_adresse TO read_sig;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE r_adresse.geo_v_adresse TO sig_edit;
 
 
 COMMENT ON TRIGGER t_t3_geo_v_adresse_vmr ON r_adresse.geo_v_adresse
@@ -884,23 +910,27 @@ COMMENT ON TRIGGER t_t3_geo_v_adresse_vmr ON r_adresse.geo_v_adresse
 
 
 
+-- View: x_opendata.xopendata_an_v_bal_12
 
+-- DROP VIEW x_opendata.xopendata_an_v_bal_12;
 
--- View: x_opendata.xopendata_an_v_bal
-
--- DROP VIEW x_opendata.xopendata_an_v_bal;
-
-CREATE OR REPLACE VIEW x_opendata.xopendata_an_v_bal AS 
- SELECT
-        lower(CASE
+CREATE OR REPLACE VIEW x_opendata.xopendata_an_v_bal_12
+ AS
+ SELECT ''::character varying AS uid_adresse,
+    lower(
+        CASE
             WHEN a.repet IS NULL AND a.complement IS NULL THEN concat(v.insee, '_', v.rivoli, '_', lpad(a.numero::text, 5, '0'::text))
             WHEN a.repet IS NOT NULL AND a.complement IS NULL THEN concat(v.insee, '_', v.rivoli, '_', lpad(a.numero::text, 5, '0'::text), lower(btrim(concat('_', "left"(a.repet::text, 3)))))
             WHEN a.repet IS NULL AND a.complement IS NOT NULL THEN concat(v.insee, '_', v.rivoli, '_', lpad(a.numero::text, 5, '0'::text), lower(btrim(concat('_', replace(a.complement::text, ' '::text, ''::text)))))
             WHEN a.repet IS NOT NULL AND a.complement IS NOT NULL THEN concat(v.insee, '_', v.rivoli, '_', lpad(a.numero::text, 5, '0'::text), lower(btrim(concat('_', "left"(a.repet::text, 3), '_', replace(a.complement::text, ' '::text, ''::text)))))
             ELSE NULL::text
         END) AS cle_interop,
-    p.id_adresse AS uid_adresse,
-    v.libvoie_c AS voie_nom,
+    v.insee::character varying(5) AS commune_insee,
+    c.commune AS commune_nom,
+    af.insee_cd AS commune_deleguee_insee,
+    af.nom_cd AS commune_deleguee_nom,
+    btrim(v.libvoie_c::text)::character varying(100) AS voie_nom,
+    a.ld_compl AS lieudit_complement_nom,
     a.numero,
         CASE
             WHEN a.repet IS NULL AND a.complement IS NULL THEN NULL::text
@@ -908,105 +938,98 @@ CREATE OR REPLACE VIEW x_opendata.xopendata_an_v_bal AS
             WHEN a.repet IS NULL AND a.complement IS NOT NULL THEN lower(btrim(replace(a.complement::text, ' '::text, ''::text)))
             WHEN a.repet IS NOT NULL AND a.complement IS NOT NULL THEN lower(btrim(concat("left"(a.repet::text, 3), '_', replace(a.complement::text, ' '::text, ''::text))))
             ELSE NULL::text
-        END AS suffixe,
-    c.commune AS commune_nom,
+        END::character varying AS suffixe,
     lt_p.valeur AS "position",
     p.x_l93 AS x,
     p.y_l93 AS y,
-    st_x(st_transform(p.geom, 4326)) AS long,
-    st_y(st_transform(p.geom, 4326)) AS lat,
-    lt_a.valeur AS source,
+    st_x(st_transform(p.geom, 4326))::numeric(8,7) AS long,
+    st_y(st_transform(p.geom, 4326))::numeric(9,7) AS lat,
+    ''::character varying AS cad_parcelles,
         CASE
-            WHEN p.date_maj IS NULL THEN to_char(date(p.date_sai),'YYYY-MM-DD')
-            ELSE to_char(date(p.date_maj),'YYYY-MM-DD')
-        END AS date_der_maj
+            WHEN "left"(c.commune::text, 1) = ANY (ARRAY['A'::text, 'E'::text, 'I'::text, 'O'::text, 'U'::text, 'Y'::text, 'H'::text, 'É'::text]) THEN 'Commune d'''::text || c.commune::text
+            ELSE 'Commune de '::text || c.commune::text
+        END::character varying AS source,
+        CASE
+            WHEN p.date_maj IS NULL THEN to_char(date(p.date_sai)::timestamp with time zone, 'YYYY-MM-DD'::text)
+            ELSE to_char(date(p.date_maj)::timestamp with time zone, 'YYYY-MM-DD'::text)
+        END::character varying(10) AS date_der_maj
    FROM r_objet.geo_objet_pt_adresse p
      LEFT JOIN r_adresse.an_adresse a ON a.id_adresse = p.id_adresse
-     LEFT JOIN r_adresse.lt_src_adr lt_a ON lt_a.code::text = a.src_adr::text
+     LEFT JOIN r_adresse.an_adresse_info af ON af.id_adresse = p.id_adresse
      LEFT JOIN r_objet.lt_position lt_p ON lt_p.code::text = p."position"::text
      LEFT JOIN r_voie.an_voie v ON v.id_voie = p.id_voie
      LEFT JOIN r_osm.geo_osm_commune c ON v.insee = c.insee::bpchar
-  WHERE (a.diag_adr::text = '11'::text OR "left"(a.diag_adr::text, 1) = '2'::text) AND a.diag_adr::text <> '31'::text AND a.diag_adr::text <> '32'::text AND a.numero <> '00000'
-  ORDER BY 
+  WHERE (a.diag_adr::text = '11'::text OR "left"(a.diag_adr::text, 1) = '2'::text) AND a.diag_adr::text <> '31'::text AND a.diag_adr::text <> '32'::text AND a.numero::text <> '00000'::text
+  ORDER BY (
         CASE
             WHEN a.repet IS NULL AND a.complement IS NULL THEN concat(v.insee, '_', v.rivoli, '_', lpad(a.numero::text, 5, '0'::text))
             WHEN a.repet IS NOT NULL AND a.complement IS NULL THEN concat(v.insee, '_', v.rivoli, '_', lpad(a.numero::text, 5, '0'::text), lower(btrim(concat('_', "left"(a.repet::text, 3)))))
             WHEN a.repet IS NULL AND a.complement IS NOT NULL THEN concat(v.insee, '_', v.rivoli, '_', lpad(a.numero::text, 5, '0'::text), lower(btrim(concat('_', replace(a.complement::text, ' '::text, ''::text)))))
             WHEN a.repet IS NOT NULL AND a.complement IS NOT NULL THEN concat(v.insee, '_', v.rivoli, '_', lpad(a.numero::text, 5, '0'::text), lower(btrim(concat('_', "left"(a.repet::text, 3), '_', replace(a.complement::text, ' '::text, ''::text)))))
             ELSE NULL::text
-        END;
+        END);
 
-ALTER TABLE x_opendata.xopendata_an_v_bal
-  OWNER TO sig_create;
-GRANT ALL ON TABLE x_opendata.xopendata_an_v_bal TO sig_create;
-GRANT SELECT ON TABLE x_opendata.xopendata_an_v_bal TO read_sig;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE x_opendata.xopendata_an_v_bal TO edit_sig;
+ALTER TABLE x_opendata.xopendata_an_v_bal_12
+    OWNER TO create_sig;
+COMMENT ON VIEW x_opendata.xopendata_an_v_bal_12
+    IS 'Vue alphanumérique simplifiée des adresses au format d''échange BAL Standard 1.2';
 
-COMMENT ON VIEW x_opendata.xopendata_an_v_bal
-  IS 'Vue alphanumérique simplifiée des adresses au format d''échange BAL';
+GRANT ALL ON TABLE x_opendata.xopendata_an_v_bal_12 TO sig_create;
+GRANT SELECT ON TABLE x_opendata.xopendata_an_v_bal_12 TO sig_read;
+GRANT ALL ON TABLE x_opendata.xopendata_an_v_bal_12 TO create_sig;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE x_opendata.xopendata_an_v_bal_12 TO sig_edit;
+
 
 
 -- View: r_adresse.an_v_adresse_commune
 
--- DROP VIEW r_adresse.an_v_adresse_commune; 
+-- DROP VIEW r_adresse.an_v_adresse_commune;
 
-CREATE OR REPLACE VIEW r_adresse.an_v_adresse_commune AS
-SELECT a.insee,c.commune,COUNT(*) as nombre
-FROM r_adresse.geo_v_adresse a
-LEFT JOIN r_osm.geo_osm_commune c ON a.insee = c.insee::bpchar
-GROUP BY a.insee, c.commune
-ORDER BY a.insee, c.commune;
+CREATE OR REPLACE VIEW r_adresse.an_v_adresse_commune
+ AS
+ SELECT c.insee,
+    c.commune,
+    count(a.*) AS nbr_bal
+   FROM x_apps.xapps_geo_vmr_adresse a
+     LEFT JOIN r_osm.geo_osm_commune c ON a.insee = c.insee::bpchar
+  GROUP BY c.insee, c.commune
+  ORDER BY c.insee, c.commune;
 
 ALTER TABLE r_adresse.an_v_adresse_commune
-  OWNER TO sig_create;      
-GRANT ALL ON TABLE r_adresse.an_v_adresse_commune TO sig_create;
-GRANT SELECT ON TABLE r_adresse.an_v_adresse_commune TO read_sig;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE r_adresse.an_v_adresse_commune TO edit_sig;
-
+    OWNER TO create_sig;
 COMMENT ON VIEW r_adresse.an_v_adresse_commune
-  IS 'Vue d''exploitation permettant de compter le nombre d''enregistrement d''adresse par commune';
+    IS 'Vue d''exploitation permettant de compter le nombre d''enregistrement d''adresse par commune';
+
+GRANT ALL ON TABLE r_adresse.an_v_adresse_commune TO sig_create;
+GRANT SELECT ON TABLE r_adresse.an_v_adresse_commune TO sig_read;
+GRANT ALL ON TABLE r_adresse.an_v_adresse_commune TO create_sig;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE r_adresse.an_v_adresse_commune TO sig_edit;
 
 
+-- View: r_adresse.an_v_adresse_bal_epci
 
--- View: r_voie.an_v_voie_adr_rivoli_null
+-- DROP VIEW r_adresse.an_v_adresse_bal_epci;
 
--- DROP VIEW r_voie.an_v_voie_adr_rivoli_null;
+CREATE OR REPLACE VIEW r_adresse.an_v_adresse_bal_epci
+ AS
+ SELECT g.lib_epci,
+    count(a.*) AS nbr_bal
+   FROM x_apps.xapps_geo_vmr_adresse a
+     LEFT JOIN r_administratif.an_geo g ON a.insee = g.insee::bpchar
+  GROUP BY g.lib_epci
+  ORDER BY g.lib_epci;
 
-CREATE OR REPLACE VIEW r_voie.an_v_voie_adr_rivoli_null AS 
-SELECT v.id_voie,v.libvoie_c,v.insee,v.rivoli,v.rivoli_cle,v.observ,v.src_voie,v.date_sai,v.date_maj
-FROM r_voie.an_voie as v
-   INNER JOIN r_objet.geo_objet_pt_adresse p ON p.id_voie = v.id_voie      
-WHERE v.rivoli IS NULL
-ORDER BY insee;
+ALTER TABLE r_adresse.an_v_adresse_bal_epci
+    OWNER TO create_sig;
+COMMENT ON VIEW r_adresse.an_v_adresse_bal_epci
+    IS 'Vue d''exploitation permettant de compter le nombre d''enregistrement d''adresse par epci de la BAL';
 
-ALTER TABLE r_voie.an_v_voie_adr_rivoli_null
-  OWNER TO sig_create;  
-GRANT ALL ON TABLE r_voie.an_v_voie_adr_rivoli_null TO sig_create;
-GRANT SELECT ON TABLE r_voie.an_v_voie_adr_rivoli_null TO read_sig;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE r_voie.an_v_voie_adr_rivoli_null TO edit_sig;
+GRANT ALL ON TABLE r_adresse.an_v_adresse_bal_epci TO sig_create;
+GRANT SELECT ON TABLE r_adresse.an_v_adresse_bal_epci TO sig_read;
+GRANT ALL ON TABLE r_adresse.an_v_adresse_bal_epci TO create_sig WITH GRANT OPTION;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE r_adresse.an_v_adresse_bal_epci TO sig_edit;
 
-COMMENT ON VIEW r_voie.an_v_voie_adr_rivoli_null
-  IS 'Vue d''exploitation permettant d''identifier les voies adressées sans code RIVOLI';
-  
 
--- View: r_voie.an_v_voie_rivoli_null
-
--- DROP VIEW r_voie.an_v_voie_rivoli_null;
-
-CREATE OR REPLACE VIEW r_voie.an_v_voie_rivoli_null AS 
-SELECT v.id_voie,v.libvoie_c,v.insee,v.rivoli,v.rivoli_cle,v.observ,v.src_voie,v.date_sai,v.date_maj
-FROM r_voie.an_voie as v   
-WHERE v.rivoli IS NULL
-ORDER BY insee;
-
-ALTER TABLE r_voie.an_v_voie_rivoli_null
-  OWNER TO sig_create;
-GRANT ALL ON TABLE r_voie.an_v_voie_rivoli_null TO sig_create;
-GRANT SELECT ON TABLE r_voie.an_v_voie_rivoli_null TO read_sig;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE r_voie.an_v_voie_rivoli_null TO edit_sig;
-
-COMMENT ON VIEW r_voie.an_v_voie_rivoli_null
-  IS 'Vue d''exploitation permettant d''identifier les voies sans code RIVOLI';
 
 
 -- ####################################################################################################################################################
@@ -1397,9 +1420,9 @@ $BODY$
   LANGUAGE plpgsql VOLATILE
   COST 100;
 ALTER FUNCTION r_adresse.ft_m_an_adresse_h()
-  OWNER TO sig_create;
-GRANT EXECUTE ON FUNCTION r_adresse.ft_m_an_adresse_h() TO public;
-GRANT EXECUTE ON FUNCTION r_adresse.ft_m_an_adresse_h() TO sig_create;
+    OWNER TO create_sig;
+
+GRANT EXECUTE ON FUNCTION r_adresse.ft_m_an_adresse_h() TO PUBLIC;
 GRANT EXECUTE ON FUNCTION r_adresse.ft_m_an_adresse_h() TO create_sig;
 		  
 COMMENT ON FUNCTION r_adresse.ft_m_an_adresse_h() IS 'Fonction trigger pour insertion de l''historisation des adresses dans la classe d''objet an_adresse_h';
@@ -1591,13 +1614,10 @@ END;
 $BODY$;
 
 ALTER FUNCTION r_adresse.ft_m_geo_adresse_gestion()
-    OWNER TO sig_create;
-
-GRANT EXECUTE ON FUNCTION r_adresse.ft_m_geo_adresse_gestion() TO sig_create;
-
-GRANT EXECUTE ON FUNCTION r_adresse.ft_m_geo_adresse_gestion() TO create_sig;
+    OWNER TO create_sig;
 
 GRANT EXECUTE ON FUNCTION r_adresse.ft_m_geo_adresse_gestion() TO PUBLIC;
+GRANT EXECUTE ON FUNCTION r_adresse.ft_m_geo_adresse_gestion() TO create_sig;
 
 COMMENT ON FUNCTION r_adresse.ft_m_geo_adresse_gestion()
     IS 'Fonction trigger pour gérer l''insertion et la mise à jour des données adresse';
@@ -1628,16 +1648,16 @@ END;
 
 $BODY$;
 
+
 ALTER FUNCTION r_adresse.ft_m_geo_v_adresse_vmr()
-    OWNER TO sig_create;
-			 
+    OWNER TO create_sig;
+
+GRANT EXECUTE ON FUNCTION r_adresse.ft_m_geo_v_adresse_vmr() TO PUBLIC;
+GRANT EXECUTE ON FUNCTION r_adresse.ft_m_geo_v_adresse_vmr() TO create_sig;
+
 COMMENT ON FUNCTION r_adresse.ft_m_geo_v_adresse_vmr()
     IS 'Fonction permettant de rafraichir la vue matérialisée des adresses visibles dans les différentes applications.';
 
-GRANT EXECUTE ON FUNCTION r_adresse.ft_m_geo_v_adresse_vmr() TO edit_sig;
-GRANT EXECUTE ON FUNCTION r_adresse.ft_m_geo_v_adresse_vmr() TO sig_create;
-GRANT EXECUTE ON FUNCTION r_adresse.ft_m_geo_v_adresse_vmr() TO create_sig;
-GRANT EXECUTE ON FUNCTION r_adresse.ft_m_geo_v_adresse_vmr() TO PUBLIC;
 
 -- CREATTION DES DECLENCHEURS		 
 			 
@@ -1662,6 +1682,40 @@ CREATE TRIGGER t_t3_geo_v_adresse_vmr
     EXECUTE PROCEDURE r_adresse.ft_m_geo_v_adresse_vmr();
 
 
+-- FUNCTION: r_adresse.ft_m_adresse_repetcomplement_null()
+
+-- DROP FUNCTION r_adresse.ft_m_adresse_repetcomplement_null();
+
+CREATE FUNCTION r_adresse.ft_m_adresse_repetcomplement_null()
+    RETURNS trigger
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE NOT LEAKPROOF
+AS $BODY$
+
+begin
+
+ -- gestion des valeurs '' mise à jour une insertion
+ update r_adresse.an_adresse set repet = null where repet = '';        
+ update r_adresse.an_adresse set complement = null where complement = '';
+ update r_adresse.an_adresse set ld_compl = null where ld_compl = '';
+
+	return new; 
+end;
+
+$BODY$;
+
+ALTER FUNCTION r_adresse.ft_m_adresse_repetcomplement_null()
+    OWNER TO create_sig;
+
+GRANT EXECUTE ON FUNCTION r_adresse.ft_m_adresse_repetcomplement_null() TO PUBLIC;
+
+GRANT EXECUTE ON FUNCTION r_adresse.ft_m_adresse_repetcomplement_null() TO create_sig;
+
+COMMENT ON FUNCTION r_adresse.ft_m_adresse_repetcomplement_null()
+    IS 'Fonction forçant le champ à null quand insertion ou mise à jour des attributs repet ou complement ''''';
+
+
 -- Trigger: t_t1_repetcomplement_null
 
 -- DROP TRIGGER t_t1_repetcomplement_null ON r_adresse.an_adresse;
@@ -1671,7 +1725,3 @@ CREATE TRIGGER t_t1_repetcomplement_null
     ON r_adresse.an_adresse
     FOR EACH ROW
     EXECUTE PROCEDURE r_adresse.ft_m_adresse_repetcomplement_null();
-
-
-
-
