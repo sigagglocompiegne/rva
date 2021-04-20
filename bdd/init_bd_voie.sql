@@ -41,7 +41,7 @@
 -- 2018/08/07 : GB / Insertion des nouveaux rôles de connexion et leurs privilèges
 -- 2021/02/16 : GB / Insertion fonction trigger de vérification du saisie code RIVOLI sur classe an_voie
 -- 2021/03/15 : GB / Modification des droits
-
+-- 2021/04/20 : GB / Correction bug dans la fonction de contrôle de saisie des RIVOLI dans la classe d'objet an_voie
 
 -- ToDo
 
@@ -2261,7 +2261,6 @@ END IF;
 
 -- si saisie d'un rivoli provisoire, doit correspondre au x +1
 									   
-IF NEW.rivoli <> OLD.rivoli THEN
 IF NEW.rivoli like 'x%' THEN
 
 IF NEW.rivoli <> 'x' || (SELECT max(substring(rivoli from 2 for 3))::integer +1 FROM r_voie.an_voie WHERE rivoli like 'x%' AND insee = NEW.insee) THEN
@@ -2271,7 +2270,6 @@ END IF;
 END IF;
 
 -- si doublon dans le code RIVOLI erreur
-IF NEW.rivoli <> OLD.rivoli THEN
 IF NEW.rivoli IN (SELECT rivoli FROM r_voie.an_voie WHERE insee = NEW.insee) THEN
 RAISE EXCEPTION 'Vous saisissez un code RIVOLI déjà présent sur la commune. Veuillez vérifier votre saisie pour poursuivre.';
 END IF;
