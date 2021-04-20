@@ -42,6 +42,7 @@
 -- 2021/03/15 : GB / Modification des droits
 -- 2021/03/15 : GB / Suppression des vues relevant les adresses sans CODE RIVOLI suite standard BAL 1.2 affectant un RIVOLI temporaire
 
+
 -- ***** pour les voies sans adresses (ex lieu dit), le numéro prend la valeur "99999"
 -- ToDo
 
