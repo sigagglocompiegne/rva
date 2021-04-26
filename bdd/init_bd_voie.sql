@@ -2242,7 +2242,7 @@ Ce déclencheur nécessite un enregistrement à chaque suppression ou mise à jo
 
 -- DROP FUNCTION r_voie.ft_m_an_voie_gestion();
 
-CREATE FUNCTION r_voie.ft_m_an_voie_gestion()
+CREATE OR REPLACE FUNCTION r_voie.ft_m_an_voie_gestion()
     RETURNS trigger
     LANGUAGE 'plpgsql'
     COST 100
@@ -2259,17 +2259,10 @@ IF NEW.rivoli IS null OR NEW.rivoli = '0000' OR NEW.rivoli = '' THEN
 RAISE EXCEPTION 'Code RIVOLI null ou égal à 0000. Veuillez corriger votre saisie.';
 END IF;
 
--- si saisie d'un rivoli provisoire, doit correspondre au x +1
-									   
+-- si saisie d'un rivoli existant
+
 IF NEW.rivoli like 'x%' THEN
 
-IF NEW.rivoli <> 'x' || (SELECT max(substring(rivoli from 2 for 3))::integer +1 FROM r_voie.an_voie WHERE rivoli like 'x%' AND insee = NEW.insee) THEN
-RAISE EXCEPTION 'Code RIVOLI non correct. Vous n''avez pas saisi le n° d''ordre correspondant';
-END IF;
-END IF;
-END IF;
-
--- si doublon dans le code RIVOLI erreur
 IF NEW.rivoli IN (SELECT rivoli FROM r_voie.an_voie WHERE insee = NEW.insee) THEN
 RAISE EXCEPTION 'Vous saisissez un code RIVOLI déjà présent sur la commune. Veuillez vérifier votre saisie pour poursuivre.';
 END IF;
@@ -2286,10 +2279,12 @@ ALTER FUNCTION r_voie.ft_m_an_voie_gestion()
     OWNER TO create_sig;
 
 GRANT EXECUTE ON FUNCTION r_voie.ft_m_an_voie_gestion() TO PUBLIC;
+
 GRANT EXECUTE ON FUNCTION r_voie.ft_m_an_voie_gestion() TO create_sig;
 
 COMMENT ON FUNCTION r_voie.ft_m_an_voie_gestion()
     IS 'Fonction trigger pour vérifier si la saisie des codes RIVOLI est correcte';
+
 									   
 									   
 -- Trigger: t1_verif_rivoli
