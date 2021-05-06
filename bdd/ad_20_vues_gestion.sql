@@ -72,9 +72,9 @@ COMMENT ON VIEW r_adresse.geo_v_adresse
     IS 'Vue éditable destinée à la modification des données relatives aux adresses';
 
 
+
 COMMENT ON TRIGGER t_t3_geo_v_adresse_vmr ON r_adresse.geo_v_adresse
     IS 'Fonction trigger déclenchée à chaque intervention sur la vue des adresses permettant de rafraichir la vue matérialisée des adresses visibles dans les différentes applications.';
-
 
 
 -- ####################################################################################################################################################
