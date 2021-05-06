@@ -1,8 +1,43 @@
--- #################################################################### SUIVI CODE SQL ####################################################################
-
 -- 2016/05/20 : FV / initialisation du code
--- 2018/04/12 : GB / Intégration des modifications sur les vues applicatives pour l'affichage côté utilisateur dans GEO
+-- 2016/05/25 : FV / confirmation réunion SIG des orientations suivantes : urbanisation base et sépération troncon/noeud avec les attributs métiers séparés de gestion de voirie
+-- 2016/05/26 : FV / table objet troncon, noeud, voie, voirie_gest et voirie_circu
+-- 2016/05/30 : FV / domaine de valeur # cas des non concernés traités (définit avec valeur "ZZ")
+-- 2016/05/30 : FV / vue troncon-gest-circu est OK, triggerS sur vue "éditable" ok, prb valeur par défaut non géré côté qgis sur la vue "éditable"
+-- 2016/06/14 : FV / trigger recup id_noeud pour noeud début et fin de troncon OK sur modif geom troncon
+-- 2016/06/14 : FV / trigger recup id_noeud pour noeud début et fin de troncon OK en lien avec modif geom noeud
+-- 2016/06/20 : GB / reprise des triggers existant dans un trigger permettant de produire/gérer les noeuds en auto lors de la saisie des troncons
+-- 2016/07/07 : FV / choix de modélisation, e:troncon a:nomme [0,1], e:voie a:nomme [1,n] ==> id_voie placé sur les tables objets de référence noeud et troncon ==> un objet ne peut être nommé (voie) que 1 fois
+-- 2016/07/11 : FV / résolution accès concurrentiel à la séquence id_tronc de geo_objet_troncon dans les triggers impliquant les tables tierces (an_troncon, an_voirie_circu, an_voirie_gest).
+--                   il faut faire référence au currval qui impose en préalable dans la session, la réalisation d'un nextval de séquence. Ceci est possible par le fait de passer le trigger impliquant le nextval en préable des autres triggers, ceci est lié à l'ordre alphabétique des triggers associés à cette vue.
+-- 2016/07/13 : FV / gestion insee_g/d non calculé si l'utilisateur fait une saisie manuelle préalable (ex : pour traiter les prb de raccord en limite de communes)
+-- 2016/07/13 : FV / prb trigger (temps de requete) pour suppression des noeuds apres modif ou sup de troncon du fait de l'union des troncons. Voir pour passer sur le principe de sup du noeud lorsque son id n'est plus référencé sur les troncons 
+-- 2016/07/19 : FV / domaine de valeur type_tronc
+-- 2016/07/20 : FV / compte tenu du choix de modélisation un troncon nommé 1 fois par commune et du cas où le troncon fait office de délimitation communale avec 2 noms de voie différents, alors on prévoit 2 champs de nommage guache/droite
+-- 2016/07/20 : FV / ajout attribut projet pour le troncon
+-- 2016/07/26 : GB / trigger sup_noeud réécrit sur la base de la présence ou non de l'id_noeud indexé aux troncons
+-- 2016/07/26 : FV / ajout attribut fictif pour le troncon (permet d'identifier les troncons ne rentrant pas dans des calculs de linéaires de voie comme les parking ou les troncons hors du pays compiégnois mais utiles dans le rendu graphique pour le fond perdu)
+-- 2016/07/29 : FV / adaptations mineures du domaine de valeur src_geom pour usage à l'ensemble des bases de données
+-- 2016/07/29 : FV / prise en charge pour la vue unifiant les tables "troncons" de la gestion des valeurs "null" > "non renseigné" dans les triggers
+-- 2016/08/24 : GB / ajout de la valeur Non concerné ZZ àa la table de valeur lt_sens_circu
+-- 2016/09/13 : FV / ajout trigger date_maj pour la classe de référence an_voie
+-- 2017/02/27 : FV / longueur de la chaine de caractères de l'attribut observations (observ) augmenté de 80 à 254 caractères pour les tables an_voirie_gest et an_voirie_circu
+-- 2017/07/25 : FV / création d'une vue troncon-voirie "décodée" pour l'exploitation applicative
+-- 2017/11/09 : GB / encodage des type de voie dans an_voie avec la table de valeur lt_type_voie
+-- 2018/03/18 : GB / Intégration du code des vues de contrôles voie-rivoli et ajout d'un numéro automatique dans la vue an_v_voie_adr_rivoli_null pour ouverture dans QGIS
+-- 2018/03/19 : GB / Intégration des modifications suite au groupe de travail RVA du 13 mars 2018
+--		- dans la table an_voirie_circu : ajout de 3 attributs (c_circu pour les contraintes de circulation issue d'une liste de valeur, c_observ pour les commentaires sur les valeurs que prennent les restrictions, date_ouv pour intégrer une année ou une période d'ouverture à la circulation
+--		- dans la table an_voirie_gest : ajout de 1 attribut (date_rem pour l'année ou la période de dernière de remise en état de la chaussée)
+--		- dans la table an_voie: ajout de 1 attribut (date_lib intégrant la date ou la période de l'arrêté nommant la voie)
+--		- création de la table an_troncon_h pour le suivi du libellé de voie : 5 attributs créés qui seront automatiquement rempli à la saisie (id,identifiant unique de l'historisation, id_tronc, id_voie, date_sai,date_maj)
+--              - création d'une séquence pour gérer l'id de l'historisation
+--		- affectation du trigger de mise à jour de la date date_maj
+--		- intégration d'un trigger supplémentaire à la saisie de la vue des tronçons pour implémentation de la base historique lorsque que la case historique est cochée dans la fiche QGIS
+--		- modification des vues et triggers de mise à jour intégrant ces différents éléments
+-- 2018/03/20 : GB / Intégration d'une partie VUES APPLICATIVES et intégration du codes SQL
+--		- création de bloc pour séparer les vues de gestion, applicatives et open data
+-- 2018/04/12 : GB / Adaptation des requêtes applicatives historiques dans le formatage des résultats pour l'utilisateur dans GEO
 -- 2018/08/07 : GB / Insertion des nouveaux rôles de connexion et leurs privilèges
--- 2021/02/16 : GB / Modification des fonctions triggers de la vue de gestion et de la classe an_voie pour mieux vérifier la saisie des codes RIVOLI issus du FANTOIR et gérer les RIVOLI provisoires
+-- 2021/02/16 : GB / Insertion fonction trigger de vérification du saisie code RIVOLI sur classe an_voie
 -- 2021/03/15 : GB / Modification des droits
+-- 2021/04/20 : GB / Correction bug dans la fonction de contrôle de saisie des RIVOLI dans la classe d'objet an_voie
 
