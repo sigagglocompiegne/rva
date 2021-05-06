@@ -1,3 +1,10 @@
+/*ADRESSE V1.0*/
+/*Creation du squelette de la structure des données (tables, séquences, triggers,...) */
+/*ad_10_SQUELETTE.sql */
+/*PostGIS*/
+/*GeoCompiegnois - http://geo.compiegnois.fr/ */
+/*Auteur : Grégory Bodet */
+
 -- #################################################################### SCHEMA  ####################################################################
 
 -- Schema: r_adresse
@@ -6,20 +13,6 @@
 
 CREATE SCHEMA r_adresse
   AUTHORIZATION sig_create;
-
-GRANT ALL ON SCHEMA r_adresse TO create_sig;
-
-ALTER DEFAULT PRIVILEGES IN SCHEMA r_adresse
-GRANT ALL ON TABLES TO sig_create;
-
-ALTER DEFAULT PRIVILEGES IN SCHEMA r_adresse
-GRANT SELECT ON TABLES TO sig_read;
-
-ALTER DEFAULT PRIVILEGES IN SCHEMA r_adresse
-GRANT ALL ON TABLES TO create_sig;
-
-ALTER DEFAULT PRIVILEGES IN SCHEMA r_adresse
-GRANT INSERT, SELECT, UPDATE, DELETE ON TABLES TO sig_edit;
 
 COMMENT ON SCHEMA r_adresse
   IS 'Référentiel Base Adresse Locale (BAL)';
@@ -47,9 +40,6 @@ CREATE SEQUENCE r_objet.geo_objet_pt_adresse_id_seq
   CACHE 1;
 ALTER SEQUENCE r_objet.geo_objet_pt_adresse_id_seq
     OWNER TO create_sig;
-
-GRANT ALL ON SEQUENCE r_objet.geo_objet_pt_adresse_id_seq TO PUBLIC;
-GRANT ALL ON SEQUENCE r_objet.geo_objet_pt_adresse_id_seq TO create_sig;
 
 ALTER TABLE r_objet.geo_objet_pt_adresse ALTER COLUMN id_adresse SET DEFAULT nextval('r_objet.geo_objet_pt_adresse_id_seq'::regclass);
   
@@ -91,11 +81,6 @@ TABLESPACE pg_default;
 
 ALTER TABLE r_objet.geo_objet_pt_adresse
     OWNER to create_sig;
-
-GRANT ALL ON TABLE r_objet.geo_objet_pt_adresse TO sig_create;
-GRANT SELECT ON TABLE r_objet.geo_objet_pt_adresse TO sig_read;
-GRANT ALL ON TABLE r_objet.geo_objet_pt_adresse TO create_sig;
-GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE r_objet.geo_objet_pt_adresse TO sig_edit;
 
 COMMENT ON TABLE r_objet.geo_objet_pt_adresse
     IS 'Classe décrivant la position d''une adresse';
@@ -180,11 +165,6 @@ WITH (
 ALTER TABLE r_adresse.an_adresse
     OWNER to create_sig;
 
-GRANT ALL ON TABLE r_adresse.an_adresse TO sig_create;
-GRANT SELECT ON TABLE r_adresse.an_adresse TO sig_read;
-GRANT ALL ON TABLE r_adresse.an_adresse TO create_sig;
-GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE r_adresse.an_adresse TO sig_edit;
-
 COMMENT ON TABLE r_adresse.an_adresse
   IS 'Table alphanumérique des adresses';
 COMMENT ON COLUMN r_adresse.an_adresse.id_adresse IS 'Identifiant unique de l''objet point adresse';
@@ -218,9 +198,6 @@ CREATE SEQUENCE r_adresse.an_adresse_h_id_seq
 ALTER SEQUENCE r_adresse.an_adresse_h_id_seq
     OWNER TO create_sig;
 
-GRANT ALL ON SEQUENCE r_adresse.an_adresse_h_id_seq TO PUBLIC;
-GRANT ALL ON SEQUENCE r_adresse.an_adresse_h_id_seq TO create_sig;
-
 
 -- Table: r_adresse.an_adresse_h
 
@@ -247,11 +224,6 @@ WITH (
 );
 ALTER TABLE r_adresse.an_adresse_h
     OWNER to create_sig;
-
-GRANT ALL ON TABLE r_adresse.an_adresse_h TO sig_create;
-GRANT SELECT ON TABLE r_adresse.an_adresse_h TO sig_read;
-GRANT ALL ON TABLE r_adresse.an_adresse_h TO create_sig;
-GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE r_adresse.an_adresse_h TO sig_edit;
 
 COMMENT ON TABLE r_adresse.an_adresse_h
   IS 'Table alphanumérique des historisations des adresses suite à une renumérotation';
@@ -298,11 +270,6 @@ WITH (
 ALTER TABLE r_adresse.an_adresse_info
     OWNER to create_sig;
 
-GRANT ALL ON TABLE r_adresse.an_adresse_info TO sig_create;
-GRANT SELECT ON TABLE r_adresse.an_adresse_info TO sig_read;
-GRANT ALL ON TABLE r_adresse.an_adresse_info TO create_sig;
-GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE r_adresse.an_adresse_info TO sig_edit;
-
 COMMENT ON TABLE r_adresse.an_adresse_info
   IS 'Table alphanumérique des informations complémentaires des adresses';
 COMMENT ON COLUMN r_adresse.an_adresse_info.id_adresse IS 'Identifiant unique de l''objet point adresse';
@@ -347,11 +314,6 @@ WITH (
 ALTER TABLE r_objet.lt_position
     OWNER to create_sig;
 
-GRANT ALL ON TABLE r_objet.lt_position TO sig_create;
-GRANT SELECT ON TABLE r_objet.lt_position TO sig_read;
-GRANT ALL ON TABLE r_objet.lt_position TO create_sig;
-GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE r_objet.lt_position TO sig_edit;
-
 COMMENT ON TABLE r_objet.lt_position
   IS 'Code permettant de décrire le type de position de l''adresse';
 COMMENT ON COLUMN r_objet.lt_position.code IS 'Code de la liste énumérée relative au type de position de l''adresse';
@@ -391,10 +353,6 @@ WITH (
 ALTER TABLE r_adresse.lt_groupee
     OWNER to create_sig;
 
-GRANT ALL ON TABLE r_adresse.lt_groupee TO sig_create;
-GRANT SELECT ON TABLE r_adresse.lt_groupee TO sig_read;
-GRANT ALL ON TABLE r_adresse.lt_groupee TO create_sig;
-GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE r_adresse.lt_groupee TO sig_edit;
 
 COMMENT ON TABLE r_adresse.lt_groupee
   IS 'Code permettant de définir si une adresse est groupée ou non';
@@ -427,10 +385,6 @@ WITH (
 ALTER TABLE r_adresse.lt_secondaire
     OWNER to create_sig;
 
-GRANT ALL ON TABLE r_adresse.lt_secondaire TO sig_create;
-GRANT SELECT ON TABLE r_adresse.lt_secondaire TO sig_read;
-GRANT ALL ON TABLE r_adresse.lt_secondaire TO create_sig;
-GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE r_adresse.lt_secondaire TO sig_edit;
 
 COMMENT ON TABLE r_adresse.lt_secondaire
   IS 'Code permettant de définir si une adresse est un accès secondaire';
@@ -462,11 +416,6 @@ WITH (
 );
 ALTER TABLE r_adresse.lt_src_adr
     OWNER to create_sig;
-
-GRANT ALL ON TABLE r_adresse.lt_src_adr TO sig_create;
-GRANT SELECT ON TABLE r_adresse.lt_src_adr TO sig_read;
-GRANT ALL ON TABLE r_adresse.lt_src_adr TO create_sig;
-GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE r_adresse.lt_src_adr TO sig_edit;
 
 COMMENT ON TABLE r_adresse.lt_src_adr
   IS 'Code permettant de décrire l''origine de l''adresse';
@@ -503,10 +452,6 @@ WITH (
 ALTER TABLE r_adresse.lt_diag_adr
     OWNER to create_sig;
 
-GRANT ALL ON TABLE r_adresse.lt_diag_adr TO sig_create;
-GRANT SELECT ON TABLE r_adresse.lt_diag_adr TO sig_read;
-GRANT ALL ON TABLE r_adresse.lt_diag_adr TO create_sig;
-GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE r_adresse.lt_diag_adr TO sig_edit;
 
 COMMENT ON TABLE r_adresse.lt_diag_adr
   IS 'Code permettant de décrire un diagnostic qualité d''une adresse';
@@ -550,10 +495,6 @@ WITH (
 ALTER TABLE r_adresse.lt_qual_adr
     OWNER to create_sig;
 
-GRANT ALL ON TABLE r_adresse.lt_qual_adr TO sig_create;
-GRANT SELECT ON TABLE r_adresse.lt_qual_adr TO sig_read;
-GRANT ALL ON TABLE r_adresse.lt_qual_adr TO create_sig;
-GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE r_adresse.lt_qual_adr TO sig_edit;
 
 COMMENT ON TABLE r_adresse.lt_qual_adr
   IS 'Code permettant de décrire un indice de qualité simplifié d''une adresse';
@@ -596,10 +537,6 @@ WITH (
 ALTER TABLE r_adresse.lt_dest_adr
     OWNER to create_sig;
 
-GRANT ALL ON TABLE r_adresse.lt_dest_adr TO sig_create;
-GRANT SELECT ON TABLE r_adresse.lt_dest_adr TO sig_read;
-GRANT ALL ON TABLE r_adresse.lt_dest_adr TO create_sig;
-GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE r_adresse.lt_dest_adr TO sig_edit;
 
 COMMENT ON TABLE r_adresse.lt_dest_adr
   IS 'Code permettant de décrire la destination de l''adresse';
@@ -638,10 +575,6 @@ WITH (
 ALTER TABLE r_adresse.lt_etat_adr
     OWNER to create_sig;
 
-GRANT ALL ON TABLE r_adresse.lt_etat_adr TO sig_create;
-GRANT SELECT ON TABLE r_adresse.lt_etat_adr TO sig_read;
-GRANT ALL ON TABLE r_adresse.lt_etat_adr TO create_sig;
-GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE r_adresse.lt_etat_adr TO sig_edit;
 
 COMMENT ON TABLE r_adresse.lt_etat_adr
   IS 'Code permettant de décrire l''état de la construction à l''adresse';
