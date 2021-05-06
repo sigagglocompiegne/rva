@@ -7,6 +7,15 @@
 
 -- ####################################################################################################################################################
 -- ###                                                                                                                                              ###
+-- ###                                                                 DROP                                                                         ###
+-- ###                                                                                                                                              ###
+-- ####################################################################################################################################################
+
+DROP VIEW IF EXISTS r_adresse.geo_v_adresse;
+
+
+-- ####################################################################################################################################################
+-- ###                                                                                                                                              ###
 -- ###                                                              VUES DE GESTION                                                                 ###
 -- ###                                                                                                                                              ###
 -- ####################################################################################################################################################
@@ -434,6 +443,34 @@ CREATE TRIGGER t_t2_an_adresse_h
     FOR EACH ROW
     EXECUTE PROCEDURE r_adresse.ft_m_an_adresse_h();
 
+-- #################################################################### FONCTION TRIGGER - ft_m_geo_adresse_gestion ###################################################
+
+-- FUNCTION: r_adresse.ft_m_geo_v_adresse_vmr()
+
+-- DROP FUNCTION r_adresse.ft_m_geo_v_adresse_vmr();
+
+CREATE FUNCTION r_adresse.ft_m_geo_v_adresse_vmr()
+    RETURNS trigger
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE NOT LEAKPROOF
+AS $BODY$
+
+BEGIN
+-- rafraichissement de la vue matérialisée des adresses visibles dans les applications
+REFRESH MATERIALIZED VIEW x_apps.xapps_geo_vmr_adresse;
+
+return new;
+
+END;
+
+$BODY$;
+
+ALTER FUNCTION r_adresse.ft_m_geo_v_adresse_vmr()
+    OWNER TO create_sig;
+
+COMMENT ON FUNCTION r_adresse.ft_m_geo_v_adresse_vmr()
+    IS 'Fonction permettant de rafraichir la vue matérialisée des adresses visibles dans les différentes applications.';
 
 CREATE TRIGGER t_t3_geo_v_adresse_vmr
     INSTEAD OF INSERT OR DELETE OR UPDATE 
