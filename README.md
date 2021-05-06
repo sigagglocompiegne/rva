@@ -8,10 +8,18 @@ Spécification du fichier d’échange relatif aux données concernant le réfé
 - Script d'initialisation de la base de données
   * [Script d'initialisation de la base de données Adresse](bdd/init_bd_adresse.sql)
   * [Script d'initialisation de la base de données Voie](bdd/init_bd_voie.sql) 
-
 - Script d'initialisation de la base de données des adresses
+  * [Suivi des modifications](bdd/ad_00_trace.sql)
+  * [Création  de la structure initiale](bdd/ad_10_squelette.sql)
+  * [Création des vues de gestion](bdd/ad_20_vues_gestion.sql)
+  * [Création des vues applicatives](bdd/ad_21_vues_xapps.sql)
+  * [Création des privilèges](bdd/ad_99_grant.sql)
 - Script d'initialisation de la base de données des voies
-
+  * [Suivi des modifications](bdd/voie_00_trace.sql)
+  * [Création  de la structure initiale](bdd/voie_10_squelette.sql)
+  * [Création des vues de gestion](bdd/voie_20_vues_gestion.sql)
+  * [Création des vues applicatives](bdd/voie_21_vues_xapps.sql)
+  * [Création des privilèges](bdd/voie_99_grant.sql)
 - Script d'initialisation de la base de données des signalements
   * [Script d'initialisation des signalements Voies et Adresses](bdd/init_bd_rva.sql) 
 - [Documentation d'administration de la base Adresse](bdd/doc_admin_bd_adresse.md) 
