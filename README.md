@@ -21,7 +21,12 @@ Spécification du fichier d’échange relatif aux données concernant le réfé
   * [Création des vues applicatives](bdd/voie_21_vues_xapps.sql)
   * [Création des privilèges](bdd/voie_99_grant.sql)
 - Script d'initialisation de la base de données des signalements
-  * [Script d'initialisation des signalements Voies et Adresses](bdd/init_bd_rva.sql) 
+  * [Script d'initialisation des signalements Voies et Adresses](bdd/init_bd_rva.sql)
+  * [Suivi des modifications](bdd/sign_00_trace.sql)
+  * [Création  de la structure initiale](bdd/sign_10_squelette.sql)
+  * [Création des vues de gestion](bdd/sign_20_vues_gestion.sql)
+  * [Création des vues applicatives](bdd/sign_21_vues_xapps.sql)
+  * [Création des privilèges](bdd/sign_99_grant.sql) 
 - [Documentation d'administration de la base Adresse](bdd/doc_admin_bd_adresse.md) 
 - [Documentation d'administration de la base Voie](bdd/doc_admin_bd_voie.md) 
 - [Documentation d'administration de l'application](app/doc_admin_app_rva.md)
