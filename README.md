@@ -6,7 +6,6 @@ Spécification du fichier d’échange relatif aux données concernant le réfé
 
 - [Lire la documentation du standard](gabarit/livrables.md)
 - Script d'initialisation de la base de données
-  * [Script d'initialisation de la base de données Adresse](bdd/init_bd_adresse.sql)
   * [Script d'initialisation de la base de données Voie](bdd/init_bd_voie.sql) 
 - Script d'initialisation de la base de données des adresses
   * [Suivi des modifications](bdd/ad_00_trace.sql)
