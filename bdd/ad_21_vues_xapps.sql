@@ -1,3 +1,22 @@
+/*ADRESSE V1.0*/
+/*Creation des vues nécessaires à l'application web-métier */
+/*ad_21_VUES_XAPPS.sql */
+/*PostGIS*/
+/* GeoCompiegnois - http://geo.compiegnois.fr/ */
+/* Auteur : Grégory Bodet */
+
+-- ####################################################################################################################################################
+-- ###                                                                                                                                              ###
+-- ###                                                                 DROP                                                                         ###
+-- ###                                                                                                                                              ###
+-- ####################################################################################################################################################
+
+DROP VIEW IF EXISTS r_adresse.an_v_adresse_commune;
+DROP VIEW IF EXISTS r_adresse.an_v_adresse_bal_epci;
+DROP VIEW IF EXISTS x_apps.xapps_geo_vmr_adresse;
+DROP VIEW IF EXISTS x_apps.xapps_an_v_adresse_h;
+DROP VIEW IF EXISTS x_opendata.xopendata_an_v_bal_12;
+
 -- ####################################################################################################################################################
 -- ###                                                                                                                                              ###
 -- ###                                                            VUES APPLICATIVES                                                                 ###
