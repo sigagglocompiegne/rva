@@ -5,7 +5,35 @@
 /*GeoCompiegnois - http://geo.compiegnois.fr/ */
 /*Auteur : Grégory Bodet */
 
--- #################################################################### SCHEMA  ####################################################################
+-- ####################################################################################################################################################
+-- ###                                                                                                                                              ###
+-- ###                                                                 SCHEMA                                                                       ###
+-- ###                                                                                                                                              ###
+-- ####################################################################################################################################################
+
+--DROP SCHEMA IF EXISTS r_adresse;
+
+DROP SEQUENCE IF EXISTS r_objet.geo_objet_pt_adresse_id_seq;
+
+DROP TABLE IF EXISTS r_objet.geo_objet_pt_adresse;
+DROP TABLE IF EXISTS r_adresse.an_adresse;
+DROP TABLE IF EXISTS r_adresse.an_adresse_h;
+DROP TABLE IF EXISTS r_adresse.an_adresse_info;
+DROP TABLE IF EXISTS r_objet.lt_position;
+DROP TABLE IF EXISTS r_adresse.lt_groupee;
+DROP TABLE IF EXISTS r_adresse.lt_secondaire;
+DROP TABLE IF EXISTS r_adresse.lt_src_adr;
+DROP TABLE IF EXISTS r_adresse.lt_diag_adr;
+DROP TABLE IF EXISTS r_adresse.lt_qual_adr;
+DROP TABLE IF EXISTS r_adresse.lt_dest_adr;
+DROP TABLE IF EXISTS r_adresse.lt_etat_adr;
+
+
+-- ####################################################################################################################################################
+-- ###                                                                                                                                              ###
+-- ###                                                                 SCHEMA                                                                         ###
+-- ###                                                                                                                                              ###
+-- ####################################################################################################################################################
 
 -- Schema: r_adresse
 
