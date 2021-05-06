@@ -1,3 +1,9 @@
+/*VOIE V1.0*/
+/*Creation du squelette de la structure des données (tables, séquences, triggers,...) */
+/*voie_10_SQUELETTE.sql */
+/*PostGIS*/
+/*GeoCompiegnois - http://geo.compiegnois.fr/ */
+/*Auteur : Grégory Bodet */
 
 -- ####################################################################################################################################################
 -- ###                                                                                                                                              ###
@@ -5,32 +11,39 @@
 -- ###                                                                                                                                              ###
 -- ####################################################################################################################################################
 
+--DROP SCHEMA IF EXISTS m_voirie CASCADE;
+--DROP SCHEMA IF EXISTS r_voie CASCADE;
+
+
+DROP TABLE IF EXISTS r_objet.geo_objet_troncon;
+DROP TABLE IF EXISTS r_objet.geo_objet_noeud;
+DROP TABLE IF EXISTS r_voie.an_troncon;
+DROP TABLE IF EXISTS r_voie.an_troncon_h;
+DROP TABLE IF EXISTS r_voie.an_voie;
+DROP TABLE IF EXISTS m_voirie.an_voirie_gest;
+DROP TABLE IF EXISTS m_voirie.an_voirie_circu;
+--DROP TABLE IF EXISTS r_objet.lt_src_geom;
+DROP TABLE IF EXISTS r_voie.lt_type_tronc;
+DROP TABLE IF EXISTS r_voie.lt_hierarchie;
+DROP TABLE IF EXISTS r_voie.lt_type_voie;
+DROP TABLE IF EXISTS m_voirie.lt_statut_jur;
+DROP TABLE IF EXISTS m_voirie.lt_gestion;
+DROP TABLE IF EXISTS m_voirie.lt_doman;
+DROP TABLE IF EXISTS m_voirie.lt_type_circu;
+DROP TABLE IF EXISTS m_voirie.lt_sens_circu;
+DROP TABLE IF EXISTS m_voirie.lt_cont_circu;
+DROP TABLE IF EXISTS m_voirie.lt_v_max;
+
+DROP SEQUENCE ID EXISTS r_objet.geo_objet_troncon_id_seq;
+DROP SEQUENCE ID EXISTS r_objet.geo_objet_noeud_id_seq;
+DROP SEQUENCE ID EXISTS r_voie.an_troncon_h_id_seq;
+DROP SEQUENCE ID EXISTS r_voie.an_voie_id_seq;
+
 -- ####################################################################################################################################################
 -- ###                                                                                                                                              ###
 -- ###                                                                      SCHEMA                                                                  ###
 -- ###                                                                                                                                              ###
 -- ####################################################################################################################################################
-
--- Schema: r_objet
-
--- DROP SCHEMA r_objet;
-
-CREATE SCHEMA r_objet
-  AUTHORIZATION create_sig;
-
-GRANT ALL ON SCHEMA r_objet TO create_sig;
-ALTER DEFAULT PRIVILEGES IN SCHEMA r_objet
-GRANT ALL ON TABLES TO sig_create;
-ALTER DEFAULT PRIVILEGES IN SCHEMA r_objet
-GRANT SELECT ON TABLES TO sig_read;
-ALTER DEFAULT PRIVILEGES IN SCHEMA r_objet
-GRANT ALL ON TABLES TO create_sig;
-ALTER DEFAULT PRIVILEGES IN SCHEMA r_objet
-GRANT INSERT, SELECT, UPDATE, DELETE ON TABLES TO sig_edit;
-
-COMMENT ON SCHEMA r_objet
-  IS 'Schéma contenant les objets géographiques virtuels métiers (zonages, lots, entités administratives, ...). Les données métiers (alphanumériques) sont stockées dans le schéma correspondant, et le lien s''effectue via la référence géographique. Une donnée géographique spécifique à un seul métier, reste dans le schéma du métier.';
-
 
 -- Schema: m_voirie
 
@@ -39,17 +52,6 @@ COMMENT ON SCHEMA r_objet
 CREATE SCHEMA m_voirie
   AUTHORIZATION create_sig;
   
-
-GRANT ALL ON SCHEMA m_voirie TO create_sig;
-ALTER DEFAULT PRIVILEGES IN SCHEMA m_voirie
-GRANT ALL ON TABLES TO sig_create;
-ALTER DEFAULT PRIVILEGES IN SCHEMA m_voirie
-GRANT SELECT ON TABLES TO sig_read;
-ALTER DEFAULT PRIVILEGES IN SCHEMA m_voirie
-GRANT ALL ON TABLES TO create_sig;
-ALTER DEFAULT PRIVILEGES IN SCHEMA m_voirie
-GRANT INSERT, SELECT, UPDATE, DELETE ON TABLES TO sig_edit;
-
 COMMENT ON SCHEMA m_voirie
   IS 'Données géographiques métiers sur la voirie';
 
@@ -59,16 +61,6 @@ COMMENT ON SCHEMA m_voirie
 
 CREATE SCHEMA r_voie
 AUTHORIZATION create_sig;
-
-GRANT ALL ON SCHEMA r_voie TO create_sig;
-ALTER DEFAULT PRIVILEGES IN SCHEMA r_voie
-GRANT ALL ON TABLES TO sig_create;
-ALTER DEFAULT PRIVILEGES IN SCHEMA r_voie
-GRANT SELECT ON TABLES TO sig_read;
-ALTER DEFAULT PRIVILEGES IN SCHEMA r_voie
-GRANT ALL ON TABLES TO create_sig;
-ALTER DEFAULT PRIVILEGES IN SCHEMA r_voie
-GRANT INSERT, SELECT, UPDATE, DELETE ON TABLES TO sig_edit;
 
 COMMENT ON SCHEMA r_voie
   IS 'Référentiel local des voies';
@@ -116,12 +108,6 @@ WITH (
 ALTER TABLE r_objet.geo_objet_troncon
     OWNER to create_sig;
 
-GRANT ALL ON TABLE r_objet.geo_objet_troncon TO sig_create;
-GRANT SELECT ON TABLE r_objet.geo_objet_troncon TO sig_read;
-GRANT ALL ON TABLE r_objet.geo_objet_troncon TO create_sig;
-GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE r_objet.geo_objet_troncon TO sig_edit
-
-
 COMMENT ON TABLE r_objet.geo_objet_troncon
   IS 'Classe décrivant un troncon du filaire de voie à circulation terrestre';
 COMMENT ON COLUMN r_objet.geo_objet_troncon.id_tronc IS 'Identifiant unique de l''objet tronçon';
@@ -163,13 +149,7 @@ CREATE SEQUENCE r_objet.geo_objet_troncon_id_seq
 ALTER SEQUENCE r_objet.geo_objet_troncon_id_seq
     OWNER TO create_sig;
 
-GRANT ALL ON SEQUENCE r_objet.geo_objet_troncon_id_seq TO PUBLIC;
-GRANT ALL ON SEQUENCE r_objet.geo_objet_troncon_id_seq TO create_sig;
-
-
 ALTER TABLE r_objet.geo_objet_troncon ALTER COLUMN id_tronc SET DEFAULT nextval('r_objet.geo_objet_troncon_id_seq'::regclass);
-
-
 
 -- #################################################################### OBJET noeud ###################################################################
 
@@ -197,11 +177,6 @@ WITH (
 );
 ALTER TABLE r_objet.geo_objet_noeud
     OWNER to create_sig;
-
-GRANT ALL ON TABLE r_objet.geo_objet_noeud TO sig_create;
-GRANT SELECT ON TABLE r_objet.geo_objet_noeud TO sig_read;
-GRANT ALL ON TABLE r_objet.geo_objet_noeud TO create_sig;
-GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE r_objet.geo_objet_noeud TO sig_edit;
 
 COMMENT ON TABLE r_objet.geo_objet_noeud
   IS 'Classe décrivant un noeud du filaire de voie à circulation terrestre';
@@ -237,11 +212,7 @@ CREATE SEQUENCE r_objet.geo_objet_noeud_id_seq
 ALTER SEQUENCE r_objet.geo_objet_noeud_id_seq
     OWNER TO create_sig;
 
-GRANT ALL ON SEQUENCE r_objet.geo_objet_noeud_id_seq TO PUBLIC;
-GRANT ALL ON SEQUENCE r_objet.geo_objet_noeud_id_seq TO create_sig;
-
 ALTER TABLE r_objet.geo_objet_noeud ALTER COLUMN id_noeud SET DEFAULT nextval('r_objet.geo_objet_noeud_id_seq'::regclass);
-
 
 
 -- ####################################################################################################################################################
@@ -276,12 +247,6 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE r_voie.an_troncon
-    OWNER to create_sig;
-
-GRANT ALL ON TABLE r_voie.an_troncon TO sig_create;
-GRANT SELECT ON TABLE r_voie.an_troncon TO sig_read;
-GRANT ALL ON TABLE r_voie.an_troncon TO create_sig;
-GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE r_voie.an_troncon TO sig_edit;
 
 COMMENT ON TABLE r_voie.an_troncon
   IS 'Table alphanumérique des troncons';
@@ -313,9 +278,6 @@ CREATE SEQUENCE r_voie.an_troncon_h_id_seq
 ALTER SEQUENCE r_voie.an_troncon_h_id_seq
     OWNER TO create_sig;
 
-GRANT ALL ON SEQUENCE r_voie.an_troncon_h_id_seq TO PUBLIC;
-GRANT ALL ON SEQUENCE r_voie.an_troncon_h_id_seq TO create_sig;
-
 
 -- Table: r_voie.an_troncon_h
 
@@ -337,11 +299,6 @@ WITH (
 );
 ALTER TABLE r_voie.an_troncon_h
     OWNER to create_sig;
-
-GRANT ALL ON TABLE r_voie.an_troncon_h TO sig_create;
-GRANT SELECT ON TABLE r_voie.an_troncon_h TO sig_read;
-GRANT ALL ON TABLE r_voie.an_troncon_h TO create_sig;
-GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE r_voie.an_troncon_h TO sig_edit;
 
 COMMENT ON TABLE r_voie.an_troncon_h
   IS 'Table historique alphanumérique des troncons pour le suivi des noms de voies';
@@ -372,7 +329,6 @@ CREATE TABLE r_voie.an_voie
   insee character(5) NOT NULL, -- Code insee
   rivoli character(4), -- Code rivoli
   rivoli_cle character(1), -- Clé rivoli
--- #
   observ character varying(254), -- Observations
   src_voie character varying(100), -- Référence utilisée pour la voie
   date_sai timestamp without time zone NOT NULL DEFAULT now(), -- Date de saisie dans la base de données
@@ -387,11 +343,6 @@ WITH (
 ALTER TABLE r_voie.an_voie
     OWNER to create_sig;
 
-GRANT ALL ON TABLE r_voie.an_voie TO sig_create;
-GRANT SELECT ON TABLE r_voie.an_voie TO sig_read;
-GRANT ALL ON TABLE r_voie.an_voie TO create_sig;
-GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE r_voie.an_voie TO sig_edit;
-
 COMMENT ON TABLE r_voie.an_voie
   IS 'Table alphanumérique des voies à circulation terrestre nommées';
 COMMENT ON COLUMN r_voie.an_voie.id_voie IS 'Identifiant unique de l''objet voie';
@@ -403,16 +354,11 @@ COMMENT ON COLUMN r_voie.an_voie.mot_dir IS 'Mot directeur de la voie';
 COMMENT ON COLUMN r_voie.an_voie.insee IS 'Code INSEE de la commune';
 COMMENT ON COLUMN r_voie.an_voie.rivoli IS 'Code rivoli';
 COMMENT ON COLUMN r_voie.an_voie.rivoli_cle IS 'Clé rivoli';
--- #
 COMMENT ON COLUMN r_voie.an_voie.observ IS 'Observations';
 COMMENT ON COLUMN r_voie.an_voie.src_voie IS 'Référence utilisée pour le nom de la voie';
 COMMENT ON COLUMN r_voie.an_voie.date_sai IS 'Date de saisie dans la base de données';
 COMMENT ON COLUMN r_voie.an_voie.date_maj IS 'Date de la dernière mise à jour dans la base de données';
 COMMENT ON COLUMN r_voie.an_voie.date_lib IS 'Année du libellé la voie (soit l''année entière est saisie soit une partie en remplaçant les 0 par des x)';
-
-GRANT SELECT(id_voie) ON r_voie.an_voie TO public;
-GRANT SELECT(id_voie) ON r_voie.an_voie TO groupe_sig WITH GRANT OPTION;
-
 
   
 -- Sequence: r_voie.an_voie_id_seq
@@ -428,9 +374,6 @@ CREATE SEQUENCE r_voie.an_voie_id_seq
   
 ALTER SEQUENCE r_voie.an_voie_id_seq
     OWNER TO create_sig;
-
-GRANT ALL ON SEQUENCE r_voie.an_voie_id_seq TO PUBLIC;
-GRANT ALL ON SEQUENCE r_voie.an_voie_id_seq TO create_sig;
 
 ALTER TABLE r_voie.an_voie ALTER COLUMN id_voie SET DEFAULT nextval('r_voie.an_voie_id_seq'::regclass);
 
@@ -468,11 +411,6 @@ WITH (
 );
 ALTER TABLE m_voirie.an_voirie_gest
     OWNER to create_sig;
-
-GRANT ALL ON TABLE m_voirie.an_voirie_gest TO sig_create;
-GRANT SELECT ON TABLE m_voirie.an_voirie_gest TO sig_read;
-GRANT ALL ON TABLE m_voirie.an_voirie_gest TO create_sig;
-GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE m_voirie.an_voirie_gest TO sig_edit;
 
 COMMENT ON TABLE m_voirie.an_voirie_gest
   IS 'Table alphanumérique des éléments de gestion de la voirie';
@@ -516,11 +454,6 @@ WITH (
 ALTER TABLE m_voirie.an_voirie_circu
     OWNER to create_sig;
 
-GRANT ALL ON TABLE m_voirie.an_voirie_circu TO sig_create;
-GRANT SELECT ON TABLE m_voirie.an_voirie_circu TO sig_read;
-GRANT ALL ON TABLE m_voirie.an_voirie_circu TO create_sig;
-GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE m_voirie.an_voirie_circu TO sig_edit;
-
 COMMENT ON TABLE m_voirie.an_voirie_circu
   IS 'Table alphanumérique des éléments de circulation de la voirie';
 COMMENT ON COLUMN m_voirie.an_voirie_circu.id_tronc IS 'Identifiant du tronçon';
@@ -560,10 +493,6 @@ WITH (
 );
 ALTER TABLE r_objet.lt_src_geom
     OWNER to create_sig;
-
-GRANT ALL ON TABLE r_objet.lt_src_geom TO sig_create;
-GRANT SELECT ON TABLE r_objet.lt_src_geom TO sig_read;
-GRANT ALL ON TABLE r_objet.lt_src_geom TO create_sig;
 
 COMMENT ON TABLE r_objet.lt_src_geom
   IS 'Code permettant de décrire le type de référentiel géométrique';
@@ -622,11 +551,6 @@ WITH (
 ALTER TABLE r_voie.lt_type_tronc
     OWNER to create_sig;
 
-GRANT ALL ON TABLE r_voie.lt_type_tronc TO sig_create;
-GRANT SELECT ON TABLE r_voie.lt_type_tronc TO sig_read;
-GRANT ALL ON TABLE r_voie.lt_type_tronc TO create_sig;
-GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE r_voie.lt_type_tronc TO sig_edit;
-
 COMMENT ON TABLE r_voie.lt_type_tronc
   IS 'Code permettant de décrire le type de tronçon';
 COMMENT ON COLUMN r_voie.lt_type_tronc.code IS 'Code de la liste énumérée relative au type de tronçon';
@@ -677,10 +601,6 @@ WITH (
 ALTER TABLE r_voie.lt_hierarchie
     OWNER to create_sig;
 
-GRANT ALL ON TABLE r_voie.lt_hierarchie TO sig_create;
-GRANT SELECT ON TABLE r_voie.lt_hierarchie TO sig_read;
-GRANT ALL ON TABLE r_voie.lt_hierarchie TO create_sig;
-GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE r_voie.lt_hierarchie TO sig_edit;
 
 COMMENT ON TABLE r_voie.lt_hierarchie
   IS 'Code permettant de décrire la hierarchie du troncon dans la trame viaire';
@@ -723,11 +643,6 @@ WITH (
 ALTER TABLE r_voie.lt_franchiss
     OWNER to create_sig;
 
-GRANT ALL ON TABLE r_voie.lt_franchiss TO sig_create;
-GRANT SELECT ON TABLE r_voie.lt_franchiss TO sig_read;
-GRANT ALL ON TABLE r_voie.lt_franchiss TO create_sig;
-GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE r_voie.lt_franchiss TO sig_edit;
-
 COMMENT ON TABLE r_voie.lt_franchiss
   IS 'Code permettant de décrire le type de franchissement du tronçon';
 COMMENT ON COLUMN r_voie.lt_franchiss.code IS 'Code de la liste énumérée relative au type de franchissement du tronçon';
@@ -766,10 +681,6 @@ WITH (
 ALTER TABLE r_voie.lt_type_voie
     OWNER to create_sig;
 
-GRANT ALL ON TABLE r_voie.lt_type_voie TO sig_create;
-GRANT SELECT ON TABLE r_voie.lt_type_voie TO sig_read;
-GRANT ALL ON TABLE r_voie.lt_type_voie TO create_sig;
-GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE r_voie.lt_type_voie TO sig_edit;
 
 COMMENT ON TABLE r_voie.lt_type_voie
   IS 'Code permettant de décrire le type de voie';
@@ -868,11 +779,6 @@ WITH (
 ALTER TABLE m_voirie.lt_statut_jur
     OWNER to create_sig;
 
-GRANT ALL ON TABLE m_voirie.lt_statut_jur TO sig_create;
-GRANT SELECT ON TABLE m_voirie.lt_statut_jur TO sig_read;
-GRANT ALL ON TABLE m_voirie.lt_statut_jur TO create_sig;
-GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE m_voirie.lt_statut_jur TO sig_edit;
-
 COMMENT ON TABLE m_voirie.lt_statut_jur
   IS 'Code permettant de décrire le statut juridique du tronçon';
 COMMENT ON COLUMN m_voirie.lt_statut_jur.code IS 'Code de la liste énumérée relative au statut juridique du tronçon';
@@ -916,11 +822,6 @@ WITH (
 ALTER TABLE m_voirie.lt_gestion
     OWNER to create_sig;
 
-GRANT ALL ON TABLE m_voirie.lt_gestion TO sig_create;
-GRANT SELECT ON TABLE m_voirie.lt_gestion TO sig_read;
-GRANT ALL ON TABLE m_voirie.lt_gestion TO create_sig;
-GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE m_voirie.lt_gestion TO sig_edit;
-
 COMMENT ON TABLE m_voirie.lt_gestion
   IS 'Code permettant de décrire le gestionnaire/propriétaire du tronçon';
 COMMENT ON COLUMN m_voirie.lt_gestion.code IS 'Code de la liste énumérée relative au gestionnaire/propriétaire du tronçon';
@@ -940,9 +841,6 @@ INSERT INTO m_voirie.lt_gestion(
     ('ZZ','Non concerné'),  
     ('00','Non renseigné');
 
-
-
-
 -- ################################################################# Domaine valeur - domanialité  ###############################################
 
 -- Table: m_voirie.lt_doman
@@ -960,11 +858,6 @@ WITH (
 );
 ALTER TABLE m_voirie.lt_doman
     OWNER to create_sig;
-
-GRANT ALL ON TABLE m_voirie.lt_doman TO sig_create;
-GRANT SELECT ON TABLE m_voirie.lt_doman TO sig_read;
-GRANT ALL ON TABLE m_voirie.lt_doman TO create_sig;
-GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE m_voirie.lt_doman TO sig_edit;
 
 COMMENT ON TABLE m_voirie.lt_doman
   IS 'Code permettant de décrire la domanialité du tronçon';
@@ -996,11 +889,6 @@ WITH (
 );
 ALTER TABLE m_voirie.lt_type_circu
     OWNER to create_sig;
-
-GRANT ALL ON TABLE m_voirie.lt_type_circu TO sig_create;
-GRANT SELECT ON TABLE m_voirie.lt_type_circu TO sig_read;
-GRANT ALL ON TABLE m_voirie.lt_type_circu TO create_sig;
-GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE m_voirie.lt_type_circu TO sig_edit;
 
 COMMENT ON TABLE m_voirie.lt_type_circu
   IS 'Code permettant de décrire la type_circulation sur le tronçon';
@@ -1037,11 +925,6 @@ WITH (
 ALTER TABLE m_voirie.lt_sens_circu
     OWNER to create_sig;
 
-GRANT ALL ON TABLE m_voirie.lt_sens_circu TO sig_create;
-GRANT SELECT ON TABLE m_voirie.lt_sens_circu TO sig_read;
-GRANT ALL ON TABLE m_voirie.lt_sens_circu TO create_sig;
-GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE m_voirie.lt_sens_circu TO sig_edit;
-
 COMMENT ON TABLE m_voirie.lt_sens_circu
   IS 'Code permettant de décrire le sens de circulation du tronçon';
 COMMENT ON COLUMN m_voirie.lt_sens_circu.code IS 'Code de la liste énumérée relative au sens de circulation du tronçon';
@@ -1075,11 +958,6 @@ WITH (
 ALTER TABLE m_voirie.lt_cont_circu
     OWNER to create_sig;
 
-GRANT ALL ON TABLE m_voirie.lt_cont_circu TO sig_create;
-GRANT SELECT ON TABLE m_voirie.lt_cont_circu TO sig_read;
-GRANT ALL ON TABLE m_voirie.lt_cont_circu TO create_sig;
-GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE m_voirie.lt_cont_circu TO sig_edit;
-
 COMMENT ON TABLE m_voirie.lt_cont_circu
   IS 'Code permettant de décrire la vitesse maximale autorisée pour un véhicule léger';
 COMMENT ON COLUMN m_voirie.lt_cont_circu.code IS 'Code de la liste énumérée relative aux contraintes de circulation possible (hors vitesse)';
@@ -1112,11 +990,6 @@ WITH (
 );
 ALTER TABLE m_voirie.lt_v_max
     OWNER to create_sig;
-
-GRANT ALL ON TABLE m_voirie.lt_v_max TO sig_create;
-GRANT SELECT ON TABLE m_voirie.lt_v_max TO sig_read;
-GRANT ALL ON TABLE m_voirie.lt_v_max TO create_sig;
-GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE m_voirie.lt_v_max TO sig_edit;
 
 COMMENT ON TABLE m_voirie.lt_v_max
   IS 'Code permettant de décrire la vitesse maximale autorisée pour un véhicule léger';
