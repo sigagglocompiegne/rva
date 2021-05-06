@@ -292,7 +292,8 @@ RETURN NEW;
 -- UPDATE
 ELSIF (TG_OP = 'UPDATE') THEN
 
--- verification des doublons des adresses conformes avant
+-- verification des doublons des adresses conformes avant si des changements de n° ....
+IF NEW.repet <> OLD.repet OR NEW.complement <> OLD.complement OR NEW.id_voie <> OLD.id_voie OR NEW.numero <> OLD.numero THEN
 
 v_cle_interop := 
 (
@@ -329,7 +330,7 @@ IF (NEW.diag_adr = '11'::text OR left(NEW.diag_adr, 1) = '2') AND
 		 THEN
 RAISE EXCEPTION USING MESSAGE = 'Cette adresse "conforme" existe déjà dans la base de données avec cette clé : ' || v_cle_interop  ;
 END IF;
-
+END IF;
 -- mise à jour de la classe des objets
 UPDATE
 r_objet.geo_objet_pt_adresse
@@ -419,12 +420,9 @@ $BODY$;
 ALTER FUNCTION r_adresse.ft_m_geo_adresse_gestion()
     OWNER TO create_sig;
 
-GRANT EXECUTE ON FUNCTION r_adresse.ft_m_geo_adresse_gestion() TO PUBLIC;
-
-GRANT EXECUTE ON FUNCTION r_adresse.ft_m_geo_adresse_gestion() TO create_sig;
-
-COMMENT ON FUNCTION r_adresse.ft_m_geo_adresse_gestion()
+	COMMENT ON FUNCTION r_adresse.ft_m_geo_adresse_gestion()
     IS 'Fonction trigger pour gérer l''insertion et la mise à jour des données adresse';
+
 
 
 
