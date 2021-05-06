@@ -313,3 +313,45 @@ INSERT INTO m_signalement.lt_traite_sig(
     ('2','Non'),
     ('0','Non renseigné');   
 
+-- ####################################################################################################################################################
+-- ###                                                                                                                                              ###
+-- ###                                                                        FKEY                                                                  ###
+-- ###                                                                                                                                              ###
+-- ####################################################################################################################################################
+
+
+-- Foreign Key: m_signalement.lt_type_rva_fkey
+
+-- ALTER TABLE m_signalement.geo_rva_signal DROP CONSTRAINT lt_type_rva_fkey;
+
+ALTER TABLE m_signalement.geo_rva_signal
+  ADD CONSTRAINT geo_rva_signal_lt_type_rva_fkey FOREIGN KEY (type_rva)
+      REFERENCES m_signalement.lt_type_rva (code) MATCH SIMPLE
+      ON UPDATE CASCADE ON DELETE SET NULL;
+
+-- Foreign Key: m_signalement.lt_nat_signal_fkey
+
+-- ALTER TABLE m_signalement.geo_rva_signal DROP CONSTRAINT lt_nat_signal_fkey;
+
+ALTER TABLE m_signalement.geo_rva_signal
+  ADD CONSTRAINT geo_rva_signal_lt_nat_signal_fkey FOREIGN KEY (nat_signal)
+      REFERENCES m_signalement.lt_nat_signal (code) MATCH SIMPLE
+      ON UPDATE CASCADE ON DELETE SET NULL;
+      
+-- Foreign Key: m_signalement.lt_acte_admin_fkey
+
+-- ALTER TABLE m_signalement.geo_rva_signal DROP CONSTRAINT lt_acte_admin_fkey;
+
+ALTER TABLE m_signalement.geo_rva_signal
+  ADD CONSTRAINT geo_rva_signal_lt_acte_admin_fkey FOREIGN KEY (acte_admin)
+      REFERENCES m_signalement.lt_acte_admin (code) MATCH SIMPLE
+      ON UPDATE CASCADE ON DELETE SET NULL;
+
+-- Foreign Key: m_signalement.lt_traite_sig_fkey
+
+-- ALTER TABLE m_signalement.geo_rva_signal DROP CONSTRAINT lt_traite_sig_fkey;
+
+ALTER TABLE m_signalement.geo_rva_signal
+  ADD CONSTRAINT geo_rva_signal_lt_traite_sig_fkey FOREIGN KEY (traite_sig)
+      REFERENCES m_signalement.lt_traite_sig (code) MATCH SIMPLE
+      ON UPDATE CASCADE ON DELETE SET NULL;
