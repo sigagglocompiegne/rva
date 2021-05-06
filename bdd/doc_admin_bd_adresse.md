@@ -14,6 +14,10 @@ L'ensemble de cette base est modifiable via des vues simples en base de données
 
 ![schema_fonctionnel](schema_fonctionnel_adresse_v3.png)
 
+## Modèle conceptuel simplifié
+
+![mcd](MCD_adresse_v2.png)
+
 ## Dépendances
 
 Cette base de donnnées est dépendante de la base de Voies. Une adresse ne peut pas être créée sans une référence à un tronçon de voie.
@@ -653,9 +657,7 @@ L'ensemble des fichiers a utilisé est placé ici `Y:\Ressources\4-Partage\3-Pro
 
 ---
 
-## Modèle conceptuel simplifié
 
-![mcd](MCD_adresse_v2.png)
 
 
 
