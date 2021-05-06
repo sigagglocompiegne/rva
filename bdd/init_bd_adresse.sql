@@ -41,7 +41,7 @@
 -- 2021/02/16 : GB / Modification des fonctions triggers de la vue de gestion et de la classe an_voie pour mieux vérifier la saisie des codes RIVOLI issus du FANTOIR et gérer les RIVOLI provisoires
 -- 2021/03/15 : GB / Modification des droits
 -- 2021/03/15 : GB / Suppression des vues relevant les adresses sans CODE RIVOLI suite standard BAL 1.2 affectant un RIVOLI temporaire
-
+-- 2021/05/06 : GB / Intégration d'un contrôle sur les adresses conformes pour éviter les doublons d'adresse à la saisie (modification de la fonction trigger de contrôle ft_m_geo_adresse_gestion())
 
 -- ***** pour les voies sans adresses (ex lieu dit), le numéro prend la valeur "99999"
 -- ToDo
@@ -1394,7 +1394,7 @@ CREATE TRIGGER t_t1_date_maj
   EXECUTE PROCEDURE public.ft_r_timestamp_maj();
   
 
--- #################################################################### FONCTION TRIGGER - an_adresse_h ###################################################
+-- #################################################################### FONCTION TRIGGER - ft_m_an_adresse_h ###################################################
 
 -- Function: r_adresse.ft_m_an_adresse_h()
 
@@ -1430,7 +1430,7 @@ COMMENT ON FUNCTION r_adresse.ft_m_an_adresse_h() IS 'Fonction trigger pour inse
 
 
 
--- #################################################################### FONCTION TRIGGER - geo_v_adresse ###################################################
+-- #################################################################### FONCTION TRIGGER - ft_m_geo_adresse_gestion ###################################################
 
 -- FUNCTION: r_adresse.ft_m_geo_adresse_gestion()
 
@@ -1444,6 +1444,7 @@ CREATE FUNCTION r_adresse.ft_m_geo_adresse_gestion()
 AS $BODY$
 
 DECLARE v_id_adresse integer;
+DECLARE v_cle_interop text;
 
 BEGIN
 
@@ -1452,6 +1453,44 @@ IF (TG_OP = 'INSERT') THEN
 
 -- récupération de l'identiant adresse dans une variable
 v_id_adresse := nextval('r_objet.geo_objet_pt_adresse_id_seq'::regclass);
+
+-- verification des doublons des adresses conformes avant
+
+v_cle_interop := 
+(
+lower(
+        CASE
+            WHEN lower(NEW.repet) IS NULL AND NEW.complement IS NULL THEN concat((SELECT insee FROM r_voie.an_voie WHERE id_voie = NEW.id_voie), '_', (SELECT rivoli FROM r_voie.an_voie WHERE id_voie = NEW.id_voie), '_', lpad(NEW.numero::text, 5, '0'::text))
+            WHEN lower(NEW.repet) IS NOT NULL AND NEW.complement IS NULL THEN concat((SELECT insee FROM r_voie.an_voie WHERE id_voie = NEW.id_voie), '_', (SELECT rivoli FROM r_voie.an_voie WHERE id_voie = NEW.id_voie), '_', lpad(NEW.numero::text, 5, '0'::text), lower(btrim(concat('_', "left"(lower(NEW.repet)::text, 3)))))
+            WHEN lower(NEW.repet) IS NULL AND NEW.complement IS NOT NULL THEN concat((SELECT insee FROM r_voie.an_voie WHERE id_voie = NEW.id_voie), '_', (SELECT rivoli FROM r_voie.an_voie WHERE id_voie = NEW.id_voie), '_', lpad(NEW.numero::text, 5, '0'::text), lower(btrim(concat('_', replace(NEW.complement::text, ' '::text, ''::text)))))
+            WHEN lower(NEW.repet) IS NOT NULL AND NEW.complement IS NOT NULL THEN concat((SELECT insee FROM r_voie.an_voie WHERE id_voie = NEW.id_voie), '_', (SELECT rivoli FROM r_voie.an_voie WHERE id_voie = NEW.id_voie), '_', lpad(NEW.numero::text, 5, '0'::text), lower(btrim(concat('_', "left"(lower(NEW.repet)::text, 3), '_', replace(NEW.complement::text, ' '::text, ''::text)))))
+            ELSE NULL::text
+        END)
+);
+
+IF (NEW.diag_adr = '11'::text OR left(NEW.diag_adr, 1) = '2') AND
+
+(SELECT COUNT(*)
+		  FROM r_objet.geo_objet_pt_adresse p
+     LEFT JOIN r_adresse.an_adresse a ON a.id_adresse = p.id_adresse
+     LEFT JOIN r_adresse.an_adresse_info af ON af.id_adresse = p.id_adresse
+     LEFT JOIN r_objet.lt_position lt_p ON lt_p.code::text = p."position"::text
+     LEFT JOIN r_voie.an_voie v ON v.id_voie = p.id_voie
+     LEFT JOIN r_osm.geo_osm_commune c ON v.insee = c.insee::bpchar
+  WHERE 
+  
+  lower(
+        CASE
+            WHEN a.repet IS NULL AND a.complement IS NULL THEN concat(v.insee, '_', v.rivoli, '_', lpad(a.numero::text, 5, '0'::text))
+            WHEN a.repet IS NOT NULL AND a.complement IS NULL THEN concat(v.insee, '_', v.rivoli, '_', lpad(a.numero::text, 5, '0'::text), lower(btrim(concat('_', "left"(a.repet::text, 3)))))
+            WHEN a.repet IS NULL AND a.complement IS NOT NULL THEN concat(v.insee, '_', v.rivoli, '_', lpad(a.numero::text, 5, '0'::text), lower(btrim(concat('_', replace(a.complement::text, ' '::text, ''::text)))))
+            WHEN a.repet IS NOT NULL AND a.complement IS NOT NULL THEN concat(v.insee, '_', v.rivoli, '_', lpad(a.numero::text, 5, '0'::text), lower(btrim(concat('_', "left"(a.repet::text, 3), '_', replace(a.complement::text, ' '::text, ''::text)))))
+            ELSE NULL::text
+        END
+  ) = v_cle_interop) > 0
+		 THEN
+RAISE EXCEPTION USING MESSAGE = 'Cette adresse "conforme" existe déjà dans la base de données avec cette clé : ' || v_cle_interop  ;
+END IF;
 
 -- insertion dans la classe des objets
 INSERT INTO r_objet.geo_objet_pt_adresse (id_adresse, id_voie, id_tronc, position, x_l93, y_l93, src_geom, src_date, date_sai, date_maj, geom)
@@ -1527,6 +1566,44 @@ RETURN NEW;
 
 -- UPDATE
 ELSIF (TG_OP = 'UPDATE') THEN
+
+-- verification des doublons des adresses conformes avant
+
+v_cle_interop := 
+(
+lower(
+        CASE
+            WHEN lower(NEW.repet) IS NULL AND NEW.complement IS NULL THEN concat((SELECT insee FROM r_voie.an_voie WHERE id_voie = NEW.id_voie), '_', (SELECT rivoli FROM r_voie.an_voie WHERE id_voie = NEW.id_voie), '_', lpad(NEW.numero::text, 5, '0'::text))
+            WHEN lower(NEW.repet) IS NOT NULL AND NEW.complement IS NULL THEN concat((SELECT insee FROM r_voie.an_voie WHERE id_voie = NEW.id_voie), '_', (SELECT rivoli FROM r_voie.an_voie WHERE id_voie = NEW.id_voie), '_', lpad(NEW.numero::text, 5, '0'::text), lower(btrim(concat('_', "left"(lower(NEW.repet)::text, 3)))))
+            WHEN lower(NEW.repet) IS NULL AND NEW.complement IS NOT NULL THEN concat((SELECT insee FROM r_voie.an_voie WHERE id_voie = NEW.id_voie), '_', (SELECT rivoli FROM r_voie.an_voie WHERE id_voie = NEW.id_voie), '_', lpad(NEW.numero::text, 5, '0'::text), lower(btrim(concat('_', replace(NEW.complement::text, ' '::text, ''::text)))))
+            WHEN lower(NEW.repet) IS NOT NULL AND NEW.complement IS NOT NULL THEN concat((SELECT insee FROM r_voie.an_voie WHERE id_voie = NEW.id_voie), '_', (SELECT rivoli FROM r_voie.an_voie WHERE id_voie = NEW.id_voie), '_', lpad(NEW.numero::text, 5, '0'::text), lower(btrim(concat('_', "left"(lower(NEW.repet)::text, 3), '_', replace(NEW.complement::text, ' '::text, ''::text)))))
+            ELSE NULL::text
+        END)
+);
+
+IF (NEW.diag_adr = '11'::text OR left(NEW.diag_adr, 1) = '2') AND
+
+(SELECT COUNT(*)
+		  FROM r_objet.geo_objet_pt_adresse p
+     LEFT JOIN r_adresse.an_adresse a ON a.id_adresse = p.id_adresse
+     LEFT JOIN r_adresse.an_adresse_info af ON af.id_adresse = p.id_adresse
+     LEFT JOIN r_objet.lt_position lt_p ON lt_p.code::text = p."position"::text
+     LEFT JOIN r_voie.an_voie v ON v.id_voie = p.id_voie
+     LEFT JOIN r_osm.geo_osm_commune c ON v.insee = c.insee::bpchar
+  WHERE 
+  
+  lower(
+        CASE
+            WHEN a.repet IS NULL AND a.complement IS NULL THEN concat(v.insee, '_', v.rivoli, '_', lpad(a.numero::text, 5, '0'::text))
+            WHEN a.repet IS NOT NULL AND a.complement IS NULL THEN concat(v.insee, '_', v.rivoli, '_', lpad(a.numero::text, 5, '0'::text), lower(btrim(concat('_', "left"(a.repet::text, 3)))))
+            WHEN a.repet IS NULL AND a.complement IS NOT NULL THEN concat(v.insee, '_', v.rivoli, '_', lpad(a.numero::text, 5, '0'::text), lower(btrim(concat('_', replace(a.complement::text, ' '::text, ''::text)))))
+            WHEN a.repet IS NOT NULL AND a.complement IS NOT NULL THEN concat(v.insee, '_', v.rivoli, '_', lpad(a.numero::text, 5, '0'::text), lower(btrim(concat('_', "left"(a.repet::text, 3), '_', replace(a.complement::text, ' '::text, ''::text)))))
+            ELSE NULL::text
+        END
+  ) = v_cle_interop) > 0
+		 THEN
+RAISE EXCEPTION USING MESSAGE = 'Cette adresse "conforme" existe déjà dans la base de données avec cette clé : ' || v_cle_interop  ;
+END IF;
 
 -- mise à jour de la classe des objets
 UPDATE
@@ -1618,46 +1695,12 @@ ALTER FUNCTION r_adresse.ft_m_geo_adresse_gestion()
     OWNER TO create_sig;
 
 GRANT EXECUTE ON FUNCTION r_adresse.ft_m_geo_adresse_gestion() TO PUBLIC;
+
 GRANT EXECUTE ON FUNCTION r_adresse.ft_m_geo_adresse_gestion() TO create_sig;
 
 COMMENT ON FUNCTION r_adresse.ft_m_geo_adresse_gestion()
     IS 'Fonction trigger pour gérer l''insertion et la mise à jour des données adresse';
 
-														 
-															 
-															 
--- FUNCTION: r_adresse.ft_m_geo_v_adresse_vmr()
-
--- DROP FUNCTION m_ecor_adressenomie.ft_m_geo_v_adresse_vmr();
-
-CREATE FUNCTION r_adresse.ft_m_geo_v_adresse_vmr()
-    RETURNS trigger
-    LANGUAGE 'plpgsql'
-    COST 100
-    VOLATILE NOT LEAKPROOF
-AS $BODY$
-
-BEGIN
--- rafraichissement de la vue matérialisée des adresses visibles dans les applications
-REFRESH MATERIALIZED VIEW x_apps.xapps_geo_vmr_adresse;
-
-
-return new;
-
-END;
-
-
-$BODY$;
-
-
-ALTER FUNCTION r_adresse.ft_m_geo_v_adresse_vmr()
-    OWNER TO create_sig;
-
-GRANT EXECUTE ON FUNCTION r_adresse.ft_m_geo_v_adresse_vmr() TO PUBLIC;
-GRANT EXECUTE ON FUNCTION r_adresse.ft_m_geo_v_adresse_vmr() TO create_sig;
-
-COMMENT ON FUNCTION r_adresse.ft_m_geo_v_adresse_vmr()
-    IS 'Fonction permettant de rafraichir la vue matérialisée des adresses visibles dans les différentes applications.';
 
 
 -- CREATTION DES DECLENCHEURS		 
