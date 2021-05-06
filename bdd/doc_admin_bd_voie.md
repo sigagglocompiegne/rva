@@ -14,6 +14,11 @@ L'ensemble de cette base est modifiable via des vues simples en base de données
 
 ![schema_fonctionnel](schema_fonctionnel_voie_v3.png)
 
+## Modèle conceptuel simplifié
+
+![mcd](MCD_voie_v1.png)
+![mcd](MCD_voie_v2.png)
+
 ## Dépendances (non critiques)
 
 Sans objet
@@ -585,10 +590,7 @@ L'ensemble des fichiers a utilisé est placé ici `Y:\Ressources\4-Partage\3-Pro
 
 ---
 
-## Modèle conceptuel simplifié
 
-![mcd](MCD_voie_v1.png)
-![mcd](MCD_voie_v2.png)
 
 
 
