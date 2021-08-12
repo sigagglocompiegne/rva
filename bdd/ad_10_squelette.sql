@@ -503,7 +503,7 @@ INSERT INTO r_adresse.lt_diag_adr(
     ('99','Autre'),
     ('00','Non renseigné');
     
-    -- tqmfsdsdmggùsrg;g
+    
 
 -- ################################################################# Domaine valeur - qual_adr  ###############################################
 
