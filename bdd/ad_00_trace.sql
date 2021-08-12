@@ -1,5 +1,5 @@
 -- #################################################################### SUIVI CODE SQL ####################################################################
--- test
+
 -- 2016/05/20 : FV / initialisation du code avec comme point de départ le format d'échange BAL 1.1 de l'AITF
 -- 2016/11/09 : FV / clé interop, ajout "0" précédent le numéro de l'adresse pour atteindre 5 caractères
 -- 2016/11/09 : FV / v_bal, attribut "position" décodé ; gestion ok de construction de la cle_interop, suffixe, date_der_maj
