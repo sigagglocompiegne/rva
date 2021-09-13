@@ -47,7 +47,7 @@ L'ensemble des classes d'objets de gestion sont stockés dans plusieurs schémas
 
 Particularité(s) à noter :
 * Une clé primaire existe sur le champ `id_adresse` lui-même contenant une séquence pour l'attribution automatique d'une référence adresse unique. 
-* Une clé étrangère exsiste sur la table de valeur `id_troncon` (lien vers un identifiant id_troncon existant de la table `r_objet.geo_objet_troncon`)
+* Une clé étrangère existe sur la table de valeur `id_troncon` (lien vers un identifiant id_troncon existant de la table `r_objet.geo_objet_troncon`)
 * Une clé étrangère existe sur la table de valeur `id_voie` (identifiant de la voie nommée `r_voie.an_voie`)
 * Une clé étrangère existe sur la table de valeur `position` (précision du positionnement du point adresse `r_objet.lt_position`)
 * Une clé étrangère existe sur la table de valeur `src_geom` (source du référentiel géographique pour la saisie `r_objet.lt_src_geom`).
@@ -80,7 +80,7 @@ Particularité(s) à noter :
 
 Particularité(s) à noter :
 * Une clé primaire existe sur le champ `idvoie`
-* Une clé étrangère exsiste sur la table de valeur `type_voie` (liste de valeur `lt_type_voie` définissant les abréviations des types de voies)
+* Une clé étrangère existe sur la table de valeur `type_voie` (liste de valeur `lt_type_voie` définissant les abréviations des types de voies)
 * Un index est présent sur le champ libvoie_c
 * 2 triggers :
   * `t1_verif_rivoli` : vérification sur la saisie du code RIVOLI
@@ -108,9 +108,9 @@ Par défaut à non.|boolean|false|
 
 Particularité(s) à noter : aucune
 * Une clé primaire existe sur le champ `id_adresse`
-* Une clé étrangère exsiste sur la table de valeur `diag_adr` (liste de valeur `lt_diag_adr` définissant le type de diagnostic de l'adresse)
-* Une clé étrangère exsiste sur la table de valeur `qual_adr` (liste de valeur `lt_qual_adr` définissant la qualité de l'adresse)
-* Une clé étrangère exsiste sur la table de valeur `src_adr` (liste de valeur `lt_src_adr` définissant les sources de l'adresse)
+* Une clé étrangère existe sur la table de valeur `diag_adr` (liste de valeur `lt_diag_adr` définissant le type de diagnostic de l'adresse)
+* Une clé étrangère existe sur la table de valeur `qual_adr` (liste de valeur `lt_qual_adr` définissant la qualité de l'adresse)
+* Une clé étrangère existe sur la table de valeur `src_adr` (liste de valeur `lt_src_adr` définissant les sources de l'adresse)
 * 1 trigger :
   * `t_t1_repetcomplement_null` : trigger permettant d'initialisé certains attributs à null et non '' (problématyique de recherche textuel dans les applications)
 
@@ -124,7 +124,6 @@ Particularité(s) à noter : aucune
 |id_adresse|Identifiant unique de l'objet point adresse|bigint| |
 |dest_adr|Destination de l'adresse (habitation, commerce, ...)|character varying(2)|'00'::character varying|
 |etat_adr|Etat de la construction à l'adresse (non commencé, en cours, achevé, muré, supprimé ...)|character varying(2)|'00'::character varying|
-|refcad|Référence(s) cadastrale(s)|character varying(254)| |
 |nb_log|Nombre de logements|integer| |
 |pc|Numéro du permis de construire|character varying(30)| |
 |groupee|Adresse groupée (O/N)|character varying(1)|'0'::character varying|
@@ -137,9 +136,29 @@ Particularité(s) à noter : aucune
 
 Particularité(s) à noter :
 * Une clé primaire existe sur le champ `id_adresse`
-* Une clé étrangère exsiste sur la table de valeur `id_adresse` de la table geo_objet_pt_adresse
-* Une clé étrangère exsiste sur la table de valeur `groupee` (liste de valeur `lt_groupee` définissant si une adresse est considérée comme groupée)
-* Une clé étrangère exsiste sur la table de valeur `secondaire` (liste de valeur `lt_secondaire` définissant si une adresse est secondaire)
+* Une clé étrangère existe sur la table de valeur `id_adresse` de la table geo_objet_pt_adresse
+* Une clé étrangère existe sur la table de valeur `groupee` (liste de valeur `lt_groupee` définissant si une adresse est considérée comme groupée)
+* Une clé étrangère existe sur la table de valeur `secondaire` (liste de valeur `lt_secondaire` définissant si une adresse est secondaire)
+
+---
+
+`r_adresse.an_adresse_cad` : Table alphanumérique des références cadastrales desservies par les adresses
+
+|Nom attribut | Définition | Type  | Valeurs par défaut |
+|:---|:---|:---|:---|
+|id|Identifiant interne ARC|bigint|nextval('r_adresse.an_adresse_cad_id_seq'::regclass)|
+|id_adresse|Identifiant unique de l''objet point adresse|bigint| |
+|commune_autre_insee|Code Insee de la commune contenant la parcelle. Cet attribut est renseigné uniquement si le point d'adresse n'est pas localisée sur la même commune que la parcelle adressée.|character varying(5)| |
+|ccosec|Section cadastrale (avec indication du 0 si besoin en 1er caractère)|character varying(2)| |
+|dnupla|Numéro de parcelle indiquée sur le plan cadastrale codé sur 4 caractères (avec les 0 si besoins)|character varying(4)| |
+|idu|Code national de la parcelle cadastrale code département(2), code de direction(1), code de commune(3), préfixe de section(3),code de section(2), code de parcelle(4)|character varying(15)| |
+|acomm|Référence cadastrale issue de l'arrêté de voirie|character varying(1)|'0'::character varying|
+
+
+Particularité(s) à noter :
+* Une clé primaire existe sur le champ `id`
+* Une clé étrangère existe sur la table de valeur `acomm` de la table an_adresse_cad
+
 
 ---
 
@@ -190,9 +209,9 @@ Particularité(s) à noter :
 Particularité(s) à noter :
 * Une clé primaire existe sur le champ `id_signal`
 * Index sur le champ `geom`
-* Une clé étrangère exsiste sur la table de valeur `nat_signal` de la table lt_nat_signal
-* Une clé étrangère exsiste sur la table de valeur `traite_sig` de la table lt_traite_sig
-* Une clé étrangère exsiste sur la table de valeur `type_rva` de la table lt_type_rva
+* Une clé étrangère existe sur la table de valeur `nat_signal` de la table lt_nat_signal
+* Une clé étrangère existe sur la table de valeur `traite_sig` de la table lt_traite_sig
+* Une clé étrangère existe sur la table de valeur `type_rva` de la table lt_type_rva
 * 1 trigger :
   * `t_t1_geo_rva_signal` : à l'insertion recherche du code insee et libellé de la commune, calcul des coordonnées X et Y, date du jour et force la valeur date de mise à jour à null et traite_sig = 1 (non traité). A la mise à jour recherche recherche du code insee et libellé de la commune, calcul des coordonnées X et Y, et date de mise jour = date du jour.
  
