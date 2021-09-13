@@ -17,6 +17,7 @@ DROP SEQUENCE IF EXISTS r_objet.geo_objet_pt_adresse_id_seq;
 
 DROP TABLE IF EXISTS r_objet.geo_objet_pt_adresse;
 DROP TABLE IF EXISTS r_adresse.an_adresse;
+DROP TABLE IF EXISTS r_adresse.an_adresse_cad;
 DROP TABLE IF EXISTS r_adresse.an_adresse_h;
 DROP TABLE IF EXISTS r_adresse.an_adresse_info;
 DROP TABLE IF EXISTS r_objet.lt_position;
@@ -314,6 +315,51 @@ COMMENT ON COLUMN r_adresse.an_adresse_info.insee_cd IS 'code Insee de la commun
 COMMENT ON COLUMN r_adresse.an_adresse_info.nom_cd IS 'Libellé de la commune déléguée (en cas de fusion de commune)';
 
 
+
+-- #################################################################### an_adresse_cad ###################################################################
+
+-- Table: r_adresse.an_adresse_cad
+
+-- DROP TABLE r_adresse.an_adresse_cad;
+
+CREATE TABLE r_adresse.an_adresse_cad
+(
+    id bigint NOT NULL DEFAULT nextval('r_adresse.an_adresse_cad_id_seq'::regclass),
+    id_adresse bigint NOT NULL,
+    commune_autre_insee character varying(5) COLLATE pg_catalog."default",
+    ccosec character varying(2) COLLATE pg_catalog."default",
+    dnupla character varying(4) COLLATE pg_catalog."default",
+    idu character varying(15) COLLATE pg_catalog."default",
+    acomm character varying(1) COLLATE pg_catalog."default" DEFAULT '0'::character varying,
+    CONSTRAINT an_adresse_cad_pkey PRIMARY KEY (id)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE r_adresse.an_adresse_cad
+    OWNER to create_sig;
+
+COMMENT ON TABLE r_adresse.an_adresse_cad
+    IS 'Table alphanumérique des parcelles cadastrales desservies par l''adresse déclarée (classe d''objets en test)';
+COMMENT ON COLUMN r_adresse.an_adresse_cad.id
+    IS 'Identifiant interne ARC';
+COMMENT ON COLUMN r_adresse.an_adresse_cad.id_adresse
+    IS 'Identifiant unique de l''''objet point adresse';
+COMMENT ON COLUMN r_adresse.an_adresse_cad.commune_autre_insee
+    IS 'Code Insee de la commune contenant la parcelle. Cet attribut est renseigné uniquement si le point d''adresse n''est pas localisée sur la même commune que la parcelle adressée.';
+COMMENT ON COLUMN r_adresse.an_adresse_cad.ccosec
+    IS 'Section cadastrale (avec indication du 0 si besoin en 1er caractère)';
+COMMENT ON COLUMN r_adresse.an_adresse_cad.dnupla
+    IS 'Numéro de parcelle indiquée sur le plan cadastrale codé sur 4 caractères (avec les 0 si besoins)';
+COMMENT ON COLUMN r_adresse.an_adresse_cad.idu
+    IS 'Code national de la parcelle cadastrale code département(2), code de direction(1), code de commune(3), préfixe de section(3),code de section(2), code de parcelle(4)';
+COMMENT ON COLUMN r_adresse.an_adresse_cad.acomm
+    IS 'Référence cadastrale issue de l''arrêté de voirie';
+    
+
+
 -- ####################################################################################################################################################
 -- ###                                                                                                                                              ###
 -- ###                                                                DOMAINES DE VALEURS                                                           ###
@@ -544,7 +590,10 @@ INSERT INTO r_adresse.lt_qual_adr(
 -- Type d'énumération urbanisé et présent dans le schéma r_objet
 -- Voir table r_objet.lt_src_geom
 
+-- ################################################################# Domaine valeur - lt_booleen  ###############################################
 
+-- Type d'énumération urbanisé et présent dans le schéma r_objet
+-- Voir table r_objet.lt_booleen
 
 -- ################################################################# Domaine valeur - destination  ###############################################
 
@@ -628,6 +677,16 @@ INSERT INTO r_adresse.lt_etat_adr(
 -- ###                                                                                                                                              ###
 -- ####################################################################################################################################################
 
+-- Constraint: an_adresse_cad_acomm_fkey
+
+-- ALTER TABLE r_adresse.an_adresse_cad DROP CONSTRAINT an_adresse_cad_acomm_fkey;
+
+ALTER TABLE r_adresse.an_adresse_cad
+    ADD CONSTRAINT an_adresse_cad_acomm_fkey FOREIGN KEY (acomm)
+    REFERENCES r_objet.lt_booleen (code) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION
+    NOT VALID;
 
 -- Foreign Key: r_objet.geo_objet_pt_adresse_id_tronc_fkey
 
