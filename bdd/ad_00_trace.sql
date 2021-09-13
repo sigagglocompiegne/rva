@@ -41,4 +41,6 @@
 -- 2021/03/15 : GB / Modification des droits
 -- 2021/03/15 : GB / Suppression des vues relevant les adresses sans CODE RIVOLI suite standard BAL 1.2 affectant un RIVOLI temporaire
 -- 2021/05/06 : GB / Intégration d'un contrôle sur les adresses conformes pour éviter les doublons d'adresse à la saisie (modification de la fonction trigger de contrôle ft_m_geo_adresse_gestion())
+-- 2021/09/13 : GB / Gestion des références cadastrales multiples pour export au format BAL (création d'une sous-classe an_adresse_cad, avec relation 0..n dans QGIS et GEO)
+--              GB / Modification de l'export OpenData pour intégrer l'attribut cadastre_parcelles (0 ou n valeurs séparées par un |) et intégration de l'attribut certification_commune (avec valeur forcée à 1) pour la remontée à ETALAB
 
