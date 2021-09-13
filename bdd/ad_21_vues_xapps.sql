@@ -271,7 +271,7 @@ CREATE OR REPLACE VIEW x_opendata.xopendata_an_v_bal_12
     p.y_l93 AS y,
     st_x(st_transform(p.geom, 4326))::numeric(8,7) AS long,
     st_y(st_transform(p.geom, 4326))::numeric(9,7) AS lat,
-    ''::character varying AS cad_parcelles,
+    string_agg(ca.idu::text, '|'::text) AS cad_parcelles,
         CASE
             WHEN "left"(c.commune::text, 1) = ANY (ARRAY['A'::text, 'E'::text, 'I'::text, 'O'::text, 'U'::text, 'Y'::text, 'H'::text, 'É'::text]) THEN 'Commune d'''::text || c.commune::text
             ELSE 'Commune de '::text || c.commune::text
@@ -279,14 +279,17 @@ CREATE OR REPLACE VIEW x_opendata.xopendata_an_v_bal_12
         CASE
             WHEN p.date_maj IS NULL THEN to_char(date(p.date_sai)::timestamp with time zone, 'YYYY-MM-DD'::text)
             ELSE to_char(date(p.date_maj)::timestamp with time zone, 'YYYY-MM-DD'::text)
-        END::character varying(10) AS date_der_maj
+        END::character varying(10) AS date_der_maj,
+    '1'::text AS certification_commune
    FROM r_objet.geo_objet_pt_adresse p
      LEFT JOIN r_adresse.an_adresse a ON a.id_adresse = p.id_adresse
      LEFT JOIN r_adresse.an_adresse_info af ON af.id_adresse = p.id_adresse
      LEFT JOIN r_objet.lt_position lt_p ON lt_p.code::text = p."position"::text
      LEFT JOIN r_voie.an_voie v ON v.id_voie = p.id_voie
      LEFT JOIN r_osm.geo_osm_commune c ON v.insee = c.insee::bpchar
+     LEFT JOIN r_adresse.an_adresse_cad ca ON ca.id_adresse = p.id_adresse
   WHERE (a.diag_adr::text = '11'::text OR "left"(a.diag_adr::text, 1) = '2'::text) AND a.diag_adr::text <> '31'::text AND a.diag_adr::text <> '32'::text AND a.numero::text <> '00000'::text
+  GROUP BY a.repet, a.complement, v.insee, v.rivoli, a.numero, c.commune, af.insee_cd, af.nom_cd, v.libvoie_c, a.ld_compl, lt_p.valeur, p.x_l93, p.y_l93, p.geom, p.date_maj, p.date_sai
   ORDER BY (
         CASE
             WHEN a.repet IS NULL AND a.complement IS NULL THEN concat(v.insee, '_', v.rivoli, '_', lpad(a.numero::text, 5, '0'::text))
@@ -298,8 +301,12 @@ CREATE OR REPLACE VIEW x_opendata.xopendata_an_v_bal_12
 
 ALTER TABLE x_opendata.xopendata_an_v_bal_12
     OWNER TO create_sig;
+    
 COMMENT ON VIEW x_opendata.xopendata_an_v_bal_12
     IS 'Vue alphanumérique simplifiée des adresses au format d''échange BAL Standard 1.2';
+
+
+
 
 
 
