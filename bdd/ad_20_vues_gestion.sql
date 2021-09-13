@@ -47,7 +47,6 @@ CREATE OR REPLACE VIEW r_adresse.geo_v_adresse
     p."position",
     i.dest_adr,
     i.etat_adr,
-    i.refcad,
     i.nb_log,
     i.pc,
     i.groupee,
@@ -91,6 +90,7 @@ COMMENT ON TRIGGER t_t3_geo_v_adresse_vmr ON r_adresse.geo_v_adresse
 -- ###                                                              TRIGGER ET FONCTION                                                             ###
 -- ###                                                                                                                                              ###
 -- ####################################################################################################################################################
+
 
 
 -- #################################################################### TRIGGER - XY_L93  ###################################################
@@ -520,3 +520,52 @@ CREATE TRIGGER t_t1_repetcomplement_null
     ON r_adresse.an_adresse
     FOR EACH ROW
     EXECUTE PROCEDURE r_adresse.ft_m_adresse_repetcomplement_null();
+		     
+-- #################################################################### FONCTION TRIGGER - ft_m_adresse_insert_update ###################################################
+
+-- FUNCTION: r_adresse.ft_m_adresse_insert_update()
+
+-- DROP FUNCTION r_adresse.ft_m_adresse_insert_update();
+
+CREATE FUNCTION r_adresse.ft_m_adresse_insert_update()
+    RETURNS trigger
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE NOT LEAKPROOF
+AS $BODY$
+
+BEGIN
+
+-- si le point d'adresse est bien sur la même commune
+IF (NEW.commune_autre_insee IS NULL or NEW.commune_autre_insee = '') THEN
+NEW.idu := '600' || (SELECT right(o.insee,3) FROM r_osm.geo_vm_osm_commune_apc o, r_objet.geo_objet_pt_adresse p 
+					 WHERE st_intersects(o.geom,p.geom) IS TRUE AND p.id_adresse = NEW.id_adresse) || '000' || upper(NEW.ccosec) || NEW.dnupla;
+ELSE
+NEW.idu := '600' || right(NEW.commune_autre_insee,3) || '000' || upper(NEW.ccosec) || NEW.dnupla;
+END IF;
+
+NEW.ccosec := upper(NEW.ccosec);
+
+	RETURN NEW; 
+	
+END;
+
+$BODY$;
+
+ALTER FUNCTION r_adresse.ft_m_adresse_insert_update()
+    OWNER TO create_sig;
+
+
+COMMENT ON FUNCTION r_adresse.ft_m_adresse_insert_update()
+    IS 'Fonction générant automatiquement l''identifiant nationale parcelle ou IDU à partir des informations fournies de section cadastrale, parcelle, et sur la commune contenant le point d''adresse';
+
+		     
+-- Trigger: t_t1_an_adresse_cad_idu
+
+-- DROP TRIGGER t_t1_an_adresse_cad_idu ON r_adresse.an_adresse_cad;
+
+CREATE TRIGGER t_t1_an_adresse_cad_idu
+    BEFORE INSERT OR UPDATE 
+    ON r_adresse.an_adresse_cad
+    FOR EACH ROW
+    EXECUTE PROCEDURE r_adresse.ft_m_adresse_insert_update();
