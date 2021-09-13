@@ -318,6 +318,25 @@ COMMENT ON COLUMN r_adresse.an_adresse_info.nom_cd IS 'Libell√© de la commune d√
 
 -- #################################################################### an_adresse_cad ###################################################################
 
+-- SEQUENCE: r_adresse.an_adresse_cad_id_seq
+
+-- DROP SEQUENCE r_adresse.an_adresse_cad_id_seq;
+
+CREATE SEQUENCE r_adresse.an_adresse_cad_id_seq
+    INCREMENT 1
+    START 1
+    MINVALUE 1
+    MAXVALUE 9223372036854775807
+    CACHE 1;
+
+ALTER SEQUENCE r_adresse.an_adresse_cad_id_seq
+    OWNER TO create_sig;
+
+GRANT ALL ON SEQUENCE r_adresse.an_adresse_cad_id_seq TO PUBLIC;
+
+GRANT ALL ON SEQUENCE r_adresse.an_adresse_cad_id_seq TO create_sig;
+
+
 -- Table: r_adresse.an_adresse_cad
 
 -- DROP TABLE r_adresse.an_adresse_cad;
