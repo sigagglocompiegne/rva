@@ -273,11 +273,10 @@ NEW.ld_compl;
 
 -- insertion dans la classe des adresses informations
 
-INSERT INTO r_adresse.an_adresse_info (id_adresse, dest_adr, etat_adr, refcad, nb_log, pc, groupee, secondaire, id_ext1, id_ext2,insee_cd,nom_cd)
+INSERT INTO r_adresse.an_adresse_info (id_adresse, dest_adr, etat_adr, nb_log, pc, groupee, secondaire, id_ext1, id_ext2,insee_cd,nom_cd)
 SELECT v_id_adresse, 
 CASE WHEN NEW.dest_adr IS NULL THEN '00' ELSE NEW.dest_adr END,
 CASE WHEN NEW.etat_adr IS NULL THEN '00' ELSE NEW.etat_adr END,
-UPPER(REPLACE(REPLACE(REPLACE(REPLACE((NEW.refcad),'-',';'),',',';'),'/',';'),'\',';')),
 NEW.nb_log,
 UPPER(NEW.pc),
 CASE WHEN NEW.groupee IS NULL THEN '0' ELSE NEW.groupee END,
@@ -392,7 +391,6 @@ r_adresse.an_adresse_info
 SET
 dest_adr=CASE WHEN NEW.dest_adr IS NULL THEN '00' ELSE NEW.dest_adr END,
 etat_adr=CASE WHEN NEW.etat_adr IS NULL THEN '00' ELSE NEW.etat_adr END,
-refcad=UPPER(REPLACE(REPLACE(REPLACE(REPLACE((NEW.refcad),'-',';'),',',';'),'/',';'),'\',';')),
 nb_log=NEW.nb_log,
 pc=UPPER(NEW.pc),
 groupee=CASE WHEN NEW.groupee IS NULL THEN '0' ELSE NEW.groupee END,
@@ -420,9 +418,12 @@ $BODY$;
 ALTER FUNCTION r_adresse.ft_m_geo_adresse_gestion()
     OWNER TO create_sig;
 
-	COMMENT ON FUNCTION r_adresse.ft_m_geo_adresse_gestion()
-    IS 'Fonction trigger pour gérer l''insertion et la mise à jour des données adresse';
+GRANT EXECUTE ON FUNCTION r_adresse.ft_m_geo_adresse_gestion() TO PUBLIC;
 
+GRANT EXECUTE ON FUNCTION r_adresse.ft_m_geo_adresse_gestion() TO create_sig;
+
+COMMENT ON FUNCTION r_adresse.ft_m_geo_adresse_gestion()
+    IS 'Fonction trigger pour gérer l''insertion et la mise à jour des données adresse';
 
 
 
@@ -441,7 +442,7 @@ CREATE TRIGGER t_t2_an_adresse_h
     FOR EACH ROW
     EXECUTE PROCEDURE r_adresse.ft_m_an_adresse_h();
 
--- #################################################################### FONCTION TRIGGER - ft_m_geo_adresse_gestion ###################################################
+-- #################################################################### FONCTION TRIGGER - ft_m_geo_v_adresse_vmr ###################################################
 
 -- FUNCTION: r_adresse.ft_m_geo_v_adresse_vmr()
 
