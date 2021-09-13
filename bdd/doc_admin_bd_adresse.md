@@ -582,6 +582,26 @@ Valeurs possibles :
 |99|Autre|
 
 ---
+`r_objet.lt_booleen` : Liste des valeurs permettant de gérer un faux booléen
+
+|Nom attribut | Définition | Type  | Valeurs par défaut |
+|:---|:---|:---|:---|    
+|code|Code|character varying(2)| |
+|valeur|Valeur|character varying(80)| |
+
+Particularité(s) à noter :
+* Une clé primaire existe sur le champ code 
+
+Valeurs possibles :
+
+|Code|Valeur|
+|:---|:---|
+|0|Non renseigné|
+|f|Non|
+|t|Oui|
+|z|Non concerné|
+
+---
 
 `public.lt_nat_signal` : Liste des valeurs permettant de décrire la nature du signalement sur le référentiel voie/adresse
 
@@ -651,13 +671,13 @@ Valeurs possibles :
 ## Projet QGIS pour la gestion
 
 Un projet QGIS a été réalisé pour la gestion interne des données. Il est stocké ici :
-Y:\Ressources\4-Partage\3-Procedures\QGIS\RVA_1.2_3.10.qgs
+R:\Ressources\4-Partage\3-Procedures\QGIS\RVA_1.2_3.10.qgs
 
 ## Traitement automatisé mis en place (Workflow de l'ETL FME)
 
 ### Gestion des procédures de contrôle des données Adresse
 
-L'ensemble des fichiers a utilisé est placé ici `Y:\Ressources\4-Partage\3-Procedures\FME\prod\RVA`.
+L'ensemble des fichiers a utilisé est placé ici `R:\Ressources\4-Partage\3-Procedures\FME\prod\RVA`.
 
 **Vérification de la qualité des adresse** `RVA_ctrl_qualite_adresse.fmw`
 
