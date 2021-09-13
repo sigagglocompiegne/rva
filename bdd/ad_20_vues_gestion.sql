@@ -570,3 +570,44 @@ CREATE TRIGGER t_t1_an_adresse_cad_idu
     ON r_adresse.an_adresse_cad
     FOR EACH ROW
     EXECUTE PROCEDURE r_adresse.ft_m_adresse_insert_update();
+    
+-- #################################################################### FONCTION TRIGGER - ft_m_adresse_repetcomplement_null ###################################################
+
+-- FUNCTION: r_adresse.ft_m_adresse_repetcomplement_null()
+
+-- DROP FUNCTION r_adresse.ft_m_adresse_repetcomplement_null();
+
+CREATE FUNCTION r_adresse.ft_m_adresse_repetcomplement_null()
+    RETURNS trigger
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE NOT LEAKPROOF
+AS $BODY$
+
+begin
+
+ -- gestion des valeurs '' mise à jour une insertion
+ update r_adresse.an_adresse set repet = null where repet = '';        
+ update r_adresse.an_adresse set complement = null where complement = '';
+ update r_adresse.an_adresse set ld_compl = null where ld_compl = '';
+
+	return new; 
+end;
+
+$BODY$;
+
+ALTER FUNCTION r_adresse.ft_m_adresse_repetcomplement_null()
+    OWNER TO create_sig;
+
+COMMENT ON FUNCTION r_adresse.ft_m_adresse_repetcomplement_null()
+    IS 'Fonction forçant le champ à null quand insertion ou mise à jour des attributs repet ou complement ''''';
+
+-- Trigger: t_t1_repetcomplement_null
+
+-- DROP TRIGGER t_t1_repetcomplement_null ON r_adresse.an_adresse;
+
+CREATE TRIGGER t_t1_repetcomplement_null
+    AFTER INSERT OR UPDATE 
+    ON r_adresse.an_adresse
+    FOR EACH ROW
+    EXECUTE PROCEDURE r_adresse.ft_m_adresse_repetcomplement_null();
