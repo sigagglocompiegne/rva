@@ -537,6 +537,16 @@ AS $BODY$
 
 BEGIN
 
+-- contrôle sur la saisie de la section cadastrale et le numéro de parcelle (longueur)
+IF length(NEW.ccosec) <> 2 OR length(NEW.dnupla) <> 4 THEN
+RAISE EXCEPTION USING MESSAGE = 'La section doit être codée sur 2 caractères et la parcelle sur 4 caractères. Vérifiez votre saisie et recommencer.';
+END IF;
+
+-- contrôle sur la saisie de la section cadastrale (positionnement du 0)
+IF (right(NEW.ccosec,1) = '0' OR NEW.ccosec = '00') THEN
+RAISE EXCEPTION USING MESSAGE = 'Une section ne peut pas être composée d''une lettre suivie d''un 0, n''y être composée d''un double 0. Corrigez votre saisie et validez.';
+END IF;
+
 -- si le point d'adresse est bien sur la même commune
 IF (NEW.commune_autre_insee IS NULL or NEW.commune_autre_insee = '') THEN
 NEW.idu := '600' || (SELECT right(o.insee,3) FROM r_osm.geo_vm_osm_commune_apc o, r_objet.geo_objet_pt_adresse p 
