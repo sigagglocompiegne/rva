@@ -130,6 +130,23 @@ Sont décrites ici les Géotables et/ou Tables intégrées dans GEO pour les bes
 | xapps_an_v_adresse_h |id_adresse | 0..n (égal) |
 
    * particularité(s) : aucune
+
+## GeoTable : `geo_v_adresse`
+
+|Attributs| Champ calculé | Formatage |Renommage|Particularité/Usage|Utilisation|Exemple|
+|:---|:-:|:-:|:---|:---|:---|:---|
+|affiche_blanc  |x||||Permet de laisser un blanc dans le résultat (non affichage en gras par défaut)||
+|affiche_result  |x|x||Formate le titre du résultat dans le menu Résultat |Afficher dans la Recherche dans la Base Adresse Locale ||
+
+
+   * filtres : aucun
+   * relations :
+
+|Géotables ou Tables| Champs de jointure | Type |
+|:---|:---|:---|
+| an_adresse_cad |id_adresse | 0..n (égal) |
+
+   * particularité(s) : aucune
    
 ## GeoTable : `xapps_geo_v_voie`
 
@@ -401,6 +418,27 @@ Source : `xapps_geo_v_voie`
 Sans objet
 
  * Fiches d'information active : Fiche d'information sur la voie
+
+## Recherche (clic sur la carte) : `Gestion des adresses`
+
+Cette recherche permet à l'administrateur de cliquer sur la carte et de remonter les informations de gestion d'une adresse
+
+  * Configuration :
+
+Source : `geo_v_adresse`
+
+|Attribut|Afficher|Rechercher|Suggestion|Attribut de géométrie|Tri des résultats|
+|:---|:-:|:-:|:-:|:-:|:-:|
+|affiche_blanc|x|||||
+|affiche_result|x|||||
+
+(la détection des doublons n'est pas activée ici)
+
+ * Filtres :
+
+Sans objet
+
+ * Fiches d'information active : Gestion des adresses
  
 ## Recherche (clic sur la carte) : `Parcelle(s) sélectionnée(s) (Parcelle (Alpha) V3)`
 
@@ -1084,6 +1122,38 @@ Source : `xapps_an_commune`
  * Fiches d'information active : aucune
  * Particularité(s) : cette table est une simple vue dans la base de données Postgres avec la liste des communes du Pays Compiégnois permettant d'y lier un champ calculé contenant le lien de téléchargement du fichier OpenData. Cette vue permet d'assoir la recherche par commune et d'accéder à ce lien dans GEO au niveau du menu résultat.
 
+## Recherche : `Saisir ou modifier un point d'adresse`
+
+Cette recherche permet à l'administrateur de créer ou de modifier un point d'adresse. Cette recherche est une moficiation géométrique. Le fonctionnement est identique au porjet métier sur QGIS.
+
+* Configuration :
+
+Source : `geo_v_adresse`
+
+## Recherche : `Rechercher une voie`
+
+Cette recherche permet à l'administrateur de recherche une voie dans la base de voie pour accéder notamment à sa fiche et la modifier.
+
+* Configuration :
+
+Source : `an_voie`
+
+|Attribut|Afficher|Rechercher|Suggestion|Attribut de géométrie|Tri des résultats|
+|:---|:-:|:-:|:-:|:-:|:-:|
+|affiche_blanc|x|||||
+|affiche_result|x|||||
+
+(la détection des doublons n'est pas activée ici)
+
+ * Filtres :
+
+|Nom|Obligatoire|Attribut|Condition|Valeur|Champ d'affichage (1)|Champ de valeurs (1)|Champ de tri (1)|Ajout autorisé (1)|Particularités|
+|:---|:-:|:---|:---|:---|:---|:---|:---|:-:|:---|
+|Commune||insee|est égal à |une valeur choisie par l'utilisateur parmi une liste|Commune APC (sans filtre)||||
+|Libellé de la voie||libvoie_c|est égal à |une valeur choisie par l'utilisateur (suggérée)|||||
+
+ * Fiches d'information active : Gestion des voies (littéral)
+
 ## Fiche d'information : `Fiche adresse`
 
 Source : `xapps_geo_vmr_adresse`
@@ -1202,6 +1272,26 @@ Source : `xapps_geo_v_troncon_voirie`
 
  * Modèle d'impression : aucun
 
+
+## Fiche d'information : `Ajout d'une voie (littéral)`
+
+Cette fiche permet à l'administrateur d'ajouter ou de modifier des voies en mode littéral dans la base de voies et repoose sur le même principe que le projet métier sous QGIS.
+
+* Configuration :
+
+Source : `an_voie`
+
+## Fiche d'information : `Gestion des adresses`
+
+Cette fiche permet à l'administrateur d'ajouter ou de modifier des adresses et repoose sur le même principe que le projet métier sous QGIS.
+
+* Configuration :
+
+Source : `geo_v_adresse`
+
+|Mode d'ouverture|Taille|Agencement des sections|
+|:---|:---|:---|
+|dans le gabarit|900x800|Vertical|
  
 ## Analyse :
 
@@ -1232,6 +1322,7 @@ Source : `geo_rva_signal`
 |||||||geo_v_osm_commune_apc|Limite communale|||x||||||Contour marron épais||
 |Adresse||x|x|x|x|xapps_geo_vmr_adresse|Conformité||x|x|x|||affiche_qual_adr|0 à 1999è|Couleur par conformité|Interactivité avec le champ infobulle|
 |Adresse||x|x|x|x|xapps_geo_vmr_adresse|Points d'adresse||x|x|||||1999 à 10000è|Carré bleu de taille 5|Interactivité avec le champ infobulle (avec seuil de zoom de 1999 à 5000è)|
+|Adresse|||x|||geo_v_adresse|Gestion des adresses|||x|||||0 à 10000è|Rond blanc(fond et contour) de taille 4, opacité de 1||
 |Voie||x|x|x|x|xapps_geo_v_voie|Voie (agrégée pour clic carte)|||x|||||0 à 100 000è|aucune symbologie||
 |Voie||x|x|x|x|xapps_geo_v_troncon_voirie|Tronçon (pour clic carte)|||x|||||0 à 100 000è|aucune symbologie||
 |Voie|Tronçons|x||||geo_objet_noeud|Noeuds||x|x|||x||0 à 50 000è|Point gris de taille 3||
@@ -1290,8 +1381,9 @@ Liste des recherches : Recherche dans la Base Adresse Locale, Recherche tronçon
 |Nom|Au démarrage|opacité|
 |:---|:---|:---|
 |Cadastre|x|80%|
-|Plan de ville|x|60%|
-|Photographie aérienne 2013|x|80%|
+|Plan de ville||80%|
+|Photographie aérienne 2018|x|80%|
+|Photographie aérienne 2013||75%|
 
 * Fonctionnalités
 
@@ -1329,3 +1421,7 @@ Liste des recherches : Recherche dans la Base Adresse Locale, Recherche tronçon
 ||Autres restrictions de circulation|
 |(pas dans un groupe)|Exporter les données des tronçons|
 |(pas dans un groupe)|Exporter la liste des voies (avec linéaire)|
+|Gestion des voies et des adresses||
+||Saisir ou modifier un point d'adresse|
+||Ajout d'une voie (littéral)|
+||Rechercher une voie|
