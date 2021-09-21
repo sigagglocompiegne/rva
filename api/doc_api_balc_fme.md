@@ -42,8 +42,9 @@ Certains valeurs peuvent être paramétrées au lancement du traitement FME pour
 
 L'attribut `$(Commune)` correspond au paramètre publié Commune contenant le code Insee de celle-ci.
 
- -  Méthode http : **POST**
- -  En-tête : Nom **Authorization** et Valeur **Token $(Jeton)**
+![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_2.png) Méthode http : **POST**
+
+![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_3.png) En-tête : Nom **Authorization** et Valeur **Token $(Jeton)**
 
 L'attribut `$(Jeton)` correspond au paramètre publié Jeton contenant la clé fournie par la BAL (ici nous saisirons donc la clé de démonstration dans un premier temps).
  
