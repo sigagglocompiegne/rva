@@ -29,6 +29,11 @@ Certains valeurs peuvent être paramétrées au lancement du traitement FME pour
  
  ![creator](img/creator.png)
  
+ 
+ **2 : Paramétrer un HttpCaller** pour lancer la 1er requête nommée `REVISION`
+ 
+ ![creator](img/httpcaller.png)
+ 
 
 ## Voir aussi
 
