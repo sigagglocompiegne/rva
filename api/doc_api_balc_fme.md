@@ -38,7 +38,8 @@ Certains valeurs peuvent être paramétrées au lancement du traitement FME pour
  
  Paramètres à indiquer dans ce transformer :
  
- - ![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_1.png) https://plateforme.adresse.data.gouv.fr/api-depot-demo/communes/$(Commune)/revisions
+![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_1.png)
+https://plateforme.adresse.data.gouv.fr/api-depot-demo/communes/$(Commune)/revisions
 
 L'attribut `$(Commune)` correspond au paramètre publié Commune contenant le code Insee de celle-ci.
 
