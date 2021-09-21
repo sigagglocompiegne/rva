@@ -213,7 +213,9 @@ Il est possible de lire les réponses renvoyées par l'API après chaque `HttpCa
 
 Exemple des résultats après chaque requête non rejetée :
 
-`REVISION` : `{"_id":"614992bfe1d1f2602d7acf37","codeCommune":"60032","context":{"nomComplet":"Service SIG","organisation":"Agglomération de la Région de Compiègne","extras":{"internal_id":""}},"validation":{"valid":true,"errors":[]},"client":{"nom":"Compiègne"},"status":"published","ready":null,"createdAt":"2021-09-21T08:07:27.919Z","updatedAt":"2021-09-21T08:07:28.738Z","publishedAt":"2021-09-21T08:07:28.738Z","current":true}`
+`REVISION` : 
+
+`{"_id":"614992bfe1d1f2602d7acf37","codeCommune":"60032","context":{"nomComplet":"Service SIG","organisation":"Agglomération de la Région de Compiègne","extras":{"internal_id":""}},"validation":{"valid":true,"errors":[]},"client":{"nom":"Compiègne"},"status":"published","ready":null,"createdAt":"2021-09-21T08:07:27.919Z","updatedAt":"2021-09-21T08:07:28.738Z","publishedAt":"2021-09-21T08:07:28.738Z","current":true}`
 
 ## Voir aussi
 
