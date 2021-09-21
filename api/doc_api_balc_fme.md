@@ -88,6 +88,11 @@ La réponse de l'API s'effectue au format JSON, il faut donc récupérer les dif
  
  ![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_4.png) **JSON**
  
+  - Conserver uniquement l'attribut `_ID` avec un simple transformet `Tester`
+
+ ![creator](img/tester_televerse.png)
+
+ 
 ## Voir aussi
 
 - Téléchargement du projet FME (vierge) (à venir)
