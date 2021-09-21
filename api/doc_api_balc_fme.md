@@ -32,7 +32,7 @@ Certains valeurs peuvent être paramétrées au lancement du traitement FME pour
  ![creator](img/creator.png)
  
  
- **2 : Paramétrer un HttpCaller pour lancer la 1er requête nommée `REVISION`**
+#### 2 : Paramétrer un HttpCaller pour lancer la 1er requête nommée `REVISION`
  
  ![creator](img/httpcaller.png)
  
@@ -68,7 +68,7 @@ L'attribut `$(Jeton)` correspond au paramètre publié Jeton contenant la clé f
  
  Laisser les autres paramètres par défaut. L'attribut de réponse `_response_body` sera utilisé dans la suite du traitement et correspond au code de retour de l'API.
  
-  **3 : Récupération de l'attribut `_ID` dans la requête de réponse de `REVISION`** pour lancer la 2nd requête nommée `TELEVERSEMENT`
+#### 3 : Récupération de l'attribut `_ID` dans la requête de réponse de `REVISION`** pour lancer la 2nd requête nommée `TELEVERSEMENT`
   
 La réponse de l'API s'effectue au format JSON, il faut donc récupérer les différents attributs utiles pour la suite du traitement et notamment l'`_ID`.
 
@@ -94,7 +94,7 @@ La réponse de l'API s'effectue au format JSON, il faut donc récupérer les dif
  
  L'attribut `json_index` liste l'ensemble des attributs de la requête de réponse. Il suffit de filter avec le nom `_id` pour récupérer en sortie uniquement la valeur de celui-ci dans l'attribut `_response_body`.
 
- **4 : Paramétrer un HttpCaller** pour lancer la 2nd requête nommée `TELEVERSEMENT`
+#### 4 : Paramétrer un HttpCaller** pour lancer la 2nd requête nommée `TELEVERSEMENT`
  
 ![creator](img/httpcaller_2_para.png)
  
