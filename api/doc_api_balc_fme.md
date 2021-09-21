@@ -191,6 +191,12 @@ L'attribut `$(Jeton)` correspond au paramètre publié Jeton contenant la clé f
  
 Laisser les autres paramètres par défaut. L'attribut de réponse `_response_body` sera utilisé dans la suite du traitement et correspond au code de retour de l'API.
 
+#### 8 - Lancement du traitement
+
+Pour lancer le traitement, cliquer sur
+
+#### 9 - Les résultats obtenus
+
 ## Voir aussi
 
 - Téléchargement du projet FME (vierge) (à venir)
