@@ -106,7 +106,7 @@ L'attribut `@Value(_response_body)` contient la valeur de l'ID récupérée pré
 
 ![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_2.png) **PUT**
 
-![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_3.png) Nom **Content-Length:** et Valeur **($Taille)**, Nom **Content-MD5:** et Valeur  **1234567890abcdedf1234567890abcdedf**
+![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_3.png) Nom **Content-Length:** et Valeur **($Taille)** + Nom **Content-MD5:** et Valeur  **1234567890abcdedf1234567890abcdedf**
 
 L'attribut `$(Taille)` correspond au paramètre publié Taille contenant la taille du fichier téléversé en octet.
 
