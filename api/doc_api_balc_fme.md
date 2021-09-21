@@ -201,6 +201,11 @@ et dans la boîte de dialogue saisir les paramètres publiés nécessaires au tr
 
  ![creator](img/fme_execut_variable_apibal.png)
 
+![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_1.png) Code Insee de la commune à téléverser
+
+![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_2.png) Taille du fichier en octet
+
+![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_3.png) Votre clé jeton
 
 #### 9 - Les résultats obtenus
 
