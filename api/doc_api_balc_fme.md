@@ -34,6 +34,10 @@ Certains valeurs peuvent être paramétrées au lancement du traitement FME pour
  
  ![creator](img/httpcaller.png)
  
+ ![creator](img/httpcaller_para.png)
+ 
+ 
+ 
  Paramètres à indiquer dans ce transformer :
  
  - URL : https://plateforme.adresse.data.gouv.fr/api-depot-demo/communes/$(Commune)/revisions
@@ -41,10 +45,21 @@ Certains valeurs peuvent être paramétrées au lancement du traitement FME pour
 L'attribut `$(Commune)` correspond au paramètre publié Commune contenant le code Insee de celle-ci.
 
  -  Méthode http : **POST**
- -  En-tête : 
-   - Nom : **Authorization**
-   - Valeur : **Token $(Jeton)**
+ -  En-tête : Nom **Authorization** et Valeur **Token $(Jeton)**
+
+L'attribut `$(Jeton)` correspond au paramètre publié Jeton contenant la clé fournie par la BAL (ici nous saisirons donc la clé de démonstration dans un premier temps).
  
+ - Corps : Type de données à charger **Specify Upload Body**
+ - Corps de requête :
+ `{
+  "context": {
+    "nomComplet": "[votre nom]",
+    "organisation": "[organisme]", 
+    "extras": {
+      "internal_id": ""
+    }
+  }
+}`
 
 ## Voir aussi
 
