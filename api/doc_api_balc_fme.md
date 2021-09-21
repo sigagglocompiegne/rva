@@ -195,6 +195,8 @@ Laisser les autres paramètres par défaut. L'attribut de réponse `_response_bo
 
 Pour lancer le traitement, cliquer sur
 
+ ![creator](img/fme_execut.png)
+
 #### 9 - Les résultats obtenus
 
 ## Voir aussi
