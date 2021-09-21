@@ -27,7 +27,7 @@ Certains valeurs peuvent être paramétrées au lancement du traitement FME pour
 
 ### B - Création de la chaîne de traitement
 
-#### **1 : Initié un `Creator` qui permettra le lancement du traitement**
+#### 1 - Initié un `Creator` qui permettra le lancement du traitement
  
  ![creator](img/creator.png)
  
