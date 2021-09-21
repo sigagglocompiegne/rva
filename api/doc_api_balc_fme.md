@@ -80,8 +80,14 @@ La réponse de l'API s'effectue au format JSON, il faut donc récupérer les dif
  
  ![creator](img/jsonfragmenter_para.png)
  
+ ![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_1.png) **Attribut JSON**
  
-
+ ![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_2.png) **_response_body**
+ 
+ ![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_3.png) **json[*]**
+ 
+ ![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_4.png) **JSON**
+ 
 ## Voir aussi
 
 - Téléchargement du projet FME (vierge) (à venir)
