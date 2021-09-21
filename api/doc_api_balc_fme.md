@@ -8,6 +8,8 @@ L'alimentation de la BaseAdresseLocale évolue et permet à présent de téléve
 
 Le service SIG qui utilise déjà l'ETL FME de la société "Safe Software" pour l'ensemble de ces traitements, a paramétré un projet pour utiliser cette API.
 
+Contact : sig@agglo-compiegne.fr
+
 ## Changelog
 
  * 20/09/2021 : Version 0.1 - téléversement d'un fichier commune au format BAL 1.2 dans la BaseAdresseLocale via l'API
