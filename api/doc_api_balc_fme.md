@@ -39,6 +39,11 @@ Certains valeurs peuvent être paramétrées au lancement du traitement FME pour
  - URL : https://plateforme.adresse.data.gouv.fr/api-depot-demo/communes/$(Commune)/revisions
 
 L'attribut `$(Commune)` correspond au paramètre publié Commune contenant le code Insee de celle-ci.
+
+ -  Méthode http : **POST**
+ -  En-tête : 
+  - Nom : **Authorization**
+  - Valeur : **Token $(Jeton)**
  
 
 ## Voir aussi
