@@ -230,6 +230,14 @@ Exemple des résultats après chaque requête non rejetée :
 
 `{"_id":"614992bfe1d1f2602d7acf37","codeCommune":"60032","context":{"nomComplet":"Service SIG","organisation":"Agglomération de la Région de Compiègne","extras":{"internal_id":""}},"validation":{"valid":true,"errors":[]},"client":{"nom":"Compiègne"},"status":"published","ready":null,"createdAt":"2021-09-21T08:07:27.919Z","updatedAt":"2021-09-21T08:07:28.738Z","publishedAt":"2021-09-21T08:07:28.738Z","current":true}`
 
+#### 10 - Récupération des informations de la BAL
+
+la [documentation de l'API BALC de la BaseAdresseNationale](https://github.com/etalab/ban-api-depot/wiki/Documentation) indique qu'il est possible d'interroger la BAL en mode libre par des requêtes `GET`.
+
+Sur le même principe que les requêtes de téléversement, il est possible d'utiliser le transformer `HttpCaller` pour cela.
+
+![creator](img/httpcaller_get.png) 
+
 ## Voir aussi
 
 - Téléchargement du projet FME (vierge) (à venir)
