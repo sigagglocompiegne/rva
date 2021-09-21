@@ -2,6 +2,9 @@
 
 # Paramétrage de l'API BALC pour FME #
 
+## Principe
+
+## Paramétrage
 
 ## Voir aussi
 
