@@ -65,6 +65,12 @@ L'attribut `$(Jeton)` correspond au paramètre publié Jeton contenant la clé f
 }`
 
  ![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_6.png) **JSON (application/json)**
+ 
+ Laisser les autres paramètres par défaut. L'attribut de réponse `_response_body` sera utilisé dans la suite du traitement et correspond au code de retour de l'API.
+ 
+  **3 : Récupération de l'attribut `_ID` dans la requête de réponse de `REVISION`** pour lancer la 2nd requête nommée `TELEVERSEMENT`
+  
+  
 
 ## Voir aussi
 
