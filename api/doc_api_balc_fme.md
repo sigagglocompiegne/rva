@@ -209,7 +209,11 @@ et dans la boîte de dialogue saisir les paramètres publiés nécessaires au tr
 
 #### 9 - Les résultats obtenus
 
-Il est possible de lire les réponses renvoyées par l'API après chaque `HttpCaller` en cliquant sur  ![creator](img/fme_result.png) après la fin du traitement. Cela peut-être utile si la requête est rejetée via le port de sortie `Rejected`
+Il est possible de lire les réponses renvoyées par l'API après chaque `HttpCaller` en cliquant sur ![creator](img/fme_result.png) après la fin du traitement. Cela peut-être utile si la requête est rejetée via le port de sortie `Rejected`.
+
+Exemple des résultats après chaque requête non rejetée :
+
+`REVISION` : `{"_id":"614992bfe1d1f2602d7acf37","codeCommune":"60032","context":{"nomComplet":"Service SIG","organisation":"Agglomération de la Région de Compiègne","extras":{"internal_id":""}},"validation":{"valid":true,"errors":[]},"client":{"nom":"Compiègne"},"status":"published","ready":null,"createdAt":"2021-09-21T08:07:27.919Z","updatedAt":"2021-09-21T08:07:28.738Z","publishedAt":"2021-09-21T08:07:28.738Z","current":true}`
 
 ## Voir aussi
 
