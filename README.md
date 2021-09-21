@@ -39,6 +39,8 @@ L’ARC privilégie donc une organisation dans laquelle l’Interface Homme Mach
 - [GitHub du Validateur de fichier au format d'échange "Base Adresse Locale"](https://github.com/etalab/bal)
 - [Validateur en ligne du format BAL](https://adresse.data.gouv.fr/bases-locales/validateur)
 - [Ressources nationales (dont spécification du format d'échange BAL version 1.2)](https://aitf-sig-topo.github.io/voies-adresses/)
+- [Documentation de l'API BALC](https://github.com/etalab/ban-api-depot/wiki/Documentation)
+- [Paramétrage de l'API BALC pour FME]()
 
 
 ## Jeu de données consolidé
