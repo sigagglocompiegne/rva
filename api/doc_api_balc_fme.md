@@ -37,5 +37,5 @@ Certains valeurs peuvent être paramétrées au lancement du traitement FME pour
 
 ## Voir aussi
 
-- [Documentation de l'API BALC de la BaseAdresseNantionale](https://github.com/etalab/ban-api-depot/wiki/Documentation)
+- [Documentation de l'API BALC de la BaseAdresseNationale](https://github.com/etalab/ban-api-depot/wiki/Documentation)
 - Téléchargement du projet FME (vierge) (à venir)
