@@ -16,14 +16,14 @@ Le service SIG qui utilise déjà l'ETL FME de la société "Safe Software" pour
 
 Cette première version est une version béta permettant le téléversement d'un seul fichier BAL commune à la fois. Il sera amélioré pour automatiser un versement de lots de communes. La version de FME utilisée est la 2021.1.1.0.
 
- * 1 - Création de paramètres publiés
+#### 1 - Création de paramètres publiés
 
 Certains valeurs peuvent être paramétrées au lancement du traitement FME pour faciliter le processus de téléversement, elles sont au nombre de 3 :
  - Commune : cet attribut contiendra le code Insee de la commune à téléverser
  - Taille : cet attribut contiendra la taille du fichier à téléverser en octet (une amélioration sera apportée au projet pour automatiser la récupération de la taille du fichier)
  - Jeton : cet attribut contiendra votre clé jeton fournit par la BAL
 
-* 2 - Création de la chaîne de traitement
+#### 2 - Création de la chaîne de traitement
 
 
 
