@@ -70,7 +70,17 @@ L'attribut `$(Jeton)` correspond au paramètre publié Jeton contenant la clé f
  
   **3 : Récupération de l'attribut `_ID` dans la requête de réponse de `REVISION`** pour lancer la 2nd requête nommée `TELEVERSEMENT`
   
-  
+La réponse de l'API s'effectue au format JSON, il faut donc récupérer les différents attributs utiles pour la suite du traitement et notamment l'`_ID`.
+
+ - Extraction des attributs JSON avec le transformer `JSONFragmenter`
+
+ ![creator](img/jsonfragmenter.png)
+ 
+  Paramètres à indiquer dans ce transformer :
+ 
+ ![creator](img/jsonfragmenter_para.png)
+ 
+ 
 
 ## Voir aussi
 
