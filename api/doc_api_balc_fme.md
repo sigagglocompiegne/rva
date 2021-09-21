@@ -88,11 +88,46 @@ La réponse de l'API s'effectue au format JSON, il faut donc récupérer les dif
  
  ![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_4.png) **JSON**
  
-  - Conserver uniquement l'attribut `_ID` avec un simple transformet `Tester`
+  - Conserver uniquement l'attribut `_ID` avec un simple transformer `Tester`
 
  ![creator](img/tester_televerse.png)
-
  
+ L'attribut `json_index` liste l'ensemble des attributs de la requête de réponse. Il suffit de filter avec le nom `_id` pour récupérer en sortie uniquement la valeur de celui-ci dans l'attribut `_response_body`.
+
+ **4 : Paramétrer un HttpCaller** pour lancer la 2nd requête nommée `TELEVERSEMENT`
+ 
+![creator](img/httpcaller_para.png)
+ 
+ Paramètres à indiquer dans ce transformer :
+ 
+![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_1.png) https://plateforme.adresse.data.gouv.fr/api-depot-demo/revisions/@Value(_response_body)/files/bal
+
+L'attribut `@Value(_response_body)` contient la valeur de l'ID récupérée précédemment et à passer dans cette requête.
+
+![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_2.png) **POST**
+
+![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_3.png) Nom **Authorization:** et Valeur **Token $(Jeton)**
+
+L'attribut `$(Jeton)` correspond au paramètre publié Jeton contenant la clé fournie par la BAL (ici nous saisirons donc la clé de démonstration dans un premier temps).
+ 
+ ![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_4.png) **Specify Upload Body**
+ 
+ ![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_5.png) (ouvrir l'éditeur de texte et copier le code ci-dessous)
+ 
+ `{
+  "context": {
+    "nomComplet": "[votre nom]",
+    "organisation": "[organisme]", 
+    "extras": {
+      "internal_id": ""
+    }
+  }
+}`
+
+ ![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_6.png) **JSON (application/json)**
+ 
+ Laisser les autres paramètres par défaut. L'attribut de réponse `_response_body` sera utilisé dans la suite du traitement et correspond au code de retour de l'API.
+
 ## Voir aussi
 
 - Téléchargement du projet FME (vierge) (à venir)
