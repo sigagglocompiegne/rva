@@ -18,21 +18,21 @@ Cette première version est une version béta permettant le téléversement d'un
 
 Les paramètres passés dans le traitement sont tous issus de la [documentation de l'API BALC de la BaseAdresseNationale](https://github.com/etalab/ban-api-depot/wiki/Documentation).
 
-#### A - Création de paramètres publiés
+### A - Création de paramètres publiés
 
 Certains valeurs peuvent être paramétrées au lancement du traitement FME pour faciliter le processus de téléversement. Vous devez créer 3 paramètres publiés :
  - Commune : cet attribut contiendra le code Insee de la commune à téléverser
  - Taille : cet attribut contiendra la taille du fichier à téléverser en octet (une amélioration sera apportée au projet pour automatiser la récupération de la taille du fichier)
  - Jeton : cet attribut contiendra votre clé jeton fournit par la BAL
 
-#### B - Création de la chaîne de traitement
+### B - Création de la chaîne de traitement
 
- **1 : Initié un `Creator`** qui permettra le lancement du traitement
+#### **1 : Initié un `Creator` qui permettra le lancement du traitement**
  
  ![creator](img/creator.png)
  
  
- **2 : Paramétrer un HttpCaller** pour lancer la 1er requête nommée `REVISION`
+ **2 : Paramétrer un HttpCaller pour lancer la 1er requête nommée `REVISION`**
  
  ![creator](img/httpcaller.png)
  
