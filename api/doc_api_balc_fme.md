@@ -16,6 +16,8 @@ Le service SIG qui utilise déjà l'ETL FME de la société "Safe Software" pour
 
 Cette première version est une version béta permettant le téléversement d'un seul fichier BAL commune à la fois. Il sera amélioré pour automatiser un versement de lots de communes. La version de FME utilisée est la 2021.1.1.0.
 
+Les paramètres passés dans le traitement sont tous issus de la [documentation de l'API BALC de la BaseAdresseNationale](https://github.com/etalab/ban-api-depot/wiki/Documentation).
+
 #### A - Création de paramètres publiés
 
 Certains valeurs peuvent être paramétrées au lancement du traitement FME pour faciliter le processus de téléversement. Vous devez créer 3 paramètres publiés :
@@ -38,7 +40,7 @@ Certains valeurs peuvent être paramétrées au lancement du traitement FME pour
  
  Paramètres à indiquer dans ce transformer :
  
-![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_1.png) URL = https://plateforme.adresse.data.gouv.fr/api-depot-demo/communes/$(Commune)/revisions
+![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_1.png) https://plateforme.adresse.data.gouv.fr/api-depot-demo/communes/$(Commune)/revisions
 
 L'attribut `$(Commune)` correspond au paramètre publié Commune contenant le code Insee de celle-ci.
 
@@ -62,5 +64,4 @@ L'attribut `$(Jeton)` correspond au paramètre publié Jeton contenant la clé f
 
 ## Voir aussi
 
-- [Documentation de l'API BALC de la BaseAdresseNationale](https://github.com/etalab/ban-api-depot/wiki/Documentation)
 - Téléchargement du projet FME (vierge) (à venir)
