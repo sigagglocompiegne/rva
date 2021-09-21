@@ -221,6 +221,15 @@ Exemple des résultats après chaque requête non rejetée :
 
 `{"_id":"614992c0e1d1f2602d7acf38","revisionId":"614992bfe1d1f2602d7acf37","name":null,"type":"bal","size":54851,"hash":"398708668d44bcfb7d94f7ee74e0f9d0dfe0e6d25a921e01b21f394e20b84a81","createdAt":"2021-09-21T08:07:28.179Z"}`
 
+`VALIDATION` : 
+
+`{"_id":"614992bfe1d1f2602d7acf37","codeCommune":"60032","context":{"nomComplet":"Service SIG","organisation":"Agglomération de la Région de Compiègne","extras":{"internal_id":""}},"validation":{"valid":true,"errors":[]},"client":{"nom":"Compiègne"},"status":"pending","ready":true,"createdAt":"2021-09-21T08:07:27.919Z","updatedAt":"2021-09-21T08:07:28.484Z","publishedAt":null}`
+
+
+`PUBLICATION` : 
+
+`{"_id":"614992bfe1d1f2602d7acf37","codeCommune":"60032","context":{"nomComplet":"Service SIG","organisation":"Agglomération de la Région de Compiègne","extras":{"internal_id":""}},"validation":{"valid":true,"errors":[]},"client":{"nom":"Compiègne"},"status":"published","ready":null,"createdAt":"2021-09-21T08:07:27.919Z","updatedAt":"2021-09-21T08:07:28.738Z","publishedAt":"2021-09-21T08:07:28.738Z","current":true}`
+
 ## Voir aussi
 
 - Téléchargement du projet FME (vierge) (à venir)
