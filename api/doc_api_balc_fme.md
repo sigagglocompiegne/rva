@@ -96,7 +96,7 @@ La réponse de l'API s'effectue au format JSON, il faut donc récupérer les dif
 
  **4 : Paramétrer un HttpCaller** pour lancer la 2nd requête nommée `TELEVERSEMENT`
  
-![creator](img/httpcaller_para.png)
+![creator](img/httpcaller_2_para.png)
  
  Paramètres à indiquer dans ce transformer :
  
