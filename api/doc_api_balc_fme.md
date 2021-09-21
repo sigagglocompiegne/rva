@@ -42,8 +42,8 @@ L'attribut `$(Commune)` correspond au paramètre publié Commune contenant le co
 
  -  Méthode http : **POST**
  -  En-tête : 
-  - Nom : **Authorization**
-  - Valeur : **Token $(Jeton)**
+   - Nom : **Authorization**
+   - Valeur : **Token $(Jeton)**
  
 
 ## Voir aussi
