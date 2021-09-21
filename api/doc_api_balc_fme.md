@@ -209,6 +209,8 @@ et dans la boîte de dialogue saisir les paramètres publiés nécessaires au tr
 
 #### 9 - Les résultats obtenus
 
+Il est possible de lire les réponses renvoyées par l'API après chaque `HttpCaller` en cliquant sur après la fin du traitement. Cela peut-être utile si la requête est rejetée via le port de sortie `Rejected`
+
 ## Voir aussi
 
 - Téléchargement du projet FME (vierge) (à venir)
