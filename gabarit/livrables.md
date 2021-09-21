@@ -92,7 +92,7 @@ Ensemble des données décrivant les objets des points d'adresse
 |ld_compl|Nom du lieu-dit historique ou complémentaire|character varying(80)| |  
 |dest_adr|Destination de l'adresse (habitation, commerce, ...)|character varying(2)|Liste de valeur lt_dest_adr|
 |etat_adr|Etat de la construction à l'adresse (non commencé, en cours, achevé, muré, supprimé ...)|character varying(2)|Liste de valeur lt_etat_adr|
-|refcad|Référence(s) cadastrale(s)|character varying(254)| |
+|refcad|Référence(s) cadastrale(s)|character varying(254)|La section est codée sur 2 caractères et le numéro de parcelle sur 4 caractères (ex : AB0125) et séparée par un pipe|
 |nb_log|Nombre de logements|integer| |
 |pc|Numéro du permis de construire|character varying(30)| |
 |groupee|Adresse groupée (O/N)|character varying(1)||
