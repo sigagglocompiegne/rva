@@ -36,11 +36,9 @@ Certains valeurs peuvent être paramétrées au lancement du traitement FME pour
  
  ![creator](img/httpcaller_para.png)
  
- 
- 
  Paramètres à indiquer dans ce transformer :
  
- - URL : https://plateforme.adresse.data.gouv.fr/api-depot-demo/communes/$(Commune)/revisions
+ - ![picto](../img/tuto_1.png) https://plateforme.adresse.data.gouv.fr/api-depot-demo/communes/$(Commune)/revisions
 
 L'attribut `$(Commune)` correspond au paramètre publié Commune contenant le code Insee de celle-ci.
 
