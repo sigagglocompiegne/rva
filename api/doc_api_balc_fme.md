@@ -12,6 +12,7 @@ Contact : sig@agglo-compiegne.fr
 
 ## Changelog
 
+ * 23/09/2021 : Version 0.2 - téléversement d'un lot de données communal au format BAL 1.2 dans la BaseAdresseLocale via l'API
  * 20/09/2021 : Version 0.1 - téléversement d'un fichier commune au format BAL 1.2 dans la BaseAdresseLocale via l'API
 
 
