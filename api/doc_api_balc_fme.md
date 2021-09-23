@@ -27,6 +27,8 @@ Cette première version est une version béta permettant le téléversement soit
 
 Les paramètres passés dans le traitement sont tous issus de la [documentation de l'API BAL de la BaseAdresseNationale](https://github.com/etalab/ban-api-depot/wiki/Documentation).
 
+## Traitement fichier par fichier
+
 ### A - Création de paramètres publiés
 
 Certains valeurs peuvent être paramétrées au lancement du traitement FME pour faciliter le processus de téléversement. Vous devez créer 3 paramètres publiés :
@@ -236,7 +238,7 @@ L'attribut `$(Commune)` correspond au paramètre publié Commune contenant le co
 
 En cliquant sur ![creator](img/fme_result.png), après la fin du traitement, vous pouvez consulter le retour de l'API. Ce retour contient toutes les révisions effectuées sur la commune interrogée.
 
-### C - Création de la chaîne de traitement pour téléverser en lot
+## Traitement par lot
 
 Le traitement par lot diffère légèrement du traitement fichier par fichier. Les paramètres publiés sont abandonnés au profit d'un fichier de configuration. Il en va de même pour le paramètre de la taille du fichier qui n'est plus utilisé (optionnel pour l'API).
 
