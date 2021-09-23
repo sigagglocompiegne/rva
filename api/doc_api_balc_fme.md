@@ -256,5 +256,20 @@ La suppression des paramètres publiés par un fichier de conf modifie les valeu
 
  - requête **REVISION** :
 
-Le paramètre `$(commune)` doit être remplacé par `@Value(insee)` : **URL** = URL : https://plateforme.adresse.data.gouv.fr/api-depot-demo/communes/@Value(insee)/revisions
+Le paramètre `$(commune)` doit être remplacé par `@Value(insee)` dans l'URL : 
+
+**URL** = https://plateforme.adresse.data.gouv.fr/api-depot-demo/communes/@Value(insee)/revisions
+
+Le paramètre `$(Jeton)` doit être remplacé par `@Value(jeton)` dans l'en-tête : 
+
+**Valeur** = Token @Value(jeton)
+
+ - requête **TELEVERSEMENT**, **VALIDATION** et **PUBLICATION**:
+
+Le paramètre `$(Jeton)` doit être remplacé par `@Value(jeton)` dans l'en-tête : 
+
+**Valeur** = Token @Value(jeton)
+
+Dans le chemin du fichier à charger le paramètre `$(commune)` doit être remplacé par `@Value(insee)`
+
 
