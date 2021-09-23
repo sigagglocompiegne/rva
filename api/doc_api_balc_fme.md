@@ -276,3 +276,5 @@ L'attribut `$(Commune)` correspond au paramètre publié Commune contenant le co
 ![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_2.png) **GET**
 
 En cliquant sur ![creator](img/fme_result.png), après la fin du traitement, vous pouvez consulter le retour de l'API. Ce retour contient toutes les révisions effectuées sur la commune interrogée.
+
+
