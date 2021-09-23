@@ -18,7 +18,7 @@ Contact : sig@agglo-compiegne.fr
 ## Gabarit
 
 - [Téléchargement du projet FME - traitement par commune](https://geo.compiegnois.fr/documents/metiers/rva/API_BAL_FME.zip) (détail de la méthode aux points A et B)
-- Téléchargement du projet FME - traitement par lot (détail de la méthode au point C) (en cours)
+- [Téléchargement du projet FME - traitement par lot](https://geo.compiegnois.fr/documents/metiers/rva/API_BAL_LOT_FME.zip) (détail de la méthode au point C)
 
 ## Paramétrage
 
