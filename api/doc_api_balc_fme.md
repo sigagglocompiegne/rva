@@ -39,7 +39,13 @@ Exemple de structuration du fichier Excel de configuration :
 
 #### 2.1 - Insérer le fichier de conf comme `Données sources`
 
+![creator](img/fme_donnees_sources.png)
+
+Ensuite sélectionner le format Excel et indiquer le lieu de votre fichier.
+
 ![creator](img/fme_fichier_source_com.png)
+
+Votre fichier de configuration est en début de chaîne.
  
 #### 2.2 - Paramétrer un HttpCaller pour lancer la 1er requête nommée `REVISION`
  
