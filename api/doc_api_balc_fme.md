@@ -247,7 +247,7 @@ Le paramètre `$(Jeton)` doit être remplacé par `@Value(jeton)` dans l'en-têt
 
 **Valeur** = Token @Value(jeton)
 
- - requête **TELEVERSEMENT**, **VALIDATION** et **PUBLICATION**:
+ - requêtes **TELEVERSEMENT**, **VALIDATION** et **PUBLICATION**:
 
 Le paramètre `$(Jeton)` doit être remplacé par `@Value(jeton)` dans l'en-tête : 
 
