@@ -243,7 +243,7 @@ Le traitement par lot diffère légèrement du traitement fichier par fichier. L
 
 Afin de téléverser un lot de communes dans l'API BAL, nous avons choisi de créer un fichier Excel contenant la liste des communes à téléverser. Ce fichier est à intégrer comme données sources au début du traitement.
 
-Le fichier Excel contient 3 attributs :
+Exemple de structuration du fichier Excel de configuration :
 
 |insee|commune|jeton|
 |:---|:---|:---|
@@ -252,3 +252,6 @@ Le fichier Excel contient 3 attributs :
 
 #### 2 - Paramétrage du traitement FME
 
+La suppression des paramètres publiés par un fichier de conf modifie les valeurs d'attributs à intégrer comme paramètres dans les tranformers `HttpCaller`. Seuls les éléments modifiés par rapport au traitement par fichier sont présentés ci-dessous par requête. Les autres paramètres sont identiques à la partie B.
+
+ - requête **REVISION**
