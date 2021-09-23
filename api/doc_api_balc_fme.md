@@ -18,8 +18,8 @@ Contact : sig@agglo-compiegne.fr
 
 ## Gabarit
 
-- [Téléchargement du projet FME - traitement par commune](https://geo.compiegnois.fr/documents/metiers/rva/API_BAL_FME.zip) (détail de la méthode aux points A et B)
-- [Téléchargement du projet FME - traitement par lot](https://geo.compiegnois.fr/documents/metiers/rva/API_BAL_LOT_FME.zip) (détail de la méthode au point C)
+- [Téléchargement du projet FME - traitement par commune](https://geo.compiegnois.fr/documents/metiers/rva/API_BAL_FME.zip) (détail de la méthode partie A)
+- [Téléchargement du projet FME - traitement par lot](https://geo.compiegnois.fr/documents/metiers/rva/API_BAL_LOT_FME.zip) (détail de la méthode partie B)
 
 ## Paramétrage
 
@@ -27,23 +27,23 @@ Cette première version est une version béta permettant le téléversement soit
 
 Les paramètres passés dans le traitement sont tous issus de la [documentation de l'API BAL de la BaseAdresseNationale](https://github.com/etalab/ban-api-depot/wiki/Documentation).
 
-## Traitement fichier par fichier
+## A - Traitement fichier par fichier
 
-### A - Création de paramètres publiés
+### 1 - Création de paramètres publiés
 
 Certains valeurs peuvent être paramétrées au lancement du traitement FME pour faciliter le processus de téléversement. Vous devez créer 3 paramètres publiés :
  - Commune : cet attribut contiendra le code Insee de la commune à téléverser
  - Taille : cet attribut contiendra la taille du fichier à téléverser en octet (une amélioration sera apportée au projet pour automatiser la récupération de la taille du fichier)
  - Jeton : cet attribut contiendra votre clé jeton fournit par la BAL
 
-### B - Création de la chaîne de traitement pour téléverser commune par commune
+### 2 - Création de la chaîne de traitement
 
-#### 1 - Initié un `Creator` qui permettra le lancement du traitement
+#### 2.1 - Initié un `Creator` qui permettra le lancement du traitement
  
  ![creator](img/creator.png)
  
  
-#### 2 - Paramétrer un HttpCaller pour lancer la 1er requête nommée `REVISION`
+#### 2.2 - Paramétrer un HttpCaller pour lancer la 1er requête nommée `REVISION`
  
  ![creator](img/httpcaller.png)
  
@@ -79,7 +79,7 @@ L'attribut `$(Jeton)` correspond au paramètre publié Jeton contenant la clé f
  
  Laisser les autres paramètres par défaut. L'attribut de réponse `_response_body` sera utilisé dans la suite du traitement et correspond au code de retour de l'API.
  
-#### 3 - Récupération de l'attribut `_ID` dans la requête de réponse de `REVISION` pour lancer la 2nd requête nommée `TELEVERSEMENT`
+#### 2.3 - Récupération de l'attribut `_ID` dans la requête de réponse de `REVISION` pour lancer la 2nd requête nommée `TELEVERSEMENT`
   
 La réponse de l'API s'effectue au format JSON, il faut donc récupérer les différents attributs utiles pour la suite du traitement et notamment l'`_ID`.
 
@@ -105,7 +105,7 @@ La réponse de l'API s'effectue au format JSON, il faut donc récupérer les dif
  
  L'attribut `json_index` liste l'ensemble des attributs de la requête de réponse. Il suffit de filter avec le nom `_id` pour récupérer en sortie uniquement la valeur de celui-ci dans l'attribut `_response_body`.
 
-#### 4 - Paramétrer un HttpCaller pour lancer la 2nd requête nommée `TELEVERSEMENT`
+#### 2.4 - Paramétrer un HttpCaller pour lancer la 2nd requête nommée `TELEVERSEMENT`
  
 ![creator](img/httpcaller_2_para.png)
  
@@ -134,7 +134,7 @@ L'attribut `$(Jeton)` correspond au paramètre publié Jeton contenant la clé f
  
  Laisser les autres paramètres par défaut. L'attribut de réponse `_response_body` sera utilisé dans la suite du traitement et correspond au code de retour de l'API.
 
-#### 5 - Récupération de l'attribut `revisionId` dans la requête de réponse de `TELEVERSEMENT` pour lancer la 3ème requête nommée `VALIDATION`
+#### 2.5 - Récupération de l'attribut `revisionId` dans la requête de réponse de `TELEVERSEMENT` pour lancer la 3ème requête nommée `VALIDATION`
   
 La réponse de l'API s'effectue au format JSON, il faut donc récupérer les différents attributs utiles pour la suite du traitement et notamment `revisionId`.
 
@@ -148,7 +148,7 @@ Reprendre la méthode indiquée au point **3**.
 
  L'attribut `json_index` liste l'ensemble des attributs de la requête de réponse. Il suffit de filter avec le nom `revisionId` pour récupérer en sortie uniquement la valeur de celui-ci dans l'attribut `_response_body`.
 
-#### 6 - Paramétrer un HttpCaller pour lancer la 3ème requête nommée `VALIDATION`
+#### 2.6 - Paramétrer un HttpCaller pour lancer la 3ème requête nommée `VALIDATION`
  
 ![creator](img/httpcaller_3_para.png)
  
@@ -168,7 +168,7 @@ L'attribut `$(Jeton)` correspond au paramètre publié Jeton contenant la clé f
  
 Laisser les autres paramètres par défaut. L'attribut de réponse `_response_body` sera utilisé dans la suite du traitement et correspond au code de retour de l'API.
 
-#### 7 - Récupération de l'attribut `_id` dans la requête de réponse de `VALIDATION` pour lancer la 4ème requête nommée `PUBLICATION`
+#### 2.7 - Récupération de l'attribut `_id` dans la requête de réponse de `VALIDATION` pour lancer la 4ème requête nommée `PUBLICATION`
   
 La réponse de l'API s'effectue au format JSON, il faut donc récupérer les différents attributs utiles pour la suite du traitement et notamment l'`_id`.
 
@@ -182,7 +182,7 @@ Reprendre la méthode indiquée au point **3**.
 
  L'attribut `json_index` liste l'ensemble des attributs de la requête de réponse. Il suffit de filter avec le nom `_id` pour récupérer en sortie uniquement la valeur de celui-ci dans l'attribut `_response_body`.
 
-#### 8 - Paramétrer un HttpCaller pour lancer la 4ème requête nommée `PUBLICATION`
+#### 2.8 - Paramétrer un HttpCaller pour lancer la 4ème requête nommée `PUBLICATION`
  
 ![creator](img/httpcaller_3_para.png)
  
@@ -202,7 +202,7 @@ L'attribut `$(Jeton)` correspond au paramètre publié Jeton contenant la clé f
  
 Laisser les autres paramètres par défaut. L'attribut de réponse `_response_body` sera utilisé dans la suite du traitement et correspond au code de retour de l'API.
 
-#### 9 - Lancement du traitement
+#### 2.9 - Lancement du traitement
 
 Pour lancer le traitement, cliquer sur
 
@@ -218,11 +218,11 @@ et dans la boîte de dialogue saisir les paramètres publiés nécessaires au tr
 
 ![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_3.png) Votre clé jeton
 
-#### 10 - Les résultats obtenus
+#### 2.10 - Les résultats obtenus
 
 Il est possible de lire les réponses renvoyées par l'API après chaque `HttpCaller` en cliquant sur ![creator](img/fme_result.png) après la fin du traitement. Cela peut-être utile si la requête est rejetée via le port de sortie `Rejected`.
 
-#### 11 - Récupération des informations de la BAL
+#### 2.11 - Récupération des informations de la BAL
 
 La [documentation de l'API BAL de la BaseAdresseNationale](https://github.com/etalab/ban-api-depot/wiki/Documentation) indique qu'il est possible d'interroger la BAL en mode libre par des requêtes `GET`.
 
@@ -238,7 +238,7 @@ L'attribut `$(Commune)` correspond au paramètre publié Commune contenant le co
 
 En cliquant sur ![creator](img/fme_result.png), après la fin du traitement, vous pouvez consulter le retour de l'API. Ce retour contient toutes les révisions effectuées sur la commune interrogée.
 
-## Traitement par lot
+## B - Traitement par lot
 
 Le traitement par lot diffère légèrement du traitement fichier par fichier. Les paramètres publiés sont abandonnés au profit d'un fichier de configuration. Il en va de même pour le paramètre de la taille du fichier qui n'est plus utilisé (optionnel pour l'API).
 
