@@ -254,4 +254,7 @@ Exemple de structuration du fichier Excel de configuration :
 
 La suppression des paramètres publiés par un fichier de conf modifie les valeurs d'attributs à intégrer comme paramètres dans les tranformers `HttpCaller`. Seuls les éléments modifiés par rapport au traitement par fichier sont présentés ci-dessous par requête. Les autres paramètres sont identiques à la partie B.
 
- - requête **REVISION**
+ - requête **REVISION** :
+
+Le paramètre `$(commune)` doit être remplacé par `@Value(insee)` : **URL** = URL : https://plateforme.adresse.data.gouv.fr/api-depot-demo/communes/@Value(insee)/revisions
+
