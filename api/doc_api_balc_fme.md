@@ -35,6 +35,8 @@ Exemple de structuration du fichier Excel de configuration :
 |60159|Compiègne|[jeton fournit par la BAL]|
 |60325|Jaux|[jeton fournit par la BAL]|
 
+**ATTENTION** : si vous utilisez une autre clé pour la référence de vos communes comme le code SIREN, qui est également référencé dans vos fichiers BAL de commune, vous devez remplacer l'attribut insee par siren. Ce remplacement devra être réalisé également dans les paramètres du traitement.
+
 ### 2 - Création de la chaîne de traitement
 
 #### 2.1 - Insérer le fichier de conf comme `Données sources`
@@ -55,15 +57,15 @@ Votre fichier de configuration est en début de chaîne.
  
  Paramètres à indiquer dans ce transformer :
  
-![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_1.png) https://plateforme.adresse.data.gouv.fr/api-depot-demo/communes/$(Commune)/revisions
+![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_1.png) https://plateforme.adresse.data.gouv.fr/api-depot-demo/communes/@Value(insee)/revisions
 
-L'attribut `$(Commune)` correspond au paramètre publié Commune contenant le code Insee de celle-ci.
+L'attribut `@Value(insee)` correspond au code insee de la commune à téléverser et présent dans le fichier de conf.
 
 ![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_2.png) **POST**
 
-![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_3.png) Nom **Authorization:** et Valeur **Token $(Jeton)**
+![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_3.png) Nom **Authorization:** et Valeur **Token @Value(jeton)**
 
-L'attribut `$(Jeton)` correspond au paramètre publié Jeton contenant la clé fournie par la BAL (ici nous saisirons donc la clé de démonstration dans un premier temps).
+L'attribut `@Value(jeton)` correspond au jeton contenant la clé fournie par la BAL et indiqué dans le fichier de conf pour chaque commune (ici nous saisirons donc la clé de démonstration dans un premier temps).
  
  ![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_4.png) **Specify Upload Body**
  
@@ -121,17 +123,17 @@ L'attribut `@Value(_response_body)` contient la valeur de l'ID récupérée pré
 
 ![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_2.png) **PUT**
 
-![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_3.png) Nom **Content-Length:** et Valeur **($Taille)** + Nom **Content-MD5:** et Valeur  **1234567890abcdedf1234567890abcdedf**
+![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_3.png) Nom **Content-MD5:** et Valeur  **1234567890abcdedf1234567890abcdedf**
 
-L'attribut `$(Taille)` correspond au paramètre publié Taille contenant la taille du fichier téléversé en octet.
+L'attribut de la taille en octet du fichier n'a pas été intégré dans ce traitement (optionnel dans l'API).
 
-![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_4.png) Nom **Authorization:** et Valeur **Token $(Jeton)**
+![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_4.png) Nom **Authorization:** et Valeur **Token @Value(jeton)**
 
-L'attribut `$(Jeton)` correspond au paramètre publié Jeton contenant la clé fournie par la BAL (ici nous saisirons donc la clé de démonstration dans un premier temps).
+L'attribut `@Value(jeton)` correspond au jeton contenant la clé fournie par la BAL et indiqué dans le fichier de conf pour chaque commune (ici nous saisirons donc la clé de démonstration dans un premier temps).
  
  ![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_5.png) **Envoyer à partir d'un fichier**
  
- ![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_6.png) (indiquer le chemin de votre fichier BAL au format csv). Dans le chemin d'accès au fichier vous pouvez intégrer la paramètre publié ($Commune) si vos fichiers contiennent le code insee (ex: `c:\temp\$(Commune)_bal.csv`)
+ ![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_6.png) (indiquer le chemin de votre fichier BAL au format csv). Dans le chemin d'accès au fichier vous devez intégrer le code insee présent dans le fichier de conf `@Value(insee)` car vos fichiers doivent contenir ce code (ex: `c:\temp\@Value(insee)_bal.csv`)
 
 
  ![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_6.png) **text/csv**
@@ -164,9 +166,9 @@ L'attribut `@Value(_response_body)` contient la valeur de l'ID récupérée pré
 
 ![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_2.png) **POST**
 
-![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_3.png) Nom **Authorization:** et Valeur **Token $(Jeton)**
+![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_3.png) Nom **Authorization:** et Valeur **Token @Value(jeton)**
 
-L'attribut `$(Jeton)` correspond au paramètre publié Jeton contenant la clé fournie par la BAL (ici nous saisirons donc la clé de démonstration dans un premier temps).
+L'attribut `@Value(jeton)` correspond au jeton contenant la clé fournie par la BAL et indiqué dans le fichier de conf pour chaque commune (ici nous saisirons donc la clé de démonstration dans un premier temps).
  
  ![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_4.png) Les paramètres de la précédente requête peuvent être gardée par défaut (pas d'incidence sur la requête)
  
@@ -198,9 +200,9 @@ L'attribut `@Value(_response_body)` contient la valeur de l'ID récupérée pré
 
 ![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_2.png) **POST**
 
-![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_3.png) Nom **Authorization:** et Valeur **Token $(Jeton)**
+![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_3.png) Nom **Authorization:** et Valeur **Token @Value(jeton)**
 
-L'attribut `$(Jeton)` correspond au paramètre publié Jeton contenant la clé fournie par la BAL (ici nous saisirons donc la clé de démonstration dans un premier temps).
+L'attribut `@Value(jeton)` correspond au jeton contenant la clé fournie par la BAL et indiqué dans le fichier de conf pour chaque commune (ici nous saisirons donc la clé de démonstration dans un premier temps).
  
  ![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_4.png) Les paramètres de la précédente requête peuvent être gardée par défaut (pas d'incidence sur la requête)
  
@@ -212,61 +214,8 @@ Pour lancer le traitement, cliquer sur
 
  ![creator](img/fme_execut.png)
  
-et dans la boîte de dialogue saisir les paramètres publiés nécessaires au traitement
 
- ![creator](img/fme_execut_variable_apibal.png)
-
-![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_1.png) Code Insee de la commune à téléverser
-
-![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_2.png) Taille du fichier en octet
-
-![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_3.png) Votre clé jeton
-
-## B - Traitement fichier par fichier
-
-Le traitement par fichier diffère légèrement d'un traitement par lot. Le fichier de conLes paramètres publiés sont abandonnés au profit d'un fichier de configuration. Il en va de même pour le paramètre de la taille du fichier qui n'est plus utilisé (optionnel pour l'API).
-
-### 1 - Création de paramètres publiés
-
-Certains valeurs peuvent être paramétrées au lancement du traitement FME pour faciliter le processus de téléversement. Vous devez créer 3 paramètres publiés :
- - Commune : cet attribut contiendra le code Insee de la commune à téléverser
- - Taille : cet attribut contiendra la taille du fichier à téléverser en octet (une amélioration sera apportée au projet pour automatiser la récupération de la taille du fichier)
- - Jeton : cet attribut contiendra votre clé jeton fournit par la BAL
-
-#### 1 - Création du fichier de configuration
-
-Afin de téléverser un lot de communes dans l'API BAL, nous avons choisi de créer un fichier Excel contenant la liste des communes à téléverser. Ce fichier est à intégrer comme données sources au début du traitement.
-
-Exemple de structuration du fichier Excel de configuration :
-
-|insee|commune|jeton|
-|:---|:---|:---|
-|60159|Compiègne|[jeton fournit par la BAL]|
-|60325|Jaux|[jeton fournit par la BAL]|
-
-#### 2 - Paramétrage du traitement FME
-
-La suppression des paramètres publiés par un fichier de conf modifie les valeurs d'attributs à intégrer comme paramètres dans les transformers `HttpCaller`. Seuls les éléments modifiés par rapport au traitement par fichier sont présentés ci-dessous par requête. Les autres paramètres sont identiques à la partie B.
-
- - requête **REVISION** :
-
-Le paramètre `$(commune)` doit être remplacé par `@Value(insee)` dans l'URL : 
-
-**URL** = https://plateforme.adresse.data.gouv.fr/api-depot-demo/communes/@Value(insee)/revisions
-
-Le paramètre `$(Jeton)` doit être remplacé par `@Value(jeton)` dans l'en-tête : 
-
-**Valeur** = Token @Value(jeton)
-
- - requêtes **TELEVERSEMENT**, **VALIDATION** et **PUBLICATION**:
-
-Le paramètre `$(Jeton)` doit être remplacé par `@Value(jeton)` dans l'en-tête : 
-
-**Valeur** = Token @Value(jeton)
-
-Dans le chemin du fichier à charger, le paramètre `$(commune)` doit être remplacé par `@Value(insee)`.
-
-## C - Exploitation
+## B - Exploitation
 
 #### 1 - Les résultats obtenus
 
