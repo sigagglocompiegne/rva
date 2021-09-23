@@ -26,7 +26,7 @@ Les paramètres passés dans le traitement sont tous issus de la [documentation 
 
 #### 1 - Création du fichier de configuration
 
-Afin de téléverser un lot de communes dans l'API BAL, nous avons choisi de créer un fichier Excel contenant la liste des communes à téléverser. Ce fichier est à intégrer comme données sources au début du traitement. Ce fichier peut contenir 1 ou plusieurs communes.
+Afin de téléverser un lot de communes dans l'API BAL, nous avons choisi de créer un fichier Excel contenant la liste des communes à téléverser. Ce fichier est à intégrer comme une donnée source au début du traitement. Ce fichier peut contenir une ou plusieurs communes.
 
 Exemple de structuration du fichier Excel de configuration :
 
@@ -35,7 +35,7 @@ Exemple de structuration du fichier Excel de configuration :
 |60159|Compiègne|[jeton fournit par la BAL]|
 |60325|Jaux|[jeton fournit par la BAL]|
 
-**ATTENTION** : si vous utilisez une autre clé pour la référence de vos communes comme le code SIREN, qui est également référencé dans vos fichiers BAL de commune, vous devez remplacer l'attribut insee par siren. Ce remplacement devra être réalisé également dans les paramètres du traitement.
+**ATTENTION** : si vous utilisez une autre clé pour la référence de vos communes comme le code SIREN, qui est également référencé dans vos fichiers BAL de commune, vous devez remplacer l'attribut insee par siren dans le fichier de conf. Ce remplacement devra être réalisé également dans les paramètres du traitement ci-dessous.
 
 ### 2 - Création de la chaîne de traitement
 
@@ -133,8 +133,7 @@ L'attribut `@Value(jeton)` correspond au jeton contenant la clé fournie par la 
  
  ![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_5.png) **Envoyer à partir d'un fichier**
  
- ![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_6.png) (indiquer le chemin de votre fichier BAL au format csv). Dans le chemin d'accès au fichier vous devez intégrer le code insee présent dans le fichier de conf `@Value(insee)` car vos fichiers doivent contenir ce code (ex: `c:\temp\@Value(insee)_bal.csv`)
-
+ ![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_6.png) (indiquer le chemin de votre fichier BAL au format csv). Dans le chemin d'accès au fichier intégrer le code insee présent dans le fichier de conf `@Value(insee)` car vos fichiers doivent contenir ce code (ex: `c:\temp\@Value(insee)_bal.csv`)
 
  ![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_6.png) **text/csv**
  
@@ -229,9 +228,9 @@ Sur le même principe que les requêtes de téléversement, il est possible d'ut
 
 ![creator](img/httpcaller_get.png) 
 
-![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_1.png) https://plateforme.adresse.data.gouv.fr/api-depot-demo/communes/$(Commune)/revisions
+![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_1.png) https://plateforme.adresse.data.gouv.fr/api-depot-demo/communes/@Value(insee)/revisions
 
-L'attribut `$(Commune)` correspond au paramètre publié Commune contenant le code Insee de la commune téléversée.
+L'attribut `@Value(insee)` correspond au code insee de la commune téléversée.
 
 ![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_2.png) **GET**
 
