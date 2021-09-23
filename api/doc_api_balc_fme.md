@@ -253,7 +253,7 @@ Le paramètre `$(Jeton)` doit être remplacé par `@Value(jeton)` dans l'en-têt
 
 **Valeur** = Token @Value(jeton)
 
-Dans le chemin du fichier à charger le paramètre `$(commune)` doit être remplacé par `@Value(insee)`
+Dans le chemin du fichier à charger, le paramètre `$(commune)` doit être remplacé par `@Value(insee)`.
 
 ## C - Exploitation
 
