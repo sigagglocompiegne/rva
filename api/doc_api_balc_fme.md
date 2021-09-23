@@ -179,7 +179,7 @@ Reprendre la méthode indiquée au point **3**.
 
  L'attribut `json_index` liste l'ensemble des attributs de la requête de réponse. Il suffit de filter avec le nom `_id` pour récupérer en sortie uniquement la valeur de celui-ci dans l'attribut `_response_body`.
 
-#### 7 - Paramétrer un HttpCaller pour lancer la 4ème requête nommée `PUBLICATION`
+#### 8 - Paramétrer un HttpCaller pour lancer la 4ème requête nommée `PUBLICATION`
  
 ![creator](img/httpcaller_3_para.png)
  
@@ -199,7 +199,7 @@ L'attribut `$(Jeton)` correspond au paramètre publié Jeton contenant la clé f
  
 Laisser les autres paramètres par défaut. L'attribut de réponse `_response_body` sera utilisé dans la suite du traitement et correspond au code de retour de l'API.
 
-#### 8 - Lancement du traitement
+#### 9 - Lancement du traitement
 
 Pour lancer le traitement, cliquer sur
 
@@ -215,11 +215,11 @@ et dans la boîte de dialogue saisir les paramètres publiés nécessaires au tr
 
 ![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_3.png) Votre clé jeton
 
-#### 9 - Les résultats obtenus
+#### 10 - Les résultats obtenus
 
 Il est possible de lire les réponses renvoyées par l'API après chaque `HttpCaller` en cliquant sur ![creator](img/fme_result.png) après la fin du traitement. Cela peut-être utile si la requête est rejetée via le port de sortie `Rejected`.
 
-#### 10 - Récupération des informations de la BAL
+#### 11 - Récupération des informations de la BAL
 
 La [documentation de l'API BAL de la BaseAdresseNationale](https://github.com/etalab/ban-api-depot/wiki/Documentation) indique qu'il est possible d'interroger la BAL en mode libre par des requêtes `GET`.
 
