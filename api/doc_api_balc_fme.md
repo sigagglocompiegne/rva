@@ -226,7 +226,7 @@ La [documentation de l'API BAL de la BaseAdresseNationale](https://github.com/et
 
 Sur le même principe que les requêtes de téléversement, il est possible d'utiliser le transformer `HttpCaller` pour cela. Ce transformer peut-être insérer à la suite de la requête `PUBLICATION`.
 
-![creator](img/httpcaller_get.png) 
+![creator](img/httpcaller_get2.png) 
 
 ![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_1.png) https://plateforme.adresse.data.gouv.fr/api-depot-demo/communes/@Value(insee)/revisions
 
