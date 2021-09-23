@@ -235,7 +235,7 @@ Exemple de structuration du fichier Excel de configuration :
 
 #### 2 - Paramétrage du traitement FME
 
-La suppression des paramètres publiés par un fichier de conf modifie les valeurs d'attributs à intégrer comme paramètres dans les tranformers `HttpCaller`. Seuls les éléments modifiés par rapport au traitement par fichier sont présentés ci-dessous par requête. Les autres paramètres sont identiques à la partie B.
+La suppression des paramètres publiés par un fichier de conf modifie les valeurs d'attributs à intégrer comme paramètres dans les transformers `HttpCaller`. Seuls les éléments modifiés par rapport au traitement par fichier sont présentés ci-dessous par requête. Les autres paramètres sont identiques à la partie B.
 
  - requête **REVISION** :
 
