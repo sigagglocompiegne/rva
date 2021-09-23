@@ -258,4 +258,18 @@ En cliquant sur ![creator](img/fme_result.png), après la fin du traitement, vou
 
 ### C - Création de la chaîne de traitement pour téléverser en lot
 
-(en cours)
+Le traitement par lot diffère légèrement du traitement fichier par fichier. Les paramètres publiés sont abandonnés au profit d'un fichier de configuration. Il en va de même pour le paramètre de la taille du fichier qui n'est plus utilisé (optionnel pour l'API).
+
+#### 1 - Création du fichier de configuration
+
+Afin de téléverser un lot de communes dans l'API BAL, nous avons choisi de créer un fichier Excel contenant la liste des communes à téléverser. Ce fichier est à intégrer comme données sources au début du traitement.
+
+Le fichier Excel contient 3 attributs :
+
+|insee|commune|jeton|
+|:---|:---|:---|
+|60159|Compiègne|[jeton fournit par la BAL]|
+|60325|Jaux|[jeton fournit par la BAL]|
+
+#### 2 - Paramétrage du traitement FME
+
