@@ -12,7 +12,7 @@ Contact : sig@agglo-compiegne.fr
 
 ## Changelog
 
- * 21/09/2021 : Version 1 - téléversement d'un fichier ou d'un lot de données communal au format BAL 1.2 dans la BaseAdresseLocale via l'API
+ * 21/09/2021 : Version 1 - téléversement d'un fichier ou d'un lot de données communal au format BAL 1.2 dans l'API BAL
  
 ## Gabarit
 
@@ -37,7 +37,9 @@ Exemple de structuration du fichier Excel de configuration :
 
 ### 2 - Création de la chaîne de traitement
 
-fme_fichier_source_com
+#### 2.1 - Insérer le fichier de conf comme `Données sources`
+
+![creator](img/fme_fichier_source_com.png)
  
 #### 2.2 - Paramétrer un HttpCaller pour lancer la 1er requête nommée `REVISION`
  
