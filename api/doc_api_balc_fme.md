@@ -12,14 +12,11 @@ Contact : sig@agglo-compiegne.fr
 
 ## Changelog
 
- * 23/09/2021 : Version 0.2 - téléversement d'un lot de données communal au format BAL 1.2 dans la BaseAdresseLocale via l'API
- * 20/09/2021 : Version 0.1 - téléversement d'un fichier commune au format BAL 1.2 dans la BaseAdresseLocale via l'API
-
-
+ * 21/09/2021 : Version 1 - téléversement d'un fichier ou d'un lot de données communal au format BAL 1.2 dans la BaseAdresseLocale via l'API
+ 
 ## Gabarit
 
-- [Téléchargement du projet FME - traitement par commune](https://geo.compiegnois.fr/documents/metiers/rva/API_BAL_FME.zip) (détail de la méthode partie A)
-- [Téléchargement du projet FME - traitement par lot](https://geo.compiegnois.fr/documents/metiers/rva/API_BAL_LOT_FME.zip) (détail de la méthode partie B)
+- [Téléchargement du projet FME - traitement par lot](https://geo.compiegnois.fr/documents/metiers/rva/API_BAL_LOT_FME_v1.zip)
 
 ## Paramétrage
 
@@ -27,21 +24,20 @@ Cette première version est une version béta permettant le téléversement soit
 
 Les paramètres passés dans le traitement sont tous issus de la [documentation de l'API BAL de la BaseAdresseNationale](https://github.com/etalab/ban-api-depot/wiki/Documentation).
 
-## A - Traitement fichier par fichier
+#### 1 - Création du fichier de configuration
 
-### 1 - Création de paramètres publiés
+Afin de téléverser un lot de communes dans l'API BAL, nous avons choisi de créer un fichier Excel contenant la liste des communes à téléverser. Ce fichier est à intégrer comme données sources au début du traitement. Ce fichier peut contenir 1 ou plusieurs communes.
 
-Certains valeurs peuvent être paramétrées au lancement du traitement FME pour faciliter le processus de téléversement. Vous devez créer 3 paramètres publiés :
- - Commune : cet attribut contiendra le code Insee de la commune à téléverser
- - Taille : cet attribut contiendra la taille du fichier à téléverser en octet (une amélioration sera apportée au projet pour automatiser la récupération de la taille du fichier)
- - Jeton : cet attribut contiendra votre clé jeton fournit par la BAL
+Exemple de structuration du fichier Excel de configuration :
+
+|insee|commune|jeton|
+|:---|:---|:---|
+|60159|Compiègne|[jeton fournit par la BAL]|
+|60325|Jaux|[jeton fournit par la BAL]|
 
 ### 2 - Création de la chaîne de traitement
 
-#### 2.1 - Initié un `Creator` qui permettra le lancement du traitement
- 
- ![creator](img/creator.png)
- 
+fme_fichier_source_com
  
 #### 2.2 - Paramétrer un HttpCaller pour lancer la 1er requête nommée `REVISION`
  
@@ -218,9 +214,16 @@ et dans la boîte de dialogue saisir les paramètres publiés nécessaires au tr
 
 ![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_3.png) Votre clé jeton
 
-## B - Traitement par lot
+## B - Traitement fichier par fichier
 
-Le traitement par lot diffère légèrement du traitement fichier par fichier. Les paramètres publiés sont abandonnés au profit d'un fichier de configuration. Il en va de même pour le paramètre de la taille du fichier qui n'est plus utilisé (optionnel pour l'API).
+Le traitement par fichier diffère légèrement d'un traitement par lot. Le fichier de conLes paramètres publiés sont abandonnés au profit d'un fichier de configuration. Il en va de même pour le paramètre de la taille du fichier qui n'est plus utilisé (optionnel pour l'API).
+
+### 1 - Création de paramètres publiés
+
+Certains valeurs peuvent être paramétrées au lancement du traitement FME pour faciliter le processus de téléversement. Vous devez créer 3 paramètres publiés :
+ - Commune : cet attribut contiendra le code Insee de la commune à téléverser
+ - Taille : cet attribut contiendra la taille du fichier à téléverser en octet (une amélioration sera apportée au projet pour automatiser la récupération de la taille du fichier)
+ - Jeton : cet attribut contiendra votre clé jeton fournit par la BAL
 
 #### 1 - Création du fichier de configuration
 
