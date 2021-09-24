@@ -44,3 +44,4 @@
 -- 2021/09/13 : GB / Gestion des références cadastrales multiples pour export au format BAL (création d'une sous-classe an_adresse_cad, avec relation 0..n dans QGIS et GEO)
 --              GB / Modification de l'export OpenData pour intégrer l'attribut cadastre_parcelles (0 ou n valeurs séparées par un |) et intégration de l'attribut certification_commune (avec valeur forcée à 1) pour la remontée à ETALAB
 -- 2021/09/14 : GB / Intégration dans le trigger de gestion à la saisie et mise à jour des références cadastres (sur an_adresse_cad) d'un controle sur la saisie des sections et n° de parcelles
+-- 2021/09/24 : GB / Modification de l'export BAL dans la clé d'interopérabilité (suppression du complément et modification du suffixe) et ajout des adresses numérotées à vérifier comme non certifiées
