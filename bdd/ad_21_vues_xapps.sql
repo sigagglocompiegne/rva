@@ -246,10 +246,8 @@ CREATE OR REPLACE VIEW x_opendata.xopendata_an_v_bal_12
  SELECT ''::character varying AS uid_adresse,
     lower(
         CASE
-            WHEN a.repet IS NULL AND a.complement IS NULL THEN concat(v.insee, '_', v.rivoli, '_', lpad(a.numero::text, 5, '0'::text))
-            WHEN a.repet IS NOT NULL AND a.complement IS NULL THEN concat(v.insee, '_', v.rivoli, '_', lpad(a.numero::text, 5, '0'::text), lower(btrim(concat('_', "left"(a.repet::text, 3)))))
-            WHEN a.repet IS NULL AND a.complement IS NOT NULL THEN concat(v.insee, '_', v.rivoli, '_', lpad(a.numero::text, 5, '0'::text), lower(btrim(concat('_', replace(a.complement::text, ' '::text, ''::text)))))
-            WHEN a.repet IS NOT NULL AND a.complement IS NOT NULL THEN concat(v.insee, '_', v.rivoli, '_', lpad(a.numero::text, 5, '0'::text), lower(btrim(concat('_', "left"(a.repet::text, 3), '_', replace(a.complement::text, ' '::text, ''::text)))))
+            WHEN a.repet IS NOT NULL THEN concat(v.insee, '_', v.rivoli, '_', lpad(a.numero::text, 5, '0'::text), lower(btrim(concat('_', "left"(a.repet::text, 3)))))
+            WHEN a.repet IS NULL THEN concat(v.insee, '_', v.rivoli, '_', lpad(a.numero::text, 5, '0'::text))
             ELSE NULL::text
         END) AS cle_interop,
     v.insee::character varying(5) AS commune_insee,
@@ -260,10 +258,8 @@ CREATE OR REPLACE VIEW x_opendata.xopendata_an_v_bal_12
     a.ld_compl AS lieudit_complement_nom,
     a.numero,
         CASE
-            WHEN a.repet IS NULL AND a.complement IS NULL THEN NULL::text
-            WHEN a.repet IS NOT NULL AND a.complement IS NULL THEN lower(btrim("left"(a.repet::text, 3)))
-            WHEN a.repet IS NULL AND a.complement IS NOT NULL THEN lower(btrim(replace(a.complement::text, ' '::text, ''::text)))
-            WHEN a.repet IS NOT NULL AND a.complement IS NOT NULL THEN lower(btrim(concat("left"(a.repet::text, 3), '_', replace(a.complement::text, ' '::text, ''::text))))
+            WHEN a.repet IS NULL THEN NULL::text
+            WHEN a.repet IS NOT NULL THEN lower(btrim("left"(a.repet::text, 3)))
             ELSE NULL::text
         END::character varying AS suffixe,
     lt_p.valeur AS "position",
@@ -280,7 +276,11 @@ CREATE OR REPLACE VIEW x_opendata.xopendata_an_v_bal_12
             WHEN p.date_maj IS NULL THEN to_char(date(p.date_sai)::timestamp with time zone, 'YYYY-MM-DD'::text)
             ELSE to_char(date(p.date_maj)::timestamp with time zone, 'YYYY-MM-DD'::text)
         END::character varying(10) AS date_der_maj,
-    '1'::text AS certification_commune
+        CASE
+            WHEN a.diag_adr::text = '11'::text OR "left"(a.diag_adr::text, 1) = '2'::text THEN '1'::text
+            WHEN a.diag_adr::text = '33'::text THEN '0'::text
+            ELSE '0'::text
+        END AS certification_commune
    FROM r_objet.geo_objet_pt_adresse p
      LEFT JOIN r_adresse.an_adresse a ON a.id_adresse = p.id_adresse
      LEFT JOIN r_adresse.an_adresse_info af ON af.id_adresse = p.id_adresse
@@ -288,22 +288,21 @@ CREATE OR REPLACE VIEW x_opendata.xopendata_an_v_bal_12
      LEFT JOIN r_voie.an_voie v ON v.id_voie = p.id_voie
      LEFT JOIN r_osm.geo_osm_commune c ON v.insee = c.insee::bpchar
      LEFT JOIN r_adresse.an_adresse_cad ca ON ca.id_adresse = p.id_adresse
-  WHERE (a.diag_adr::text = '11'::text OR "left"(a.diag_adr::text, 1) = '2'::text) AND a.diag_adr::text <> '31'::text AND a.diag_adr::text <> '32'::text AND a.numero::text <> '00000'::text
-  GROUP BY a.repet, a.complement, v.insee, v.rivoli, a.numero, c.commune, af.insee_cd, af.nom_cd, v.libvoie_c, a.ld_compl, lt_p.valeur, p.x_l93, p.y_l93, p.geom, p.date_maj, p.date_sai
+  WHERE a.diag_adr::text = '11'::text OR "left"(a.diag_adr::text, 1) = '2'::text OR a.diag_adr::text = '33'::text
+  GROUP BY a.repet, a.complement, v.insee, v.rivoli, a.diag_adr, a.numero, c.commune, af.insee_cd, af.nom_cd, v.libvoie_c, a.ld_compl, lt_p.valeur, p.x_l93, p.y_l93, p.geom, p.date_maj, p.date_sai
   ORDER BY (
         CASE
-            WHEN a.repet IS NULL AND a.complement IS NULL THEN concat(v.insee, '_', v.rivoli, '_', lpad(a.numero::text, 5, '0'::text))
-            WHEN a.repet IS NOT NULL AND a.complement IS NULL THEN concat(v.insee, '_', v.rivoli, '_', lpad(a.numero::text, 5, '0'::text), lower(btrim(concat('_', "left"(a.repet::text, 3)))))
-            WHEN a.repet IS NULL AND a.complement IS NOT NULL THEN concat(v.insee, '_', v.rivoli, '_', lpad(a.numero::text, 5, '0'::text), lower(btrim(concat('_', replace(a.complement::text, ' '::text, ''::text)))))
-            WHEN a.repet IS NOT NULL AND a.complement IS NOT NULL THEN concat(v.insee, '_', v.rivoli, '_', lpad(a.numero::text, 5, '0'::text), lower(btrim(concat('_', "left"(a.repet::text, 3), '_', replace(a.complement::text, ' '::text, ''::text)))))
+            WHEN a.repet IS NOT NULL THEN concat(v.insee, '_', v.rivoli, '_', lpad(a.numero::text, 5, '0'::text), lower(btrim(concat('_', "left"(a.repet::text, 3)))))
+            WHEN a.repet IS NULL THEN concat(v.insee, '_', v.rivoli, '_', lpad(a.numero::text, 5, '0'::text))
             ELSE NULL::text
         END);
 
 ALTER TABLE x_opendata.xopendata_an_v_bal_12
     OWNER TO create_sig;
-    
 COMMENT ON VIEW x_opendata.xopendata_an_v_bal_12
     IS 'Vue alphanumérique simplifiée des adresses au format d''échange BAL Standard 1.2';
+
+
 
 
 
