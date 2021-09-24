@@ -466,6 +466,13 @@ Valeurs possibles :
 |33|Adresse à confirmer (existence, numéro ...)|
 |99|Autre|
 
+Précisions :
+-------------
+
+Une adresse non attribuée, est une adresse projetée (aménagement à venir) qui ne dispose pas encore d'une numérotation officielle de la commune. Les adresses non numérotées  correspondent à des constructions existantes sans numérotation. Une adresse à confirmer dispose d'une numérotation mais sans que celle-ci soit validée par la commune.
+
+Les adresses codées '11' et '20 à 25' sont remontées à la BAL comme certifiée. Les adresses codées '33' sont remontées à la BAL comme non certifiées. Les autres adresses ('00','99','12','31' et '32') ne sont pas remontées à la BAL.
+
 ---
 
 `r_adresse.lt_etat_adr` : Liste des valeurs permettant de décrire l'état de la construction à l''adresse
