@@ -45,3 +45,4 @@
 --              GB / Modification de l'export OpenData pour intégrer l'attribut cadastre_parcelles (0 ou n valeurs séparées par un |) et intégration de l'attribut certification_commune (avec valeur forcée à 1) pour la remontée à ETALAB
 -- 2021/09/14 : GB / Intégration dans le trigger de gestion à la saisie et mise à jour des références cadastres (sur an_adresse_cad) d'un controle sur la saisie des sections et n° de parcelles
 -- 2021/09/24 : GB / Modification de l'export BAL dans la clé d'interopérabilité (suppression du complément et modification du suffixe) et ajout des adresses numérotées à vérifier comme non certifiées
+-- 2021/10/12 : GB / Correction fonction trigger sur contrôle adresse non numéroté avec 00000 en n° et sdans étiquette (exception sans erreur ici)
