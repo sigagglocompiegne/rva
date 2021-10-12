@@ -222,20 +222,13 @@ IF NEW.diag_adr = '31' AND NEW.numero IS NULL THEN
 RAISE EXCEPTION USING MESSAGE = 'Une adresse non attribuée (projet) doit contenir un numéro mais non certifié.'  ;
 END IF;
 
-IF NEW.diag_adr = '32' AND NEW.numero IS NOT NULL THEN
+IF NEW.diag_adr = '32' AND NEW.numero IS NOT NULL AND NEW.numero <> '00000' THEN
 RAISE EXCEPTION USING MESSAGE = 'Vous nous pouvez pas indiquer une adresse non numérotée et saisir un numéro.'  ;
 END IF;
 
-IF NEW.diag_adr = '32' AND NEW.numero IS NOT NULL THEN
-RAISE EXCEPTION USING MESSAGE = 'Vous nous pouvez pas indiquer une adresse non numérotée et saisir un numéro.'  ;
-END IF;
 
 IF NEW.groupee = '1' AND (NEW.diag_adr <> '20' OR NEW.diag_adr <> '23') THEN
 RAISE EXCEPTION USING MESSAGE = 'Vous nous pouvez pas indiquer une adresse groupée sans indiquer dans la qualité qu''elle est à dégrouper' ;
-END IF;
-
-IF NEW.groupee = '0' AND (NEW.diag_adr ='23') THEN
-RAISE EXCEPTION USING MESSAGE = 'Vous nous pouvez pas indiquer dans la qualité de l''adresse à dégrouper et mettre ''non'' dans adresse groupée' ;
 END IF;
 
 -- insertion dans la classe des objets
@@ -352,26 +345,17 @@ RAISE EXCEPTION USING MESSAGE = 'Cette adresse "conforme" existe déjà dans la 
 END IF;
 END IF;
 
-
 -- contrôle sur les diagnostics adresses
 IF NEW.diag_adr = '31' AND NEW.numero IS NULL THEN
 RAISE EXCEPTION USING MESSAGE = 'Une adresse non attribuée (projet) doit contenir un numéro mais non certifié.'  ;
 END IF;
 
-IF NEW.diag_adr = '32' AND NEW.numero IS NOT NULL THEN
-RAISE EXCEPTION USING MESSAGE = 'Vous nous pouvez pas indiquer une adresse non numérotée et saisir un numéro.'  ;
-END IF;
-
-IF NEW.diag_adr = '32' AND NEW.numero IS NOT NULL THEN
+IF NEW.diag_adr = '32' AND NEW.numero IS NOT NULL AND NEW.numero <> '00000' THEN
 RAISE EXCEPTION USING MESSAGE = 'Vous nous pouvez pas indiquer une adresse non numérotée et saisir un numéro.'  ;
 END IF;
 
 IF NEW.groupee = '1' AND (NEW.diag_adr <> '20' OR NEW.diag_adr <> '23') THEN
 RAISE EXCEPTION USING MESSAGE = 'Vous nous pouvez pas indiquer une adresse groupée sans indiquer dans la qualité qu''elle est à dégrouper' ;
-END IF;
-
-IF NEW.groupee = '0' AND (NEW.diag_adr ='23') THEN
-RAISE EXCEPTION USING MESSAGE = 'Vous nous pouvez pas indiquer dans la qualité de l''adresse à dégrouper et mettre ''non'' dans adresse groupée' ;
 END IF;
 
 -- mise à jour de la classe des objets
@@ -464,6 +448,7 @@ ALTER FUNCTION r_adresse.ft_m_geo_adresse_gestion()
 
 COMMENT ON FUNCTION r_adresse.ft_m_geo_adresse_gestion()
     IS 'Fonction trigger pour gérer l''insertion et la mise à jour des données adresse';
+
 
 
 -- #################################################################### FONCTION TRIGGER - ft_m_geo_v_adresse_vmr ###################################################
