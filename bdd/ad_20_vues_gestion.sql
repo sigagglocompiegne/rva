@@ -226,9 +226,12 @@ IF NEW.diag_adr = '32' AND NEW.numero IS NOT NULL AND NEW.numero <> '00000' THEN
 RAISE EXCEPTION USING MESSAGE = 'Vous nous pouvez pas indiquer une adresse non numérotée et saisir un numéro.'  ;
 END IF;
 
-
-IF NEW.groupee = '1' AND (NEW.diag_adr <> '20' OR NEW.diag_adr <> '23') THEN
+IF NEW.groupee = '1' AND NEW.diag_adr <> '23' THEN
 RAISE EXCEPTION USING MESSAGE = 'Vous nous pouvez pas indiquer une adresse groupée sans indiquer dans la qualité qu''elle est à dégrouper' ;
+END IF;
+
+IF (NEW.groupee = '2' or NEW.groupee = '0') AND NEW.diag_adr = '23' THEN
+RAISE EXCEPTION USING MESSAGE = 'Vous nous pouvez pas indiquer une qualité d''adresse dégroupée sans indiquer la valeur "oui" en adresse groupée' ;
 END IF;
 
 -- insertion dans la classe des objets
@@ -354,8 +357,12 @@ IF NEW.diag_adr = '32' AND NEW.numero IS NOT NULL AND NEW.numero <> '00000' THEN
 RAISE EXCEPTION USING MESSAGE = 'Vous nous pouvez pas indiquer une adresse non numérotée et saisir un numéro.'  ;
 END IF;
 
-IF NEW.groupee = '1' AND (NEW.diag_adr <> '20' OR NEW.diag_adr <> '23') THEN
+IF NEW.groupee = '1' AND NEW.diag_adr <> '23' THEN
 RAISE EXCEPTION USING MESSAGE = 'Vous nous pouvez pas indiquer une adresse groupée sans indiquer dans la qualité qu''elle est à dégrouper' ;
+END IF;
+
+IF (NEW.groupee = '2' or NEW.groupee = '0') AND NEW.diag_adr = '23' THEN
+RAISE EXCEPTION USING MESSAGE = 'Vous nous pouvez pas indiquer une qualité d''adresse dégroupée sans indiquer la valeur "oui" en adresse groupée' ;
 END IF;
 
 -- mise à jour de la classe des objets
@@ -446,8 +453,10 @@ $BODY$;
 ALTER FUNCTION r_adresse.ft_m_geo_adresse_gestion()
     OWNER TO create_sig;
 
+
 COMMENT ON FUNCTION r_adresse.ft_m_geo_adresse_gestion()
     IS 'Fonction trigger pour gérer l''insertion et la mise à jour des données adresse';
+
 
 
 
