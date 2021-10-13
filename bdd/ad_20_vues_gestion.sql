@@ -226,7 +226,7 @@ IF NEW.diag_adr = '32' AND NEW.numero IS NOT NULL AND NEW.numero <> '00000' THEN
 RAISE EXCEPTION USING MESSAGE = 'Vous nous pouvez pas indiquer une adresse non numérotée et saisir un numéro.'  ;
 END IF;
 
-IF NEW.groupee = '1' AND NEW.diag_adr <> '23' THEN
+IF NEW.groupee = '1' AND NEW.diag_adr NOT IN ('20','23') THEN
 RAISE EXCEPTION USING MESSAGE = 'Vous nous pouvez pas indiquer une adresse groupée sans indiquer dans la qualité qu''elle est à dégrouper' ;
 END IF;
 
@@ -357,7 +357,7 @@ IF NEW.diag_adr = '32' AND NEW.numero IS NOT NULL AND NEW.numero <> '00000' THEN
 RAISE EXCEPTION USING MESSAGE = 'Vous nous pouvez pas indiquer une adresse non numérotée et saisir un numéro.'  ;
 END IF;
 
-IF NEW.groupee = '1' AND NEW.diag_adr <> '23' THEN
+IF NEW.groupee = '1' AND NEW.diag_adr NOT IN ('20','23') THEN
 RAISE EXCEPTION USING MESSAGE = 'Vous nous pouvez pas indiquer une adresse groupée sans indiquer dans la qualité qu''elle est à dégrouper' ;
 END IF;
 
@@ -456,6 +456,7 @@ ALTER FUNCTION r_adresse.ft_m_geo_adresse_gestion()
 
 COMMENT ON FUNCTION r_adresse.ft_m_geo_adresse_gestion()
     IS 'Fonction trigger pour gérer l''insertion et la mise à jour des données adresse';
+
 
 
 
