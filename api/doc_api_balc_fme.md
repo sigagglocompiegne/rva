@@ -230,6 +230,8 @@ Sur le même principe que les requêtes de téléversement, il est possible d'ut
 
 ![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_1.png) https://plateforme.adresse.data.gouv.fr/api-depot-demo/communes/@Value(insee)/revisions
 
+Cette requête renvoie toutes les révisions. Pour récupérer la version courante utilisez cette requête `https://plateforme.adresse.data.gouv.fr/api-depot/communes/@Value(insee)/current-revision`.
+
 L'attribut `@Value(insee)` correspond au code insee de la commune téléversée.
 
 ![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_2.png) **GET**
