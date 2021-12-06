@@ -12,8 +12,7 @@ Contact : sig@agglo-compiegne.fr
 
 ## Changelog
 
- * 06/12/2021 : Version 1.2 - téléversement d'un lot de données communal au format BAL 1.3 dans l'API de dépôt BAL avec vérification d'une BAL existante et vérification des mises à jour
- * 06/12/2021 : Version 1.1 - téléversement d'un lot de données communal au format BAL 1.3 dans l'API de dépôt BAL avec vérification des mises à jour
+ * 06/12/2021 : Version 1.1 - téléversement d'un lot de données communal au format BAL 1.3 dans l'API de dépôt BAL avec vérification d'une BAL existante et vérification des mises à jour
  * 21/09/2021 : Version 1 - téléversement d'un fichier ou d'un lot de données communal au format BAL 1.2 dans l'API de démo BAL
  
 ## Gabarit
@@ -22,7 +21,7 @@ Contact : sig@agglo-compiegne.fr
 
 ## Paramétrage
 
-Cette version 1.2 est une version permettant le téléversement en masse de x communes, avec une vérification de la présence d'une BAL existante (pour un autre client) et des dates de mises à jour, dans l'API de dépôt de la BAL. La version de FME utilisée est la 2021.1.1.0.
+Cette version 1.1 est une version permettant le téléversement en masse de x communes, avec une vérification de la présence d'une BAL existante (pour un autre client) et des dates de mises à jour, dans l'API de dépôt de la BAL. La version de FME utilisée est la 2021.1.1.0.
 
 Les paramètres passés dans le traitement sont tous issus de la [documentation de l'API BAL de la BaseAdresseNationale](https://github.com/etalab/ban-api-depot/wiki/Documentation).
 
