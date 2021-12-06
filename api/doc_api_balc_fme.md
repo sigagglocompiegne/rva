@@ -63,7 +63,7 @@ Ce contrôle permet de vérifier l'existance d'une BAL publiée par un autre org
 
 #### 2.3 - Vérification d'une mise à jour d'adresse
 
-**Pour un versement initial via l'API de dépôt, vous devez désactiver ce traitement et relier directement le point 2.2 au point 2.4 dans le Workflow. Une fois cette initialisation réalisée, vous pouvez réactiver ce traitement.**
+**Pour un versement initial via l'API de dépôt, vous devez désactiver ce traitement et relier directement le point 2.1 ou 2.2 au point 2.4 dans le Workflow. Une fois cette initialisation réalisée, vous pouvez réactiver ce traitement.**
 
 Ce contrôle permet de sélectionner uniquement les communes dont au moins une adresse a été modifiée ou ajoutée pour être téléversées dans l'API de dépôt. Le fonctionnement de l'API de dépôt créant une historisation à chaque versionnement, ce filtre évite de surcharger la base nationale en données non modifiées.
 
