@@ -51,7 +51,19 @@ Ensuite sélectionner le format Excel et indiquer le lieu de votre fichier.
 
 Votre fichier de configuration est en début de chaîne.
  
-#### 2.2 - Paramétrer un HttpCaller pour lancer la 1er requête nommée `REVISION`
+#### 2.2 - Vérification d'une BAL existante (en cours de développement)
+
+Ce contrôle permet de vérifier l'existance d'une BAL publiée par un autre organisme. En cas de retour positif de l'API de dépôt, la ou les communes en question sortent du traitement pour ne pas être téléversées. En effet, le fonctionnement de l'API suprimerait la BAL publiée par un autre organisme. Si le cas se présente, une investigation devra être réalisée pour déterminer l'origine de la publication par l'utilisateur.
+
+#### 2.3 - Vérification d'une mise à jour d'adresse (en cours de développement)
+
+Ce contrôle permet de sélectionner uniquement les communes dont au moins une adresse a été modifiée ou ajoutée pour être téléversées dans l'API de dépôt. Le fonctionnement de l'API de dépôt créant une historisation à chaque versionnement, ce filtre évite de surcharger la base nationale en données non modifiées.
+
+![creator](fme_verif_maj.png)
+
+Le transformers `DatabaseJoiner` est utilisé pour récupérer les données existantes dans une base de données, avant d'être comparée à la date du jour. Il doit être paramétré en fonction de l'infrastructure de données de l'utilisateur. 
+ 
+#### 2.4 - Paramétrer un HttpCaller pour lancer la 1er requête nommée `REVISION`
  
  ![creator](img/httpcaller.png)
  
@@ -87,7 +99,7 @@ L'attribut `@Value(jeton)` correspond au jeton contenant la clé fournie par la 
  
  Laisser les autres paramètres par défaut. L'attribut de réponse `_response_body` sera utilisé dans la suite du traitement et correspond au code de retour de l'API.
  
-#### 2.3 - Récupération de l'attribut `_ID` dans la requête de réponse de `REVISION` pour lancer la 2nd requête nommée `TELEVERSEMENT`
+#### 2.5 - Récupération de l'attribut `_ID` dans la requête de réponse de `REVISION` pour lancer la 2nd requête nommée `TELEVERSEMENT`
   
 La réponse de l'API s'effectue au format JSON, il faut donc récupérer les différents attributs utiles pour la suite du traitement et notamment l'`_ID`.
 
@@ -113,7 +125,7 @@ La réponse de l'API s'effectue au format JSON, il faut donc récupérer les dif
  
  L'attribut `json_index` liste l'ensemble des attributs de la requête de réponse. Il suffit de filter avec le nom `_id` pour récupérer en sortie uniquement la valeur de celui-ci dans l'attribut `_response_body`.
 
-#### 2.4 - Paramétrer un HttpCaller pour lancer la 2nd requête nommée `TELEVERSEMENT`
+#### 2.6 - Paramétrer un HttpCaller pour lancer la 2nd requête nommée `TELEVERSEMENT`
  
 ![creator](img/httpcaller_2_para.png)
  
@@ -141,7 +153,7 @@ L'attribut `@Value(jeton)` correspond au jeton contenant la clé fournie par la 
  
  Laisser les autres paramètres par défaut. L'attribut de réponse `_response_body` sera utilisé dans la suite du traitement et correspond au code de retour de l'API.
 
-#### 2.5 - Récupération de l'attribut `revisionId` dans la requête de réponse de `TELEVERSEMENT` pour lancer la 3ème requête nommée `VALIDATION`
+#### 2.7 - Récupération de l'attribut `revisionId` dans la requête de réponse de `TELEVERSEMENT` pour lancer la 3ème requête nommée `VALIDATION`
   
 La réponse de l'API s'effectue au format JSON, il faut donc récupérer les différents attributs utiles pour la suite du traitement et notamment `revisionId`.
 
@@ -155,7 +167,7 @@ Reprendre la méthode indiquée au point **3**.
 
  L'attribut `json_index` liste l'ensemble des attributs de la requête de réponse. Il suffit de filter avec le nom `revisionId` pour récupérer en sortie uniquement la valeur de celui-ci dans l'attribut `_response_body`.
 
-#### 2.6 - Paramétrer un HttpCaller pour lancer la 3ème requête nommée `VALIDATION`
+#### 2.8 - Paramétrer un HttpCaller pour lancer la 3ème requête nommée `VALIDATION`
  
 ![creator](img/httpcaller_3_para.png)
  
@@ -175,7 +187,7 @@ L'attribut `@Value(jeton)` correspond au jeton contenant la clé fournie par la 
  
 Laisser les autres paramètres par défaut. L'attribut de réponse `_response_body` sera utilisé dans la suite du traitement et correspond au code de retour de l'API.
 
-#### 2.7 - Récupération de l'attribut `_id` dans la requête de réponse de `VALIDATION` pour lancer la 4ème requête nommée `PUBLICATION`
+#### 2.9 - Récupération de l'attribut `_id` dans la requête de réponse de `VALIDATION` pour lancer la 4ème requête nommée `PUBLICATION`
   
 La réponse de l'API s'effectue au format JSON, il faut donc récupérer les différents attributs utiles pour la suite du traitement et notamment l'`_id`.
 
@@ -189,7 +201,7 @@ Reprendre la méthode indiquée au point **3**.
 
  L'attribut `json_index` liste l'ensemble des attributs de la requête de réponse. Il suffit de filter avec le nom `_id` pour récupérer en sortie uniquement la valeur de celui-ci dans l'attribut `_response_body`.
 
-#### 2.8 - Paramétrer un HttpCaller pour lancer la 4ème requête nommée `PUBLICATION`
+#### 2.10 - Paramétrer un HttpCaller pour lancer la 4ème requête nommée `PUBLICATION`
  
 ![creator](img/httpcaller_3_para.png)
  
@@ -209,7 +221,7 @@ L'attribut `@Value(jeton)` correspond au jeton contenant la clé fournie par la 
  
 Laisser les autres paramètres par défaut. L'attribut de réponse `_response_body` sera utilisé dans la suite du traitement et correspond au code de retour de l'API.
 
-#### 2.9 - Lancement du traitement
+#### 2.11 - Lancement du traitement
 
 Pour lancer le traitement, cliquer sur
 
