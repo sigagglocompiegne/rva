@@ -59,7 +59,7 @@ Ce contrôle permet de vérifier l'existance d'une BAL publiée par un autre org
 
 Ce contrôle permet de sélectionner uniquement les communes dont au moins une adresse a été modifiée ou ajoutée pour être téléversées dans l'API de dépôt. Le fonctionnement de l'API de dépôt créant une historisation à chaque versionnement, ce filtre évite de surcharger la base nationale en données non modifiées.
 
-![creator](fme_verif_maj.png)
+![creator](img/fme_verif_maj.png)
 
 Le transformers `DatabaseJoiner` est utilisé pour récupérer les données existantes dans une base de données, avant d'être comparée à la date du jour. Il doit être paramétré en fonction de l'infrastructure de données de l'utilisateur. 
  
