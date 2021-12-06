@@ -61,7 +61,7 @@ Ce contrôle permet de sélectionner uniquement les communes dont au moins une a
 
 ![creator](img/fme_verif_maj.png)
 
-Le transformers `DatabaseJoiner` est utilisé pour récupérer les données existantes dans une base de données, avant d'être comparée à la date du jour. Il doit être paramétré en fonction de l'infrastructure de données de l'utilisateur. 
+Le transformers `DatabaseJoiner` est utilisé pour récupérer les données existantes (au format BAL) dans une base de données, avant d'être comparée à la date du jour. Il doit être paramétré en fonction de l'infrastructure de données de l'utilisateur. 
  
 #### 2.4 - Paramétrer un HttpCaller pour lancer la 1er requête nommée `REVISION`
  
