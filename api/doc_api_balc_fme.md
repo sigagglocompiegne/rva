@@ -12,6 +12,7 @@ Contact : sig@agglo-compiegne.fr
 
 ## Changelog
 
+ * 06/12/2021 : Version 2 - téléversement d'un lot de données communal au format BAL 1.3 dans l'API de dépôt BAL (+ vérification du client + vérification de mises à jour) ==> en cours de développement
  * 21/09/2021 : Version 1 - téléversement d'un fichier ou d'un lot de données communal au format BAL 1.2 dans l'API BAL
  
 ## Gabarit
@@ -30,12 +31,13 @@ Afin de téléverser un lot de communes dans l'API BAL, nous avons choisi de cr�
 
 Exemple de structuration du fichier Excel de configuration :
 
-|insee|commune|jeton|
-|:---|:---|:---|
-|60159|Compiègne|[jeton fournit par la BAL]|
-|60325|Jaux|[jeton fournit par la BAL]|
+|insee|commune|jeton|epci|
+|:---|:---|:---|:---|
+|60159|Compiègne|[jeton fournit par la BAL]|ARC|
+|60325|Jaux|[jeton fournit par la BAL]|ARC|
 
-**ATTENTION** : si vous utilisez une autre clé pour la référence de vos communes comme le code SIREN, qui est également référencé dans vos fichiers BAL de commune, vous devez remplacer l'attribut insee par siren dans le fichier de conf. Ce remplacement devra être réalisé également dans les paramètres du traitement ci-dessous.
+**ATTENTION** : si vous utilisez une autre clé pour la référence de vos communes comme le code SIREN, qui est également référencé dans vos fichiers BAL de commune, vous devez remplacer l'attribut insee par siren dans le fichier de conf. Ce remplacement devra être réalisé également dans les paramètres du traitement ci-dessous. Un attribut EPCI a été ajouté uniquement pour la gestion du fichier Excel dans le cas d'un traitement multiple d'EPCI. Cet attribut permet de trier les communes pour y copier les jetons plus facilement.
+
 
 ### 2 - Création de la chaîne de traitement
 
