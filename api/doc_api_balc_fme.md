@@ -59,6 +59,8 @@ Ce contrôle permet de vérifier l'existance d'une BAL publiée par un autre org
 
 ![maj](img/fme_api_client.png)
 
+![maj](img/fme_verif_client.png)
+
 #### 2.3 - Vérification d'une mise à jour d'adresse
 
 **Pour un versement initial via l'API de dépôt, vous devez désactiver ce traitement et relier directement le point 2.2 au point 2.4 dans le Workflow. Une fois cette initialisation réalisée, vous pouvez réactiver ce traitement.**
