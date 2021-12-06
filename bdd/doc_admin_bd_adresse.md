@@ -706,7 +706,7 @@ L'ensemble des fichiers a utilisé est placé ici `Y:\Ressources\4-Partage\3-Pro
 
 L'ensemble des adresses est téléversé quotidiennement dans la BAL à travers une API de dépôt. Ce traitement est réalisé par un WorkFlow FME. Le fichier et son paramétrage sont disponibles [ici](https://github.com/sigagglocompiegne/rva/blob/master/api/doc_api_balc_fme.md) .
 
-Ils existent 3 versions de fichiers pour le traitement FME d'envoie à l'API de dépôt de la BAL :
+Ils existent 3 versions de fichiers pour le traitement FME d'envoie à l'API de dépôt de la BAL, placés ici `Y:\Ressources\4-Partage\3-Procedures\FME\prod\OPEN-DATA` :
 - API_BAL_lot_version_PC.fmw : version s'exécutant sur un PC du service SIG
 - API_BAL_lot_version_SERVEUR.fmw : version s'exécutant sur le serveur Open-Data
 - API_BAL_LOT_FME_v11_github.fmw : version pour le partage sur GitHub
