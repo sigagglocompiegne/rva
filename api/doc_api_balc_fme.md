@@ -53,7 +53,7 @@ Votre fichier de configuration est en début de chaîne.
  
 #### 2.2 - Vérification d'une BAL existante
 
-**Prérequis : il est préférable de s'assurer du nom de client déclaré dans l'API de dépôt pour mettre à jour le traitement au niveau du test d'existance d'une BAL**. Pour cela vous pouvez utiliser le Workflow en activant l'`Inspector` nommé 'VERIF_NOM_CLIENT'. Dans la chaîne renvoyée, vous pouvez vérifier le nom de votre organisme.
+**Prérequis : il est préférable de s'assurer du nom de client déclaré dans l'API de dépôt pour mettre à jour le traitement au niveau du test d'existence d'une BAL**. Pour cela vous pouvez utiliser le Workflow en activant l'`Inspector` nommé 'VERIF_NOM_CLIENT'. Dans la chaîne renvoyée, vous pouvez vérifier le nom de votre organisme.
 
 ![maj](img/fme_api_client.png)
 
