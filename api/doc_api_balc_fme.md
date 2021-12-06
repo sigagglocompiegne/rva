@@ -12,16 +12,17 @@ Contact : sig@agglo-compiegne.fr
 
 ## Changelog
 
- * 06/12/2021 : Version 2 - téléversement d'un lot de données communal au format BAL 1.3 dans l'API de dépôt BAL (+ vérification du client + vérification de mises à jour) ==> en cours de développement
- * 21/09/2021 : Version 1 - téléversement d'un fichier ou d'un lot de données communal au format BAL 1.2 dans l'API BAL
+ * --/12/2021 : Version 1.2 (en cours de dévelopement)  - téléversement d'un lot de données communal au format BAL 1.3 dans l'API de dépôt BAL avec vérification d'une BAL existante et vérification des mises à jour
+ * 06/12/2021 : Version 1.1 - téléversement d'un lot de données communal au format BAL 1.3 dans l'API de dépôt BAL avec vérification des mises à jour
+ * 21/09/2021 : Version 1 - téléversement d'un fichier ou d'un lot de données communal au format BAL 1.2 dans l'API de démo BAL
  
 ## Gabarit
 
-- [Téléchargement du projet FME - traitement par lot](https://geo.compiegnois.fr/documents/metiers/rva/API_BAL_LOT_FME_v1.zip)
+- [Téléchargement du projet FME - traitement par lot](https://geo.compiegnois.fr/documents/metiers/rva/API_BAL_LOT_FME_v11_github.zip)
 
 ## Paramétrage
 
-Cette première version est une version béta permettant le téléversement soit d'un seul fichier BAL commune à la fois, soit d'un téléversement en masse de x communes. La version de FME utilisée est la 2021.1.1.0.
+Cette version 1.1 est une version permettant le téléversement en masse de x communes avec une vérification des dates de mises à jour dans l'API de dépôt de la BAL. La version de FME utilisée est la 2021.1.1.0.
 
 Les paramètres passés dans le traitement sont tous issus de la [documentation de l'API BAL de la BaseAdresseNationale](https://github.com/etalab/ban-api-depot/wiki/Documentation).
 
@@ -51,11 +52,13 @@ Ensuite sélectionner le format Excel et indiquer le lieu de votre fichier.
 
 Votre fichier de configuration est en début de chaîne.
  
-#### 2.2 - Vérification d'une BAL existante (en cours de développement)
+#### 2.2 - Vérification d'une BAL existante (disponible pour la version 1.2 en cours de développement)
 
 Ce contrôle permet de vérifier l'existance d'une BAL publiée par un autre organisme. En cas de retour positif de l'API de dépôt, la ou les communes en question sortent du traitement pour ne pas être téléversées. En effet, le fonctionnement de l'API suprimerait la BAL publiée par un autre organisme. Si le cas se présente, une investigation devra être réalisée pour déterminer l'origine de la publication par l'utilisateur.
 
-#### 2.3 - Vérification d'une mise à jour d'adresse (en cours de développement)
+#### 2.3 - Vérification d'une mise à jour d'adresse
+
+**Pour un versement initial via l'API de dépôt, vous devez désactiver ce traitement et relier directement le point 2.1 au point 2.4 dans le Workflow. Une fois cette initialisation réalisée, vous pouvez réactiver ce traitement.**
 
 Ce contrôle permet de sélectionner uniquement les communes dont au moins une adresse a été modifiée ou ajoutée pour être téléversées dans l'API de dépôt. Le fonctionnement de l'API de dépôt créant une historisation à chaque versionnement, ce filtre évite de surcharger la base nationale en données non modifiées.
 
