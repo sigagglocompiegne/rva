@@ -57,7 +57,7 @@ Votre fichier de configuration est en début de chaîne.
 
 ![maj](img/fme_api_client.png)
 
-Ce contrôle permet de vérifier l'existence d'une BAL publiée par un autre organisme. En cas de retour positif de l'API de dépôt, la ou les communes en question sortent du traitement pour ne pas être téléversées. En effet, le fonctionnement de l'API suprimerait la BAL publiée par un autre organisme. Si le cas se présente, une investigation devra être réalisée pour déterminer l'origine de la publication par l'utilisateur.
+Ce contrôle permet de vérifier l'existence d'une BAL publiée par un autre organisme. En cas de retour positif de l'API de dépôt, la ou les communes en question sortent du traitement pour ne pas être téléversées. En effet, le fonctionnement de l'API supprimerait la BAL publiée par un autre organisme. Si le cas se présente, une investigation devra être réalisée pour déterminer l'origine de la publication par l'utilisateur.
 
 **Cette partie du traitement peut être désactivée pour un versionnement initial à condition de s'être assuré de la non présence de BAL existante sur son territoire de téléversement.**
 
