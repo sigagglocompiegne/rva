@@ -12,7 +12,7 @@ Contact : sig@agglo-compiegne.fr
 
 ## Changelog
 
- * 06/12/2021 : Version 1.1 - téléversement d'un lot de données communal au format BAL 1.3 dans l'API de dépôt BAL avec vérification d'une BAL existante et vérification des mises à jour
+ * 06/12/2021 : Version 1.1 - téléversement d'un lot de données communal au format BAL 1.3 dans l'API de dépôt BAL avec vérification d'une BAL existante et vérification des mises à jour d'adresses
  * 21/09/2021 : Version 1 - téléversement d'un fichier ou d'un lot de données communal au format BAL 1.2 dans l'API de démo BAL
  
 ## Gabarit
@@ -66,6 +66,8 @@ Ce contrôle permet de vérifier l'existance d'une BAL publiée par un autre org
 **Pour un versement initial via l'API de dépôt, vous devez désactiver ce traitement et relier directement le point 2.2 au point 2.4 dans le Workflow. Une fois cette initialisation réalisée, vous pouvez réactiver ce traitement.**
 
 Ce contrôle permet de sélectionner uniquement les communes dont au moins une adresse a été modifiée ou ajoutée pour être téléversées dans l'API de dépôt. Le fonctionnement de l'API de dépôt créant une historisation à chaque versionnement, ce filtre évite de surcharger la base nationale en données non modifiées.
+
+**Note** : ce traitement ne gère pas pour le moment le fait qu'une adresse ait été supprimée. Le format BAL ne gérant pas l'état d'une adresse, si une adresse est supprimée d'une commune, elle ne sera pas pris en compte dans la mise à jour. Ce cas est en cours de résolution et le Workflow sera complété. 
 
 ![maj](img/fme_verif_maj.png)
 
