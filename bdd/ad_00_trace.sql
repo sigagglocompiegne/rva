@@ -46,4 +46,4 @@
 -- 2021/09/14 : GB / Intégration dans le trigger de gestion à la saisie et mise à jour des références cadastres (sur an_adresse_cad) d'un controle sur la saisie des sections et n° de parcelles
 -- 2021/09/24 : GB / Modification de l'export BAL dans la clé d'interopérabilité (suppression du complément et modification du suffixe) et ajout des adresses numérotées à vérifier comme non certifiées
 -- 2021/10/12 : GB / Correction fonction trigger sur contrôle adresse non numéroté avec 00000 en n° et sdans étiquette (exception sans erreur ici)
--- 2021/12/07 : GB / Création d'une vue d'export pour le nouveau standard BAL 1.3
+-- 2021/12/07 : GB / Création d'une vue d'export pour le nouveau standard BAL 1.3 avec ajout permis de l'export des adresses codé 99999 (voies et lieux-dits sans adresse)
