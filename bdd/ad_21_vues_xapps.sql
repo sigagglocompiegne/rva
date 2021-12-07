@@ -15,7 +15,7 @@ DROP VIEW IF EXISTS r_adresse.an_v_adresse_commune;
 DROP VIEW IF EXISTS r_adresse.an_v_adresse_bal_epci;
 DROP VIEW IF EXISTS x_apps.xapps_geo_vmr_adresse;
 DROP VIEW IF EXISTS x_apps.xapps_an_v_adresse_h;
-DROP VIEW IF EXISTS x_opendata.xopendata_an_v_bal_12;
+DROP VIEW IF EXISTS x_opendata.xopendata_an_v_bal_13;
 
 -- ####################################################################################################################################################
 -- ###                                                                                                                                              ###
@@ -237,11 +237,11 @@ COMMENT ON VIEW x_apps.xapps_an_v_adresse_h
 -- ###                                                                                                                                              ###
 -- ####################################################################################################################################################
 
--- View: x_opendata.xopendata_an_v_bal_12
+-- View: x_opendata.xopendata_an_v_bal_13
 
--- DROP VIEW x_opendata.xopendata_an_v_bal_12;
+-- DROP VIEW x_opendata.xopendata_an_v_bal_13;
 
-CREATE OR REPLACE VIEW x_opendata.xopendata_an_v_bal_12
+CREATE OR REPLACE VIEW x_opendata.xopendata_an_v_bal_13
  AS
  SELECT ''::character varying AS uid_adresse,
     lower(
@@ -269,8 +269,10 @@ CREATE OR REPLACE VIEW x_opendata.xopendata_an_v_bal_12
     st_y(st_transform(p.geom, 4326))::numeric(9,7) AS lat,
     string_agg(ca.idu::text, '|'::text) AS cad_parcelles,
         CASE
-            WHEN "left"(c.commune::text, 1) = ANY (ARRAY['A'::text, 'E'::text, 'I'::text, 'O'::text, 'U'::text, 'Y'::text, 'H'::text, 'É'::text]) THEN 'Commune d'''::text || c.commune::text
-            ELSE 'Commune de '::text || c.commune::text
+            WHEN v.insee = ANY (ARRAY['60023'::bpchar, '60067'::bpchar, '60068'::bpchar, '60070'::bpchar, '60151'::bpchar, '60156'::bpchar, '60159'::bpchar, '60323'::bpchar, '60325'::bpchar, '60326'::bpchar, '60337'::bpchar, '60338'::bpchar, '60382'::bpchar, '60402'::bpchar, '60447'::bpchar, '60578'::bpchar, '60579'::bpchar, '60597'::bpchar, '60600'::bpchar, '60665'::bpchar, '60667'::bpchar, '60674'::bpchar]) THEN 'Agglomération de la Région de Compiègne et de la Basse Automne'::text
+            WHEN v.insee = ANY (ARRAY['60024'::bpchar, '60036'::bpchar, '60040'::bpchar, '60078'::bpchar, '60125'::bpchar, '60149'::bpchar, '60152'::bpchar, '60210'::bpchar, '60223'::bpchar, '60229'::bpchar, '60254'::bpchar, '60284'::bpchar, '60308'::bpchar, '60318'::bpchar, '60369'::bpchar, '60424'::bpchar, '60441'::bpchar, '60531'::bpchar, '60540'::bpchar]) THEN 'Communauté de Communes de la Plaine d''Estrées'::text
+            WHEN v.insee = ANY (ARRAY['60025'::bpchar, '60032'::bpchar, '60064'::bpchar, '60072'::bpchar, '60145'::bpchar, '60167'::bpchar, '60171'::bpchar, '60184'::bpchar, '60188'::bpchar, '60305'::bpchar, '60324'::bpchar, '60438'::bpchar, '60445'::bpchar, '60491'::bpchar, '60534'::bpchar, '60569'::bpchar, '60572'::bpchar, '60593'::bpchar, '60641'::bpchar, '60647'::bpchar]) THEN 'Communauté de Communes des Lisières de l''Oise'::text
+            ELSE ''::text
         END::character varying AS source,
         CASE
             WHEN p.date_maj IS NULL THEN to_char(date(p.date_sai)::timestamp with time zone, 'YYYY-MM-DD'::text)
@@ -278,7 +280,7 @@ CREATE OR REPLACE VIEW x_opendata.xopendata_an_v_bal_12
         END::character varying(10) AS date_der_maj,
         CASE
             WHEN a.diag_adr::text = '11'::text OR "left"(a.diag_adr::text, 1) = '2'::text THEN '1'::text
-            WHEN a.diag_adr::text = '33'::text THEN '0'::text
+            WHEN a.diag_adr::text = '33'::text OR a.diag_adr::text = '99'::text THEN '0'::text
             ELSE '0'::text
         END AS certification_commune
    FROM r_objet.geo_objet_pt_adresse p
@@ -288,7 +290,7 @@ CREATE OR REPLACE VIEW x_opendata.xopendata_an_v_bal_12
      LEFT JOIN r_voie.an_voie v ON v.id_voie = p.id_voie
      LEFT JOIN r_osm.geo_osm_commune c ON v.insee = c.insee::bpchar
      LEFT JOIN r_adresse.an_adresse_cad ca ON ca.id_adresse = p.id_adresse
-  WHERE a.diag_adr::text = '11'::text OR "left"(a.diag_adr::text, 1) = '2'::text OR a.diag_adr::text = '33'::text
+  WHERE (a.diag_adr::text = '11'::text OR "left"(a.diag_adr::text, 1) = '2'::text OR a.diag_adr::text = '33'::text OR a.diag_adr::text = '99'::text) AND (v.insee = ANY (ARRAY['60023'::bpchar, '60067'::bpchar, '60068'::bpchar, '60070'::bpchar, '60151'::bpchar, '60156'::bpchar, '60159'::bpchar, '60323'::bpchar, '60325'::bpchar, '60326'::bpchar, '60337'::bpchar, '60338'::bpchar, '60382'::bpchar, '60402'::bpchar, '60447'::bpchar, '60578'::bpchar, '60579'::bpchar, '60597'::bpchar, '60600'::bpchar, '60665'::bpchar, '60667'::bpchar, '60674'::bpchar, '60024'::bpchar, '60036'::bpchar, '60040'::bpchar, '60078'::bpchar, '60125'::bpchar, '60149'::bpchar, '60152'::bpchar, '60210'::bpchar, '60223'::bpchar, '60229'::bpchar, '60254'::bpchar, '60284'::bpchar, '60308'::bpchar, '60318'::bpchar, '60369'::bpchar, '60424'::bpchar, '60441'::bpchar, '60531'::bpchar, '60540'::bpchar, '60025'::bpchar, '60032'::bpchar, '60064'::bpchar, '60072'::bpchar, '60145'::bpchar, '60167'::bpchar, '60171'::bpchar, '60184'::bpchar, '60188'::bpchar, '60305'::bpchar, '60324'::bpchar, '60438'::bpchar, '60445'::bpchar, '60491'::bpchar, '60534'::bpchar, '60569'::bpchar, '60572'::bpchar, '60593'::bpchar, '60641'::bpchar, '60647'::bpchar]))
   GROUP BY a.repet, a.complement, v.insee, v.rivoli, a.diag_adr, a.numero, c.commune, af.insee_cd, af.nom_cd, v.libvoie_c, a.ld_compl, lt_p.valeur, p.x_l93, p.y_l93, p.geom, p.date_maj, p.date_sai
   ORDER BY (
         CASE
@@ -297,10 +299,11 @@ CREATE OR REPLACE VIEW x_opendata.xopendata_an_v_bal_12
             ELSE NULL::text
         END);
 
-ALTER TABLE x_opendata.xopendata_an_v_bal_12
+ALTER TABLE x_opendata.xopendata_an_v_bal_13
     OWNER TO create_sig;
-COMMENT ON VIEW x_opendata.xopendata_an_v_bal_12
-    IS 'Vue alphanumérique simplifiée des adresses au format d''échange BAL Standard 1.2';
+COMMENT ON VIEW x_opendata.xopendata_an_v_bal_13
+    IS 'Vue alphanumérique simplifiée des adresses au format d''échange BAL Standard 1.3';
+
 
 
 
