@@ -47,3 +47,4 @@
 -- 2021/09/24 : GB / Modification de l'export BAL dans la clé d'interopérabilité (suppression du complément et modification du suffixe) et ajout des adresses numérotées à vérifier comme non certifiées
 -- 2021/10/12 : GB / Correction fonction trigger sur contrôle adresse non numéroté avec 00000 en n° et sdans étiquette (exception sans erreur ici)
 -- 2021/12/07 : GB / Création d'une vue d'export pour le nouveau standard BAL 1.3 avec ajout permis de l'export des adresses codé 99999 (voies et lieux-dits sans adresse)
+-- 2021/12/08 : GB / Modification trigger gestion des adresses (ajout d'un contrôle sur la suppressio impossible d'un point d'adresse relié à un établissement
