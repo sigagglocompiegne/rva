@@ -440,6 +440,11 @@ RETURN NEW;
 
 --DELETE
 ELSIF (TG_OP = 'DELETE') THEN
+
+IF (SELECT count(*) FROM m_economie.lk_adresseetablissement WHERE idadresse = OLD.id_adresse) >= 1 THEN
+RAISE EXCEPTION 'Vous ne pouvez pas supprimer un point d''adresse rattaché à un établissement. Contactez l''administrateur SIG.';
+END IF;
+
 DELETE FROM r_objet.geo_objet_pt_adresse where id_adresse = OLD.id_adresse;
 DELETE FROM r_adresse.an_adresse where id_adresse = OLD.id_adresse;
 DELETE FROM r_adresse.an_adresse_info where id_adresse = OLD.id_adresse;
@@ -453,9 +458,9 @@ $BODY$;
 ALTER FUNCTION r_adresse.ft_m_geo_adresse_gestion()
     OWNER TO create_sig;
 
-
 COMMENT ON FUNCTION r_adresse.ft_m_geo_adresse_gestion()
     IS 'Fonction trigger pour gérer l''insertion et la mise à jour des données adresse';
+
 
 
 
