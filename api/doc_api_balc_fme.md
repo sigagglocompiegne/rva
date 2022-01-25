@@ -18,7 +18,7 @@ Contact : sig@agglo-compiegne.fr
  
 ## Gabarit
 
-- [Téléchargement du projet FME version 1.2 - traitement par lot + mise à jour des adresses supprimées par lectture des fichies CSV](https://geo.compiegnois.fr/documents/metiers/rva/API_BAL_LOT_FME_v12_csv_github.zip)
+- [Téléchargement du projet FME version 1.2 - traitement par lot + mise à jour des adresses supprimées par lectture des fichies CSV] (ajustement à venir le 26/01/2022)
 - [Téléchargement du projet FME version 1.1 - traitement par lot](https://geo.compiegnois.fr/documents/metiers/rva/API_BAL_LOT_FME_v11_github.zip)
 
 
@@ -90,9 +90,9 @@ Le traitement intègre une passe de lecture de la base source pour sélectionner
 
 (2) l'objet "adresse", à savoir le point localisant l'adresse est supprimé. Cette vérification est réalisée à partir de la lecture des derniers fichiers CSV exportés et comparés avec la dernière version de la BAL publiée via l'API de dépôt (on compare le nombre d'adresses).
 
-![maj](img/fme_adresse_objet_supprime.png)
+![maj](img/.png)
 
-Le traitement effectue une lecture des derniers fichiers CSV exportés au format BAL (comptage des adresses) pour une comparaison avec la dernière version de l'API de dépôt. Si cette comparaison est différente, alors l'ensemble de la BAL communale concernée est envoyée dans le traitement principale de l'API de dépôt pour mise à jour. Cette passe pourra être remplacée par un appel à l'API lorsque celle-ci intégrera une variable décomptant le nombre d'adresses de la dernière version publiée (évolution de l'API de dépôt à venir).
+Le traitement effectue une lecture des dernières BAL publiées (comptage des adresses) pour une comparaison avec la dernière version des fichiers BAL CSV exportés avant mise à jourbers l'API de dépôt. Si cette comparaison est différente, alors l'ensemble de la BAL communale concernée est envoyée dans le traitement principale de l'API de dépôt pour mise à jour. Cette passe pourra être remplacée par un appel à l'API lorsque celle-ci intégrera une variable décomptant le nombre d'adresses de la dernière version publiée (évolution de l'API de dépôt à venir). ==> adaptation en cours
  
 #### 2.5 - Paramétrer un HttpCaller pour lancer la 1er requête nommée `REVISION`
  
