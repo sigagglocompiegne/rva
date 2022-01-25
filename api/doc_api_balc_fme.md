@@ -86,11 +86,13 @@ Le versement des BAL, via l'API de dépôt, est réalisé à partir des fichiers
 
 ![maj](img/fme_adresse_etat_supprime.png)
 
-Le traitement intègre une passe de lecture de la base source pour sélectionner les adresses avec un état "supprimée" avec leur date de mise à jour. Ce dernier attribut est renommé afin d'être envoyé dans le traitement global. Si une adresse ressort et que sa mise à jour est intervenue dans la journée, l'ensemble de la BAL communale sera envoyée à l'API de dépôt pour mise à jour.
+Le traitement intègre une passe de lecture de la base source pour sélectionner les adresses avec un état "supprimée" avec leur date de mise à jour. Ce dernier attribut est renommé afin d'être envoyé dans le traitement global. Si une adresse ressort et que sa mise à jour est intervenue dans la journée, l'ensemble de la BAL communale est envoyée dans le traitement principale de l'API de dépôt pour mise à jour.
 
 (2) l'objet "adresse", à savoir le point localisant l'adresse est supprimé. Cette vérification est réalisée à partir de la lecture des derniers fichiers CSV exportés et comparés avec la dernière version de la BAL publiée via l'API de dépôt (on compare le nombre d'adresses).
 
 ![maj](img/fme_adresse_objet_supprime.png)
+
+Le traitement effectue une lecture des derniers fichiers CSV exportés au format BAL (comptage des adresses) pour une comparaison avec la dernière version de l'API de dépôt. Si cette comparaison est différente, alors l'ensemble de la BAL communale concernée est envoyée dans le traitement principale de l'API de dépôt pour mise à jour.
  
 #### 2.5 - Paramétrer un HttpCaller pour lancer la 1er requête nommée `REVISION`
  
