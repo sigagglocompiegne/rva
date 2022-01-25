@@ -182,7 +182,7 @@ Particularité(s) à noter :
 Particularité(s) à noter :
 * Une clé primaire existe sur le champ `id_adresse`
 
-`public.geo_rva_signal` : Table des signalements des Voies et Adresses saisies par les collectivités
+`m_signalement.geo_rva_signal` : Table des signalements des Voies et Adresses saisies par les collectivités
 
 |Nom attribut | Définition | Type  | Valeurs par défaut |
 |:---|:---|:---|:---|  
@@ -217,7 +217,7 @@ Particularité(s) à noter :
  
 ---
 
-`public.an_rva_signal_media` : table des médias structurée selon les recommandations de l'éditeur des applications métiers. Elle permet de stocker des documents joints (ici documents en lien avec le signalement d'une adresse ou d'une voie)
+`m_signalement.an_rva_signal_media` : table des médias structurée selon les recommandations de l'éditeur des applications métiers. Elle permet de stocker des documents joints (ici documents en lien avec le signalement d'une adresse ou d'une voie)
 
 |Nom attribut | Définition | Type  | Valeurs par défaut |
 |:---|:---|:---|:---|  
