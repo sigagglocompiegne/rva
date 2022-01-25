@@ -84,6 +84,10 @@ Le versement des BAL, via l'API de dépôt, est réalisé à partir des fichiers
 
 (1) l'Agglomération de la Région de Compiègne a développé un modèle de données propres permettant de gérer plus finement les adresses que le format BAL. Ce modèle intègre un "état". Cet attribut permet de ne pas supprimer un point d'adresse si celle-ci n'est plus utilisée (démolition ...).
 
+![maj](img/fme_adresse_etat_supprime.png)
+
+
+
 (2) l'objet "adresse", à savoir le point localisant l'adresse est supprimé. Cette vérification est réalisée à partir de la lecture des derniers fichiers CSV exportés et comparés avec la dernière version de la BAL publiée via l'API de dépôt (on compare le nombre d'adresses).
 
  
