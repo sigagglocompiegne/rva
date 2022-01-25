@@ -82,7 +82,7 @@ Le transformers `DatabaseJoiner` est utilisé pour récupérer les données exis
 
 Le versement des BAL, via l'API de dépôt, est réalisé à partir des fichiers CSV exportés tous les jours. Ces fichiers comprennent uniquement les adresses existantes. Ce contrôle permet donc de sélectionner les communes dont au moins une adresse a été supprimée pour être téléversées dans l'API de dépôt. Ce filtre permet de rechercher les adresses avec un état à "supprimer"(1) ou les objets "adresse" supprimés(2). Dans ces 2 cas, si une adresse est concernée, la commune est mise à jour via l'API de dépôt.
 
-(1) l'Agglomération de la Région de Compiègne a développé un [modèle de données propres]() permettant de gérer plus finement les adresses que le format BAL. Ce modèle intègre un "état". Cet attribut permet de ne pas supprimer un point d'adresse si celle-ci n'est plus utilisée (démolition ...).
+(1) l'Agglomération de la Région de Compiègne a développé un [modèle de données propres](https://github.com/sigagglocompiegne/rva/blob/master/bdd/doc_admin_bd_adresse.md) permettant de gérer plus finement les adresses que le format BAL. Ce modèle intègre un "état". Cet attribut permet de ne pas supprimer un point d'adresse si celle-ci n'est plus utilisée (démolition ...).
 
 ![maj](img/fme_adresse_etat_supprime.png)
 
