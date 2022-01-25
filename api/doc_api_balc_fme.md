@@ -90,7 +90,7 @@ Le traitement intègre une passe de lecture de la base source pour sélectionner
 
 (2) l'objet "adresse", à savoir le point localisant l'adresse est supprimé. Cette vérification est réalisée à partir de la lecture des derniers fichiers CSV exportés et comparés avec la dernière version de la BAL publiée via l'API de dépôt (on compare le nombre d'adresses).
 
-![maj](img/.png)
+![maj](img/fme_adresse_objet_delete.png)
 
 Le traitement effectue une récupération des dernières BAL publiées au format .csv (comptage des adresses) pour une comparaison avec la dernière version des fichiers BAL CSV exportés avant mise à jour vers l'API de dépôt. Si cette comparaison est différente, alors l'ensemble de la BAL communale concernée est envoyée dans le traitement principale de l'API de dépôt pour mise à jour. Cette passe pourra être remplacée par un appel à l'API lorsque celle-ci intégrera une variable décomptant le nombre d'adresses de la dernière version publiée (évolution de l'API de dépôt à venir). 
 
