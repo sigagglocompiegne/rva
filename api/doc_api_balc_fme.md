@@ -92,7 +92,7 @@ Le traitement intègre une passe de lecture de la base source pour sélectionner
 
 ![maj](img/fme_adresse_objet_supprime.png)
 
-Le traitement effectue une lecture des derniers fichiers CSV exportés au format BAL (comptage des adresses) pour une comparaison avec la dernière version de l'API de dépôt. Si cette comparaison est différente, alors l'ensemble de la BAL communale concernée est envoyée dans le traitement principale de l'API de dépôt pour mise à jour.
+Le traitement effectue une lecture des derniers fichiers CSV exportés au format BAL (comptage des adresses) pour une comparaison avec la dernière version de l'API de dépôt. Si cette comparaison est différente, alors l'ensemble de la BAL communale concernée est envoyée dans le traitement principale de l'API de dépôt pour mise à jour. Cette passe pourra être remplacée par un appel à l'API lorsque celle-ci intégrera une variable décomptant le nombre d'adresses de la dernière version publiée (évolution de l'API de dépôt à venir).
  
 #### 2.5 - Paramétrer un HttpCaller pour lancer la 1er requête nommée `REVISION`
  
