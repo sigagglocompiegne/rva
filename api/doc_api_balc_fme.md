@@ -18,8 +18,8 @@ Contact : sig@agglo-compiegne.fr
  
 ## Gabarit
 
-- [Téléchargement du projet FME version 1.2 - traitement par lot + mise à jour des adresses supprimées par lectture des fichies CSV] (ajustement à venir le 26/01/2022)
-- [Téléchargement du projet FME version 1.1 - traitement par lot](https://geo.compiegnois.fr/documents/metiers/rva/API_BAL_LOT_FME_v11_github.zip)
+- [Téléchargement du projet FME version 1.2 - traitement par lot + mise à jour des adresses supprimées par lectture des fichies CSV] (https://geo.compiegnois.fr/documents/metiers/rva/API_BAL_LOT_FME_v11_github.zip)
+- [Téléchargement du projet FME version 1.1 - traitement par lot](https://geo.compiegnois.fr/documents/metiers/rva/API_BAL_LOT_FME_v12_csv_github.zip)
 
 
 ## Paramétrage
@@ -92,7 +92,9 @@ Le traitement intègre une passe de lecture de la base source pour sélectionner
 
 ![maj](img/.png)
 
-Le traitement effectue une lecture des dernières BAL publiées (comptage des adresses) pour une comparaison avec la dernière version des fichiers BAL CSV exportés avant mise à jourbers l'API de dépôt. Si cette comparaison est différente, alors l'ensemble de la BAL communale concernée est envoyée dans le traitement principale de l'API de dépôt pour mise à jour. Cette passe pourra être remplacée par un appel à l'API lorsque celle-ci intégrera une variable décomptant le nombre d'adresses de la dernière version publiée (évolution de l'API de dépôt à venir). ==> adaptation en cours
+Le traitement effectue une récupération des dernières BAL publiées au format .csv (comptage des adresses) pour une comparaison avec la dernière version des fichiers BAL CSV exportés avant mise à jour vers l'API de dépôt. Si cette comparaison est différente, alors l'ensemble de la BAL communale concernée est envoyée dans le traitement principale de l'API de dépôt pour mise à jour. Cette passe pourra être remplacée par un appel à l'API lorsque celle-ci intégrera une variable décomptant le nombre d'adresses de la dernière version publiée (évolution de l'API de dépôt à venir). 
+
+Ce traitement par récupération des BAL publiées sur l'API et la comparaison avec les futurs BAL à publier est transitoire, dans l'attente de l'évolution de l'API par la mise à disposition d'un attribut de décompte.
  
 #### 2.5 - Paramétrer un HttpCaller pour lancer la 1er requête nommée `REVISION`
  
