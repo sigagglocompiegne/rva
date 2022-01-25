@@ -12,17 +12,18 @@ Contact : sig@agglo-compiegne.fr
 
 ## Changelog
 
+ * 25/01/2022 : Version 1.2 - téléversement d'un lot de données communal au format BAL 1.3 dans l'API de dépôt BAL avec vérification d'une BAL existante, vérification des mises à jour d'adresses intégrant un état ou un objet adresse supprimé (par lecture des fichies CSV source)
  * 06/12/2021 : Version 1.1 - téléversement d'un lot de données communal au format BAL 1.3 dans l'API de dépôt BAL avec vérification d'une BAL existante et vérification des mises à jour d'adresses
  * 21/09/2021 : Version 1 - téléversement d'un fichier ou d'un lot de données communal au format BAL 1.2 dans l'API de démo BAL
  
 ## Gabarit
 
 - [Téléchargement du projet FME version 1.1 - traitement par lot](https://geo.compiegnois.fr/documents/metiers/rva/API_BAL_LOT_FME_v11_github.zip)
-- [Téléchargement du projet FME version 1.1 - traitement par lot + mise à jour des adresses supprimées]()
+- [Téléchargement du projet FME version 1.2 - traitement par lot + mise à jour des adresses supprimées par lectture des fichies CSV](https://geo.compiegnois.fr/documents/metiers/rva/API_BAL_LOT_FME_v12_csv_github.zip)
 
 ## Paramétrage
 
-Cette version 1.1 est une version permettant le téléversement en masse de x communes, avec une vérification de la présence d'une BAL existante (pour un autre client) et des dates de mises à jour, dans l'API de dépôt de la BAL. La version de FME utilisée est la 2021.1.1.0.
+Cette version 1.2 est une version permettant le téléversement en masse de x communes, avec une vérification de la présence d'une BAL existante (pour un autre client),  des dates de mises à jour et la suppression d'adresses (par un état ou par suppression des objets) par rapport à l'API de dépôt de la BAL. La version de FME utilisée est la 2021.1.1.0.
 
 Les paramètres passés dans le traitement sont tous issus de la [documentation de l'API BAL de la BaseAdresseNationale](https://github.com/etalab/ban-api-depot/wiki/Documentation).
 
@@ -66,7 +67,7 @@ Ce contrôle permet de vérifier l'existence d'une BAL publiée par un autre org
 
 #### 2.3 - Vérification d'une mise à jour d'adresse
 
-**Pour un versement initial via l'API de dépôt, vous devez désactiver ce traitement et relier directement le point 2.1 ou 2.2 au point 2.4 dans le Workflow. Une fois cette initialisation réalisée, vous pouvez réactiver ce traitement.**
+**Pour un versement initial via l'API de dépôt, vous devez désactiver ce traitement et relier directement le point 2.1 ou 2.2 au point 2.5 dans le Workflow. Une fois cette initialisation réalisée, vous pouvez réactiver ce traitement.**
 
 Ce contrôle permet de sélectionner uniquement les communes dont au moins une adresse a été modifiée ou ajoutée pour être téléversées dans l'API de dépôt. Le fonctionnement de l'API de dépôt créant une historisation à chaque versionnement, ce filtre évite de surcharger la base nationale en données non modifiées.
 
@@ -75,8 +76,17 @@ Ce contrôle permet de sélectionner uniquement les communes dont au moins une a
 ![maj](img/fme_verif_maj.png)
 
 Le transformers `DatabaseJoiner` est utilisé pour récupérer les données existantes (au format BAL) dans une base de données, avant d'être comparée à la date du jour. Il doit être paramétré en fonction de l'infrastructure des données de l'utilisateur. 
+
+#### 2.4 - Vérification des adresses supprimées
+
+Le versement des BAL, via l'API de dépôt, est réalisé à partir des fichiers CSV exportés tous les jours. Ces fichiers comprennent uniquement les adresses existantes. Ce contrôle permet donc de sélectionner les communes dont au moins une adresse a été supprimée pour être téléversées dans l'API de dépôt. Ce filtre permet de rechercher les adresses avec un état à "supprimer"(1) ou les objets "adresse" supprimés(2). Dans ces 2 cas, si une adresse est concernée, la commune est mise à jour via l'API de dépôt.
+
+(1) l'Agglomération de la Région de Compiègne a développé un modèle de données propres permettant de gérer plus finement les adresses que le format BAL. Ce modèle intègre un "état". Cet attribut permet de ne pas supprimer un point d'adresse si celle-ci n'est plus utilisée (démolition ...).
+
+(2) l'objet "adresse", à savoir le point localisant l'adresse est supprimé. Cette vérification est réalisée à partir de la lecture des derniers fichiers CSV exportés et comparés avec la dernière version de la BAL publiée via l'API de dépôt (on compare le nombre d'adresses).
+
  
-#### 2.4 - Paramétrer un HttpCaller pour lancer la 1er requête nommée `REVISION`
+#### 2.5 - Paramétrer un HttpCaller pour lancer la 1er requête nommée `REVISION`
  
  ![creator](img/httpcaller.png)
  
@@ -112,7 +122,7 @@ L'attribut `@Value(jeton)` correspond au jeton contenant la clé fournie par la 
  
  Laisser les autres paramètres par défaut. L'attribut de réponse `_response_body` sera utilisé dans la suite du traitement et correspond au code de retour de l'API.
  
-#### 2.5 - Récupération de l'attribut `_ID` dans la requête de réponse de `REVISION` pour lancer la 2nd requête nommée `TELEVERSEMENT`
+#### 2.6 - Récupération de l'attribut `_ID` dans la requête de réponse de `REVISION` pour lancer la 2nd requête nommée `TELEVERSEMENT`
   
 La réponse de l'API s'effectue au format JSON, il faut donc récupérer les différents attributs utiles pour la suite du traitement et notamment l'`_ID`.
 
@@ -138,7 +148,7 @@ La réponse de l'API s'effectue au format JSON, il faut donc récupérer les dif
  
  L'attribut `json_index` liste l'ensemble des attributs de la requête de réponse. Il suffit de filter avec le nom `_id` pour récupérer en sortie uniquement la valeur de celui-ci dans l'attribut `_response_body`.
 
-#### 2.6 - Paramétrer un HttpCaller pour lancer la 2nd requête nommée `TELEVERSEMENT`
+#### 2.7 - Paramétrer un HttpCaller pour lancer la 2nd requête nommée `TELEVERSEMENT`
  
 ![creator](img/httpcaller_2_para.png)
  
@@ -166,7 +176,7 @@ L'attribut `@Value(jeton)` correspond au jeton contenant la clé fournie par la 
  
  Laisser les autres paramètres par défaut. L'attribut de réponse `_response_body` sera utilisé dans la suite du traitement et correspond au code de retour de l'API.
 
-#### 2.7 - Récupération de l'attribut `revisionId` dans la requête de réponse de `TELEVERSEMENT` pour lancer la 3ème requête nommée `VALIDATION`
+#### 2.8 - Récupération de l'attribut `revisionId` dans la requête de réponse de `TELEVERSEMENT` pour lancer la 3ème requête nommée `VALIDATION`
   
 La réponse de l'API s'effectue au format JSON, il faut donc récupérer les différents attributs utiles pour la suite du traitement et notamment `revisionId`.
 
@@ -180,7 +190,7 @@ Reprendre la méthode indiquée au point **3**.
 
  L'attribut `json_index` liste l'ensemble des attributs de la requête de réponse. Il suffit de filter avec le nom `revisionId` pour récupérer en sortie uniquement la valeur de celui-ci dans l'attribut `_response_body`.
 
-#### 2.8 - Paramétrer un HttpCaller pour lancer la 3ème requête nommée `VALIDATION`
+#### 2.9 - Paramétrer un HttpCaller pour lancer la 3ème requête nommée `VALIDATION`
  
 ![creator](img/httpcaller_3_para.png)
  
@@ -200,7 +210,7 @@ L'attribut `@Value(jeton)` correspond au jeton contenant la clé fournie par la 
  
 Laisser les autres paramètres par défaut. L'attribut de réponse `_response_body` sera utilisé dans la suite du traitement et correspond au code de retour de l'API.
 
-#### 2.9 - Récupération de l'attribut `_id` dans la requête de réponse de `VALIDATION` pour lancer la 4ème requête nommée `PUBLICATION`
+#### 2.10 - Récupération de l'attribut `_id` dans la requête de réponse de `VALIDATION` pour lancer la 4ème requête nommée `PUBLICATION`
   
 La réponse de l'API s'effectue au format JSON, il faut donc récupérer les différents attributs utiles pour la suite du traitement et notamment l'`_id`.
 
@@ -214,7 +224,7 @@ Reprendre la méthode indiquée au point **3**.
 
  L'attribut `json_index` liste l'ensemble des attributs de la requête de réponse. Il suffit de filter avec le nom `_id` pour récupérer en sortie uniquement la valeur de celui-ci dans l'attribut `_response_body`.
 
-#### 2.10 - Paramétrer un HttpCaller pour lancer la 4ème requête nommée `PUBLICATION`
+#### 2.11 - Paramétrer un HttpCaller pour lancer la 4ème requête nommée `PUBLICATION`
  
 ![creator](img/httpcaller_3_para.png)
  
@@ -234,7 +244,7 @@ L'attribut `@Value(jeton)` correspond au jeton contenant la clé fournie par la 
  
 Laisser les autres paramètres par défaut. L'attribut de réponse `_response_body` sera utilisé dans la suite du traitement et correspond au code de retour de l'API.
 
-#### 2.11 - Lancement du traitement
+#### 2.12 - Lancement du traitement
 
 Pour lancer le traitement, cliquer sur
 
