@@ -1,6 +1,6 @@
 ![picto](https://github.com/sigagglocompiegne/orga_gest_igeo/blob/master/doc/img/geocompiegnois_2020_reduit_v2.png)
 
-# Prescriptions locales de la base adresse locale
+# Prescriptions locales de la base des adresses et des voies locales
 
 (x) en cours de rédaction
 
@@ -8,6 +8,7 @@
 
 # Changelog
 
+- 06/04/2022 : intégration des règles de modélisation des voies 
 - 05/02/2021 : description initiale du gabarit de production et de mise à jour des adresses et des voies
 
 # Livrables
@@ -30,26 +31,110 @@ Chaque point d'adresse est localisé le plus précisément possible (à l'entré
 
 La gestion des voies correspond à une logique de connaissance des caractéristiques des tronçons qui la compose. La modélisation des tronçons repose sur des principes de ruptures.
 Ces ruptures sont diverses et peuvent correspondre à des intersections, des coupures aux limites des communes, des changements d'usage, ... 
+Les tronçons de voies doivent représenter l'ensemble des circulations possibles (route, chemin, piste cyclable, sentier, ...) dans l'espace public quelque soit le mode de déplacement (motorisé ou non). Les tronçons de voies dans l'espace privé sont à intégrer seulement si ils sont ouvert sur l'espace public.
 
 Les mises à jour des données est réalisées à la fois par des signalements des communes, l'intégration par des mises à jour de référentiels extérieurs ou par des applications tierces utilisant la donnée des adresses.
 
-## Système de coordonnées
+## Règles de modélisation des tronçons de voies
 
-Les coordonnées seront exprimées en mètre avec trois chiffres après la virgule dans le système national en vigueur.
-Sur le territoire métropolitain s'applique le système géodésique français légal RGF93 associé au système altimétrique IGN69. La projection associée Lambert 93 France (epsg:2154) sera à utiliser pour la livraison des données.
+### Règles générales
 
-## Topologie
+La saisie de ces objets doit permettre une **restitution de l'ordre du xxxx **.
 
-- Pour les adresses : tout objet est nécessairement inclu dans l'emprise des communes du Pays Compiégnois. Les points d'adresse doivent être inclus dans une parcelle cadastrale (sauf si la qualité du référentiel ne le permet pas) et positionnés au meilleur emplacement possible connu. 
+Le cadre prescriptif autorise des modalités d'inventaire variées sous réserve que la précision soit suffisante pour respecter l'échelle de restitution indiquée.
+Ainsi, l'inventaire pourra se faire par :
+- xxxxx,
+- xxxxx,
+- xxxxx,
 
-- Pour les voies : 
-  - la saisie du tronçon correspond au centre de la chaussée que se soit une route, un chemin, une piste cyclable, une sente, ...
-  - les tronçons doivent être connectés entre eux si ils sont contiguës dans la réalité du dessin saisi
-  
-  ![picto](topo_line_1.png)
-  
-  - les tronçons sont découpés aux intersections, aux limites communales, et à chaque modification d'usage
-  - les noeuds des extrémités de chaque tronçon est saisi en complément dans une classe d'objets spécifiques
+![picto]()
+
+Schéma 1 : Exemple de représentation des objets d'un inventaire cartographique des voies
+
+
+### La modélisation géométrique
+
+Les règles de modélisation consistent à présenter la façon dont les objets doivent être saisis et restitués dans le gabarit.
+
+Les objets constituant l'inventaire cartographique initial sont organisés autour d'une seule primitive géographique : ligne. 
+**La saisie des objets de type multi n'est pas autorisée.**
+
+L'objectif poursuivi dans le cadre de l'inventaire n'est pas celui d'établir un dessin topographique précis mais bien de disposer d'une information nécessaire à la gestion et l'exploitation des tronçons de voies par la collectivité.
+A ce titre, des mesures de simplification de la restitution graphique sont prises tout en permettant une rapidité d'exécution accrue pour la saisie initiale et la mise à jour des données. 
+
+(à faire, indiquer les règles de saisie au centre de la voie + troncçon privé fictif,...)
+
+![graph]()
+
+Schéma n°2 : xxxx
+
+### Topologie
+
+La cohérence topologique impose le partage de géométrie et donc l’utilisation des outils « d’accroches ».
+
+- xxxx
+- xxxx
+- Les objets devront être découpés avec les limites communales.
+
+- xxxx
+
+![picto]()
+
+- Les linéraires doivent être connectés entre eux s'ils sont contigus dans la réalité du dessin saisi. (à revoir)
+
+![picto](topo_line_1.png) + intersection + franchissement
+
+
+- Les arcs de cercle ou ellipses devront être numérisés sous forme de polyligne suffisamment détaillée pour en reproduire la forme. 
+
+(abrodé ici le cas des rd point, cercle dessiné puis découpé)
+
+
+### Règles de saisies
+
+#### Les règles de saisies détaillées des objets tronçon
+
+
+|Classe d'objets|Représentation|Définition et règle|Type d'objets saisis|Schéma de principe|
+|:---|:---|:---|:---|:---|
+
+#### Classes d'attributs complémentaires propre à certains objets
+
+Certaines classes d'objets doivent faire l'objet de complétude par des attributs complémentaires qualitatifs. Le tableau ci-dessous indique les classes d'objets du gabarit qui sont concernées et les attributs à saisir (les valeurs possibles sont listées à la suite du tableau).
+
+|Classe d'objets|Type de saisie (1)|Position (2)|Largeur|
+|:---|:---|:---|:---|
+
+
+(1)  Type de saisie : liste des valeurs décrivant le type de saisie de la sous-classe de précision des objets xxxx
+
+|Valeur|
+|:---|
+
+
+(2) Position : liste des valeurs décrivant la position des objets xxxxx
+
+|Illustration|Valeur|
+|:---|:---|
+
+
+
+
+#### Exemples d'application des règles de saisie
+
+![picto]()
+
+Schéma n°3 : xxxx
+
+
+![picto]()
+
+Schéma n°4 : xxxx
+
+### Système de coordonnées
+
+Les coordonnées seront exprimées en mètres avec trois chiffres après la virgule dans le système national en vigueur.
+Sur le territoire métropolitain s'applique le système géodésique français légal RGF93 associé au système altimétrique IGN69. La projection associée Lambert 93 France (EPSG:2154) sera à utiliser pour la livraison des données.
 
 
 ## Format des fichiers
