@@ -83,6 +83,7 @@ Schéma n°3 : Saisie d'un tronçon sur l'axe centrale de la chaussée pour chaq
 ![graph](rva_rdpt.png)
 Schéma n°4 : le cas des ronds-points
 
+ - **le dessin des tronçons de voies doit prendre en compte les aménagements routiers particuliers :**
    - les séparations de chaussées dues à un zébra ou un ilôts en centrale doivent être prises en compte
 
 ![graph](rva_ilot.png)
