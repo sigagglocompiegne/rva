@@ -89,9 +89,11 @@ Schéma n°4 : le cas des ronds-points
 
    - les séparations de chaussées dues à un zébra ou un ilôts en centrale doivent être prises en compte
 
-![graph](rva_axe_zebra.png)
+![graph](rva_ilot.png)
 
-Schéma n°5 : le cas des îlots et des zébras
+![graph](rva_zbra.png)
+
+Schéma n°5 et 6 : le cas des îlots et des zébras
 
  - **les circulations douces doivent être représentées si elles sont séparées de la chaussée, soit par un stationnement, un espace vert ou une rupture (trottoir),**
 
@@ -99,7 +101,7 @@ Schéma n°5 : le cas des îlots et des zébras
 
 ![graph](rva_axe_doux2.png)
 
-Schéma n°6 et 7 : Saisie des circulations douces séparées des chaussées principales ou isolées
+Schéma n°7 et 8 : Saisie des circulations douces séparées des chaussées principales ou isolées
 
  - **la continuité des circulations doit être assurée dans le cas d'un aménagement spécifique,**
 
@@ -107,7 +109,7 @@ Schéma n°6 et 7 : Saisie des circulations douces séparées des chaussées pri
 
 ![graph](rva_axe_continuite_2.png)
 
-Schéma n°8 et 9 : Exemple de continuités
+Schéma n°9 et 10 : Exemple de continuités
 
  - **les tronçons de voies (chemin, sentier ou amorce de rue pour desservir des adresses) de l'espace privé ouvert sur l'espace public doivent être représentés,**
 
