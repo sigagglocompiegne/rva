@@ -171,7 +171,7 @@ La seule saisie des géométries "tronçon" ne permet pas de qualifier les voies
 
 ![picto](rva_ident.png)
 
-L'affectation des identifiants à chaque tronçons, la création des noeuds (début et fin) ainsi que leur identification sont gérés automatiquement par la base de données à l'insertion de nouveaux objets ou lors de leur sectionnement.
+L'affectation des identifiants à chaque tronçons, la création des noeuds (début et fin) ainsi que leur identification sont gérés automatiquement par la base de données à l'insertion de nouveaux objets ou lors de leurs sectionnements.
 
 Les identifiants de voies affectés aux tronçons doivent être réalisés manuellement et ceux-ci sont issus de la base de voies litterales intégrant les informations du fichier FANTOIR ou de la future base de données TOPO. Cette base génère un identifiant unique pour chaque voie nommée.
 
@@ -181,26 +181,49 @@ Chaque tronçon est identifié selon que la dénomination des voies peut varier 
 
 #### Classes d'attributs sur les caractéristiques des tronçons
 
-Ces attributs permettant de qualifier chaque tronçon selon le type de circulation et son statut de voies. Ils permettent également de produire la représentation cartographique du fond de plans de ville, et d'intégrer ou non les tronçons dans les calculs de longueur de voies.
+Cette classe alphanumérique, contient l’ensemble des attributs métiers liés aux conditions de gestion qui sont attachés aux tronçons. Cette classe est par nature, complétée et mise à jour par les services métiers afférents. Lors de l’initialisation du contenu de la base, elle peut néanmoins être saisie pour partie par connaissance (doc ressources tiers).
 
 
 |Classe d'objets|Définition|
 |:---|:---|
-|Type de tronçon||
-|Type de circulation||
-|Hiérarchisation||
-|Tronçon en projet||
-|Tronçon fictif||
-|Statut juridique||
-|N° du statut||
-|Gestionnaire||
-|Domanialité||
-|Propriété||
+|Type de tronçon|qualification du tronçon selon son type aménagement ou d'usage|
+|Type de circulation|qualitifation du tronçon selon le mode de circulation principale|
+|Hiérarchisation|classification du tronçon selon son importance en terme de circulation routière pour la représentation symbologique des plans de ville|
+|Tronçon en projet|indication d'un état ouvert ou fermé à la circulation|
+|Tronçon fictif|indication de prise en compte statistique dans le décompte d'une voie nommée|
+|Statut juridique|statut juridique du tronçon déduit de la voie nommée|
+|N° du statut|n° de la voie nommée |
+|Gestionnaire|Nom du gestionnaire de la voie|
+|Domanialité|appartenance du tronçon au domaine privé ou public*|
+|Propriété|Propriétaire du foncier d'assise de la voie|
 
-|Valeur|
+* particularité des chemins ruraux qui doivent par défaut être sur le domaine privé
+
+|Valeur des types de tronçons|
 |:---|
+|Non renseigné|
+|Troncon de type routier|
+|Autoroute|
+|Voie rapide/express|
+|Bretelle|
+|Route|
+|Chemin|
+|Troncon de type cyclable|
+|Voie cyclable|
+|Troncon de type piéton|
+|Sentier|
+|Passerelle|
+|Escalier|
+|Troncon hors réseau|
+|Parking|
+|Autre|
+|Non concerné|
 
+#### Classes d'attributs sur les informations à la chaussée
 
+Cette classe alphanumérique, contient l’ensemble des attributs métiers liés aux conditions de circulation qui sont attachés aux tronçons. Cette classe est par nature, complétée et mise à jour par les services métiers afférents. Lors de l’initialisation du contenu de la base, elle peut néanmoins être saisie pour partie par connaissance (doc ressources tiers). 
+
+Cette classe doit pouvoir aisément s’enrichir de nouveaux attributs pour indiquer telle ou telle restriction ou contrainte, limitation de circulation etc…
 
 
 ## Règles de modélisation des points d'adresse
@@ -333,8 +356,8 @@ Ensemble des données décrivant les objets des points d'adresse
 
 ### Les identifiants
 
-Les identifiants des adresses, des voies et des noeuds sont des identifiants non signifiants (un simple numéro incrémenté de 1 à chaque insertion).
+Les identifiants des adresses, des voies et des noeuds sont des identifiants non signifiants uniques (un simple numéro incrémenté de 1 à chaque insertion).
 
 ### Liste de valeurs
 
-Le contenu des listes de valeurs est disponible dans la documentation complète de la base de données en cliquant [ici]() dans la rubrique `Liste de valeurs`.
+Le contenu des listes de valeurs est disponible dans la documentation complète de la base de données en cliquant [ici](https://github.com/sigagglocompiegne/rva/blob/master/bdd/doc_admin_bd_voie.md) dans la rubrique `Liste de valeurs`.
