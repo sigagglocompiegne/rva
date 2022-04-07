@@ -70,9 +70,9 @@ En conséquence, la saisie des tronçons de voies doit respecter les règles ci-
 
  - **l'objet est dessiner sur l'axe central de la chaussée identifié,**
 
-![graph]()
+![graph](rva_axe.png)
 
-Schéma n°2 : xxxx
+Schéma n°2 : Saisie du tronçon sur l'axe centrale de la chaussée
 
  - **chaque chaussée doit-être représenté,**
 
