@@ -86,7 +86,11 @@ Schéma n°2 : Saisie du tronçon sur l'axe centrale de la chaussée
    - les ronds-points doivent être circulaire,
    - les séparations de chaussées dues à un zébra ou un ilôts en centrale doivent être prises en compte
 
+ - **les tronçons de voies doivent être séquent entre eux** sauf dans le cas de franchissement (pont, tunnel, passage à niveau, ...), ou le tronçon doit représenter ce franchissement
 
+![graph](rva_franch.png)
+
+Schéma n° : Le tronçon jaune représente le franchissement sur un passage à niveau
 
 ### Topologie
 
