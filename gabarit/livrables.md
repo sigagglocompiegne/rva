@@ -76,6 +76,10 @@ Schéma n°2 : Saisie du tronçon sur l'axe centrale de la chaussée
 
  - **chaque chaussée doit-être représenté,**
 
+![graph](rva_axe_2chausee.png.png)
+
+Schéma n°3 : Saisie d'un tronçon sur l'axe centrale de la chaussée pour chaque chaussée séparée
+
  - **les circulations douces doivent être représentées si elles sont séparées de la chaussée, soit par un stationnement, un espace vert ou une rupture (trottoir),**
 
  - **la continuité des circulations doit être assurée dans le cas d'un aménagement spécifique,**
