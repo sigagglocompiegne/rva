@@ -288,10 +288,56 @@ Cette classe alphanumérique, contient l’ensemble des attributs métiers liés
 
 Cette classe doit pouvoir aisément s’enrichir de nouveaux attributs pour indiquer telle ou telle restriction ou contrainte, limitation de circulation etc…
 
+|Valeur des franchissements|
+|:---|
+|Non renseigné|
+|Pont|
+|Tunnel|
+|Passage à niveau sur voie ferrée|
+|Porche (passage sous un bâtiment)|
+|Escalier|
+|Passerelle|
+|Autre|
+|Non concerné|
+
+|Valeur des sens de circulationpar rapport à la saisie initiale|
+|:---|
+|Non renseigné|
+|Double sens|
+|Sens unique direct (sens de saisie du troncon)|
+|Sens unique inverse (sens de saisie du troncon)|
+|Non concerné|
+
+D'autres valeurs sont disponibles et correspondent à des restructions de circulation (contraintes de poids, hauteur, largeur, ..., ou une limitation de vitesses). Ces informations ne font pas l'objet d'une saisie obligatoire lors de l'inventaire. Elles peuvent être renseignés dans certains cas.
+
 
 ## Règles de modélisation des points d'adresse
 
-(à venir)
+La saisie de ces objets doit permettre une **restitution de l'ordre du 1/500ème** afin de distinguer l'emplacement le plus fin de l'adresse à savoir l'entrée de l'usage.
+
+Le cadre prescriptif autorise certaines modalités d'inventaire en fonction de l'état de connaissance des adresses sous réserve que la précision soit suffisante pour respecter l'échelle de restitution indiquée.
+Ainsi ;
+- l'inventaire se fera principalement sur des supports de type orthophotographique pour la saisie des adresses à l'entrée,
+- d'autres supports de référence peuvent être utilisés pour des précisions d'adresses moindre (PCI Vecteur pour une position à la parcelle ou au bâtiment par exemple),
+- les plans masses ou de projets peuvent également être utilisés à la fois pour situer l'adressage et/ou en définir son entrée projetée.
+- les levés de terrain peuvent être acceptés à la condition de présenter un ponctuel correspondant à l'entrée de l'usage. Par défaut celui-ci sera placé dans l'espace public, il devra donc être replacé dans la propriété privée de l'usage.
+
+### La modélisation géométrique
+
+Les règles de modélisation consistent à présenter la façon dont les objets doivent être saisis et restitués dans le gabarit.
+
+Les objets constituant l'inventaire cartographique initial sont organisés autour d'une seule primitive géographique : point. 
+
+**La saisie des objets de type multi n'est pas autorisée.**
+
+![picto](rva_posi_adresse.png)
+
+Schéma n°1 : schéma de principe de positionnement des points d'adresses
+
+### Topologie
+
+- Tous les objets adresses sont nécessairement inclus dans une emprise communale,
+- Les objets ne peuvent pas se superposer (n points d'adresses correspondants à une seule entrée doivent être décalés, le principe est de les placer les uns derrière les autres dans le sens de l'entrée),
 
 ## Système de coordonnées
 
