@@ -135,13 +135,22 @@ Schéma n°13 et 14 : Exemple de franchissement, le tronçon jaune représente l
  
 ### Topologie
 
+La topologie adoptée ici est une topologie de réseau, qui décrit la relation entre arcs (représentés par des lignes) et nœuds (représentés par des points) et inscrit le référencement des nœuds dans la description des arcs.
+
+Dans cette topologie, illustrée dans la figure ci-dessous :
+ -	Tout objet (ponctuel ou linéaire, nœud ou arc) est en relation topologique avec au moins un autre objet,
+ -	Tout arc joint deux nœuds (ceux dont la localisation coïncide avec celle d’une de ses extrémités) tel l’arc H, les nœuds 7 et 8 ou l’arc A et les nœuds 1 et 2,
+ -	Deux arcs ou plus peuvent se croiser sans être connectés, tels les arcs A et H ;
+ - Un nœud constitue soit une terminaison du réseau (nœud 1,9 et 10), soit connecte deux arc (nœud 7 pour les arcs G et H) ou plus (nœud 3 pour les arcs B, C et F) par leurs extrémités.
+
+![picto](rva_topologie.png)
+
 La cohérence topologique impose le partage de géométrie et donc l’utilisation des outils « d’accroches ».
 
 - Tous les objets tronçons sont nécessairement inclus dans une emprise communale,
 - Les objets devront être découpés avec les limites communales,
 - Les objets ne peuvent pas se superposer (2 tronçons ne peuvent pas partager le même tracé),
 - Les objets peuvent partagés la géométrie de la BDTopo si cela est nécessaire,
-- Les tronçons doivent être connectés entre eux s'ils sont contigus dans la réalité du dessin saisi,
 - Les tronçons servant de limites communales doivent être découpés sur la longueur de ce partage.
 - Les linéraires doivent être connectés entre eux s'ils sont contigus dans la réalité du dessin saisi.
 
@@ -161,28 +170,32 @@ L'affectation des identifiants à chaque tronçons, la création des noeuds (dé
 
 Les identifiants de voies affectés aux tronçons doivent être réalisés manuellement et ceux-ci sont issus de la base de voies litterales intégrant les informations du fichier FANTOIR ou de la future base de données TOPO. Cette base génère un identifiant unique pour chaque voie nommée.
 
-Chaque tronçon est identifié selon que la dénomination les voies peut varier à gauche ou à droite. Les identifiants du code Insee de la commune concernée et du code des voies sont à saisir à gauche et à droite (cf ci-dessous).
+Chaque tronçon est identifié selon que la dénomination des voies peut varier à gauche ou à droite. Les identifiants du code Insee de la commune concernée et du code des voies sont à saisir à gauche et à droite (cf ci-dessous).
 
 ![picto](rva_idvoie.png)
 
-#### Classes d'attributs complémentaires
+#### Classes d'attributs sur les caractéristiques des tronçons
+
+Ces attributs permettant de qualifier chaque tronçon selon le type de circulation et son statut de voies. Ils permettent également de produire la représentation cartographique du fond de plans de ville, et d'intégrer ou non les tronçons dans les calculs de longueur de voies.
 
 
-
-|Classe d'objets|Type de saisie (1)|Position (2)|Largeur|
-|:---|:---|:---|:---|
-
-
-(1)  Type de saisie : liste des valeurs décrivant le type de saisie de la sous-classe de précision des objets xxxx
+|Classe d'objets|Définition|
+|:---|:---|
+|Type de tronçon||
+|Type de circulation||
+|Hiérarchisation||
+|Tronçon en projet||
+|Tronçon fictif||
+|Statut juridique||
+|N° du statut||
+|Gestionnaire||
+|Domanialité||
+|Propriété||
 
 |Valeur|
 |:---|
 
 
-(2) Position : liste des valeurs décrivant la position des objets xxxxx
-
-|Illustration|Valeur|
-|:---|:---|
 
 
 ## Règles de modélisation des points d'adresse
