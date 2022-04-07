@@ -64,7 +64,12 @@ Les objets constituant l'inventaire cartographique initial sont organisés autou
 L'objectif poursuivi dans le cadre de l'inventaire n'est pas celui d'établir un dessin topographique précis mais bien de disposer d'une information nécessaire à la gestion et l'exploitation des tronçons de voies par la collectivité.
 A ce titre, des mesures de simplification de la restitution graphique sont prises tout en permettant une rapidité d'exécution accrue pour la saisie initiale et la mise à jour des données. 
 
-(à faire, indiquer les règles de saisie au centre de la voie + troncçon privé fictif,...)
+Un tronçon est :
+ -	un morceau de voie/chaussée/chemin
+ -	en site propre (autoroute, voie rapide, piste cyclable) ou à usage partagé (route avec bande cyclable, voie verte)
+ -	emprunté par un moyen de déplacement terrestre (voitures, vélos, piétons, roller …)
+
+A la saisie initiale, il faut privilégier un sens de saisie conforme au sens de circulation en cas de sens unique
 
 En conséquence, la saisie des tronçons de voies doit respecter les règles ci-dessous :
 
