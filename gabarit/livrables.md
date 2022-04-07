@@ -336,6 +336,8 @@ Les objets constituant l'inventaire cartographique initial sont organisés autou
 
 Schéma n°1 : schéma de principe de positionnement des points d'adresses
 
+Le positionnement du point d'adresse s'effectue par photo-interprétation du support cartographique utilisé, surtout pour une positionnement à l'entrée.
+
 |Valeur de positonnement|Définition|
 |:---|:---|
 |délivrance postale|Identifie un point de délivrance postale (boîte aux lettres)|
@@ -346,6 +348,8 @@ Schéma n°1 : schéma de principe de positionnement des points d'adresses
 |parcelle|Identifie une parcelle cadastrale|
 |segment|Identifie une position dérivée du segment de la voie de rattachement|
 |service technique|Identifie un point d'accès technique (ex : local disposant d'organe de coupure d'eau, électricité, gaz, ...)|
+
+Un guide d'adressage a été rédigé sur l'affectation des libellés de voies et la manière d'adresser. Ce qui guide est disponbile depuis cet [article](https://geo.compiegnois.fr/documents/cms/ressources/GEOCOMPIEGNOIS_GUIDE%20METHODOLOGIQUE%20ADRESSAGE%20V1.pdf) pour information.
 
 ### Topologie
 
@@ -360,11 +364,44 @@ Chaque point d'adresse doit être renseigné par l'identifiant du tronçon d'aff
 
 ![picto](rva_ad_troncon_1.png)
 
-Schéma n°2 : Principe d'affectation de l'identifiant du tronçon à l'adresse
+Schéma n°2 : Principe d'affectation de l'identifiant du tronçon et de la voie à l'adresse
 
-#### Classes d'attributs sur les caractéristiques des tronçons
+#### Classes d'attributs sur les références des adresses
 
+|Valeurs|Définition|
+|:---|:---|
+|Numéro de la voie|N° de l'adresse issu de l'arrêté de numérotation ou à défaut d'autres supports comme le PCI Vecteur ou GoogleStreetView|
+|Indice de répétition|Indice de répétition lié au n° de la voie (bis, ter, quater, quinques, ...)|
+|Complément d'adresse|Il permet d'indiquer une indication précisant l'adresse (résidence, parc d'activité, immeuble d'entreprises, ...)|
+|Nom du lieu-dit historique ou complémentaire|attribut spécifique au format BAL qui permet de saisir le nom du lieu-dit en complément de l'adressage|
+|Etiquette|Formatage de l'étiquettage affiché dans les différents supports cartographique. Cette étiquette est composé du n° de la voie et la première lettre de l'indice de répétition en majuscule (ex : 2bis => 2B, 2c => 2C, ...)|
+|Angle|angle en degré permettant un positionnement de l'étiquette parallèlement à l'entrée|
+|Libellé de la voie|déduit d'après l'identifiant de voies affecté à l'adresse|
+|Code insee de la commune|déduit d'après l'identifiant de voies affecté à l'adresse|
+|Code postal de la commune|déduit d'après l'identifiant de voies affecté à l'adresse. Le code postal présenté ici peut être érroné si la commune en dispose de plusieurs. Cette source étant gérée par un organisme extérieur, l'excatitude des informations présentées n'est pas assurée.|
+|Nom de la commune|déduit d'après l'identifiant de voies affecté à l'adresse|
+|Code RIVOLI|déduit d'après l'identifiant de voies affecté à l'adresse|
+|Clé RIVOLI|déduit d'après l'identifiant de voies affecté à l'adresse|
+|Positonnement du point d'adresse||
 
+#### Classes d'attributs sur les compléments des adresses
+
+|Valeurs|Définition|
+|:---|:---|
+|Destination|information complémentaire sur l'usage de l'adresse (habitation, établissement, équipement, ...)|
+|Etat|information sur l'état d'avancement de la construction desservie par l'adresse|
+|Nombre de logements|indication du nombre de logements desservie par l'adresse (informatif)|
+|N° PC|numéro du permis de construire|
+|Adresse groupée|information sur le groupement ou non d'une adresse. Une adresse groupée est une adresse qui dessert plusieurs usages sans qu'elle soit individualisé à chaque entrée (ex : local en pas-de-porte avec une entrée pour un logement à l'étage = 1 adresse pour 2 entrées ici)|
+|Adresse secondaire|adresse desservant un usage dont celui-ci est déjà adressé. Il peut s'agir d'une entrée par une autre rue qui a également fait l'objet d'un adressage)|
+|Code insee de la commune déléguée|code insee de la commune avant la fusion aves d'autres communes|
+|Nom de la commune déléguée|nom de la commune avant la fusion aves d'autres communes|
+|Références cadastrales|Cette information est gérée dans une classe spécifique et liste l'ensemble des parcelles desservies par l'adresse. Par défaut seule la référence d'assise du point d'adresse peut être saisie, mais l'unité foncière est recommandée|
+|Source|organisme de provenance de la connaissance du point d'adresse|
+|Référentiel de saisie|référenbtiel géographique utilisé pour la saisie du point d'adresse|
+|Date du référentiel|année du référentiel géographique utilisé|
+|Diagnostic|information de diagnostic du point d'adresse. Si une adresse dispose d'un n° et d'un libellé de voie issus d'une information communale, cette adresses est dite "conforme" et elle concidérée comme certifiée. Dans le cas contraire, l'adresse n'est pas conforme et elle est donc non certifiée. Il existe en revanche des nuances dans l'adressage conforme permettant d'améliorer certains informations complémentaires non disponibles au moment de l'inventaire. Ces adresses sont toutefois concidédées comme certifiées.|
+|Qualité|la qualité de l'adresse et déduit du diagnostic et comporte 3 niveaux bon/moyen/mauvais|
 
 ## Système de coordonnées
 
@@ -496,4 +533,6 @@ Les identifiants des adresses, des voies et des noeuds sont des identifiants non
 
 ### Liste de valeurs
 
-Le contenu des listes de valeurs est disponible dans la documentation complète de la base de données en cliquant [ici](https://github.com/sigagglocompiegne/rva/blob/master/bdd/doc_admin_bd_voie.md) dans la rubrique `Liste de valeurs`.
+Le contenu des listes de valeurs est disponible dans la documentation complète de la base de données des voies en cliquant [ici](https://github.com/sigagglocompiegne/rva/blob/master/bdd/doc_admin_bd_voie.md) dans la rubrique `Liste de valeurs`.
+
+Le contenu des listes de valeurs est disponible dans la documentation complète de la base de données des adresses en cliquant [ici](https://github.com/sigagglocompiegne/rva/blob/master/bdd/doc_admin_bd_adresse.md) dans la rubrique `Liste de valeurs`.
