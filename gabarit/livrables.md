@@ -114,23 +114,27 @@ Schéma n°9 et 10 : Exemple de continuités
 
 ![graph](rva_voie_privee.png)
 
-Schéma n° : Exemple de continuités
+Schéma n°11 : Exemple de continuités
 
  - **les tronçons de voies desservant des zones de stationnement ou de parking dans l'espace public ou dans l'espace privé ouvert sur l'espace public doivent être représentés,**
 
 ![graph](rva_parking.png)
 
-Schéma n° : Saisie des allées desserant des zones de stationnement ouvertes
+Schéma n°12 : Saisie des allées desserant des zones de stationnement ouvertes
 
  - **les tronçons de voies doivent être séquent entre eux** sauf dans le cas de franchissement (pont, tunnel, passage à niveau, ...), ou le tronçon doit représenter ce franchissement
 
+![graph](rva_pont.png)
+
 ![graph](rva_franch.png)
 
-Schéma n° : Le tronçon jaune représente le franchissement sur un passage à niveau
+Schéma n°13 et 14 : Exemple de franchissement, le tronçon jaune représente le franchissement sur un pont ou sur un passage à niveau
 
  - **au minimum les tronçons devront être découpés à chaque intersection avec un autre tronçon (hors cas spécifique évoqué plus haut), avec les limites communales et au niveau des entrées et sorties d'agglomération.** Des changements d'usages ou de réglementations routières peuvent également être la cause d'un sectionnement du tronçon entre 2 intersections afin de pouvoir y gérer les informations propres à celui-ci.
 
- 
+![graph](rva_com_es.png)
+
+Schéma n°15 et 14 : Sectionnement du tronçon à la limite communale et aux entrées/sorties d'agglomération (au niveau des panneaux routiers correspondant)
  
  
 ### Topologie
