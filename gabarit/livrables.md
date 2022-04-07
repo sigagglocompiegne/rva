@@ -143,7 +143,7 @@ Dans cette topologie, illustrée dans la figure ci-dessous :
  -	Deux arcs ou plus peuvent se croiser sans être connectés, tels les arcs A et H ;
  - Un nœud constitue soit une terminaison du réseau (nœud 1,9 et 10), soit connecte deux arc (nœud 7 pour les arcs G et H) ou plus (nœud 3 pour les arcs B, C et F) par leurs extrémités.
 
-![picto](rva_topologie.png)
+![picto](rva_topo.png)
 
 La cohérence topologique impose le partage de géométrie et donc l’utilisation des outils « d’accroches ».
 
