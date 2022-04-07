@@ -173,7 +173,7 @@ L'affectation des identifiants à chaque tronçons, la création des noeuds (dé
 
 Les identifiants de voies affectés aux tronçons doivent être réalisés manuellement et ceux-ci sont issus de la base de voies litterales intégrant les informations du fichier FANTOIR ou de la future base de données TOPO. Cette base génère un identifiant unique pour chaque voie nommée.
 
-Chaque tronçon est identifié selon que la dénomination des voies peut varier à gauche ou à droite. Les identifiants du code Insee de la commune concernée et du code des voies sont à saisir à gauche et à droite (cf ci-dessous).
+Chaque tronçon est identifié selon que la dénomination des voies peut varier à gauche ou à droite. Les identifiants du code Insee de la commune concernée et du code des voies sont à saisir à gauche et à droite (cf ci-dessous). La gauche et la droite sont définies par rapport au sens de saisie du tronçon.
 
 ![picto](rva_idvoie.png)
 
