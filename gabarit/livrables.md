@@ -1,6 +1,6 @@
 ![picto](https://github.com/sigagglocompiegne/orga_gest_igeo/blob/master/doc/img/geocompiegnois_2020_reduit_v2.png)
 
-# Prescriptions locales de la base des adresses et des voies locales
+# Prescriptions locales de la base des adresses et des voies
 
 # Documentation du standard
 
