@@ -382,7 +382,7 @@ Schéma n°2 : Principe d'affectation de l'identifiant du tronçon et de la voie
 |Nom de la commune|déduit d'après l'identifiant de voies affecté à l'adresse|
 |Code RIVOLI|déduit d'après l'identifiant de voies affecté à l'adresse|
 |Clé RIVOLI|déduit d'après l'identifiant de voies affecté à l'adresse|
-|Positonnement du point d'adresse||
+|Positonnement du point d'adresse|valeur du positionnement (cf partie sur la modélisation)|
 
 #### Classes d'attributs sur les compléments des adresses
 
