@@ -149,9 +149,9 @@ La cohérence topologique impose le partage de géométrie et donc l’utilisati
 
 - Les arcs de cercle ou ellipses devront être numérisés sous forme de polyligne suffisamment détaillée pour en reproduire la forme. 
 
-### Règles de saisies des attributs
+### Les règles de saisies attributaires des objets tronçons
 
-#### Les règles de saisies détaillées des objets tronçon
+La seule saisie des géométries [tronçon] ne permet pas de qualifier  
 
 |Classe d'objets|Représentation|Définition et règle|Type d'objets saisis|Schéma de principe|
 |:---|:---|:---|:---|:---|
