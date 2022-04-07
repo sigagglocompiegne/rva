@@ -320,7 +320,8 @@ Ainsi ;
 - l'inventaire se fera principalement sur des supports de type orthophotographique pour la saisie des adresses à l'entrée,
 - d'autres supports de référence peuvent être utilisés pour des précisions d'adresses moindre (PCI Vecteur pour une position à la parcelle ou au bâtiment par exemple),
 - les plans masses ou de projets peuvent également être utilisés à la fois pour situer l'adressage et/ou en définir son entrée projetée.
-- les levés de terrain peuvent être acceptés à la condition de présenter un ponctuel correspondant à l'entrée de l'usage. Par défaut celui-ci sera placé dans l'espace public, il devra donc être replacé dans la propriété privée de l'usage.
+- les levés de terrain peuvent être acceptés à la condition de présenter un ponctuel correspondant à l'entrée de l'usage. Par défaut celui-ci sera placé dans l'espace public, il devra donc être replacé dans la propriété privée de l'usage,
+- les objets doivent être rattachés attributairement à un tronçon de voie.
 
 ### La modélisation géométrique
 
@@ -334,10 +335,35 @@ Les objets constituant l'inventaire cartographique initial sont organisés autou
 
 Schéma n°1 : schéma de principe de positionnement des points d'adresses
 
+|Valeur de positonnement|Définition|
+|:---|:---|
+|délivrance postale|Identifie un point de délivrance postale (boîte aux lettres)|
+|entrée|Identifie l'entrée principale d'un bâtiment ou un portail, de préférence piétonne|
+|bâtiment|Identifie un bâtiment ou une partie de bâtiment|
+|cage d'escalier|Identifie une cage d'escalier en temps normal à l'intérieur d'un bâtiment|
+|logement|Identifie un logement ou une pièce à l'intérieur d'un bâtiment|
+|parcelle|Identifie une parcelle cadastrale|
+|segment|Identifie une position dérivée du segment de la voie de rattachement|
+|service technique|Identifie un point d'accès technique (ex : local disposant d'organe de coupure d'eau, électricité, gaz, ...)|
+
 ### Topologie
 
 - Tous les objets adresses sont nécessairement inclus dans une emprise communale,
 - Les objets ne peuvent pas se superposer (n points d'adresses correspondants à une seule entrée doivent être décalés, le principe est de les placer les uns derrière les autres dans le sens de l'entrée),
+
+La seule saisie des géométries "tronçon" ne permet pas de qualifier les voies ni d'en déduire un réseau structuré et cohérent. La saisie des attributs métiers est donc nécessaire et repose sur ces propres règles.
+
+#### Les identifiants
+
+L'affectation des identifiants à chaque adresse est géré automatiquement par la base de données à l'insertion de nouveaux objets. Ceux-ci ne sont en aucun cas des identifiants nationaux. Il reste uniquement pour un usage interne. L'identification nationale se fera selon d'autrès règles qui restent à définir.
+
+Chaque point d'adresse doit être renseigné par l'identifiant du tronçon d'affectation correspondant à la desserte de l'entrée.
+
+![picto](rva_ad_troncon.png)
+
+Schéma n°2 : Principe d'affectation de l'identifiant du tronçon à l'adresse
+
+#### Classes d'attributs sur les caractéristiques des tronçons
 
 ## Système de coordonnées
 
