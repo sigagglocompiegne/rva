@@ -39,15 +39,16 @@ Les mises à jour des données est réalisées à la fois par des signalements d
 
 ### Règles générales
 
-La saisie de ces objets doit permettre une **restitution de l'ordre du xxxx **.
+La saisie de ces objets doit permettre une **restitution de l'ordre du 1/500ème **.
 
-Le cadre prescriptif autorise des modalités d'inventaire variées sous réserve que la précision soit suffisante pour respecter l'échelle de restitution indiquée.
-Ainsi, l'inventaire pourra se faire par :
-- xxxxx,
-- xxxxx,
-- xxxxx,
+Le cadre prescriptif autorise certaines modalités d'inventaire en fonction de l'état de connaissance des voies sous réserve que la précision soit suffisante pour respecter l'échelle de restitution indiquée.
+Ainsi ;
+- l'inventaire pourra se faire uniquement sur des supports de type orthophotographique pour la saisie des voies visibles,
+- les parties de voies de type doux (chemin, sentier, ....) n'étant pas identifiable, peuvent faire l'objet d'une saisie à partir d'autres support cartographique comme la BDTopo,
+- les parties de voies en projet ou apparues à postériori de la prise de vue du support orthophotographique pourront être intégrées à partir de support de type topographique (plan masse, plan autocad, ...),
+- la dénomination des voies (en cohérence avec le fichier FANTOIR ou avec la future base TOPO) pourra être identifiée avec tous les supports disponibles (BDTopo, Scan25, Plan de Ville, PCI Vecteur, ...).
 
-![picto]()
+![picto](rva_schema_reseau.png)
 
 Schéma 1 : Exemple de représentation des objets d'un inventaire cartographique des voies
 
