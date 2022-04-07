@@ -49,7 +49,6 @@ Ainsi ;
 - la dénomination des voies (en cohérence avec le fichier FANTOIR ou avec la future base TOPO) pourra être identifiée avec tous les supports disponibles (BDTopo, Scan25, Plan de Ville, PCI Vecteur, ...).
 
 ![picto](rva_schema_reseau.png)
-
 Schéma 1 : Exemple de représentation des objets d'un inventaire cartographique des voies
 
 
@@ -71,20 +70,17 @@ En conséquence, la saisie des tronçons de voies doit respecter les règles ci-
  - **l'objet est dessiner sur l'axe central de la chaussée identifié,**
 
 ![graph](rva_axe.png)
-
 Schéma n°2 : Saisie du tronçon sur l'axe centrale de la chaussée
 
  - **chaque chaussée doit-être représenté,**
 
 ![graph](rva_axe_2chausee.png)
-
 Schéma n°3 : Saisie d'un tronçon sur l'axe centrale de la chaussée pour chaque chaussée séparée
 
  - **le dessin des tronçons de voies doit prendre en compte les aménagements routiers particuliers :**
    - les ronds-points doivent être circulaire,
 
 ![graph](rva_rdpt.png)
-
 Schéma n°4 : le cas des ronds-points
 
    - les séparations de chaussées dues à un zébra ou un ilôts en centrale doivent être prises en compte
@@ -100,7 +96,6 @@ Schéma n°5 et 6 : le cas des îlots et des zébras
 ![graph](rva_axe_doux.png)
 
 ![graph](rva_axe_doux2.png)
-
 Schéma n°7 et 8 : Saisie des circulations douces séparées des chaussées principales ou isolées
 
  - **la continuité des circulations doit être assurée dans le cas d'un aménagement spécifique,**
@@ -108,7 +103,6 @@ Schéma n°7 et 8 : Saisie des circulations douces séparées des chaussées pri
 ![graph](rva_axe_continuite_1.png)
 
 ![graph](rva_axe_continuite_2.png)
-
 Schéma n°9 et 10 : Exemple de continuités
 
  - **les tronçons de voies (chemin, sentier ou amorce de rue pour desservir des adresses) de l'espace privé ouvert sur l'espace public doivent être représentés,**
@@ -118,7 +112,6 @@ Schéma n°9 et 10 : Exemple de continuités
  - **les tronçons de voies doivent être séquent entre eux** sauf dans le cas de franchissement (pont, tunnel, passage à niveau, ...), ou le tronçon doit représenter ce franchissement
 
 ![graph](rva_franch.png)
-
 Schéma n° : Le tronçon jaune représente le franchissement sur un passage à niveau
 
  - **au minimum les tronçons devront être découpés à chaque intersection avec un autre tronçon (hors cas spécifique évoqué plus haut), avec les limites communales et au niveau des entrées et sorties d'agglomération.** Des changements d'usages ou de réglementations routières peuvent également être la cause d'un sectionnement du tronçon entre 2 intersections afin de pouvoir y gérer les informations propres à celui-ci.
