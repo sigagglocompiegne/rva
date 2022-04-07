@@ -151,7 +151,11 @@ La cohérence topologique impose le partage de géométrie et donc l’utilisati
 
 ### Les règles de saisies attributaires des objets tronçons
 
-La seule saisie des géométries [tronçon] ne permet pas de qualifier  
+La seule saisie des géométries "tronçon" ne permet pas de qualifier les voies ni d'en déduire un réseau structuré et cohérent. La saisie des attributs métiers est donc nécessaire et repose sur ces propres règles.
+
+#### Les identifiants
+
+![picto](rva_ident.png)
 
 |Classe d'objets|Représentation|Définition et règle|Type d'objets saisis|Schéma de principe|
 |:---|:---|:---|:---|:---|
