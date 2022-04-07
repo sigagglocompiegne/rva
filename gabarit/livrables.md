@@ -197,7 +197,7 @@ Cette classe alphanumérique, contient l’ensemble des attributs métiers liés
 |Domanialité|appartenance du tronçon au domaine privé ou public*|
 |Propriété|Propriétaire du foncier d'assise de la voie|
 
-* particularité des chemins ruraux qui doivent par défaut être sur le domaine privé
+ - (*) particularité des chemins ruraux qui doivent par défaut être sur le domaine privé
 
 |Valeur des types de tronçons|
 |:---|
@@ -217,6 +217,69 @@ Cette classe alphanumérique, contient l’ensemble des attributs métiers liés
 |Troncon hors réseau|
 |Parking|
 |Autre|
+|Non concerné|
+
+|Valeur des types de circulations|
+|:---|
+|Non renseigné|
+|Routier|
+|Cyclable|
+|Piéton|
+|Mixte à dominante routière|
+|Mixte à dominante cyclable|
+|Mixte à dominante piétonne|
+|Mixte sans dominante particulière|
+
+|Valeur des hiérarchisations|
+|:---|
+|Voie d'interêt national ou régional|
+|Voie structurant l'aire urbaine|
+|Ceinture de desserte d'agglomération|
+|Voie de desserte urbaine|
+|Voie principale hors agglomération|
+|Voie principale communale|
+|Voie inter-quartier|
+|Voie de desserte locale|
+|Autre|
+|Non renseigné|
+|Non concerné|
+
+|Valeur des statuts juridiques|
+|:---|
+|Non renseigné|
+|Autoroute|
+|Route Nationale|
+|Route Départementale|
+|Voie d'Interêt Communautaire|
+|Voie Communale|
+|Chemin Rural|
+|Chemin d'Exploitation|
+|Chemin Forestier|
+|Chemin de Halage|
+|Voie Privée|
+|Piste Cyclable|
+|Voie Verte|
+|Autre statut|
+|Non concerné|
+
+|Valeur des gestionnaires et des propriétaires|
+|:---|
+|Non renseigné|
+|Etat|
+|Région|
+|Département|
+|Intercommunalité|
+|Commune|
+|Office HLM|
+|Privé|
+|Autre|
+|Non concerné|
+
+|Valeur des domanialités|
+|:---|
+|Public|
+|Privé|
+|Non renseigné|
 |Non concerné|
 
 #### Classes d'attributs sur les informations à la chaussée
