@@ -8,7 +8,7 @@
 
 # Changelog
 
-- 06/04/2022 : intégration des règles de modélisation des voies 
+- 07/04/2022 : intégration des règles de modélisation des voies et des adresses
 - 05/02/2021 : description initiale du gabarit de production et de mise à jour des adresses et des voies
 
 # Livrables
