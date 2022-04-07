@@ -108,7 +108,13 @@ Schéma n°9 et 10 : Exemple de continuités
 
  - **les tronçons de voies (chemin, sentier ou amorce de rue pour desservir des adresses) de l'espace privé ouvert sur l'espace public doivent être représentés,**
 
+![graph](.png)
+Schéma n° : Exemple de continuités
 
+ - **les tronçons de voies desservant des zones de stationnement ou de parking dans l'espace public ou dans l'espace privé ouvert sur l'espace public doivent être représentés,**
+
+![graph](rva_parking.png)
+Schéma n° : Saisie des allées desserant des zones de stationnement ouvertes
 
  - **les tronçons de voies doivent être séquent entre eux** sauf dans le cas de franchissement (pont, tunnel, passage à niveau, ...), ou le tronçon doit représenter ce franchissement
 
