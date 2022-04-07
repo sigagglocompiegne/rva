@@ -141,8 +141,9 @@ La cohérence topologique impose le partage de géométrie et donc l’utilisati
 - Les objets devront être découpés avec les limites communales,
 - Les objets ne peuvent pas se superposer (2 tronçons ne peuvent pas partager le même tracé),
 - Les objets peuvent partagés la géométrie de la BDTopo si cela est nécessaire,
-- Les troncçons doivent être connectés entre eux s'ils sont contigus dans la réalité du dessin saisi,
+- Les tronçons doivent être connectés entre eux s'ils sont contigus dans la réalité du dessin saisi,
 - Les tronçons servant de limites communales doivent être découpés sur la longueur de ce partage.
+- Les linéraires doivent être connectés entre eux s'ils sont contigus dans la réalité du dessin saisi.
 
 ![picto](topo_line_1.png)
 
