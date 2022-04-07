@@ -94,6 +94,12 @@ Schéma n°3 et 4 : Saisie des circulations douces séparées des chaussées pri
 
  - **la continuité des circulations doit être assurée dans le cas d'un aménagement spécifique,**
 
+![graph](rva_axe_continuite_1.png)
+
+![graph](rva_axe_continuite_2.png)
+
+Schéma n°5 et 6 : Exemple de continuités
+
  - **les tronçons de voies (chemin, sentier ou amorce de rue pour desservir des adresses) de l'espace privé ouvert sur l'espace public doivent être représentés,**
 
 
