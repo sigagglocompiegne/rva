@@ -68,23 +68,25 @@ A ce titre, des mesures de simplification de la restitution graphique sont prise
 
 En conséquence, la saisie des tronçons de voies doit respecter les règles ci-dessous :
 
- - l'objet est dessiner sur l'axe central de la chaussée identifié,
-
- - chaque chaussée doit-être représenté,
-
- - les circulations douces doivent être représentées si elles sont séparées de la chaussée, soit par un stationnement, un espace vert ou une rupture (trottoir),
-
- - la continuité des circulations doit être assurée dans le cas d'un aménagement spécifique,
-
- - les tronçons de voies (chemin, sentier ou amorce de rue pour desservir des adresses) de l'espace privé ouvert sur l'espace public doivent être représentés,
-
- - le dessin des tronçons de voies doit prendre en compte les aménagements routiers particuliers :
-   - les ronds-points doivent être circulaire,
-   - les séparations de chaussées dues à un zébra ou un ilôts en centrale doivent être prises en compte
+ - **l'objet est dessiner sur l'axe central de la chaussée identifié,**
 
 ![graph]()
 
 Schéma n°2 : xxxx
+
+ - **chaque chaussée doit-être représenté,**
+
+ - **les circulations douces doivent être représentées si elles sont séparées de la chaussée, soit par un stationnement, un espace vert ou une rupture (trottoir),**
+
+ - **la continuité des circulations doit être assurée dans le cas d'un aménagement spécifique,**
+
+ - **les tronçons de voies (chemin, sentier ou amorce de rue pour desservir des adresses) de l'espace privé ouvert sur l'espace public doivent être représentés,**
+
+ - **le dessin des tronçons de voies doit prendre en compte les aménagements routiers particuliers :**
+   - les ronds-points doivent être circulaire,
+   - les séparations de chaussées dues à un zébra ou un ilôts en centrale doivent être prises en compte
+
+
 
 ### Topologie
 
