@@ -2,8 +2,6 @@
 
 # Prescriptions locales de la base des adresses et des voies locales
 
-(x) en cours de rédaction
-
 # Documentation du standard
 
 # Changelog
