@@ -79,8 +79,8 @@ En conséquence, la saisie des tronçons de voies doit respecter les règles ci-
  - les tronçons de voies (chemin, sentier ou amorce de rue pour desservir des adresses) de l'espace privé ouvert sur l'espace public doivent être représentés,
 
  - le dessin des tronçons de voies doit prendre en compte les aménagements routiers particuliers :
-  -  les ronds-points doivent être circulaire,
-  -  les séparations de chaussées dues à un zébra ou un ilôts en centrale doivent être prises en compte
+   - les ronds-points doivent être circulaire,
+   - les séparations de chaussées dues à un zébra ou un ilôts en centrale doivent être prises en compte
 
 ![graph]()
 
