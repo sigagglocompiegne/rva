@@ -157,12 +157,17 @@ La seule saisie des géométries "tronçon" ne permet pas de qualifier les voies
 
 ![picto](rva_ident.png)
 
-|Classe d'objets|Représentation|Définition et règle|Type d'objets saisis|Schéma de principe|
-|:---|:---|:---|:---|:---|
+L'affectation des identifiants à chaque tronçons, la création des noeuds (début et fin) ainsi que leur identification sont gérés automatiquement par la base de données à l'insertion de nouveaux objets ou lors de leur sectionnement.
 
-#### Classes d'attributs complémentaires propre à certains objets
+Les identifiants de voies affectés aux tronçons doivent être réalisés manuellement et ceux-ci sont issus de la base de voies litterales intégrant les informations du fichier FANTOIR ou de la future base de données TOPO. Cette base génère un identifiant unique pour chaque voie nommée.
 
-Certaines classes d'objets doivent faire l'objet de complétude par des attributs complémentaires qualitatifs. Le tableau ci-dessous indique les classes d'objets du gabarit qui sont concernées et les attributs à saisir (les valeurs possibles sont listées à la suite du tableau).
+Chaque tronçon est identifié selon que la dénomination les voies peut varier à gauche ou à droite. Les identifiants du code Insee de la commune concernée et du code des voies sont à saisir à gauche et à droite (cf ci-dessous).
+
+![picto](rva_idvoie.png)
+
+#### Classes d'attributs complémentaires
+
+
 
 |Classe d'objets|Type de saisie (1)|Position (2)|Largeur|
 |:---|:---|:---|:---|
