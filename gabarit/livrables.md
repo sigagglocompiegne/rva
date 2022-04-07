@@ -82,7 +82,16 @@ Schéma n°3 : Saisie d'un tronçon sur l'axe centrale de la chaussée pour chaq
 
  - **le dessin des tronçons de voies doit prendre en compte les aménagements routiers particuliers :**
    - les ronds-points doivent être circulaire,
+
+![graph](rva_rdpt.png)
+
+Schéma n°4 : le cas des ronds-points
+
    - les séparations de chaussées dues à un zébra ou un ilôts en centrale doivent être prises en compte
+
+![graph](rva_axe_zebra.png)
+
+Schéma n°5 : le cas des îlots et des zébras
 
  - **les circulations douces doivent être représentées si elles sont séparées de la chaussée, soit par un stationnement, un espace vert ou une rupture (trottoir),**
 
@@ -90,7 +99,7 @@ Schéma n°3 : Saisie d'un tronçon sur l'axe centrale de la chaussée pour chaq
 
 ![graph](rva_axe_doux2.png)
 
-Schéma n°3 et 4 : Saisie des circulations douces séparées des chaussées principales ou isolées
+Schéma n°6 et 7 : Saisie des circulations douces séparées des chaussées principales ou isolées
 
  - **la continuité des circulations doit être assurée dans le cas d'un aménagement spécifique,**
 
@@ -98,7 +107,7 @@ Schéma n°3 et 4 : Saisie des circulations douces séparées des chaussées pri
 
 ![graph](rva_axe_continuite_2.png)
 
-Schéma n°5 et 6 : Exemple de continuités
+Schéma n°8 et 9 : Exemple de continuités
 
  - **les tronçons de voies (chemin, sentier ou amorce de rue pour desservir des adresses) de l'espace privé ouvert sur l'espace public doivent être représentés,**
 
@@ -110,6 +119,11 @@ Schéma n°5 et 6 : Exemple de continuités
 
 Schéma n° : Le tronçon jaune représente le franchissement sur un passage à niveau
 
+ - **au minimum les tronçons devront être découpés à chaque intersection avec un autre tronçon (hors cas spécifique évoqué plus haut), avec les limites communales et au niveau des entrées et sorties d'agglomération.** Des changements d'usages ou de réglementations routières peuvent également être la cause d'un sectionnement du tronçon entre 2 intersections afin de pouvoir y gérer les informations propres à celui-ci.
+
+ 
+ 
+ 
 ### Topologie
 
 La cohérence topologique impose le partage de géométrie et donc l’utilisation des outils « d’accroches ».
