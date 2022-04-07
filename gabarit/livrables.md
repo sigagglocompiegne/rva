@@ -131,38 +131,26 @@ Schéma n°12 : Saisie des allées desserant des zones de stationnement ouvertes
 Schéma n°13 et 14 : Exemple de franchissement, le tronçon jaune représente le franchissement sur un pont ou sur un passage à niveau
 
  - **au minimum les tronçons devront être découpés à chaque intersection avec un autre tronçon (hors cas spécifique évoqué plus haut), avec les limites communales et au niveau des entrées et sorties d'agglomération.** Des changements d'usages ou de réglementations routières peuvent également être la cause d'un sectionnement du tronçon entre 2 intersections afin de pouvoir y gérer les informations propres à celui-ci.
-
-![graph](rva_com_es.png)
-
-Schéma n°15 et 14 : Sectionnement du tronçon à la limite communale et aux entrées/sorties d'agglomération (au niveau des panneaux routiers correspondant)
  
  
 ### Topologie
 
 La cohérence topologique impose le partage de géométrie et donc l’utilisation des outils « d’accroches ».
 
-- xxxx
-- xxxx
-- Les objets devront être découpés avec les limites communales.
+- Tous les objets tronçons sont nécessairement inclus dans une emprise communale,
+- Les objets devront être découpés avec les limites communales,
+- Les objets ne peuvent pas se superposer (2 tronçons ne peuvent pas partager le même tracé),
+- Les objets peuvent partagés la géométrie de la BDTopo si cela est nécessaire,
+- Les troncçons doivent être connectés entre eux s'ils sont contigus dans la réalité du dessin saisi,
+- Les tronçons servant de limites communales doivent être découpés sur la longueur de ce partage.
 
-- xxxx
-
-![picto]()
-
-- Les linéraires doivent être connectés entre eux s'ils sont contigus dans la réalité du dessin saisi. (à revoir)
-
-![picto](topo_line_1.png) + intersection + franchissement
-
+![picto](topo_line_1.png)
 
 - Les arcs de cercle ou ellipses devront être numérisés sous forme de polyligne suffisamment détaillée pour en reproduire la forme. 
 
-(abrodé ici le cas des rd point, cercle dessiné puis découpé)
-
-
-### Règles de saisies
+### Règles de saisies des attributs
 
 #### Les règles de saisies détaillées des objets tronçon
-
 
 |Classe d'objets|Représentation|Définition et règle|Type d'objets saisis|Schéma de principe|
 |:---|:---|:---|:---|:---|
@@ -187,20 +175,11 @@ Certaines classes d'objets doivent faire l'objet de complétude par des attribut
 |:---|:---|
 
 
+## Règles de modélisation des points d'adresse
 
+(à venir)
 
-#### Exemples d'application des règles de saisie
-
-![picto]()
-
-Schéma n°3 : xxxx
-
-
-![picto]()
-
-Schéma n°4 : xxxx
-
-### Système de coordonnées
+## Système de coordonnées
 
 Les coordonnées seront exprimées en mètres avec trois chiffres après la virgule dans le système national en vigueur.
 Sur le territoire métropolitain s'applique le système géodésique français légal RGF93 associé au système altimétrique IGN69. La projection associée Lambert 93 France (EPSG:2154) sera à utiliser pour la livraison des données.
