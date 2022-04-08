@@ -64,20 +64,20 @@ A ce titre, des mesures de simplification de la restitution graphique sont prise
 
 Un tronçon est :
  -	un morceau de voie/chaussée/chemin
- -	en site propre (autoroute, voie rapide, piste cyclable) ou à usage partagé (route avec bande cyclable, voie verte)
+ -	en site propre (autoroute, voie rapide, piste cyclable, voie verte) ou à usage partagé (route avec bande cyclable, contre sens cyclable ...)
  -	emprunté par un moyen de déplacement terrestre (voitures, vélos, piétons, roller …)
 
 A la saisie initiale, il faut privilégier un sens de saisie conforme au sens de circulation en cas de sens unique
 
 En conséquence, la saisie des tronçons de voies doit respecter les règles ci-dessous :
 
- - **l'objet est dessiner sur l'axe central de la chaussée identifié,**
+ - **l'objet est dessiner sur l'axe central de la chaussée identifiée,**
 
 ![graph](rva_axe.png)
 
 Schéma n°2 : Saisie du tronçon sur l'axe centrale de la chaussée
 
- - **chaque chaussée doit-être représenté,**
+ - **chaque chaussée doit-être représentée,**
 
 ![graph](rva_axe_2chausee.png)
 
