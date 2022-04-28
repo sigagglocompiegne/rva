@@ -278,19 +278,19 @@ Particularité(s) à noter :
 
 Valeurs possibles :
 
-|Code|Valeur|
-|:---|:---|
-|1|Voie d'interêt national ou régional|
-|2|Voie structurant l'aire urbaine|
-|3|Ceinture de desserte d'agglomération|
-|4|Voie de desserte urbaine|
-|5|Voie principale hors agglomération|
-|6|Voie principale communale|
-|7|Voie inter-quartier|
-|8|Voie de desserte locale|
-|9|Autre|
-|0|Non renseigné|
-|Z|Non concerné|
+|Code|Valeur|Exemple|
+|:---|:---|:---|
+|1|Voie d'interêt national ou régional||
+|2|Voie structurant l'aire urbaine||
+|3|Ceinture de desserte d'agglomération||
+|4|Voie de desserte urbaine||
+|5|Voie principale hors agglomération||
+|6|Voie principale communale||
+|7|Voie inter-quartier||
+|8|Voie de desserte locale||
+|9|Autre||
+|0|Non renseigné||
+|Z|Non concerné||
 
 
 ---
@@ -309,25 +309,25 @@ Particularité(s) à noter :
 
 Valeurs possibles :
 
-|Code|Valeur|
-|:---|:---|
-|00|Non renseigné|
-|10|Troncon de type routier|
-|11|Autoroute|
-|12|Voie rapide/express|
-|13|Bretelle|
-|14|Route|
-|15|Chemin|
-|20|Troncon de type cyclable|
-|21|Voie cyclable|
-|30|Troncon de type piéton|
-|31|Sentier|
-|32|Passerelle|
-|33|Escalier|
-|40|Troncon hors réseau|
-|41|Parking|
-|99|Autre|
-|ZZ|Non concerné|
+|Code|Valeur|Définition|
+|:---|:---|:---|
+|00|Non renseigné||
+|10|Troncon de type routier||
+|11|Autoroute|Route sans croisement accessible uniquement en certains points, réservée à certains véhicules motorisés et de statut autoroutier|
+|12|Voie rapide/express|Route sans croisement accessible uniquement en certains points, réservée à certains véhicules motorisés, de statut non autoroutier|
+|13|Bretelle|Dispositif de liaison ou voie d'accès|
+|14|Route|Route goudronnée|
+|15|Chemin|Chemin permettant la circulation de véhicules ou d'engins d'exploitation|
+|20|Troncon de type cyclable||
+|21|Voie cyclable|Voie réservée à un usage cyclable|
+|30|Troncon de type piéton||
+|31|Sentier|Chemin étroit ne permettant pas le passage de véhicules|
+|32|Passerelle|Passerelle supportant une allée|
+|33|Escalier|Escalier|
+|40|Troncon hors réseau||
+|41|Parking|Voie de stationnement interne|
+|99|Autre||
+|ZZ|Non concerné||
 
 ---
 
