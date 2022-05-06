@@ -65,7 +65,7 @@ COMMENT ON VIEW m_signalement.geo_v_rva_signal
 
 -- DROP FUNCTION m_signalement.ft_geo_rva_signal();
 
-CREATE OR REPLACE FUNCTION m_signalement.ft_geo_rva_signal()
+CREATE OR REPLACE FUNCTION m_signalement.ft_m_geo_rva_signal()
   RETURNS trigger AS
 $BODY$
 
@@ -105,7 +105,7 @@ END;
 $BODY$
   LANGUAGE plpgsql VOLATILE
   COST 100;
-ALTER FUNCTION m_signalement.ft_geo_rva_signal()
+ALTER FUNCTION m_signalement.ft_m_geo_rva_signal()
   OWNER TO sig_create;
                                                                                                                     
                                                                                                                                   
