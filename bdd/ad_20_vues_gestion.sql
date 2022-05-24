@@ -357,7 +357,7 @@ IF NEW.diag_adr = '32' AND NEW.numero IS NOT NULL AND NEW.numero <> '00000' THEN
 RAISE EXCEPTION USING MESSAGE = 'Vous nous pouvez pas indiquer une adresse non numérotée et saisir un numéro.'  ;
 END IF;
 
-IF NEW.groupee = '1' AND NEW.diag_adr NOT IN ('20','23') THEN
+IF NEW.groupee = '1' AND NEW.diag_adr NOT IN ('20','23','33') THEN
 RAISE EXCEPTION USING MESSAGE = 'Vous nous pouvez pas indiquer une adresse groupée sans indiquer dans la qualité qu''elle est à dégrouper' ;
 END IF;
 
