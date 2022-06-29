@@ -262,7 +262,7 @@ IF (new.numero || CASE
 	WHEN new.repet = 'bis' THEN 'B' 
 	WHEN new.repet = 'ter' THEN 'T'
 	WHEN new.repet = 'quater' THEN 'Q'
-	WHEN new.repet = 'quinques' THEN 'C'
+	WHEN new.repet = 'quinquies' THEN 'C'
         WHEN new.repet = 'quinter' THEN 'Q'
 	WHEN (new.repet = 'a' or new.repet = 'b' or new.repet = 'c'
 	or new.repet = 'd' or new.repet = 'e' or new.repet = 'f'
