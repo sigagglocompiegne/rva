@@ -48,3 +48,4 @@
 -- 2021/10/12 : GB / Correction fonction trigger sur contrôle adresse non numéroté avec 00000 en n° et sdans étiquette (exception sans erreur ici)
 -- 2021/12/07 : GB / Création d'une vue d'export pour le nouveau standard BAL 1.3 avec ajout permis de l'export des adresses codé 99999 (voies et lieux-dits sans adresse)
 -- 2021/12/08 : GB / Modification trigger gestion des adresses (ajout d'un contrôle sur la suppressio impossible d'un point d'adresse relié à un établissement
+-- 2022/10/27 : GB / Suppression du diagnostic adresse, pour les adresses non numérotée en projet, reporté sur adresse non numérotée avec un état d'avancement à non commencé
