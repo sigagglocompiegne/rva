@@ -562,7 +562,6 @@ INSERT INTO r_adresse.lt_diag_adr(
     ('23','Adresse à améliorer (dégrouper)'),
     ('24','Adresse à améliorer (logement)'),        
     ('25','Adresse à améliorer (état)'),
-    ('31','Adresse non attribuée (projet)'),
     ('32','Adresse non numérotée'),
     ('33','Adresse à confirmer (existence, numéro ...)'),           
     ('99','Autre'),
