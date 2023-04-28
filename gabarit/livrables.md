@@ -80,9 +80,11 @@ Schéma n°2 : Saisie du tronçon sur l'axe centrale de la chaussée
  - **chaque chaussée doit-être représentée,**
 
 ![graph](rva_axe_2chausee.png)
-![graph](rva_axe_herbe75.png)
 
 Schéma n°3a : Saisie d'un tronçon sur l'axe centrale de la chaussée pour chaque chaussée séparée
+
+![graph](rva_axe_herbe75.png)
+
 Schéma n°3b : Sasie d'un tronçon piéton séparé de la voie cyclable
 
  - **le dessin des tronçons de voies doit prendre en compte les aménagements routiers particuliers :**
