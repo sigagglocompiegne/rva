@@ -82,7 +82,8 @@ Schéma n°2 : Saisie du tronçon sur l'axe centrale de la chaussée
 ![graph](rva_axe_2chausee.png)
 ![graph](rva_axe_herbe75.png)
 
-Schéma n°3a et Schéma n°3b : Saisie d'un tronçon sur l'axe centrale de la chaussée pour chaque chaussée séparée
+Schéma n°3a : Saisie d'un tronçon sur l'axe centrale de la chaussée pour chaque chaussée séparée
+Schéma n°3b : Sasie d'un tronçon piéton séparé de la voie cyclable
 
  - **le dessin des tronçons de voies doit prendre en compte les aménagements routiers particuliers :**
    - les ronds-points doivent être circulaire (une pré-saisie du cercle dans une couche temporaire puis une transformation en linéaire est nécessaire avant intégration dans la base des voies),
