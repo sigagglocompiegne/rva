@@ -66,7 +66,8 @@ CREATE OR REPLACE VIEW r_adresse.geo_v_adresse
     p.x_l93,
     p.y_l93,
     a.verif_base,
-    p.geom
+    p.geom,
+    a.id_ban_adresse
    FROM r_objet.geo_objet_pt_adresse p
      LEFT JOIN r_adresse.an_adresse a ON a.id_adresse = p.id_adresse
      LEFT JOIN r_adresse.an_adresse_info i ON i.id_adresse = p.id_adresse
@@ -274,7 +275,7 @@ RAISE EXCEPTION 'Le champ d''étiquette n''est pas cohérent avec le numéro et 
 END IF;
 END IF;
 
-INSERT INTO r_adresse.an_adresse (id_adresse, numero, repet, complement, etiquette, angle, observ, src_adr, diag_adr, qual_adr,verif_base,ld_compl)
+INSERT INTO r_adresse.an_adresse (id_adresse, numero, repet, complement, etiquette, angle, observ, src_adr, diag_adr, qual_adr,verif_base,ld_compl,id_ban_adresse)
 SELECT v_id_adresse,
 NEW.numero,
 LOWER(NEW.repet),
@@ -286,7 +287,8 @@ CASE WHEN NEW.src_adr IS NULL THEN '00' ELSE NEW.src_adr END,
 CASE WHEN NEW.diag_adr IS NULL THEN '00' ELSE NEW.diag_adr END,
 CASE WHEN NEW.diag_adr IS NULL THEN '0' ELSE LEFT(NEW.diag_adr,1) END,
 false,
-NEW.ld_compl;
+NEW.ld_compl,
+uuid_generate_v4();
 
 -- insertion dans la classe des adresses informations
 
