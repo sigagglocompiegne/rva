@@ -76,7 +76,7 @@ Particularité(s) à noter :
 |date_sai|Date de saisie dans la base de données|timestamp without time zone|now()|
 |date_maj|Date de la dernière mise à jour dans la base de données|timestamp without time zone| |
 |date_lib|Année du libellé la voie (soit l''année entière est saisie soit une partie en remplaçant les 0 par des x)|character(4)| |
-
+|id_ban_toponyme|Table alphanumérique des voies à circulation terrestre nommées|text|uuid_generate_v4()|
 
 Particularité(s) à noter :
 * Une clé primaire existe sur le champ `idvoie`
@@ -105,6 +105,7 @@ Particularité(s) à noter :
 |verif_base|Champ informant si l'adresse a été vérifié par rapport aux erreurs de bases (n°, tronçon, voie, correspondance BAN).
 Par défaut à non.|boolean|false|
 |ld_compl|Nom du lieu-dit historique ou complémentaire|character varying(80)||
+|id_ban_adresse|Identifiant d'adresse de la BAN au format UUID V4 (cet identifiant doit être commun à toutes les positions d'une même adresse => pas géré ici car le trigger empêche la saisie de plusieurs même adresses pour le moment)|text||
 
 Particularité(s) à noter : aucune
 * Une clé primaire existe sur le champ `id_adresse`
