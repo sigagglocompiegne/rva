@@ -243,7 +243,8 @@ COMMENT ON VIEW x_apps.xapps_an_v_adresse_h
 
 CREATE OR REPLACE VIEW x_opendata.xopendata_an_v_bal_13
  AS
- SELECT ''::character varying AS uid_adresse,
+ SELECT 
+    ('@c:' || ibc.id_ban_commune || ' ' || '@v:' || v.id_ban_toponyme || ' ' || '@a:' || a.id_ban_adresse)::text AS uid_adresse,
     lower(
         CASE
             WHEN a.repet IS NOT NULL THEN concat(v.insee, '_', v.rivoli, '_', lpad(a.numero::text, 5, '0'::text), lower(btrim(concat('_', "left"(a.repet::text, 3)))))
@@ -290,8 +291,10 @@ CREATE OR REPLACE VIEW x_opendata.xopendata_an_v_bal_13
      LEFT JOIN r_voie.an_voie v ON v.id_voie = p.id_voie
      LEFT JOIN r_osm.geo_osm_commune c ON v.insee = c.insee::bpchar
      LEFT JOIN r_adresse.an_adresse_cad ca ON ca.id_adresse = p.id_adresse
+     LEFT JOIN r_adresse.lt_id_ban_commune ibc ON ibc.insee::bpchar = v.insee
   WHERE (a.diag_adr::text = '11'::text OR "left"(a.diag_adr::text, 1) = '2'::text OR a.diag_adr::text = '33'::text OR a.diag_adr::text = '99'::text) AND (v.insee = ANY (ARRAY['60023'::bpchar, '60067'::bpchar, '60068'::bpchar, '60070'::bpchar, '60151'::bpchar, '60156'::bpchar, '60159'::bpchar, '60323'::bpchar, '60325'::bpchar, '60326'::bpchar, '60337'::bpchar, '60338'::bpchar, '60382'::bpchar, '60402'::bpchar, '60447'::bpchar, '60578'::bpchar, '60579'::bpchar, '60597'::bpchar, '60600'::bpchar, '60665'::bpchar, '60667'::bpchar, '60674'::bpchar, '60024'::bpchar, '60036'::bpchar, '60040'::bpchar, '60078'::bpchar, '60125'::bpchar, '60149'::bpchar, '60152'::bpchar, '60210'::bpchar, '60223'::bpchar, '60229'::bpchar, '60254'::bpchar, '60284'::bpchar, '60308'::bpchar, '60318'::bpchar, '60369'::bpchar, '60424'::bpchar, '60441'::bpchar, '60531'::bpchar, '60540'::bpchar, '60025'::bpchar, '60032'::bpchar, '60064'::bpchar, '60072'::bpchar, '60145'::bpchar, '60167'::bpchar, '60171'::bpchar, '60184'::bpchar, '60188'::bpchar, '60305'::bpchar, '60324'::bpchar, '60438'::bpchar, '60445'::bpchar, '60491'::bpchar, '60534'::bpchar, '60569'::bpchar, '60572'::bpchar, '60593'::bpchar, '60641'::bpchar, '60647'::bpchar]))
-  GROUP BY a.repet, a.complement, v.insee, v.rivoli, a.diag_adr, a.numero, c.commune, af.insee_cd, af.nom_cd, v.libvoie_c, a.ld_compl, lt_p.valeur, p.x_l93, p.y_l93, p.geom, p.date_maj, p.date_sai
+  GROUP BY a.repet, a.complement, v.insee, v.rivoli, a.diag_adr, a.numero, c.commune, af.insee_cd, af.nom_cd, v.libvoie_c, a.ld_compl, lt_p.valeur, p.x_l93, p.y_l93, p.geom, p.date_maj, p.date_sai,
+	('@c:' || ibc.id_ban_commune || ' ' || '@v:' || v.id_ban_toponyme || ' ' || '@a:' || a.id_ban_adresse)
   ORDER BY (
         CASE
             WHEN a.repet IS NOT NULL THEN concat(v.insee, '_', v.rivoli, '_', lpad(a.numero::text, 5, '0'::text), lower(btrim(concat('_', "left"(a.repet::text, 3)))))
