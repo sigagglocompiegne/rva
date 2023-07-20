@@ -40,4 +40,5 @@
 -- 2021/02/16 : GB / Insertion fonction trigger de vérification du saisie code RIVOLI sur classe an_voie
 -- 2021/03/15 : GB / Modification des droits
 -- 2021/04/20 : GB / Correction bug dans la fonction de contrôle de saisie des RIVOLI dans la classe d'objet an_voie
+-- 2023/07/20 : GB / Intégration d'identient BAN de la voie au format UUIDV4
 
