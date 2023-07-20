@@ -334,7 +334,7 @@ CREATE TABLE r_voie.an_voie
   date_sai timestamp without time zone NOT NULL DEFAULT now(), -- Date de saisie dans la base de données
   date_maj timestamp without time zone, -- Date de la dernière mise à jour dans la base de données
   date_lib character(4), -- Année du libellé la voie (soit l'année entière est saisie soit une partie en remplaçant les 0 par des x),
-  id_ban_toponyme text -- Identifiant de voie de la BAN au format UUID V4
+  id_ban_toponyme text NULL DEFAULT uuid_generate_v4() -- Identifiant de voie de la BAN au format UUID V4
   
   CONSTRAINT an_voie_pkey PRIMARY KEY (id_voie)
 )
