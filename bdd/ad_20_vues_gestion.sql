@@ -447,6 +447,14 @@ IF (SELECT count(*) FROM m_economie.lk_adresseetablissement WHERE idadresse = OL
 RAISE EXCEPTION 'Vous ne pouvez pas supprimer un point d''adresse rattaché à un établissement. Contactez l''administrateur SIG.';
 END IF;
 
+IF (SELECT count(*) FROM m_spanc.an_spanc_installation WHERE idadresse = OLD.id_adresse) >= 1 THEN
+RAISE EXCEPTION 'Vous ne pouvez pas supprimer un point d''adresse rattaché à un contrôle du SPANC. Contactez l''administrateur SIG.';
+END IF;
+
+IF (SELECT count(*) FROM m_reseau_humide.an_euep_cc WHERE id_adresse = OLD.id_adresse) >= 1 THEN
+RAISE EXCEPTION 'Vous ne pouvez pas supprimer un point d''adresse rattaché à un contrôle ANC. Contactez l''administrateur SIG.';
+END IF;
+
 DELETE FROM r_objet.geo_objet_pt_adresse where id_adresse = OLD.id_adresse;
 DELETE FROM r_adresse.an_adresse where id_adresse = OLD.id_adresse;
 DELETE FROM r_adresse.an_adresse_info where id_adresse = OLD.id_adresse;
