@@ -185,7 +185,7 @@ CREATE TABLE r_adresse.an_adresse
   qual_adr character varying(1) DEFAULT '0',-- Indice de qualité simplifié de l'adresse
   verif_base boolean DEFAULT false, -- Champ informant si l'adresse a été vérifié par rapport aux erreurs de bases (n°, tronçon, voie, correspondance BAN)....
   ld_compl character varying(80), -- Nom du lieu-dit historique ou complémentaire
-  an_adresse text, --Identifiant d'adresse de la BAN au format UUID V4 (cet identifiant doit être commun à toutes les positions d'une même adresse => pas géré ici car le trigger empêche la saisie de plusieurs même adresses pour le moment)
+  id_ban_adresse text, --Identifiant d'adresse de la BAN au format UUID V4 (cet identifiant doit être commun à toutes les positions d'une même adresse => pas géré ici car le trigger empêche la saisie de plusieurs même adresses pour le moment)
   CONSTRAINT an_adresse_pkey PRIMARY KEY (id_adresse)
 )
 WITH (
