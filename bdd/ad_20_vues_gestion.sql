@@ -161,13 +161,10 @@ COMMENT ON FUNCTION r_adresse.ft_m_an_adresse_h() IS 'Fonction trigger pour inse
 -- FUNCTION: r_adresse.ft_m_geo_adresse_gestion()
 
 -- DROP FUNCTION r_adresse.ft_m_geo_adresse_gestion();
-
 CREATE OR REPLACE FUNCTION r_adresse.ft_m_geo_adresse_gestion()
-    RETURNS trigger
-    LANGUAGE 'plpgsql'
-    COST 100
-    VOLATILE NOT LEAKPROOF
-AS $BODY$
+ RETURNS trigger
+ LANGUAGE plpgsql
+AS $function$
 
 DECLARE v_id_adresse integer;
 DECLARE v_cle_interop text;
@@ -218,13 +215,21 @@ IF (NEW.diag_adr = '11'::text OR left(NEW.diag_adr, 1) = '2') AND
 RAISE EXCEPTION USING MESSAGE = 'Cette adresse "conforme" existe déjà dans la base de données avec cette clé : ' || v_cle_interop  ;
 END IF;
 
-
-IF NEW.diag_adr = '32' AND NEW.numero IS NOT NULL AND NEW.numero <> '00000' THEN
+IF NEW.diag_adr = '32' AND NEW.numero IS NOT NULL AND NEW.numero <> '00000' AND NEW.numero <> '99999' THEN
 RAISE EXCEPTION USING MESSAGE = 'Vous ne pouvez pas indiquer une adresse non numérotée et saisir un numéro.'  ;
 END IF;
 
-IF NEW.diag_adr IN ('11','20','21','22','23','24','25','33') AND (NEW.numero IS NULL OR NEW.numero = '00000' OR NEW.numero = '') THEN
+IF NEW.diag_adr IN ('11','20','21','22','23','24','25') AND (NEW.numero IS NULL OR NEW.numero = '00000' OR NEW.numero = '') THEN
 RAISE EXCEPTION USING MESSAGE = 'Vous ne pouvez pas indiquer une adresse conforme qui soit non numérotée.'  ;
+END IF;
+
+-- contrôle sur la position : une délivrance postale ne peut pas avoir une mélioration de position uniquement
+IF NEW.diag_adr = '21' and new.position = '01' THEN
+RAISE EXCEPTION USING MESSAGE = 'Vous ne pouvez pas indiquer une adresse à améliorer (position) pour une délivrance postale.'  ;
+END IF;
+
+IF NEW.numero = '9999' THEN
+RAISE EXCEPTION USING MESSAGE = 'Pour une voie sans numéro, il faut indiquer 99999 et non 9999.'  ;
 END IF;
 
 IF NEW.groupee = '1' AND NEW.diag_adr NOT IN ('20','23','33') THEN
@@ -274,6 +279,7 @@ IF (new.numero || CASE
 RAISE EXCEPTION 'Le champ d''étiquette n''est pas cohérent avec le numéro et l''indice de répétition';
 END IF;
 END IF;
+
 
 INSERT INTO r_adresse.an_adresse (id_adresse, numero, repet, complement, etiquette, angle, observ, src_adr, diag_adr, qual_adr,verif_base,ld_compl,id_ban_adresse)
 SELECT v_id_adresse,
@@ -350,13 +356,16 @@ RAISE EXCEPTION USING MESSAGE = 'Cette adresse "conforme" existe déjà dans la 
 END IF;
 END IF;
 
-
-IF NEW.diag_adr = '32' AND NEW.numero IS NOT NULL AND NEW.numero <> '00000' THEN
+IF NEW.diag_adr = '32' AND NEW.numero IS NOT NULL AND NEW.numero <> '00000' AND NEW.numero <> '99999' THEN
 RAISE EXCEPTION USING MESSAGE = 'Vous ne pouvez pas indiquer une adresse non numérotée et saisir un numéro.'  ;
 END IF;
 
-IF NEW.diag_adr IN ('11','20','21','22','23','24','25','33') AND (NEW.numero IS NULL OR NEW.numero = '00000' OR NEW.numero = '') THEN
+IF NEW.diag_adr IN ('11','20','21','22','23','24','25') AND (NEW.numero IS NULL OR NEW.numero = '00000' OR NEW.numero = '') THEN
 RAISE EXCEPTION USING MESSAGE = 'Vous ne pouvez pas indiquer une adresse conforme qui soit non numérotée.'  ;
+END IF;
+
+IF NEW.numero = '9999' THEN
+RAISE EXCEPTION USING MESSAGE = 'Pour une voie sans numéro, il faut indiquer 99999 et non 9999.'  ;
 END IF;
 
 IF NEW.groupee = '1' AND NEW.diag_adr NOT IN ('20','23','33') THEN
@@ -365,6 +374,11 @@ END IF;
 
 IF (NEW.groupee = '2' or NEW.groupee = '0') AND NEW.diag_adr = '23' THEN
 RAISE EXCEPTION USING MESSAGE = 'Vous ne pouvez pas indiquer une qualité d''adresse dégroupée sans indiquer la valeur "oui" en adresse groupée' ;
+END IF;
+
+-- contrôle sur la position : une délivrance postale ne peut pas avoir une mélioration de position uniquement
+IF NEW.diag_adr = '21' and new.position = '01' THEN
+RAISE EXCEPTION USING MESSAGE = 'Vous ne pouvez pas indiquer une adresse à améliorer (position) pour une délivrance postale.'  ;
 END IF;
 
 -- mise à jour de la classe des objets
@@ -443,7 +457,7 @@ RETURN NEW;
 --DELETE
 ELSIF (TG_OP = 'DELETE') THEN
 
-IF (SELECT count(*) FROM m_economie.lk_adresseetablissement WHERE idadresse = OLD.id_adresse) >= 1 THEN
+IF (SELECT count(*) FROM m_activite_eco.lk_adresseetablissement WHERE idadresse = OLD.id_adresse) >= 1 THEN
 RAISE EXCEPTION 'Vous ne pouvez pas supprimer un point d''adresse rattaché à un établissement. Contactez l''administrateur SIG.';
 END IF;
 
@@ -463,17 +477,10 @@ RETURN OLD;
 END IF;
 
 END;
-$BODY$;
+$function$
+;
 
-ALTER FUNCTION r_adresse.ft_m_geo_adresse_gestion()
-    OWNER TO create_sig;
-
-
-COMMENT ON FUNCTION r_adresse.ft_m_geo_adresse_gestion()
-    IS 'Fonction trigger pour gérer l''insertion et la mise à jour des données adresse';
-
-
-
+COMMENT ON FUNCTION r_adresse.ft_m_geo_adresse_gestion() IS 'Fonction trigger pour gérer l''insertion et la mise à jour des données adresse';
 
 
 -- #################################################################### FONCTION TRIGGER - ft_m_geo_v_adresse_vmr ###################################################
