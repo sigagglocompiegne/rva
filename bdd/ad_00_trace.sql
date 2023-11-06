@@ -50,5 +50,6 @@
 -- 2021/12/08 : GB / Modification trigger gestion des adresses (ajout d'un contrôle sur la suppressio impossible d'un point d'adresse relié à un établissement
 -- 2022/10/27 : GB / Suppression du diagnostic adresse, pour les adresses non numérotée en projet, reporté sur adresse non numérotée avec un état d'avancement à non commencé
 -- 2023/07/20 : GB / Intégration de l'identifiant BAN au format UUIDV4
+-- 2023/11/06 : GB / Ajout d'un contrôle sur les positions en délivrance postale (ce cas n'est pas compatible avec une amélioration de position)
 -- 2023/08/23 : GB / Ajout dans la fonction de gestion des adresses, l'impossibilité de suppirmer une adresse si elle est utilisée par le SPANC ou l'ANC
 -- 2023/09/-- : GB / Intégration vue applicative d'exports des données au format BAL 1.4
