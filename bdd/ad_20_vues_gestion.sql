@@ -411,7 +411,7 @@ IF (new.numero || CASE
 	WHEN new.repet = 'bis' THEN 'B' 
 	WHEN new.repet = 'ter' THEN 'T'
 	WHEN new.repet = 'quater' THEN 'Q'
-	WHEN new.repet = 'quinques' THEN 'C'
+	WHEN new.repet = 'quinquies' THEN 'C'
         WHEN new.repet = 'quinter' THEN 'Q'
 	ELSE upper(new.repet)
 	END) <> new.etiquette THEN
