@@ -118,7 +118,31 @@ CREATE TRIGGER t_t1_date_maj
   ON r_objet.geo_objet_pt_adresse
   FOR EACH ROW
   EXECUTE PROCEDURE public.ft_r_timestamp_maj();
+
+-- #################################################################### TRIGGER - dbinsert  ###################################################
+
+-- Trigger: t_t1_dbinsert on r_adresse.an_adresse_cad
+
+-- DROP TRIGGER t_t1_dbinsert on r_adresse.an_adresse_cad;
+
+CREATE TRIGGER t_t1_dbinsert
+  BEFORE UPDATE
+  ON r_adresse.an_adresse_cad
+  FOR EACH ROW
+  EXECUTE PROCEDURE public.ft_r_timestamp_dbinsert();
   
+
+-- #################################################################### TRIGGER - dbupdate  ###################################################
+
+-- Trigger: t_t1_dbupdate on r_adresse.an_adresse_cad
+
+-- DROP TRIGGER t_t1_dbupdate on r_adresse.an_adresse_cad;
+
+CREATE TRIGGER t_t1_dbupdate
+  BEFORE UPDATE
+  ON r_adresse.an_adresse_cad
+  FOR EACH ROW
+  EXECUTE PROCEDURE public.ft_r_timestamp_dbupdate();
 
 -- #################################################################### FONCTION TRIGGER - ft_m_an_adresse_h ###################################################
 
@@ -154,13 +178,15 @@ GRANT EXECUTE ON FUNCTION r_adresse.ft_m_an_adresse_h() TO create_sig;
 		  
 COMMENT ON FUNCTION r_adresse.ft_m_an_adresse_h() IS 'Fonction trigger pour insertion de l''historisation des adresses dans la classe d''objet an_adresse_h';
 
-
+create trigger t_t2_an_adresse_h instead of
+update
+    on
+    r_adresse.geo_v_adresse for each row execute procedure r_adresse.ft_m_an_adresse_h()
 
 -- #################################################################### FONCTION TRIGGER - ft_m_geo_adresse_gestion ###################################################
 
--- FUNCTION: r_adresse.ft_m_geo_adresse_gestion()
-
 -- DROP FUNCTION r_adresse.ft_m_geo_adresse_gestion();
+
 CREATE OR REPLACE FUNCTION r_adresse.ft_m_geo_adresse_gestion()
  RETURNS trigger
  LANGUAGE plpgsql
@@ -394,6 +420,13 @@ src_geom=CASE WHEN NEW.src_geom IS NULL THEN '00' ELSE NEW.src_geom END,
 src_date=CASE WHEN NEW.src_date IS NULL THEN '0000' ELSE NEW.src_date END,
 date_sai=OLD.date_sai,
 date_maj=now(),
+maj_bal=case when (new.id_voie <> old.id_voie) or (new.numero <> old.numero) or (new.repet <> old.repet) or (new.ld_compl <> old.ld_compl) or (new.position <> old.position) 
+		or (old.diag_adr IN ('11','99') and new.diag_adr IN ('12','32','33','00')) or (old.diag_adr IN ('12','32','33','00') and new.diag_adr IN ('11','99')) 
+		or (old.diag_adr IN ('12','32','33','00') and left(new.diag_adr,1) = '2') 
+		or (left(old.diag_adr,1) = '2' and new.diag_adr IN ('12','32','33','00'))
+		-- si une parcelle est modifiée, supprimée ou insérée, l'attribut maj_bal est géré par le trigger de contrôle sur la table an_cadastre_cad
+		then 
+		now() else null end,
 geom=NEW.geom
 WHERE id_adresse = NEW.id_adresse;
 
@@ -472,6 +505,7 @@ END IF;
 DELETE FROM r_objet.geo_objet_pt_adresse where id_adresse = OLD.id_adresse;
 DELETE FROM r_adresse.an_adresse where id_adresse = OLD.id_adresse;
 DELETE FROM r_adresse.an_adresse_info where id_adresse = OLD.id_adresse;
+DELETE FROM r_adresse.an_adresse_cad where id_adresse = OLD.id_adresse;
 RETURN OLD;
 
 END IF;
@@ -482,6 +516,15 @@ $function$
 
 COMMENT ON FUNCTION r_adresse.ft_m_geo_adresse_gestion() IS 'Fonction trigger pour gérer l''insertion et la mise à jour des données adresse';
 
+
+create trigger t_t1_geo_adresse_gestion instead of
+insert
+    or
+delete
+    or
+update
+    on
+    r_adresse.geo_v_adresse for each row execute procedure r_adresse.ft_m_geo_adresse_gestion()
 
 -- #################################################################### FONCTION TRIGGER - ft_m_geo_v_adresse_vmr ###################################################
 
@@ -562,14 +605,26 @@ CREATE TRIGGER t_t1_repetcomplement_null
     ON r_adresse.an_adresse
     FOR EACH ROW
     EXECUTE PROCEDURE r_adresse.ft_m_adresse_repetcomplement_null();
+
+
+create trigger t_t3_geo_v_adresse_vmr instead of
+insert
+    or
+delete
+    or
+update
+    on
+    r_adresse.geo_v_adresse for each row execute procedure r_adresse.ft_m_geo_v_adresse_vmr();
+
+COMMENT ON TRIGGER t_t3_geo_v_adresse_vmr ON r_adresse.geo_v_adresse IS 'Fonction trigger déclenchée à chaque mise à jour des voies pour rafraichir la vue matérialisée des adresses visibles dans les différentes applications.';
 		     
--- #################################################################### FONCTION TRIGGER - ft_m_adresse_insert_update ###################################################
+-- #################################################################### FONCTION TRIGGER - ft_m_adresse_cad_insert_update ###################################################
 
--- FUNCTION: r_adresse.ft_m_adresse_insert_update()
+-- FUNCTION: r_adresse.ft_m_adresse_cad_insert_update()
 
--- DROP FUNCTION r_adresse.ft_m_adresse_insert_update();
+-- DROP FUNCTION r_adresse.ft_m_adresse_cad_insert_update();
 
-CREATE FUNCTION r_adresse.ft_m_adresse_insert_update()
+CREATE FUNCTION r_adresse.ft_m_adresse_cad_insert_update()
     RETURNS trigger
     LANGUAGE 'plpgsql'
     COST 100
@@ -604,11 +659,11 @@ END;
 
 $BODY$;
 
-ALTER FUNCTION r_adresse.ft_m_adresse_insert_update()
+ALTER FUNCTION r_adresse.ft_m_adresse_cad_insert_update()
     OWNER TO create_sig;
 
 
-COMMENT ON FUNCTION r_adresse.ft_m_adresse_insert_update()
+COMMENT ON FUNCTION r_adresse.ft_m_adresse_cad_insert_update()
     IS 'Fonction générant automatiquement l''identifiant nationale parcelle ou IDU à partir des informations fournies de section cadastrale, parcelle, et sur la commune contenant le point d''adresse';
 
 		     
@@ -620,7 +675,7 @@ CREATE TRIGGER t_t1_an_adresse_cad_idu
     BEFORE INSERT OR UPDATE 
     ON r_adresse.an_adresse_cad
     FOR EACH ROW
-    EXECUTE PROCEDURE r_adresse.ft_m_adresse_insert_update();
+    EXECUTE PROCEDURE r_adresse.ft_m_adresse_cad_insert_update();
     
 -- #################################################################### FONCTION TRIGGER - ft_m_adresse_repetcomplement_null ###################################################
 
@@ -662,3 +717,46 @@ CREATE TRIGGER t_t1_repetcomplement_null
     ON r_adresse.an_adresse
     FOR EACH ROW
     EXECUTE PROCEDURE r_adresse.ft_m_adresse_repetcomplement_null();
+
+-- #################################################################### FONCTION TRIGGER - ft_m_adresse_cad_delete ###################################################
+
+-- DROP FUNCTION r_adresse.ft_m_adresse_cad_delete();
+
+CREATE OR REPLACE FUNCTION r_adresse.ft_m_adresse_cad_delete()
+ RETURNS trigger
+ LANGUAGE plpgsql
+AS $function$
+
+BEGIN
+
+	-- mise à jour de l'attribut maj_bal dans la table geo_objet_point_adresse lors de l'insertion d'une référence
+	if TG_OP in ('INSERT') THEN
+    update r_objet.geo_objet_pt_adresse set maj_bal = now() where id_adresse = new.id_adresse;
+   -- mise à jour de l'attribut maj_bal dans la table geo_objet_point_adresse lors de la mise à jour d'une référence (section, n° de parcelle ou autre commune seulement)
+    elsif TG_OP in ('UPDATE') then
+    update r_objet.geo_objet_pt_adresse set maj_bal = now() where id_adresse = old.id_adresse and (new.ccosec <> old.ccosec or new.dnupla <> old.dnupla or new.commune_autre_insee <> old.commune_autre_insee);
+   -- mise à jour de l'attribut maj_bal dans la table geo_objet_point_adresse lors de la suppression d'une référence
+    elsif TG_OP in ('DELETE') then
+    update r_objet.geo_objet_pt_adresse set maj_bal = now() where id_adresse = old.id_adresse;
+
+    end if;
+	RETURN OLD; 
+
+	
+END;
+
+$function$
+;
+
+COMMENT ON FUNCTION r_adresse.ft_m_adresse_cad_delete() IS 'Fonction générant automatiquement l''attribut maj_bal dans la table geo_objet_pt_adresse';
+
+
+
+create trigger t_t4_maj_bal after
+insert
+    or
+delete
+    or
+update
+    on
+    r_adresse.an_adresse_cad for each row execute procedure r_adresse.ft_m_adresse_cad_delete()
