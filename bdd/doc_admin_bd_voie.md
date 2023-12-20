@@ -580,13 +580,13 @@ Ce traitement permet de :
 ## Projet QGIS pour la gestion
 
 Un projet QGIS a été réalisé pour la gestion interne des données. Il est stocké ici :
-Y:\Ressources\4-Partage\3-Procedures\QGIS\RVA_1.2_3.10.qgs
+R:\Ressources\4-Partage\3-Procedures\QGIS\RVA_3.x.qgs
 
 ## Export Open Data
 
-L'ensemble des fichiers a utilisé est placé ici `Y:\Ressources\4-Partage\3-Procedures\FME\prod\OPEN-DATA`.
+L'ensemble des fichiers a utilisé est placé ici `R:\Ressources\4-Partage\3-Procedures\FME\prod\OPEN-DATA`.
 
- - `RVA_voie_metadonnees.fmw` : ce traitement exporte l'ensemble des données Voie à de multiples formats téléchargeables via la fiche de métadonnées (csv, shape, kml, geojson, excel) et il est exécuté tous les jours à 21h30 sur le serveur sig-applis.
+ - `RVA_voie_metadonnees.fmw` : ce traitement exporte l'ensemble des données Voie à de multiples formats téléchargeables via la fiche de métadonnées (csv, shape, kml, geojson, excel) et il est exécuté tous les jours à 22h30 via FMEServer.
 
 ---
 
