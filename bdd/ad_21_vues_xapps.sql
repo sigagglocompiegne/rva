@@ -236,26 +236,12 @@ COMMENT ON VIEW x_apps.xapps_an_v_adresse_h
 -- ###                                                                                                                                              ###
 -- ####################################################################################################################################################
 
--- à venir
+-- x_opendata.xopendata_an_v_bal_14 source
 
--- ####################################################################################################################################################
--- ###                                                                                                                                              ###
--- ###                                                             VUES OPEN DATA BAL1.3                                                            ###
--- ###                                                                                                                                              ###
--- ####################################################################################################################################################
-
--- View: x_opendata.xopendata_an_v_bal_13
-
--- DROP VIEW x_opendata.xopendata_an_v_bal_13;
-
-CREATE OR REPLACE VIEW x_opendata.xopendata_an_v_bal_13
- AS
- SELECT 
-    case when a.diag_adr <> '99' THEN
-    concat('@c:', ibc.id_ban_commune, ' ', '@v:', v.id_ban_toponyme, ' ', '@a:', a.id_ban_adresse)
-    else
-    concat('@c:', ibc.id_ban_commune, ' ', '@v:', v.id_ban_toponyme)
-    end AS uid_adresse,
+CREATE OR REPLACE VIEW x_opendata.xopendata_an_v_bal_14
+AS SELECT ibc.id_ban_commune,
+    v.id_ban_toponyme,
+    a.id_ban_adresse,
     lower(
         CASE
             WHEN a.repet IS NOT NULL THEN concat(v.insee, '_', v.rivoli, '_', lpad(a.numero::text, 5, '0'::text), lower(btrim(concat('_', "left"(a.repet::text, 3)))))
@@ -284,15 +270,15 @@ CREATE OR REPLACE VIEW x_opendata.xopendata_an_v_bal_13
             WHEN v.insee = ANY (ARRAY['60023'::bpchar, '60067'::bpchar, '60068'::bpchar, '60070'::bpchar, '60151'::bpchar, '60156'::bpchar, '60159'::bpchar, '60323'::bpchar, '60325'::bpchar, '60326'::bpchar, '60337'::bpchar, '60338'::bpchar, '60382'::bpchar, '60402'::bpchar, '60447'::bpchar, '60578'::bpchar, '60579'::bpchar, '60597'::bpchar, '60600'::bpchar, '60665'::bpchar, '60667'::bpchar, '60674'::bpchar]) THEN 'Agglomération de la Région de Compiègne et de la Basse Automne'::text
             WHEN v.insee = ANY (ARRAY['60024'::bpchar, '60036'::bpchar, '60040'::bpchar, '60078'::bpchar, '60125'::bpchar, '60149'::bpchar, '60152'::bpchar, '60210'::bpchar, '60223'::bpchar, '60229'::bpchar, '60254'::bpchar, '60284'::bpchar, '60308'::bpchar, '60318'::bpchar, '60369'::bpchar, '60424'::bpchar, '60441'::bpchar, '60531'::bpchar, '60540'::bpchar]) THEN 'Communauté de Communes de la Plaine d''Estrées'::text
             WHEN v.insee = ANY (ARRAY['60025'::bpchar, '60032'::bpchar, '60064'::bpchar, '60072'::bpchar, '60145'::bpchar, '60167'::bpchar, '60171'::bpchar, '60184'::bpchar, '60188'::bpchar, '60305'::bpchar, '60324'::bpchar, '60438'::bpchar, '60445'::bpchar, '60491'::bpchar, '60534'::bpchar, '60569'::bpchar, '60572'::bpchar, '60593'::bpchar, '60641'::bpchar, '60647'::bpchar]) THEN 'Communauté de Communes des Lisières de l''Oise'::text
+            WHEN v.insee = ANY (ARRAY['60043'::bpchar, '60119'::bpchar, '60147'::bpchar, '60150'::bpchar, '60368'::bpchar, '60373'::bpchar, '60378'::bpchar, '60392'::bpchar, '60423'::bpchar, '60492'::bpchar, '60501'::bpchar, '60537'::bpchar, '60582'::bpchar, '60636'::bpchar, '60642'::bpchar, '60654'::bpchar]) THEN 'Communauté de Communes des Deux Vallées'::text
             ELSE ''::text
         END::character varying AS source,
         CASE
-            WHEN p.date_maj IS NULL THEN to_char(date(p.date_sai)::timestamp with time zone, 'YYYY-MM-DD'::text)
-            ELSE to_char(date(p.date_maj)::timestamp with time zone, 'YYYY-MM-DD'::text)
+            WHEN p.maj_bal IS NULL THEN to_char(date(p.date_sai)::timestamp with time zone, 'YYYY-MM-DD'::text)
+            ELSE to_char(date(p.maj_bal)::timestamp with time zone, 'YYYY-MM-DD'::text)
         END::character varying(10) AS date_der_maj,
         CASE
-            WHEN a.diag_adr::text = '11'::text OR "left"(a.diag_adr::text, 1) = '2'::text THEN '1'::text
-            WHEN a.diag_adr::text = '33'::text OR a.diag_adr::text = '99'::text THEN '0'::text
+            WHEN a.diag_adr::text = '11'::text OR "left"(a.diag_adr::text, 1) = '2'::text OR a.diag_adr::text = '99'::text THEN '1'::text
             ELSE '0'::text
         END AS certification_commune
    FROM r_objet.geo_objet_pt_adresse p
@@ -303,10 +289,8 @@ CREATE OR REPLACE VIEW x_opendata.xopendata_an_v_bal_13
      LEFT JOIN r_osm.geo_osm_commune c ON v.insee = c.insee::bpchar
      LEFT JOIN r_adresse.an_adresse_cad ca ON ca.id_adresse = p.id_adresse
      LEFT JOIN r_adresse.lt_id_ban_commune ibc ON ibc.insee::bpchar = v.insee
-  WHERE (a.diag_adr::text = '11'::text OR "left"(a.diag_adr::text, 1) = '2'::text OR a.diag_adr::text = '33'::text OR a.diag_adr::text = '99'::text) AND (v.insee = ANY (ARRAY['60023'::bpchar, '60067'::bpchar, '60068'::bpchar, '60070'::bpchar, '60151'::bpchar, '60156'::bpchar, '60159'::bpchar, '60323'::bpchar, '60325'::bpchar, '60326'::bpchar, '60337'::bpchar, '60338'::bpchar, '60382'::bpchar, '60402'::bpchar, '60447'::bpchar, '60578'::bpchar, '60579'::bpchar, '60597'::bpchar, '60600'::bpchar, '60665'::bpchar, '60667'::bpchar, '60674'::bpchar, '60024'::bpchar, '60036'::bpchar, '60040'::bpchar, '60078'::bpchar, '60125'::bpchar, '60149'::bpchar, '60152'::bpchar, '60210'::bpchar, '60223'::bpchar, '60229'::bpchar, '60254'::bpchar, '60284'::bpchar, '60308'::bpchar, '60318'::bpchar, '60369'::bpchar, '60424'::bpchar, '60441'::bpchar, '60531'::bpchar, '60540'::bpchar, '60025'::bpchar, '60032'::bpchar, '60064'::bpchar, '60072'::bpchar, '60145'::bpchar, '60167'::bpchar, '60171'::bpchar, '60184'::bpchar, '60188'::bpchar, '60305'::bpchar, '60324'::bpchar, '60438'::bpchar, '60445'::bpchar, '60491'::bpchar, '60534'::bpchar, '60569'::bpchar, '60572'::bpchar, '60593'::bpchar, '60641'::bpchar, '60647'::bpchar]))
-  GROUP BY a.repet, a.complement, v.insee, v.rivoli, a.diag_adr, a.numero, c.commune, af.insee_cd, af.nom_cd, v.libvoie_c, a.ld_compl, lt_p.valeur, p.x_l93, p.y_l93, p.geom, p.date_maj, p.date_sai,
-	concat('@c:', ibc.id_ban_commune, ' ', '@v:', v.id_ban_toponyme, ' ', '@a:', a.id_ban_adresse),
-	concat('@c:', ibc.id_ban_commune, ' ', '@v:', v.id_ban_toponyme)
+  WHERE (a.diag_adr::text = '11'::text OR "left"(a.diag_adr::text, 1) = '2'::text OR a.diag_adr::text = '33'::text OR a.diag_adr::text = '99'::text) AND v.insee IS NOT NULL
+  GROUP BY a.repet, a.complement, v.insee, v.rivoli, a.diag_adr, a.numero, c.commune, af.insee_cd, af.nom_cd, v.libvoie_c, a.ld_compl, lt_p.valeur, p.x_l93, p.y_l93, p.geom, p.maj_bal, p.date_sai, ibc.id_ban_commune, v.id_ban_toponyme, a.id_ban_adresse
   ORDER BY (
         CASE
             WHEN a.repet IS NOT NULL THEN concat(v.insee, '_', v.rivoli, '_', lpad(a.numero::text, 5, '0'::text), lower(btrim(concat('_', "left"(a.repet::text, 3)))))
@@ -314,10 +298,83 @@ CREATE OR REPLACE VIEW x_opendata.xopendata_an_v_bal_13
             ELSE NULL::text
         END);
 
-ALTER TABLE x_opendata.xopendata_an_v_bal_13
-    OWNER TO create_sig;
-COMMENT ON VIEW x_opendata.xopendata_an_v_bal_13
-    IS 'Vue alphanumérique simplifiée des adresses au format d''échange BAL Standard 1.3';
+COMMENT ON VIEW x_opendata.xopendata_an_v_bal_14 IS 'Vue alphanumérique simplifiée des adresses au format d''échange BAL Standard 1.4 sur les communes du Grand Compiégnois';
+
+
+
+-- ####################################################################################################################################################
+-- ###                                                                                                                                              ###
+-- ###                                                             VUES OPEN DATA BAL1.3                                                            ###
+-- ###                                                                                                                                              ###
+-- ####################################################################################################################################################
+
+-- x_opendata.xopendata_an_v_bal_13 source
+
+CREATE OR REPLACE VIEW x_opendata.xopendata_an_v_bal_13
+AS SELECT
+        CASE
+            WHEN a.diag_adr::text <> '99'::text THEN concat('@c:', ibc.id_ban_commune, ' ', '@v:', v.id_ban_toponyme, ' ', '@a:', a.id_ban_adresse)
+            ELSE concat('@c:', ibc.id_ban_commune, ' ', '@v:', v.id_ban_toponyme)
+        END AS uid_adresse,
+    lower(
+        CASE
+            WHEN a.repet IS NOT NULL THEN concat(v.insee, '_', v.rivoli, '_', lpad(a.numero::text, 5, '0'::text), lower(btrim(concat('_', "left"(a.repet::text, 3)))))
+            WHEN a.repet IS NULL THEN concat(v.insee, '_', v.rivoli, '_', lpad(a.numero::text, 5, '0'::text))
+            ELSE NULL::text
+        END) AS cle_interop,
+    v.insee::character varying(5) AS commune_insee,
+    c.commune AS commune_nom,
+    af.insee_cd AS commune_deleguee_insee,
+    af.nom_cd AS commune_deleguee_nom,
+    btrim(v.libvoie_c::text)::character varying(100) AS voie_nom,
+    a.ld_compl AS lieudit_complement_nom,
+    a.numero,
+        CASE
+            WHEN a.repet IS NULL THEN NULL::text
+            WHEN a.repet IS NOT NULL THEN lower(btrim("left"(a.repet::text, 3)))
+            ELSE NULL::text
+        END::character varying AS suffixe,
+    lt_p.valeur AS "position",
+    p.x_l93 AS x,
+    p.y_l93 AS y,
+    st_x(st_transform(p.geom, 4326))::numeric(8,7) AS long,
+    st_y(st_transform(p.geom, 4326))::numeric(9,7) AS lat,
+    string_agg(ca.idu::text, '|'::text) AS cad_parcelles,
+        CASE
+            WHEN v.insee = ANY (ARRAY['60023'::bpchar, '60067'::bpchar, '60068'::bpchar, '60070'::bpchar, '60151'::bpchar, '60156'::bpchar, '60159'::bpchar, '60323'::bpchar, '60325'::bpchar, '60326'::bpchar, '60337'::bpchar, '60338'::bpchar, '60382'::bpchar, '60402'::bpchar, '60447'::bpchar, '60578'::bpchar, '60579'::bpchar, '60597'::bpchar, '60600'::bpchar, '60665'::bpchar, '60667'::bpchar, '60674'::bpchar]) THEN 'Agglomération de la Région de Compiègne et de la Basse Automne'::text
+            WHEN v.insee = ANY (ARRAY['60024'::bpchar, '60036'::bpchar, '60040'::bpchar, '60078'::bpchar, '60125'::bpchar, '60149'::bpchar, '60152'::bpchar, '60210'::bpchar, '60223'::bpchar, '60229'::bpchar, '60254'::bpchar, '60284'::bpchar, '60308'::bpchar, '60318'::bpchar, '60369'::bpchar, '60424'::bpchar, '60441'::bpchar, '60531'::bpchar, '60540'::bpchar]) THEN 'Communauté de Communes de la Plaine d''Estrées'::text
+            WHEN v.insee = ANY (ARRAY['60025'::bpchar, '60032'::bpchar, '60064'::bpchar, '60072'::bpchar, '60145'::bpchar, '60167'::bpchar, '60171'::bpchar, '60184'::bpchar, '60188'::bpchar, '60305'::bpchar, '60324'::bpchar, '60438'::bpchar, '60445'::bpchar, '60491'::bpchar, '60534'::bpchar, '60569'::bpchar, '60572'::bpchar, '60593'::bpchar, '60641'::bpchar, '60647'::bpchar]) THEN 'Communauté de Communes des Lisières de l''Oise'::text
+            WHEN v.insee = ANY (ARRAY['60043'::bpchar, '60119'::bpchar, '60147'::bpchar, '60150'::bpchar, '60368'::bpchar, '60373'::bpchar, '60378'::bpchar, '60392'::bpchar, '60423'::bpchar, '60492'::bpchar, '60501'::bpchar, '60537'::bpchar, '60582'::bpchar, '60636'::bpchar, '60642'::bpchar, '60654'::bpchar]) THEN 'Communauté de Communes des Deux Vallées'::text
+            ELSE ''::text
+        END::character varying AS source,
+        CASE
+            WHEN p.maj_bal IS NULL THEN to_char(date(p.date_sai)::timestamp with time zone, 'YYYY-MM-DD'::text)
+            ELSE to_char(date(p.maj_bal)::timestamp with time zone, 'YYYY-MM-DD'::text)
+        END::character varying(10) AS date_der_maj,
+        CASE
+            WHEN a.diag_adr::text = '11'::text OR "left"(a.diag_adr::text, 1) = '2'::text OR a.diag_adr::text = '99'::text THEN '1'::text
+            ELSE '0'::text
+        END AS certification_commune
+   FROM r_objet.geo_objet_pt_adresse p
+     LEFT JOIN r_adresse.an_adresse a ON a.id_adresse = p.id_adresse
+     LEFT JOIN r_adresse.an_adresse_info af ON af.id_adresse = p.id_adresse
+     LEFT JOIN r_objet.lt_position lt_p ON lt_p.code::text = p."position"::text
+     LEFT JOIN r_voie.an_voie v ON v.id_voie = p.id_voie
+     LEFT JOIN r_osm.geo_osm_commune c ON v.insee = c.insee::bpchar
+     LEFT JOIN r_adresse.an_adresse_cad ca ON ca.id_adresse = p.id_adresse
+     LEFT JOIN r_adresse.lt_id_ban_commune ibc ON ibc.insee::bpchar = v.insee
+  WHERE (a.diag_adr::text = '11'::text OR "left"(a.diag_adr::text, 1) = '2'::text OR a.diag_adr::text = '33'::text OR a.diag_adr::text = '99'::text) AND v.insee IS NOT NULL
+  GROUP BY a.repet, a.complement, v.insee, v.rivoli, a.diag_adr, a.numero, c.commune, af.insee_cd, af.nom_cd, v.libvoie_c, a.ld_compl, lt_p.valeur, p.x_l93, p.y_l93, p.geom, p.maj_bal, p.date_sai, (concat('@c:', ibc.id_ban_commune, ' ', '@v:', v.id_ban_toponyme, ' ', '@a:', a.id_ban_adresse)), (concat('@c:', ibc.id_ban_commune, ' ', '@v:', v.id_ban_toponyme))
+  ORDER BY (
+        CASE
+            WHEN a.repet IS NOT NULL THEN concat(v.insee, '_', v.rivoli, '_', lpad(a.numero::text, 5, '0'::text), lower(btrim(concat('_', "left"(a.repet::text, 3)))))
+            WHEN a.repet IS NULL THEN concat(v.insee, '_', v.rivoli, '_', lpad(a.numero::text, 5, '0'::text))
+            ELSE NULL::text
+        END);
+
+COMMENT ON VIEW x_opendata.xopendata_an_v_bal_13 IS 'Vue alphanumérique simplifiée des adresses au format d''échange BAL Standard 1.3 sur les communes du Pays Compiégnois (hors CC2V)';
+
+
 
 
 
