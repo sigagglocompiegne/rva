@@ -88,6 +88,7 @@ CREATE TABLE r_objet.geo_objet_pt_adresse
     src_date character varying(4) COLLATE pg_catalog."default" NOT NULL DEFAULT '0000'::bpchar,
     date_sai timestamp without time zone NOT NULL DEFAULT now(),
     date_maj timestamp without time zone,
+    maj_bal timestamp without time zone,
     geom geometry(Point,2154),
     CONSTRAINT geo_objet_adresse_pkey PRIMARY KEY (id_adresse),
     CONSTRAINT geo_objet_adresse_id_tronc_fkey FOREIGN KEY (id_tronc)
@@ -146,6 +147,10 @@ COMMENT ON COLUMN r_objet.geo_objet_pt_adresse.date_maj
 
 COMMENT ON COLUMN r_objet.geo_objet_pt_adresse.geom
     IS 'Géomètrie ponctuelle de l''objet';
+
+COMMENT ON COLUMN r_objet.geo_objet_pt_adresse.maj_bal
+    IS 'Date de mise à jour d''un élément du standard BAL';
+
 -- Index: geo_objet_adresse_geom_idx
 
 -- DROP INDEX r_objet.geo_objet_adresse_geom_idx;
@@ -351,6 +356,8 @@ CREATE TABLE r_adresse.an_adresse_cad
     dnupla character varying(4) COLLATE pg_catalog."default",
     idu character varying(15) COLLATE pg_catalog."default",
     acomm character varying(1) COLLATE pg_catalog."default" DEFAULT '0'::character varying,
+    dbinsert timestamp without time zone, -- Date de saisie de l'information dans la base
+    dbupdate timestamp without time zone, -- Date de mise à jour de l'information dans la base
     CONSTRAINT an_adresse_cad_pkey PRIMARY KEY (id)
 )
 WITH (
@@ -377,6 +384,10 @@ COMMENT ON COLUMN r_adresse.an_adresse_cad.idu
     IS 'Code national de la parcelle cadastrale code département(2), code de direction(1), code de commune(3), préfixe de section(3),code de section(2), code de parcelle(4)';
 COMMENT ON COLUMN r_adresse.an_adresse_cad.acomm
     IS 'Référence cadastrale issue de l''arrêté de voirie';
+COMMENT ON COLUMN r_adresse.an_adresse_cad.dbinsert
+    IS 'Date de saisie en base';
+COMMENT ON COLUMN r_adresse.an_adresse_cad.dbupdate
+    IS 'Date de mise à jour en base';
     
 
 
