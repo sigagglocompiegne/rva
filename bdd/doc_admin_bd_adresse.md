@@ -43,6 +43,7 @@ L'ensemble des classes d'objets de gestion sont stockés dans plusieurs schémas
 |src_date|Année du millésime du référentiel de saisie|character varying(4)|'0000'::bpchar|
 |date_sai|Horodatage de l'intégration en base de l'objet|timestamp without time zone|now()|
 |date_maj|Horodatage de la mise à jour en base de l'objet|timestamp without time zone| |
+|maj_bal|Date de mise à jour d'un attribut constituant le standard BAL|timestamp without time zone| |
 |geom|Géomètrie ponctuelle de l'objet|Point,2154| |
 
 Particularité(s) à noter :
@@ -154,12 +155,18 @@ Particularité(s) à noter :
 |dnupla|Numéro de parcelle indiquée sur le plan cadastrale codé sur 4 caractères (avec les 0 si besoins)|character varying(4)| |
 |idu|Code national de la parcelle cadastrale code département(2), code de direction(1), code de commune(3), préfixe de section(3),code de section(2), code de parcelle(4)|character varying(15)| |
 |acomm|Référence cadastrale issue de l'arrêté de voirie|character varying(1)|'0'::character varying|
+|dbinsert|Date de saisie dans la base de données|timestamp without time zone||
+|dbupdate|Date de mise à jour dans la base de données|timestamp without time zone||
 
 
 Particularité(s) à noter :
 * Une clé primaire existe sur le champ `id`
 * Une clé étrangère existe sur la table de valeur `acomm` de la table an_adresse_cad
-
+* 4 triggers :
+  * `t_t1_controle` : trigger contrôlant la saisie utilisateur
+  * `t_t2_dbinsert` : trigger insérant la date de saisie dans la base de données
+  * `t_t3_dbupdate` : trigger insérant la date de mise à jour dans la base de données
+  * `t_t4_maj_bal` : trigger gérant la mise à jour de l'attribut `maj_bal` dans la classe d'objets geo_objet_pt_adresse si besoin
 
 ---
 
