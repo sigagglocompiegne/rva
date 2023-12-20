@@ -27,7 +27,7 @@ Spécification du fichier d’échange relatif aux données concernant le réfé
 - [Documentation d'administration de la base Voie](bdd/doc_admin_bd_voie.md) 
 - [Documentation d'administration de l'application](app/doc_admin_app_rva.md)
 - [Documentation utilisateur de l'application](app/doc_user_app_rva.md)
-- Règles de saisies des voies et des adresses(à venir)
+- [Règles de saisies des voies](gabarit/livrables.md) et des adresses(à venir)
 
 ## Contexte
 
