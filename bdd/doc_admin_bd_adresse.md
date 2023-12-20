@@ -257,7 +257,7 @@ Particularité(s) à noter :
 `r_adresse.geo_v_adresse` : Vue éditable destinée à la modification des données relatives aux adresses
 
 * 4 triggers :
-  * `t_t1_geo_adresse_gestion` : intégration ou mise à jour des données Adresse
+  * `t_t1_geo_adresse_gestion` : intégration ou mise à jour des données Adresse (y compris la gestion de l'attribut `maj_bal` pour le téléversement au format BAL uniquement si les attributs le constituant sont modifiés)
   * `t_t2_an_adresse_h` : intégration des données Adresse historiques dans la table alphanumérique correspondante pour une instance de mise à jour
   * `t_t3_geo_v_adresse_vmr` : trigger permettant de rafraîchir la vue matérialisée des adresses visualisés par les utilisateurs dans les différentes applications
 
