@@ -53,3 +53,4 @@
 -- 2023/11/06 : GB / Ajout d'un contrôle sur les positions en délivrance postale (ce cas n'est pas compatible avec une amélioration de position)
 -- 2023/08/23 : GB / Ajout dans la fonction de gestion des adresses, l'impossibilité de suppirmer une adresse si elle est utilisée par le SPANC ou l'ANC
 -- 2023/09/-- : GB / Intégration vue applicative d'exports des données au format BAL 1.4
+-- 2023/12/20 : GB / Intégration d'un foncitonnel pour générer des BAL uniquement sur les attributs intégrés au standard
