@@ -1731,7 +1731,114 @@ COMMENT ON VIEW x_apps.xapps_an_v_troncon_h
 -- ####################################################################################################################################################
 
 
--- la vue x_apps.xapps_geo_vmr_voie est utilisée dans un WorkFlow FME pour générer les exports OpenDate (cf documentation de la base de données)
+-- la vue x_apps.xapps_geo_vmr_voie est utilisée dans un WorkFlow FME pour générer les exports OpenData (cf documentation de la base de données)
+
+-- ################################################################# VUE FULL DECODEE  ###############################################
+
+--drop view if exists r_voie.geo_v_troncon_voie_full_decode;
+CREATE OR REPLACE VIEW r_voie.geo_v_troncon_voie_full_decode
+AS
+
+SELECT t.id_tronc,
+    t.id_voie_g,
+    t.id_voie_d,
+    vg.libvoie_c AS libvoie_g,
+    vg.rivoli AS rivoli_g,
+    vg.id_ban_toponyme AS id_ban_toponyme_g,
+    vd.libvoie_c AS libvoie_d,
+    vd.rivoli AS rivoli_d,
+    vd.id_ban_toponyme AS id_ban_toponyme_d,
+    t.insee_g,
+    t.insee_d,
+    t.noeud_d,
+    t.noeud_f,
+    t.src_tronc,
+    a.type_tronc,
+    tt.valeur as type_tronc_v,
+    a.hierarchie,
+    h.valeur as hierarchie_v,
+    a.franchiss,
+    f.valeur as franchiss_v,
+    a.nb_voie,
+    a.projet,
+    a.fictif,
+    
+    c.type_circu,
+    tc.valeur as type_circu_v,
+    c.sens_circu,
+    sc.valeur as sens_circu_v,
+    c.v_max,
+    vc.valeur as v_max_v,
+    c.src_circu,
+    c.c_circu,
+	case when c.c_circu = '{"00"}' then 'Non renseigné' else '' end 
+    ||
+    case when c.c_circu like '%10%' then 'Hauteur' else '' end 
+    ||
+    case when c.c_circu like '%,"20"%' then ', Largeur' else case when c.c_circu like '%20%' then 'Largeur' else '' end end
+    ||
+    case when c.c_circu like '%,"30"%' then ', Poids' else case when c.c_circu like '%30%' then 'Poids' else '' end end
+    ||
+    case when c.c_circu like '%,"40"%' then ', Marchandises dangereurses' else case when c.c_circu like '%40%' then 'Marchandises dangereurses' else '' end end
+    ||
+	case when c.c_circu like '%,"50"}' then ', Type de véhicules' else case when c.c_circu like '%50%' then 'Type de véhicules' else '' end end
+    as c_circu_v,  
+    c.c_observ,
+    c.date_ouv,
+    
+    g.statut_jur,
+    sj.valeur as statut_jur_v,
+    g.num_statut,
+    g.gestion,
+    gt.valeur as gestion_v,
+    g.doman,
+      dt.valeur as doman_v,
+    g.proprio,
+    pt.valeur as proprio_v,
+    g.src_gest,
+    g.date_rem,
+    
+    t.pente,
+    t.observ,
+    t.src_geom,
+    src.valeur as src_geom_v,
+    t.src_date,
+    t.date_sai,
+    t.date_maj,
+    t.geom
+   FROM r_objet.geo_objet_troncon t
+     left JOIN r_voie.an_troncon a ON a.id_tronc = t.id_tronc
+     join r_voie.lt_type_tronc tt on tt.code = a.type_tronc
+     join r_voie.lt_hierarchie h on h.code = a.hierarchie
+     join r_voie.lt_franchiss f on f.code = a.franchiss
+     LEFT JOIN r_voie.an_voie vg ON vg.id_voie = t.id_voie_g
+     LEFT JOIN r_voie.an_voie vd ON vd.id_voie = t.id_voie_d
+     left JOIN m_voirie.an_voirie_circu c ON c.id_tronc = t.id_tronc
+     left JOIN m_voirie.an_voirie_gest g ON g.id_tronc = t.id_tronc
+     join m_voirie.lt_type_circu tc on tc.code = c.type_circu
+     join m_voirie.lt_sens_circu sc on sc.code = c.sens_circu
+     join m_voirie.lt_v_max vc on vc.code = c.v_max
+     join m_voirie.lt_statut_jur sj on sj.code = g.statut_jur
+     join m_voirie.lt_gestion gt on gt.code = g.gestion
+     join m_voirie.lt_doman dt on dt.code = g.doman
+     join m_voirie.lt_gestion pt on pt.code = g.proprio
+     join r_objet.lt_src_geom src on src.code = t.src_geom
+     
+   where t.insee_g in 
+         ('60023','60067','60068','60070','60151','60156','60159','60323','60325','60326','60337','60338','60382','60402','60447','60578','60579','60597','60600','60665','60667','60674',
+         '60024','60036','60040','60078','60125','60149','60152','60210','60223','60229','60254','60284','60308','60318','60369','60424','60441','60531','60540',
+         '60025','60032','60064','60072','60145','60167','60171','60184','60188','60305','60324','60438','60445','60491','60534','60569','60572','60593','60641','60647',
+         '60043','60119','60147','60150','60368','60373','60378','60392','60423','60492','60501','60537','60582','60636','60642','60654')
+         or
+         t.insee_d in 
+         ('60023','60067','60068','60070','60151','60156','60159','60323','60325','60326','60337','60338','60382','60402','60447','60578','60579','60597','60600','60665','60667','60674',
+         '60024','60036','60040','60078','60125','60149','60152','60210','60223','60229','60254','60284','60308','60318','60369','60424','60441','60531','60540',
+         '60025','60032','60064','60072','60145','60167','60171','60184','60188','60305','60324','60438','60445','60491','60534','60569','60572','60593','60641','60647',
+         '60043','60119','60147','60150','60368','60373','60378','60392','60423','60492','60501','60537','60582','60636','60642','60654')
+     ;
+
+COMMENT ON VIEW r_voie.geo_v_troncon_voie_full_decode 
+IS 'Vue de synthèse de la base de voie uniquement sur les communes du Grand Compiégnois, avec tous les attributs métiers codés et décodés';
 
 
-
+    
