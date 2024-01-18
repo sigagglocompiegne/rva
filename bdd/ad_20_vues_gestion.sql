@@ -187,6 +187,8 @@ update
 
 -- DROP FUNCTION r_adresse.ft_m_geo_adresse_gestion();
 
+-- DROP FUNCTION r_adresse.ft_m_geo_adresse_gestion();
+
 CREATE OR REPLACE FUNCTION r_adresse.ft_m_geo_adresse_gestion()
  RETURNS trigger
  LANGUAGE plpgsql
@@ -295,7 +297,7 @@ IF (new.numero || CASE
 	WHEN new.repet = 'ter' THEN 'T'
 	WHEN new.repet = 'quater' THEN 'Q'
 	WHEN new.repet = 'quinquies' THEN 'C'
-        WHEN new.repet = 'quinter' THEN 'Q'
+    WHEN new.repet = 'quinter' THEN 'Q'
 	WHEN (new.repet = 'a' or new.repet = 'b' or new.repet = 'c'
 	or new.repet = 'd' or new.repet = 'e' or new.repet = 'f'
 	or new.repet = 'g' or new.repet = 'h' or new.repet = 'i'
@@ -311,15 +313,15 @@ INSERT INTO r_adresse.an_adresse (id_adresse, numero, repet, complement, etiquet
 SELECT v_id_adresse,
 NEW.numero,
 LOWER(NEW.repet),
-NEW.complement,
+trim(NEW.complement),
 UPPER(REPLACE(REPLACE(REPLACE(REPLACE((NEW.etiquette),'bis','B'),'ter','T'),'quater','Q'),'quinquies','C')),
 CASE WHEN NEW.angle BETWEEN 90 AND 179 THEN NEW.angle + 180 WHEN NEW.angle BETWEEN 181 AND 270 THEN NEW.angle - 180 WHEN NEW.angle = 180 THEN 0 WHEN NEW.angle < 0 THEN NEW.angle + 360 ELSE NEW.angle END,
-NEW.observ,
+trim(NEW.observ),
 CASE WHEN NEW.src_adr IS NULL THEN '00' ELSE NEW.src_adr END,
 CASE WHEN NEW.diag_adr IS NULL THEN '00' ELSE NEW.diag_adr END,
 CASE WHEN NEW.diag_adr IS NULL THEN '0' ELSE LEFT(NEW.diag_adr,1) END,
 false,
-NEW.ld_compl,
+trim(NEW.ld_compl),
 case when NEW.diag_adr <> '99' THEN uuid_generate_v4() else null END;
 
 -- insertion dans la classe des adresses informations
@@ -329,13 +331,13 @@ SELECT v_id_adresse,
 CASE WHEN NEW.dest_adr IS NULL THEN '00' ELSE NEW.dest_adr END,
 CASE WHEN NEW.etat_adr IS NULL THEN '00' ELSE NEW.etat_adr END,
 NEW.nb_log,
-UPPER(NEW.pc),
+UPPER(trim(NEW.pc)),
 CASE WHEN NEW.groupee IS NULL THEN '0' ELSE NEW.groupee END,
 CASE WHEN NEW.secondaire IS NULL THEN '0' ELSE NEW.secondaire END,
 NEW.id_ext1,
 NEW.id_ext2,
 NEW.insee_cd,
-NEW.nom_cd;
+trim(NEW.nom_cd);
 
 RETURN NEW;
 
@@ -420,7 +422,10 @@ src_geom=CASE WHEN NEW.src_geom IS NULL THEN '00' ELSE NEW.src_geom END,
 src_date=CASE WHEN NEW.src_date IS NULL THEN '0000' ELSE NEW.src_date END,
 date_sai=OLD.date_sai,
 date_maj=now(),
-maj_bal=case when (new.id_voie <> old.id_voie) or (new.numero <> old.numero) or (new.repet <> old.repet) or (new.ld_compl <> old.ld_compl) or (new.position <> old.position) 
+maj_bal=case when (new.id_voie <> old.id_voie) or (new.numero <> old.numero) 
+		or (new.repet <> old.repet) or (new.repet is not null and old.repet is null) or (old.repet is not null and new.repet is null)
+		or (new.ld_compl <> old.ld_compl) or (new.ld_compl is not null and old.ld_compl is null) or (old.ld_compl is not null and new.ld_compl is null)
+		or (new.position <> old.position) 
 		or (old.diag_adr IN ('11','99') and new.diag_adr IN ('12','32','33','00')) or (old.diag_adr IN ('12','32','33','00') and new.diag_adr IN ('11','99')) 
 		or (old.diag_adr IN ('12','32','33','00') and left(new.diag_adr,1) = '2') 
 		or (left(old.diag_adr,1) = '2' and new.diag_adr IN ('12','32','33','00'))
@@ -456,16 +461,16 @@ UPDATE
 r_adresse.an_adresse
 SET
 numero=NEW.numero,
-repet=LOWER(NEW.repet),
-complement=NEW.complement,
+repet=LOWER(trim(NEW.repet)),
+complement=trim(NEW.complement),
 etiquette=UPPER(REPLACE(REPLACE(REPLACE(REPLACE((NEW.etiquette),'bis','B'),'ter','T'),'quater','Q'),'quinquies','C')),
 angle=CASE WHEN NEW.angle BETWEEN 90 AND 179 THEN NEW.angle + 180 WHEN NEW.angle BETWEEN 181 AND 270 THEN NEW.angle - 180 WHEN NEW.angle = 180 THEN 0 WHEN NEW.angle < 0 THEN NEW.angle + 360 ELSE NEW.angle END,
 verif_base=NEW.verif_base,
-observ=NEW.observ,
+observ=trim(NEW.observ),
 src_adr=CASE WHEN NEW.src_adr IS NULL THEN '00' ELSE NEW.src_adr END,
 diag_adr=CASE WHEN NEW.diag_adr IS NULL THEN '00' ELSE NEW.diag_adr END,
 qual_adr=CASE WHEN NEW.diag_adr IS NULL THEN '0' ELSE LEFT(NEW.diag_adr,1) END,
-ld_compl = NEW.ld_compl                                                                              
+ld_compl = trim(NEW.ld_compl)     
 WHERE id_adresse = NEW.id_adresse;
 
 -- mise à jour de la classe des adresses informations
@@ -476,13 +481,13 @@ SET
 dest_adr=CASE WHEN NEW.dest_adr IS NULL THEN '00' ELSE NEW.dest_adr END,
 etat_adr=CASE WHEN NEW.etat_adr IS NULL THEN '00' ELSE NEW.etat_adr END,
 nb_log=NEW.nb_log,
-pc=UPPER(NEW.pc),
+pc=UPPER(trim(NEW.pc)),
 groupee=CASE WHEN NEW.groupee IS NULL THEN '0' ELSE NEW.groupee END,
 secondaire=CASE WHEN NEW.secondaire IS NULL THEN '0' ELSE NEW.secondaire END,
 id_ext1=NEW.id_ext1,
 id_ext2=NEW.id_ext2,
 insee_cd=NEW.insee_cd,
-nom_cd=NEW.nom_cd
+nom_cd=trim(NEW.nom_cd)
 WHERE id_adresse = NEW.id_adresse;
 
 RETURN NEW;
@@ -517,14 +522,7 @@ $function$
 COMMENT ON FUNCTION r_adresse.ft_m_geo_adresse_gestion() IS 'Fonction trigger pour gérer l''insertion et la mise à jour des données adresse';
 
 
-create trigger t_t1_geo_adresse_gestion instead of
-insert
-    or
-delete
-    or
-update
-    on
-    r_adresse.geo_v_adresse for each row execute procedure r_adresse.ft_m_geo_adresse_gestion()
+
 
 -- #################################################################### FONCTION TRIGGER - ft_m_geo_v_adresse_vmr ###################################################
 
