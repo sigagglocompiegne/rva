@@ -187,8 +187,6 @@ update
 
 -- DROP FUNCTION r_adresse.ft_m_geo_adresse_gestion();
 
--- DROP FUNCTION r_adresse.ft_m_geo_adresse_gestion();
-
 CREATE OR REPLACE FUNCTION r_adresse.ft_m_geo_adresse_gestion()
  RETURNS trigger
  LANGUAGE plpgsql
@@ -263,6 +261,12 @@ END IF;
 IF NEW.groupee = '1' AND NEW.diag_adr NOT IN ('20','23','33') THEN
 RAISE EXCEPTION USING MESSAGE = 'Vous ne pouvez pas indiquer une adresse groupée sans indiquer dans la qualité qu''elle est à dégrouper ou à confirmer' ;
 END IF;
+
+IF (NEW.numero = '99999' AND NEW.diag_adr <> '99') or (NEW.numero <> '99999' AND NEW.diag_adr = '99') THEN
+RAISE EXCEPTION USING MESSAGE = 'Incohérence entre le numéro et la qualité : une voie sans adresse doit avoir comme numéro "99999" et avoir une qualité en "Autre (voies sans adresse)"' ;
+END IF;
+
+
 
 IF (NEW.groupee = '2' or NEW.groupee = '0') AND NEW.diag_adr = '23' THEN
 RAISE EXCEPTION USING MESSAGE = 'Vous ne pouvez pas indiquer une qualité d''adresse dégroupée sans indiquer la valeur "oui" en adresse groupée' ;
@@ -409,6 +413,10 @@ IF NEW.diag_adr = '21' and new.position = '01' THEN
 RAISE EXCEPTION USING MESSAGE = 'Vous ne pouvez pas indiquer une adresse à améliorer (position) pour une délivrance postale.'  ;
 END IF;
 
+IF (NEW.numero = '99999' AND NEW.diag_adr <> '99') or (NEW.numero <> '99999' AND NEW.diag_adr = '99') THEN
+RAISE EXCEPTION USING MESSAGE = 'Incohérence entre le numéro et la qualité : une voie sans adresse doit avoir comme numéro "99999" et avoir une qualité en "Autre (voies sans adresse)"' ;
+END IF;
+
 -- mise à jour de la classe des objets
 UPDATE
 r_objet.geo_objet_pt_adresse
@@ -470,7 +478,7 @@ observ=trim(NEW.observ),
 src_adr=CASE WHEN NEW.src_adr IS NULL THEN '00' ELSE NEW.src_adr END,
 diag_adr=CASE WHEN NEW.diag_adr IS NULL THEN '00' ELSE NEW.diag_adr END,
 qual_adr=CASE WHEN NEW.diag_adr IS NULL THEN '0' ELSE LEFT(NEW.diag_adr,1) END,
-ld_compl = trim(NEW.ld_compl)     
+ld_compl = trim(NEW.ld_compl)
 WHERE id_adresse = NEW.id_adresse;
 
 -- mise à jour de la classe des adresses informations
@@ -520,6 +528,7 @@ $function$
 ;
 
 COMMENT ON FUNCTION r_adresse.ft_m_geo_adresse_gestion() IS 'Fonction trigger pour gérer l''insertion et la mise à jour des données adresse';
+
 
 
 
