@@ -322,7 +322,7 @@ CASE WHEN NEW.diag_adr IS NULL THEN '00' ELSE NEW.diag_adr END,
 CASE WHEN NEW.diag_adr IS NULL THEN '0' ELSE LEFT(NEW.diag_adr,1) END,
 false,
 trim(NEW.ld_compl),
-case when NEW.diag_adr <> '99' THEN uuid_generate_v4() else null END;
+uuid_generate_v4();
 
 -- insertion dans la classe des adresses informations
 
