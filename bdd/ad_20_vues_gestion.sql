@@ -254,6 +254,10 @@ IF NEW.diag_adr = '21' and new.position = '01' THEN
 RAISE EXCEPTION USING MESSAGE = 'Vous ne pouvez pas indiquer une adresse à améliorer (position) pour une délivrance postale.'  ;
 END IF;
 
+IF NEW.diag_adr = '11' and new.position not IN ('01','02') THEN
+RAISE EXCEPTION USING MESSAGE = 'Vous ne pouvez pas indiquer une adresse conforme pour une position autre que délivrance postale ou entrée.'  ;
+END IF;
+
 IF NEW.numero = '9999' THEN
 RAISE EXCEPTION USING MESSAGE = 'Pour une voie sans numéro, il faut indiquer 99999 et non 9999.'  ;
 END IF;
@@ -413,6 +417,10 @@ IF NEW.diag_adr = '21' and new.position = '01' THEN
 RAISE EXCEPTION USING MESSAGE = 'Vous ne pouvez pas indiquer une adresse à améliorer (position) pour une délivrance postale.'  ;
 END IF;
 
+IF NEW.diag_adr = '11' and new.position not IN ('01','02') THEN
+RAISE EXCEPTION USING MESSAGE = 'Vous ne pouvez pas indiquer une adresse conforme pour une position autre que délivrance postale ou entrée.'  ;
+END if;
+
 IF (NEW.numero = '99999' AND NEW.diag_adr <> '99') or (NEW.numero <> '99999' AND NEW.diag_adr = '99') THEN
 RAISE EXCEPTION USING MESSAGE = 'Incohérence entre le numéro et la qualité : une voie sans adresse doit avoir comme numéro "99999" et avoir une qualité en "Autre (voies sans adresse)"' ;
 END IF;
@@ -531,100 +539,6 @@ COMMENT ON FUNCTION r_adresse.ft_m_geo_adresse_gestion() IS 'Fonction trigger po
 
 
 
-
-
--- #################################################################### FONCTION TRIGGER - ft_m_geo_v_adresse_vmr ###################################################
-
--- FUNCTION: r_adresse.ft_m_geo_v_adresse_vmr()
-
--- DROP FUNCTION r_adresse.ft_m_geo_v_adresse_vmr();
-
-CREATE FUNCTION r_adresse.ft_m_geo_v_adresse_vmr()
-    RETURNS trigger
-    LANGUAGE 'plpgsql'
-    COST 100
-    VOLATILE NOT LEAKPROOF
-AS $BODY$
-
-BEGIN
--- rafraichissement de la vue matérialisée des adresses visibles dans les applications
-REFRESH MATERIALIZED VIEW x_apps.xapps_geo_vmr_adresse;
-
-return new;
-
-END;
-
-$BODY$;
-
-ALTER FUNCTION r_adresse.ft_m_geo_v_adresse_vmr()
-    OWNER TO create_sig;
-
-COMMENT ON FUNCTION r_adresse.ft_m_geo_v_adresse_vmr()
-    IS 'Fonction permettant de rafraichir la vue matérialisée des adresses visibles dans les différentes applications.';
-
-CREATE TRIGGER t_t3_geo_v_adresse_vmr
-    INSTEAD OF INSERT OR DELETE OR UPDATE 
-    ON r_adresse.geo_v_adresse
-    FOR EACH ROW
-    EXECUTE PROCEDURE r_adresse.ft_m_geo_v_adresse_vmr();
-
-
--- FUNCTION: r_adresse.ft_m_adresse_repetcomplement_null()
-
--- DROP FUNCTION r_adresse.ft_m_adresse_repetcomplement_null();
-
-CREATE FUNCTION r_adresse.ft_m_adresse_repetcomplement_null()
-    RETURNS trigger
-    LANGUAGE 'plpgsql'
-    COST 100
-    VOLATILE NOT LEAKPROOF
-AS $BODY$
-
-begin
-
- -- gestion des valeurs '' mise à jour une insertion
- update r_adresse.an_adresse set repet = null where repet = '';        
- update r_adresse.an_adresse set complement = null where complement = '';
- update r_adresse.an_adresse set ld_compl = null where ld_compl = '';
-
-	return new; 
-end;
-
-$BODY$;
-
-ALTER FUNCTION r_adresse.ft_m_adresse_repetcomplement_null()
-    OWNER TO create_sig;
-
-GRANT EXECUTE ON FUNCTION r_adresse.ft_m_adresse_repetcomplement_null() TO PUBLIC;
-
-GRANT EXECUTE ON FUNCTION r_adresse.ft_m_adresse_repetcomplement_null() TO create_sig;
-
-COMMENT ON FUNCTION r_adresse.ft_m_adresse_repetcomplement_null()
-    IS 'Fonction forçant le champ à null quand insertion ou mise à jour des attributs repet ou complement ''''';
-
-
--- Trigger: t_t1_repetcomplement_null
-
--- DROP TRIGGER t_t1_repetcomplement_null ON r_adresse.an_adresse;
-
-CREATE TRIGGER t_t1_repetcomplement_null
-    AFTER INSERT OR UPDATE 
-    ON r_adresse.an_adresse
-    FOR EACH ROW
-    EXECUTE PROCEDURE r_adresse.ft_m_adresse_repetcomplement_null();
-
-
-create trigger t_t3_geo_v_adresse_vmr instead of
-insert
-    or
-delete
-    or
-update
-    on
-    r_adresse.geo_v_adresse for each row execute procedure r_adresse.ft_m_geo_v_adresse_vmr();
-
-COMMENT ON TRIGGER t_t3_geo_v_adresse_vmr ON r_adresse.geo_v_adresse IS 'Fonction trigger déclenchée à chaque mise à jour des voies pour rafraichir la vue matérialisée des adresses visibles dans les différentes applications.';
-		     
 -- #################################################################### FONCTION TRIGGER - ft_m_adresse_cad_insert_update ###################################################
 
 -- FUNCTION: r_adresse.ft_m_adresse_cad_insert_update()
