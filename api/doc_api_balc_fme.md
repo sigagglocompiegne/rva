@@ -25,6 +25,8 @@ Contact : sig@agglo-compiegne.fr
 
 ## Paramétrage
 
+La version 1.3 supprime la partie de vérification des adresses par des fichiers CSV historisés. Cette vérification se fait désormais par la comparaison du nombre d'adresses présent dans la base de données avant le téléversement et la variable de l'API `rowCount` qui compte le nombre d'adresses présent dans la dernière version de la BAL téléversée.
+
 Cette version 1.2 est une version permettant le téléversement en masse de x communes, avec une vérification de la présence d'une BAL existante (pour un autre client),  des dates de mises à jour et la suppression d'adresses (par un état ou par suppression des objets) par rapport à l'API de dépôt de la BAL. La version de FME utilisée est la 2021.1.1.0.
 
 Les paramètres passés dans le traitement sont tous issus de la [documentation de l'API BAL de la BaseAdresseNationale](https://github.com/etalab/ban-api-depot/wiki/Documentation).
