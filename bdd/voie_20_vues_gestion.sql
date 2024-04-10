@@ -65,9 +65,113 @@ COMMENT ON VIEW m_voirie.geo_v_troncon_voirie
 -- ###                                                                      TRIGGER                                                                 ###
 -- ###                                                                                                                                              ###
 -- ####################################################################################################################################################
+-- #################################################################### FONCTION TRIGGER - ft_m_controle_saisie ###################################################
+-- DROP FUNCTION m_voirie.ft_m_controle_saisie();
+
+CREATE OR REPLACE FUNCTION m_voirie.ft_m_controle_saisie()
+ RETURNS trigger
+ LANGUAGE plpgsql
+AS $function$
+
+BEGIN
+
+-- insee obligatoire
+if new.insee_g is null or new.insee_d is null or new.insee_g = '' or new.insee_d = '' then 
+	raise exception 'Vous devez saisir le code insee gauche et droite de la commune<br><br>';
+end if;
+
+-- mauvais code insee
+if new.insee_g not in (select distinct insee_g from r_objet.geo_objet_troncon) then
+	raise exception 'Vous devez saisir un code insee gauche existant dans la table des tronçons<br><br>';
+end if;
+if new.insee_d not in (select distinct insee_d from r_objet.geo_objet_troncon) then
+	raise exception 'Vous devez saisir un code insee droite existant dans la table des tronçons<br><br>';
+end if;
+
+/*
+-- contrôle spatiale
+if new.insee_g = new.insee_d then
+if new.insee_g not in (select c.insee from r_osm.geo_osm_commune c where st_intersects(new.geom,c.geom) is true) then
+	raise exception 'Votre tronçon est saisie dans une autre commune que celle indiquée à gauche <br><br>';
+end if;
+if new.insee_d not in (select c.insee from r_osm.geo_osm_commune c where st_intersects(new.geom,c.geom) is true) then
+	raise exception 'Votre tronçon est saisie dans une autre commune que celle indiquée à droite <br><br>';
+end if;
+end if;
+*/
+-- idvoie existe dans la commune
+if new.id_voie_g is not null then
+if new.id_voie_g not in (select id_voie from r_voie.an_voie where insee = new.insee_g) then 
+	raise exception 'L''identifiant gauche de voie n''existe pas pour la commune indiquée<br><br>';
+end if;
+end if;
+if new.id_voie_d is not null then
+if new.id_voie_d not in (select id_voie from r_voie.an_voie where insee = new.insee_d) then 
+	raise exception 'L''identifiant droit de voie n''existe pas pour la commune indiquée<br><br>';
+end if;
+end if;
+-- type de tronçon
+-- si voie cyclable = circulation cyclable
+-- si tronçon de type cyclable à dominante cyclable
+if new.type_tronc = '21' and new.type_circu NOT IN ('02','05') then 
+	raise exception 'Un tronçon de type "Voie cyclable" ne peut qu''être cyclable ou mixte à dominante cyclable en type de circulation<br><br>';
+end if;
+if new.type_tronc = '20' and new.type_circu <> '05' then 
+	raise exception 'Un tronçon de type "Tronçon de type cyclable" ne peut qu''être "Mixte à dominante cyclable" en type de circulation<br><br>';
+end if;
+
+-- voie verte, voie cyclable, à dominante cyclable et statut voie verte
+if new.statut_jur = '12' and (new.type_tronc <> '21' or new.type_circu <> '05') then 
+	raise exception 'Une voie verte est un tronçon de type cyclable et circulation à dominante cyclable<br><br>';
+end if;
+
+-- piste cyclable, voie cyclable, cyclable et statut piste cyclable
+if new.statut_jur = '11' and (new.type_tronc <> '21' or new.type_circu <> '02') then 
+	raise exception 'Une piste cyclable est un tronçon de type cyclable et circulation cyclable<br><br>';
+end if;
 
 
+-- statut juridique
+-- si type de tronçon voie cyclable, statut = piste ou voie verte
+if new.type_tronc = '21' and new.statut_jur not in ('11','12') then 
+	raise exception 'Un tronçon de type "Voie cyclable" ne peut qu''être une "Piste Cyclable" ou une "Voie Verte" en statut juridique<br><br>';
+end if;
 
+-- statut juridique et domanialité
+-- si domaine public par de propriétaire et inversement
+if new.doman = '01' and new.proprio <> 'ZZ' then 
+	raise exception 'Un tronçon en domaine public ne peut pas avoir de propriétaire<br><br>';	
+end if;
+if new.doman = '02' and new.proprio = 'ZZ' then 
+	raise exception 'Un tronçon en domaine privé doit avoir un type propriétaire renseigné<br><br>';	
+end if;
+
+-- si gestionnaire privé, domaine privé et propriétaire
+if new.gestion = '07' and (new.doman <> '02' or new.proprio = 'ZZ') then 
+	raise exception 'Un tronçon en gestion privée, doit être en domaine privé et avoir un type propriétaire renseigné<br><br>';	
+end if;
+
+-- si statut voie communale, domanialité par privé ni gestionnaire ni proprio
+if new.statut_jur IN ('02','03','05') and (new.doman ='02' or new.proprio ='07' or new.gestion ='07') then 
+	raise exception 'Un statut voie communale ne peut pas être en domaine privé, ni gestionnaire privé, ni propriétaire privé<br><br>';	
+end if;
+
+
+RETURN NEW;
+
+END;
+$function$
+;
+
+COMMENT ON FUNCTION m_voirie.ft_m_controle_saisie() IS 'Fonction trigger pour la gestion des contrôles de saisies des tronçons de voie';
+
+
+create trigger t_t0_controle_saisie instead of
+insert
+    or
+update
+    on
+    m_voirie.geo_v_troncon_voirie for each row execute procedure m_voirie.ft_m_controle_saisie();
 -- #################################################################### FONCTION TRIGGER - GEO_OBJET_TRONCON ###################################################
 
 -- Function: r_objet.ft_m_geo_objet_troncon()
