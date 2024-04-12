@@ -4,7 +4,7 @@
 
 ## Principe
 
-L'alimentation de la BaseAdresseLocale évolue et permet à présent de téléverser les fichiers communaux au format BAL via une API. L'Agglomération de la Région de Compiègne, signataire de la [charte "Base Adresse Locale"](https://geo.compiegnois.fr/portail/index.php/2021/05/30/adresse-le-compiegnois-sur-la-bonne-voie/), diffuse quotidiennement les informations certifiées de ses communes membres ainsi que celles de deux autres EPCI également signataires de la charte, à savoir la Communauté de Communes de la Plaine d'Estrées et la Communauté de Communes des Lisières de l'Oise. 
+L'alimentation de la BaseAdresseLocale évolue et permet à présent de téléverser les fichiers communaux au format BAL via une API. L'Agglomération de la Région de Compiègne (ARC), signataire de la [charte "Base Adresse Locale"](https://geo.compiegnois.fr/portail/index.php/2021/05/30/adresse-le-compiegnois-sur-la-bonne-voie/), diffuse quotidiennement les informations certifiées de ses communes membres ainsi que celles de trois autres EPCI également signataires de la charte, à savoir la Communauté de Communes de la Plaine d'Estrées (CCPE), la Communauté de Communes des Lisières de l'Oise (CCLO) et la Communauté de Communes des 2 Vallées (CC2V). 
 
 Le service SIG qui utilise déjà l'ETL FME de la société "Safe Software" pour l'ensemble de ces traitements, a paramétré un projet pour utiliser cette API.
 
