@@ -185,6 +185,7 @@ update
 
 -- #################################################################### FONCTION TRIGGER - ft_m_geo_adresse_gestion ###################################################
 
+
 -- DROP FUNCTION r_adresse.ft_m_geo_adresse_gestion();
 
 CREATE OR REPLACE FUNCTION r_adresse.ft_m_geo_adresse_gestion()
@@ -270,7 +271,10 @@ IF (NEW.numero = '99999' AND NEW.diag_adr <> '99') or (NEW.numero <> '99999' AND
 RAISE EXCEPTION USING MESSAGE = 'Incohérence entre le numéro et la qualité : une voie sans adresse doit avoir comme numéro "99999" et avoir une qualité en "Autre (voies sans adresse)"' ;
 END IF;
 
-
+-- position doit être renseigne si adresse conforme
+if new.position = '00' and NEW.diag_adr IN ('11','12','20','21','22','23','24','25','33','99') then 
+RAISE EXCEPTION 'Vous ne pouvez pas indiquer une position à "Non renseignée".' ;
+end if;
 
 IF (NEW.groupee = '2' or NEW.groupee = '0') AND NEW.diag_adr = '23' THEN
 RAISE EXCEPTION USING MESSAGE = 'Vous ne pouvez pas indiquer une qualité d''adresse dégroupée sans indiquer la valeur "oui" en adresse groupée' ;
@@ -425,6 +429,11 @@ IF (NEW.numero = '99999' AND NEW.diag_adr <> '99') or (NEW.numero <> '99999' AND
 RAISE EXCEPTION USING MESSAGE = 'Incohérence entre le numéro et la qualité : une voie sans adresse doit avoir comme numéro "99999" et avoir une qualité en "Autre (voies sans adresse)"' ;
 END IF;
 
+-- position doit être renseigne si adresse conforme
+if new.position = '00' and NEW.diag_adr IN ('11','12','20','21','22','23','24','25','33','99') then 
+RAISE EXCEPTION 'Vous ne pouvez pas indiquer une position à "Non renseignée".' ;
+end if;
+
 -- mise à jour de la classe des objets
 UPDATE
 r_objet.geo_objet_pt_adresse
@@ -536,6 +545,7 @@ $function$
 ;
 
 COMMENT ON FUNCTION r_adresse.ft_m_geo_adresse_gestion() IS 'Fonction trigger pour gérer l''insertion et la mise à jour des données adresse';
+
 
 
 
