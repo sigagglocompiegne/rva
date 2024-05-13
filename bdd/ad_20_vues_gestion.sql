@@ -228,7 +228,8 @@ IF (NEW.diag_adr = '11'::text OR left(NEW.diag_adr, 1) = '2') AND
      LEFT JOIN r_voie.an_voie v ON v.id_voie = p.id_voie
      LEFT JOIN r_osm.geo_osm_commune c ON v.insee = c.insee::bpchar
   WHERE 
-  
+    a.diag_adr <> '12' and a.diag_adr <> '33'
+  and
   lower(
         CASE
             WHEN a.repet IS NULL AND a.complement IS NULL THEN concat(v.insee, '_', v.rivoli, '_', lpad(a.numero::text, 5, '0'::text))
