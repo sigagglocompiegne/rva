@@ -82,7 +82,7 @@ L'ensemble des classes d'objets de gestion sont stockés dans le schéma `m_sign
 Particularité(s) à noter :
 * Une clé primaire existe sur le champ `gid` lui-même contenant une séquence pour l'attribution automatique d'une référence de trace. 
 * 1 trigger :
-  * `t_t0_sign_ign_after` : après l'insertion, cette fonction permet de traiter le cas des découpes de tronçons propre à la gestion de voies. Cette modification ne doit pas remonter à l'IGN. Dans un processus automatique, cette découpe génére un `update` sur une partie du tronçon découpé et créer un tronçon sur l'autre partie. Le processus de trace depuis la vue de gestion enregistre bien ces 52 mouvements dans cette classe d'objets mais la fonction-trigger les supprime après l'enregistrement. Cette pratique implique d'enregistrer le découpage avant d'effectuer éventuellement une autre modification.
+  * `t_t0_sign_ign_after` : après l'insertion, cette fonction permet de traiter le cas des découpes de tronçons propre à la gestion de voies. Cette modification ne doit pas remonter à l'IGN. Dans un processus automatique, cette découpe génére un `update` sur une partie du tronçon découpé et créer un tronçon sur l'autre partie. Le processus de trace depuis la vue de gestion enregistre bien ces 2 mouvements mais la fonction-trigger les supprime après l'enregistrement. Cette pratique implique d'enregistrer le découpage avant d'effectuer éventuellement une autre modification.
 
 ---
 
