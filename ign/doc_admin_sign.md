@@ -2,5 +2,5 @@
 
 # Signalement IGN - base de voies
 
-  * [Suivi des modifications](ign/ign_sign_00_trace.sql)
-  * [Création  de la structure initiale](ign/ign_sig_10_squelette.sql)
+  * [Suivi des modifications](ign_sign_00_trace.sql)
+  * [Création  de la structure initiale](ign_sig_10_squelette.sql)
