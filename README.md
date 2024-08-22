@@ -31,7 +31,7 @@ Spécification du fichier d’échange relatif aux données concernant le réfé
 - Règles de saisies des adresses(à venir)
 - Signalements IGN - Base de voies
   * [Suivi des modifications](ign/ign_sign_00_trace.sql)
-  * [Création  de la structure initiale](ign/ign_sign_10_squelette.sql)
+  * [Création de la structure initiale](ign/ign_sign_10_squelette.sql)
   * [Documentation d'administration de la base de signalement](ign/doc_admin_ign_sign.md)
   
 ## Contexte
