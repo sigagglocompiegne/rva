@@ -151,7 +151,7 @@ Ce traitement a été automatisé dans FME-Flow et s'éxécute tous les jours.
    - un insert / update est post-traité pour indiquer qu'il s'agit d'un INSERT avec les attributs modifiés de l'UPDATE
    - un update multiple est post-traité pour déterminer si il s'agit d'une mise à jour géométrique, attributaire ou les deux
 
- Une fois ce post-traitement réalisé, les signalements sont envoyés à l'IGN, et en retour, le transformer renvoie un n° de signalement IGN qui est écrit dans un fichier Excel de suivi `voie_ign_api_signalement_send_trace_id.xlsx`. Un email est également générer au service pour confirmer l'envoie. Si un problème survient pendant le post-traitement, un `Terminator` a été intégré avec l'envoi d'un email au service indiquant le problème rencontré.
+ Une fois ce post-traitement réalisé, les signalements sont envoyés à l'IGN, et en retour, le transformer renvoie un n° de signalement IGN qui est écrit dans un fichier Excel de suivi `voie_ign_api_signalement_send_trace_id.xlsx`. Un email est également généré au service pour confirmer l'envoie. Si un problème survient pendant le post-traitement, un `Terminator` a été intégré avec l'envoi d'un email au service indiquant le problème rencontré.
 
 Ce post-traitement a été automatisé dans FME-Flow et s'éxécute chaque 1er jour du mois et traite les traces du mosi précédent. Les traces du mois en cours sont également affichées dans le projet QGIS.
 
