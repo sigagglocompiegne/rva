@@ -155,6 +155,7 @@ Ce traitement a été automatisé dans FME-Flow et s'éxécute tous les jours.
 
 Ce post-traitement a été automatisé dans FME-Flow et s'éxécute chaque 1er jour du mois et traite les traces du mosi précédent. Les traces du mois en cours sont également affichées dans le projet QGIS.
 
+Les signalements, et leur suivi auprès de l'IGN, sont visibles dans l'espace collaboratif `https://espacecollaboratif.ign.fr/profile/`. Les paramètres de connexions sont disponibles dans le Wiki associé.
 
 ## Projet QGIS pour la gestion
 
