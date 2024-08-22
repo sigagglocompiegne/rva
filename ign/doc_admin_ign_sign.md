@@ -52,7 +52,7 @@ L'ensemble des classes d'objets de gestion sont stockés dans le schéma `m_sign
 |id_tronc|identifiant du tronçon|bigint| |
 |date_modif|Date du changement effectué en base|timestamp without time zone| |
 |type_ope|Type d'opération effectuée|text| |
-|geom|Géométrie du tronçon à envoyer avec le signalement|USER-DEFINED| |
+|geom|Géométrie du tronçon à envoyer avec le signalement|linestring(2154)| |
 |qualif_sign|Qualification du signalement, sera envoyé comme description|text| |
 |att_liste|Liste des attributs ayant subi une modification de sa valeur|text| |
 |date_ouv|Valeur de la date d'ouverture envoyée avec le signalement|character varying(4)| |
