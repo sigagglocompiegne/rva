@@ -29,9 +29,9 @@ Sur cette vue a été intégrée un trigger pour générer les traces.
 
 Cette fonction permet d'écrire l'ensemble des traces selon les paramètres définis avec l'IGN. En effet, toutes les modifications réalisées sur la base de voies ne doivent pas être envoyées à l'IGN. Ci-dessous, la liste des critères d'envois (donc d'écriture d'une trace).
 
-- quand je supprime un tronçon (pour les statuts hors département, national, autoroute, chemin forestier, chemin de halage)
-- quand j'insère un tronçon (pour les statuts hors département, national, autoroute, chemin forestier, chemin de halage)
-- à la mise à jour d'un tronçon (géométrie ou attribut) et toujours pour les statuts hors département, national, autoroute, chemin forestier, chemin de halage :
+- quand je supprime un tronçon (pour les statuts hors département, national, autoroute)
+- quand j'insère un tronçon (pour les statuts hors département, national, autoroute)
+- à la mise à jour d'un tronçon (géométrie ou attribut) et toujours pour les statuts hors département, national, autoroute :
  - en géométrie : filtre sur les ajustements de tracés inférieur à 6m non tracé
  - attribut : filtre uniquement sur les modifications des attributs suivants (`date_ouv`, `type_tronc`, `id_voie`,`sens_circu`,`nb_voie`,`projet`,`statut_jur`,`num_statut`)
 
