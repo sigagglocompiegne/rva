@@ -20,7 +20,7 @@ L'objectif n'est pas de créér des signalements "manuels" comme pour les adress
 
 ## Dépendances
 
-L'écriture des traces, ensemble des modifications effectuées sur la base de voies, est réalisée à partir de la vue de gestion des tronçons de voies. Cette vue est stockée dans le schéma `m_voirie` et se nomme `geo_v_troncon_voirie`.
+L'écriture des traces, ensemble des modifications effectuées sur la base de voies, est réalisée à partir de la vue de gestion des tronçons de voies. Cette vue est stockée dans le schéma `m_voirie` et se nomme `geo_v_troncon_voirie`. Elle est accessible et modifiable dans le projet QGIS de gestion.
 
 Sur cette vue a été intégrée un trigger pour générer les traces.
 
