@@ -165,7 +165,7 @@ Dans ce projet, sont visibles les signalements uploadés de l'IGN (comme dans l'
 
 ![qgis](img/QGIS_ign_sign.png)
 
-Il est possible de forcer un non-signalement à l'IGN, à savoir ne pas générer une trace depuis ce projet si un besoin particulier de modification de la base de voies est nécessaire. Il suffit de cocher la case présente dans l'ongler `Divers` de la fiche du tronçon.
+**Il est possible de forcer un non-signalement à l'IGN**, à savoir ne pas générer une trace depuis ce projet si un besoin particulier de modification de la base de voies est nécessaire. Il suffit de cocher la case présente dans l'ongler `Divers` de la fiche du tronçon.
 
 ![qgis](img/QGIS_ign_sign_non.png)
 
