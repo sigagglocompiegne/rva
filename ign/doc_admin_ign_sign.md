@@ -4,7 +4,7 @@
 
 ## Principes
   * **généralité** :
-Afin d'améliorer la remontée des informations gérées dans la base de voies locales à l'ensemble des producteurs de cartographies en ligne, GPS, ... il s'est avéré nécessaire d'alimenter la base Route de la BDTopo de l'IGN qui est généralement utilisé par ces producteurs. Une expertise de l'IGN a été menée sur notre base de voies avant d'entamer une démarche de signalements. Celle-ci a été mis en place à l'issue.
+Afin d'améliorer la remontée des informations gérées dans la base de voies locales à l'ensemble des producteurs de cartographies en ligne, GPS, ... il s'est avéré nécessaire d'alimenter la base Route de la BDTopo de l'IGN qui est généralement utilisé par ces producteurs. Une expertise de l'IGN a été menée sur notre base de voies avant d'entamer une démarche de signalements. Celle-ci a été mise en place à l'issue.
  
  * **résumé fonctionnel** :
 L'objectif n'est pas de créér des signalements "manuels" comme pour les adresses, mais de les générer de façon automatique. Cette génération nosu oblige à mettre en place un fonctionnel permettant d'isoler les modifications réalisées et celles devant être envoyées à l'IGN. L'ensemble de ces contraintes sont gérées en 2 temps. Un permier temps isole l'ensemble des traces dans une table spécifique alimentée par la vue de gestion des tronçons de voies. Le second temps consiste à réaliser un post-traitement dans FME afin de préparer les données à envoyer à l'IGN. En effet l'IGN a développé un transformer pour envoyer les signalements.
@@ -20,14 +20,14 @@ L'objectif n'est pas de créér des signalements "manuels" comme pour les adress
 
 ## Dépendances
 
-L'écriture des traces, ensemble des modifications effectuées sur la base de voies, est réalisée à partir de la vue de gestion des tronçons de voies. Cette vue est stockéé dans le schéma `m_voirie` et se nomme `geo_v_troncon_voirie`.
+L'écriture des traces, ensemble des modifications effectuées sur la base de voies, est réalisée à partir de la vue de gestion des tronçons de voies. Cette vue est stockée dans le schéma `m_voirie` et se nomme `geo_v_troncon_voirie`.
 
 Sur cette vue a été intégrée un trigger pour générer les traces.
 
 * 1 trigger :
   * `t_t4_sign_ign` : à l'insertion, mise à jour ou suppression
 
-Cette fonction permet d'écrire l'ensemble des traces selon les paramètres définis avec l'IGN. Ces paramètres ont pour objectifs de tracer uniquement les informations à envoyer à l'IGN. En effet, toutes les modifications réalisées sur la base de voies ne doivent pas être envoyées à l'IGN. Ci-dessous, la liste des critères d'envois (donc d'écriture d'une trace).
+Cette fonction permet d'écrire l'ensemble des traces selon les paramètres définis avec l'IGN. En effet, toutes les modifications réalisées sur la base de voies ne doivent pas être envoyées à l'IGN. Ci-dessous, la liste des critères d'envois (donc d'écriture d'une trace).
 
 - quand je supprime un tronçon (pour les statuts hors département, national, autoroute, chemin forestier, chemin de halage)
 - quand j'insère un tronçon (pour les statuts hors département, national, autoroute, chemin forestier, chemin de halage)
@@ -77,6 +77,9 @@ Sans objet
 Sans objet
 
 ## Traitement automatisé mis en place (Workflow de l'ETL FME)
+
+ * `voie_ign_api_signalement_send.fmw` : post-traitement FME des traces enregistrées dans le mois. Une synthèse est réalisée sur l'ensemble des traces d'un même tronçon (pour éviter des envois multiples)
+   - qsffq
 
 ### Récupération des signalements de la base Route de l'IGN
 
