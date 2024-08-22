@@ -48,16 +48,40 @@ L'ensemble des classes d'objets de gestion sont stockés dans le schéma `m_sign
    
 |Nom attribut | Définition | Type | Valeurs par défaut |
 |:---|:---|:---|:---|
-
+|gid|Identifiant unique de chaque changement intervenu sur un tronçon|bigint|nextval('m_signalement.an_log_ign_signalement_send_gid_seq'::regclass)|
+|id_tronc|identifiant du tronçon|bigint| |
+|date_modif|Date du changement effectué en base|timestamp without time zone| |
+|type_ope|Type d'opération effectuée|text| |
+|geom|Géométrie du tronçon à envoyer avec le signalement|USER-DEFINED| |
+|qualif_sign|Qualification du signalement, sera envoyé comme description|text| |
+|att_liste|Liste des attributs ayant subi une modification de sa valeur|text| |
+|date_ouv|Valeur de la date d'ouverture envoyée avec le signalement|character varying(4)| |
+|type_tronc|Code du type de tronçon envoyée avec le signalement|character varying(2)| |
+|type_tronc_v|Valeur du type de tronçon envoyée avec le signalement|text| |
+|libvoie_g|Libellé de voie gauche envoyée avec le signalement|text| |
+|libvoie_d|Libellé de voie droite envoyée avec le signalement|text| |
+|sens_circu|Code du sens de circulation envoyée avec le signalement|character varying(2)| |
+|sens_circu_v|Valeur du sens de circulation envoyée avec le signalement|text| |
+|nb_voie|Nombre de voie envoyée avec le signalement|smallint| |
+|projet|Information du tronçon en projet ou non envoyée avec le signalement|boolean| |
+|hierarchie|Code de hiérarchie envoyée avec le signalement|character varying(1)| |
+|hierarchie_v|Valeur de la hiérarchie du tronçon envoyée avec le signalement|text| |
+|date_maj|Date de saisie ou de mise à jour du tronçon envoyée avec le signalement|timestamp without time zone| |
+|insee_d|Code insee droite envoyée avec le signalement|character varying(5)| |
+|insee_g|Code insee gaiche envoyée avec le signalement|character varying(5)| |
+|franchiss|Code de franchissement envoyée avec le signalement|character varying(2)| |
+|franchiss_v|Valeur du code de franchissement envoyée avec le signalement|text| |
+|statut_jur_v|Valeur du statut juridique envoyée avec le signalement|text| |
+|num_statut|Numéro de statut de la voie envoyée avec le signalement|character varying(10)| |
+|src_geom_v|Valeur du référentiel géographique utilisé pour la saisie envoyée avec le signalement|text| |
+|src_tronc|Valeur de la source d'information à l'origine du tracé envoyée avec le signalement|text| |
+|type_circu_v|Valeur du type de circulation envoyée avec le signalement|text| |
 
 Particularité(s) à noter :
-* Une clé primaire existe sur le champ `id_tronc` lui-même contenant une séquence pour l'attribution automatique d'une référence tronçon unique. 
-* Un index est présent sur le champ geom
-* 3 triggers :
-  * `t_t1_noeud_insert` : avant insertion ou mise à jour, recherche si il existe un noeud de épart ou de fin, sinon création des noeud du tronçon
-  * `t_t2_noeud_sup` : après suppression ou mise à jour, si il n'y a aucun noeud dans la table des noeuds alors on supprime tout, sinon suppression uniquement des noeuds ne faisant plus partie d'un début ou d'une fin.
-  * `t_t3_maj_insee_gd` : avant insertion ou mise à jour, recherche code insee et nom de la commune à droite et à gauche du tronçon.
-  
+* Une clé primaire existe sur le champ `gid` lui-même contenant une séquence pour l'attribution automatique d'une référence de trace. 
+* 1 trigger :
+  * `t_t0_sign_ign_after` : après l'insertion, cette fonction permet de traiter le cas des découpes de tronçons propre à la gestion de voies. Cette modification ne doit pas remonter à l'IGN. Dans un processus automatique, cette découpe génére un `update` sur une partie du tronçon découpé et créer un tronçon sur l'autre partie. Le processus de trace depuis la vue de gestion enregistre bien ces 52 mouvements dans cette classe d'objets mais la fonction-trigger les supprime après l'enregistrement. Cette pratique implique d'enregistrer le découpage avant d'effectuer éventuellement une autre modification.
+
 ---
 
 ### classes d'objets applicatives métiers sont classés dans le schéma x_apps :
