@@ -32,7 +32,7 @@ Cette fonction permet d'écrire l'ensemble des traces selon les paramètres déf
 - quand je supprime un tronçon (pour les statuts hors département, national, autoroute)
 - quand j'insère un tronçon (pour les statuts hors département, national, autoroute)
 - à la mise à jour d'un tronçon (géométrie ou attribut) et toujours pour les statuts hors département, national, autoroute :
- - en géométrie : filtre sur les ajustements de tracés inférieur à 6m non tracé
+ - en géométrie : filtre sur les ajustements de tracés inférieurs à 6m non pris en compte
  - attribut : filtre uniquement sur les modifications des attributs suivants (`date_ouv`, `type_tronc`, `id_voie`,`sens_circu`,`nb_voie`,`projet`,`statut_jur`,`num_statut`)
 
 Concernant l'attribut franchissements, celui-ci est envoyé si il correspond à un passage à niveau ou un pont.
