@@ -159,9 +159,9 @@ Ce post-traitement a été automatisé dans FME-Flow et s'éxécute chaque 1er j
 ## Projet QGIS pour la gestion
 
 Le projet QGIS utilisé est celui de la gestion de la base de voie. Il est stocké ici :
-R:\Ressources\4-Partage\3-Procedures\QGIS\RVA_3.x.qgs
+`R:\Ressources\4-Partage\3-Procedures\QGIS\RVA_3.x.qgs`
 
-Dans ce projet, sont visibles les signalements uploadés de l'IGN et ceux du mois en cours qui seront envoyés le 1er jour du mois suivant.
+Dans ce projet, sont visibles les signalements uploadés de l'IGN (comme dans l'application GEO) et ceux du mois en cours (non présent dans l'application GEO) qui seront envoyés le 1er jour du mois suivant.
 
 ![qgis](img/QGIS_ign_sign.png)
 
