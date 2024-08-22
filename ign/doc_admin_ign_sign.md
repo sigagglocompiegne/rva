@@ -7,7 +7,7 @@
 Afin d'améliorer la remontée des informations gérées dans la base de voies locales à l'ensemble des producteurs de cartographies en ligne, GPS, ... il s'est avéré nécessaire d'alimenter la base Route de la BDTopo de l'IGN qui est généralement utilisé par ces producteurs. Une expertise de l'IGN a été menée sur notre base de voies avant d'entamer une démarche de signalements. Celle-ci a été mise en place à l'issue.
  
  * **résumé fonctionnel** :
-L'objectif n'est pas de créér des signalements "manuels" comme pour les adresses, mais de les générer de façon automatique. Cette génération nosu oblige à mettre en place un fonctionnel permettant d'isoler les modifications réalisées et celles devant être envoyées à l'IGN. L'ensemble de ces contraintes sont gérées en 2 temps. Un permier temps isole l'ensemble des traces dans une table spécifique alimentée par la vue de gestion des tronçons de voies. Le second temps consiste à réaliser un post-traitement dans FME afin de préparer les données à envoyer à l'IGN. En effet l'IGN a développé un transformer pour envoyer les signalements.
+L'objectif n'est pas de créér des signalements "manuels" comme pour les adresses, mais de les générer de façon automatique. Cette génération nous oblige à mettre en place un fonctionnel permettant d'isoler les modifications réalisées et celles devant être envoyées à l'IGN. L'ensemble de ces contraintes sont gérées en 2 temps. Un permier temps isole l'ensemble des traces dans une table spécifique alimentée par la vue de gestion des tronçons de voies. Le second temps consiste à réaliser un post-traitement dans FME afin de préparer les données à envoyer à l'IGN. En effet l'IGN a développé un transformer pour envoyer les signalements.
 
 ## Schéma fonctionnel
 
