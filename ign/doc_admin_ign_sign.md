@@ -112,6 +112,7 @@ Particularité(s) à noter :
 |geom|Géométrie du signalement (point)|point(2154)| |
 |geom1|Géométrie du croquis (ligne)|multilinestring(2154)| |
 |geom2|Géométrie du croquis (point)|multipoint(2154)| |
+|id_fichier|Identifiant du fichier joint au signalement. Cet attribut permet d'accéder à la pièce jointe (après authentification) avec cette adresse https://espacecollaboratif.ign.fr/document/download/[id_fichier]|int4||
 
 Particularité(s) à noter :
 * Une clé primaire existe sur le champ `signalement_id` : identifiant de signalement interne l'IGN (et unique)
