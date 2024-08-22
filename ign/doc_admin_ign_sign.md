@@ -105,7 +105,7 @@ R:\Ressources\4-Partage\3-Procedures\QGIS\RVA_3.x.qgs
 
 Dans ce projet, sont visibles les signalements uploadés de l'IGN et ceux du mois en cours qui seront envoyés le 1er jour du mois suivant.
 
-![qgis](QGIS_ign_sign.png)
+![qgis](img/QGIS_ign_sign.png)
 
 ## Export Open Data
 
