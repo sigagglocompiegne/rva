@@ -143,11 +143,11 @@ Ce traitement a été automatisé dans FME-Flow et s'éxécute tous les jours.
 ### Envoie des signalements à la base Route de l'IGN
 
 * `voie_ign_api_signalement_send.fmw` : post-traitement FME des traces enregistrées dans le mois. Une synthèse est réalisée sur l'ensemble des traces d'un même tronçon (pour éviter des envois multiples)
-   - filtre sur les tronçons supprimés inférieur à 25m
-   - un delete, un insert ou un update unique par tronçon n'est pas filtré. Un apramétrage particulier est réalisé pour ajouter la liste des attributs éventuellement modifiés à la description du signalement
+   - filtre sur les tronçons supprimés inférieurs à 25m
+   - un delete, un insert ou un update unique par tronçon n'est pas filtré. Un paramétrage particulier est réalisé pour ajouter la liste des attributs éventuellement modifiés à la description du signalement
    - un insert / delete d'un même tronçon n'est pas envoyé
    - un insert / update est post-traité pour indiquer qu'il s'agit d'un INSERT avec les attributs modifiés de l'UPDATE
-   - un UPDATE multiple est post-traité pour déterminer si mise à jour géométrique, attributaire ou les deux
+   - un update multiple est post-traité pour déterminer si il s'agit d'une mise à jour géométrique, attributaire ou les deux
 
  Une fois ce post-traitement réalisé, les signalements sont envoyés à l'IGN, et en retour, le transformer renvoie un n° de signalement IGN qui est écrit dans un fichier Excel de suivi `voie_ign_api_signalement_send_trace_id.xlsx`. Un email est également générer au service pour confirmer l'envoie. Si un problème survient pendant le post-traitement, un `Terminator` a été intégré avec l'envoi d'un email au service indiquant le problème rencontré.
 
