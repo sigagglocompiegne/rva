@@ -11,7 +11,7 @@
 -- ####################################################################################################################################################
 
 -- ATTENTION : l'alimentation de la table _send, est réalisée à partir de la vue m_voirie.geo_v_troncon_voirie avec une fonction trigger.
--- le code SQL est intégré dans la partie
+-- le code SQL est intégré dans la partie "Script d'initialisation de la base de données des voies"
 
 -- ####################################################################################################################################################
 -- ###                                                                                                                                              ###
