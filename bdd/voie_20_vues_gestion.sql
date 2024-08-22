@@ -26,7 +26,8 @@ DROP VIEW IF EXISTS m_voirie.geo_v_troncon_voirie;
 -- DROP VIEW r_voie.geo_v_troncon_voie;
 
 CREATE OR REPLACE VIEW r_voie.geo_v_troncon_voie AS 
- SELECT t.id_tronc,t.id_voie_g,t.id_voie_d, vg.libvoie_c as libvoie_g, vg.rivoli as rivoli_g, vd.libvoie_c as libvoie_d, vd.rivoli as rivoli_d, t.insee_g,t.insee_d,t.noeud_d,t.noeud_f,t.src_tronc,a.type_tronc,a.hierarchie,a.franchiss,a.nb_voie,a.projet,a.fictif,t.pente,t.observ, t.src_geom, t.src_date, t.geom
+ SELECT t.id_tronc,t.id_voie_g,t.id_voie_d, vg.libvoie_c as libvoie_g, vg.rivoli as rivoli_g, vd.libvoie_c as libvoie_d, vd.rivoli as rivoli_d, t.insee_g,t.insee_d,t.noeud_d,
+	t.noeud_f,t.src_tronc,a.type_tronc,a.hierarchie,a.franchiss,a.nb_voie,a.projet,a.fictif,t.pente,t.observ, t.src_geom, t.src_date, t.geom
    FROM r_objet.geo_objet_troncon t
    LEFT JOIN r_voie.an_troncon a ON a.id_tronc = t.id_tronc
    LEFT JOIN r_voie.an_voie vg ON vg.id_voie = t.id_voie_g
@@ -45,7 +46,8 @@ CREATE OR REPLACE VIEW m_voirie.geo_v_troncon_voirie AS
  SELECT t.id_tronc,t.id_voie_g,t.id_voie_d, t.insee_g,t.insee_d,t.noeud_d,t.noeud_f,
         false as h_troncon,
         a.type_tronc,a.hierarchie,a.franchiss,a.nb_voie,a.projet,a.fictif,g.statut_jur,
-        g.num_statut,g.gestion,g.doman,g.proprio,g.date_rem,c.type_circu,c.sens_circu,c.c_circu,c.c_observ,c.date_ouv,c.v_max,t.pente,t.observ, t.src_geom, t.src_date, t.src_tronc, t.geom
+        g.num_statut,g.gestion,g.doman,g.proprio,g.date_rem,c.type_circu,c.sens_circu,c.c_circu,c.c_observ,c.date_ouv,c.v_max,t.pente,t.observ, t.src_geom, t.src_date, t.src_tronc, false as ign_s,
+	t.geom
    FROM r_objet.geo_objet_troncon t
    LEFT JOIN r_voie.an_troncon a ON a.id_tronc = t.id_tronc
    LEFT JOIN m_voirie.an_voirie_gest g ON g.id_tronc = t.id_tronc
