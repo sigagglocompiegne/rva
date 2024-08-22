@@ -67,6 +67,331 @@ COMMENT ON VIEW m_voirie.geo_v_troncon_voirie
 -- ###                                                                      TRIGGER                                                                 ###
 -- ###                                                                                                                                              ###
 -- ####################################################################################################################################################
+
+-- #################################################################### FONCTION TRIGGER - ft_m_signal_ign ###################################################
+
+-- DROP FUNCTION m_voirie.ft_m_signal_ign();
+
+CREATE OR REPLACE FUNCTION m_voirie.ft_m_signal_ign()
+ RETURNS trigger
+ LANGUAGE plpgsql
+AS $function$
+
+DECLARE v_id_tronc integer;
+DECLARE v_trace text;	
+
+
+BEGIN
+
+
+	
+-- GESTION DES TRACES DANS LE CAS D'UNE SUPPRESSION D'UN TRONCON
+IF (TG_OP = 'DELETE') THEN 	
+
+-- uniquement pour des voies avec un statut juridique hors département, national, autoroute, chemin forestier, chemin de halage
+if old.statut_jur in ('00','04','05','06','10','11','12','99','ZZ')
+-- filtre sur les micros tronçons éventuellement supprimés, max 50m
+
+
+ then
+
+insert into m_signalement.an_log_ign_signalement_send 
+(gid, id_tronc,date_modif, type_ope, geom, qualif_sign, att_liste, date_ouv, type_tronc, type_tronc_v, libvoie_g, libvoie_d,
+sens_circu, sens_circu_v, nb_voie, projet, hierarchie, hierarchie_v, date_maj, insee_d, insee_g, franchiss, franchiss_v,
+statut_jur_v, num_statut, src_geom_v, src_tronc, type_circu_v) values
+(
+nextval('m_signalement.an_log_ign_signalement_send_gid_seq'::regclass),
+old.id_tronc,
+now(),
+'DELETE',
+old.geom,
+'Suppression d''un tronçon de voies',
+null,
+old.date_ouv,
+old.type_tronc,
+(select valeur from r_voie.lt_type_tronc where code = old.type_tronc),
+(select libvoie_c from r_voie.an_voie where id_voie = old.id_voie_g),
+(select libvoie_c from r_voie.an_voie where id_voie = old.id_voie_d),
+old.sens_circu,
+(select valeur from m_voirie.lt_sens_circu where code = old.sens_circu),
+old.nb_voie,
+old.projet,
+old.hierarchie,
+(select valeur from r_voie.lt_hierarchie where code = old.hierarchie),
+now(),
+old.insee_d,
+old.insee_g,
+case 
+	when old.franchiss not in ('01','03') then null else old.franchiss 
+END,
+case 
+	when old.franchiss not in ('01','03') then null else 
+	(select valeur from r_voie.lt_franchiss where code = old.franchiss)
+END,
+(select valeur from m_voirie.lt_statut_jur where code = old.statut_jur),
+old.num_statut,
+(select valeur from r_objet.lt_src_geom where code = old.src_geom),
+old.src_tronc,
+(select valeur from m_voirie.lt_type_circu where code = old.type_circu)
+);
+end if;
+
+end if;
+
+/**** GESTION DES TRACES DANS LE CAS D'UNE INSERTION DE TRONCON ****/	
+
+IF (TG_OP = 'INSERT') THEN 	
+IF new.ign_s = false THEN
+-- alimentation du fichier trace pour l'envoie des signalements à l'IGN depuis les modification sur la base de voie
+-- localisation de la table des traces (m_signalement.an_log_ign_signalement_send)
+-- uniquement pour des voies avec un statut juridique hors département, national, autoroute, chemin forestier, chemin de halage
+
+if new.statut_jur in ('00','04','05','06','10','11','12','99','ZZ')
+
+-- et pas les tronçons issus d'un découpage (gérer dans un trigger after sur le fichier de trace)
+
+ then
+
+v_id_tronc := currval('r_objet.geo_objet_troncon_id_seq'::regclass);
+
+insert into m_signalement.an_log_ign_signalement_send 
+(gid, id_tronc,date_modif, type_ope, geom, qualif_sign, att_liste, date_ouv, type_tronc, type_tronc_v, libvoie_g, libvoie_d,
+sens_circu, sens_circu_v, nb_voie, projet, hierarchie, hierarchie_v, date_maj, insee_d, insee_g, franchiss, franchiss_v,
+statut_jur_v, num_statut, src_geom_v, src_tronc, type_circu_v) values
+(
+nextval('m_signalement.an_log_ign_signalement_send_gid_seq'::regclass),
+v_id_tronc,
+now(),
+'INSERT',
+new.geom,
+'Ajout d''un tronçon de voies',
+case when new.date_ouv is not null then 'date_ouv ' else '' end || 
+case when new.type_tronc <> '00' then ' type_tronc type_tronc_v ' else '' end ||
+case when new.id_voie_g is not null then ' libvoie_g ' else '' end ||
+case when new.id_voie_d is not null then ' libvoie_d ' else '' end ||
+case when new.sens_circu in ('01','02','03') then ' sens_circu sens_circu_v' else '' end ||
+case when new.nb_voie is not null or new.nb_voie <> 0 then ' nb_voie ' else '' end ||
+case when new.projet = true then ' projet ' else '' end ||
+case when new.franchiss in ('01','03') then ' franchiss franchiss_v ' else '' end ||
+case when new.statut_jur in ('04','05','06','10','11','12') then ' statut_jur_v ' else '' end ||
+case when new.num_statut <> '' and new.statut_jur in ('04','05','06','10','11','12') then ' num_statut ' else '' end
+,
+new.date_ouv,
+new.type_tronc,
+(select valeur from r_voie.lt_type_tronc where code = NEW.type_tronc),
+(select libvoie_c from r_voie.an_voie where id_voie = NEW.id_voie_g),
+(select libvoie_c from r_voie.an_voie where id_voie = NEW.id_voie_d),
+new.sens_circu,
+(select valeur from m_voirie.lt_sens_circu where code = new.sens_circu),
+new.nb_voie,
+new.projet,
+new.hierarchie,
+(select valeur from r_voie.lt_hierarchie where code = new.hierarchie),
+now(),
+new.insee_d,
+new.insee_g,
+case 
+	when new.franchiss not in ('01','03') then null else new.franchiss 
+END,
+case 
+	when new.franchiss not in ('01','03') then null else 
+	(select valeur from r_voie.lt_franchiss where code = new.franchiss)
+END,
+(select valeur from m_voirie.lt_statut_jur where code = new.statut_jur),
+new.num_statut,
+(select valeur from r_objet.lt_src_geom where code = new.src_geom),
+new.src_tronc,
+(select valeur from m_voirie.lt_type_circu where code = new.type_circu)
+);
+end if;
+
+end if;
+
+end if;
+/**** GESTION DES TRACES DANS LE CAS D'UNE MODIFICATION DE TRONCON ****/
+
+IF (TG_OP = 'UPDATE') THEN 	
+
+IF new.ign_s = false THEN
+-- alimentation du fichier trace pour l'envoie des signalements à l'IGN depuis les modification sur la base de voie
+-- localisation de la table des traces (m_signalement.an_log_ign_signalement_send)
+
+--raise exception 'trace --> %', ST_HausdorffDistance(old.geom, new.geom);
+/*
+v_trace := (
+(with
+				req_o as
+					(
+					SELECT (dp).path[1] As index, (dp).geom As wktnode
+					FROM 
+						(SELECT ST_DumpPoints(old.geom) AS dp
+        				) As req 
+ 					),
+ 				req_m as
+					(   
+					SELECT (dp).path[1] As index, (dp).geom As wktnode
+					FROM 
+						(SELECT ST_DumpPoints(new.geom) AS dp 
+   						) As req
+					)
+				select 
+				max(st_distance(o.wktnode,m.wktnode))
+				from
+				req_o o, req_m m
+				where o.index = m.index 
+				)
+);
+
+raise exception 'trace --> %', v_trace;
+*/
+-- j'intègre une mise à jour uniquement si un tronçon est modifié en géométrie (géométrie différente et des écarts de points supérieure à 6m) ou un attribut de signalement est modifié
+-- cette restriction d'écart de 6m s'applique pour éviter d'envoyer à l'IGN des signalements modificatifs de géométrie pour de l'afficnage de tracé.
+
+--raise exception 'trace --> %', round(st_length(st_intersection(old.geom, st_envelope(new.geom)))::decimal,2) || '-' || round(st_length(new.geom)::decimal,2) ;
+if ((st_equals(new.geom,old.geom) is false
+				and
+				-- ici test de comparaison des points entre le nouveau et l'ancien tronçon pour calculer les écarts
+				ST_HausdorffDistance(old.geom, new.geom) > 6
+				-- la gestion des découpes de tronçon est gérée dans la table de trace avec un after insert
+				
+				)
+				or (new.date_ouv <> old.date_ouv or (new.date_ouv is not null and old.date_ouv is null) or (new.date_ouv is null and old.date_ouv is not null))
+				or new.type_tronc <> old.type_tronc or (new.id_voie_g <> old.id_voie_g or (new.id_voie_g is not null and old.id_voie_g is null) or (new.id_voie_g is null and old.id_voie_g is not null)) 
+				or new.id_voie_d <> old.id_voie_d or (new.id_voie_d <> old.id_voie_d or (new.id_voie_d is not null and old.id_voie_d is null) or (new.id_voie_d is null and old.id_voie_d is not null)) 
+				or new.sens_circu <> old.sens_circu -- à revoir car 00 ou ZZ 
+				or (new.nb_voie <> old.nb_voie or (new.nb_voie is not null and old.nb_voie is null) or (new.nb_voie is null and old.nb_voie is not null)) 
+				or new.projet <> old.projet or new.franchiss <> old.franchiss -- à revoir car que pont et pn
+				or new.statut_jur <> old.statut_jur or 
+				(new.num_statut <> old.num_statut or (new.num_statut is not null and old.num_statut is null) or 
+				(new.num_statut is null and old.num_statut is not null)) 
+				) 
+				and 
+				-- uniquement pour des voies avec un statut juridique hors département, national, autoroute, chemin forestier, chemin de halage
+				new.statut_jur in ('00','04','05','06','10','11','12','ZZ','99')
+				THEN
+
+insert into m_signalement.an_log_ign_signalement_send 
+(gid, id_tronc,date_modif, type_ope, geom, qualif_sign, att_liste, date_ouv, type_tronc, type_tronc_v, libvoie_g, libvoie_d,
+sens_circu, sens_circu_v, nb_voie, projet, hierarchie, hierarchie_v, date_maj, insee_d, insee_g, franchiss, franchiss_v,
+statut_jur_v, num_statut, src_geom_v, src_tronc, type_circu_v) values
+(
+nextval('m_signalement.an_log_ign_signalement_send_gid_seq'::regclass),
+old.id_tronc,
+now(),
+'UPDATE',
+-- je teste si new.geom <> old.geom pour intégrer la bonne géométrie à envoyer
+case when st_equals(new.geom,old.geom) = true then old.geom else new.geom end,
+-- je teste si geom <> et/ou attribut différent pour qualifier le signalement (description)
+case 
+	when st_equals(new.geom,old.geom) is false and 
+				(
+				(new.date_ouv <> old.date_ouv or (new.date_ouv is not null and old.date_ouv is null) or (new.date_ouv is null and old.date_ouv is not null))
+				or
+				new.type_tronc <> old.type_tronc
+				or
+				(new.id_voie_g <> old.id_voie_g or (new.id_voie_g is not null and old.id_voie_g is null) or (new.id_voie_g is null and old.id_voie_g is not null))
+				or
+				(new.id_voie_d <> old.id_voie_d or (new.id_voie_d is not null and old.id_voie_d is null) or (new.id_voie_d is null and old.id_voie_d is not null))
+				or
+				(new.sens_circu <> old.sens_circu and (new.sens_circu in ('01','03') or old.sens_circu in ('01','03')))
+				or 
+				(new.nb_voie <> old.nb_voie or (new.nb_voie is not null and old.nb_voie is null) or (new.nb_voie is null and old.nb_voie is not null))
+				or 
+				new.projet <> old.projet
+				or 
+				(new.franchiss <> old.franchiss and (new.franchiss in ('01','02','03') or old.franchiss in ('01','02','03')))
+				or
+				new.statut_jur <> old.statut_jur
+				or 
+				(new.num_statut <> old.num_statut or (new.num_statut is not null and old.num_statut is null) or (new.num_statut is null and old.num_statut is not null))
+				) 
+		then 'Mise à jour de la géométrie et d''au moins un attribut de signalement'
+		
+    when st_equals(new.geom,old.geom) is false and 
+    			(
+    			(new.date_ouv = old.date_ouv or (new.date_ouv is null and old.date_ouv is null))
+				and
+				new.type_tronc = old.type_tronc
+				and
+				(new.id_voie_g = old.id_voie_g or (new.id_voie_g is null and old.id_voie_g is null))
+				and
+				(new.id_voie_d = old.id_voie_d or (new.id_voie_d is null and old.id_voie_d is null))
+				and
+				new.sens_circu = old.sens_circu
+				and 
+				(new.nb_voie = old.nb_voie or (new.nb_voie is null and old.nb_voie is null))
+				and 
+				new.projet = old.projet
+				and 
+				new.franchiss = old.franchiss
+				and
+				new.statut_jur = old.statut_jur
+				and 
+				(new.num_statut = old.num_statut or (new.num_statut is null and old.num_statut is null))
+				)
+        then 'Mise à jour de la géométrie'
+    else 'Mise à jour d''au moins un attribut de signalement'
+end,
+case when (new.date_ouv <> old.date_ouv or (new.date_ouv is not null and old.date_ouv is null) or (new.date_ouv is null and old.date_ouv is not null)) then 'date_ouv ' else '' end || 
+case when new.type_tronc <> old.type_tronc then ' type_tronc type_tronc_v ' else '' end ||
+case when (new.id_voie_g <> old.id_voie_g or (new.id_voie_g is null and old.id_voie_g is not null) or (new.id_voie_g is not null and old.id_voie_g is null)) then ' libvoie_g ' else '' end ||
+case when (new.id_voie_d <> old.id_voie_d or (new.id_voie_d is null and old.id_voie_d is not null) or (new.id_voie_d is not null and old.id_voie_d is null)) then ' libvoie_d ' else '' end ||
+case when new.sens_circu <> old.sens_circu and (new.sens_circu in ('01','03') or old.sens_circu in ('01','03')) then ' sens_circu sens_circu_v' else '' end ||
+case when (new.nb_voie <> old.nb_voie or (new.nb_voie is null and old.nb_voie is not null) or (new.nb_voie is not null and old.nb_voie is null)) then ' nb_voie ' else '' end ||
+case when new.projet <> old.projet then ' projet ' else '' end ||
+case when new.franchiss <> old.franchiss and (new.franchiss in ('01','02','03') or old.franchiss in ('01','02','03')) then ' franchiss franchiss_v ' else '' end ||
+case when new.statut_jur <> old.statut_jur then ' statut_jur_v ' else '' end ||
+case when (new.num_statut <> old.num_statut or (new.num_statut is null and old.num_statut is not null) or (new.num_statut is not null and old.num_statut is null)) then ' num_statut ' else '' end
+,
+new.date_ouv,
+new.type_tronc,
+(select valeur from r_voie.lt_type_tronc where code = NEW.type_tronc),
+(select libvoie_c from r_voie.an_voie where id_voie = NEW.id_voie_g),
+(select libvoie_c from r_voie.an_voie where id_voie = NEW.id_voie_d),
+new.sens_circu,
+(select valeur from m_voirie.lt_sens_circu where code = new.sens_circu),
+new.nb_voie,
+new.projet,
+new.hierarchie,
+(select valeur from r_voie.lt_hierarchie where code = new.hierarchie),
+now(),
+new.insee_d,
+new.insee_g,
+case 
+	when new.franchiss not in ('01','03') then null else new.franchiss 
+END,
+case 
+	when new.franchiss not in ('01','03') then null else 
+	(select valeur from r_voie.lt_franchiss where code = new.franchiss)
+END,
+(select valeur from m_voirie.lt_statut_jur where code = new.statut_jur),
+new.num_statut,
+(select valeur from r_objet.lt_src_geom where code = new.src_geom),
+new.src_tronc,
+(select valeur from m_voirie.lt_type_circu where code = new.type_circu)
+);
+
+end if;
+
+end if;
+
+end if;
+
+RETURN NEW;
+
+END;
+$function$
+;
+
+COMMENT ON FUNCTION m_voirie.ft_m_signal_ign() IS 'Fonction trigger permettant d''alimenter le fichier de trace de la base de voies pour le traitement et l''envoi des signalements à l''IGN';
+
+-- Permissions
+
+ALTER FUNCTION m_voirie.ft_m_signal_ign() OWNER TO create_sig;
+GRANT ALL ON FUNCTION m_voirie.ft_m_signal_ign() TO public;
+GRANT ALL ON FUNCTION m_voirie.ft_m_signal_ign() TO create_sig;
+
+
 -- #################################################################### FONCTION TRIGGER - ft_m_controle_saisie ###################################################
 -- DROP FUNCTION m_voirie.ft_m_controle_saisie();
 
