@@ -29,7 +29,8 @@ Spécification du fichier d’échange relatif aux données concernant le réfé
 - [Documentation utilisateur de l'application](app/doc_user_app_rva.md)
 - [Règles de saisies des voies](gabarit/livrables.md)
 - Règles de saisies des adresses(à venir)
-- [Signalement IGN - base de voies](ign/doc_admin_sign.md)
+- Signalement IGN - base de voies
+- [Suivi des modifications](ign/ign_sign_00_trace.sql)
   
 ## Contexte
 
