@@ -37,6 +37,8 @@ Cette fonction permet d'écrire l'ensemble des traces selon les paramètres déf
 
 Concernant l'attribut franchissements, celui-ci est envoyé si il correspond à un passage à niveau ou un pont.
 
+Ces traces sont générés uniquement sur les tronçons du Grand Compiégnois. Les tronçons d'habillage en dehors du territoire ne sont pas concernés.
+
 Le fonctionnel mis en place à travers un workflow FME (envoi mensuel pour rappel), permet de post-traiter l'ensemble des traces du mois enregistrés. Se référer à la partie des traitements FME (ci-après) pour plus de précisions.
 
 
