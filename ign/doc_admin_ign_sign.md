@@ -44,7 +44,7 @@ L'ensemble des classes d'objets de gestion sont stockés dans le schéma `m_sign
 
  ### classes d'objets de gestion :
   
-   `m_signelement.an_log_ign_signalement_send` : table des traces (modification) effectuées sur la base de voies
+   `m_signalement.an_log_ign_signalement_send` : table des traces (modification) effectuées sur la base de voies
    
 |Nom attribut | Définition | Type | Valeurs par défaut |
 |:---|:---|:---|:---|
@@ -83,6 +83,38 @@ Particularité(s) à noter :
   * `t_t0_sign_ign_after` : après l'insertion, cette fonction permet de traiter le cas des découpes de tronçons propre à la gestion de voies. Cette modification ne doit pas remonter à l'IGN. Dans un processus automatique, cette découpe génére un `update` sur une partie du tronçon découpé et créer un tronçon sur l'autre partie. Le processus de trace depuis la vue de gestion enregistre bien ces 52 mouvements dans cette classe d'objets mais la fonction-trigger les supprime après l'enregistrement. Cette pratique implique d'enregistrer le découpage avant d'effectuer éventuellement une autre modification.
 
 ---
+
+ `m_signalement.geo_ign_signalement_upload` : table de l'ensemble des signalements réalisés auprès de l'IGN (à l'exception de ceux générés par GéoCompiégnois)
+   
+|Nom attribut | Définition | Type | Valeurs par défaut |
+|:---|:---|:---|:---|
+|groupe_id|Identifiant du groupe de l'espace collaboratif|smallint| |
+|groupe|Groupe d'appartenance|text| |
+|groupe_description|Description du groupe d'appartenance|text| |
+|auteur|Auteur du signalement|text| |
+|commune|Libellé de la commune|text| |
+|departement|Département|text| |
+|commentaire|Commentaire de la personne ayant fait le signalement|text| |
+|theme|Thème du signalement (ici ROUTE)|text| |
+|attributs|sans objet|text| |
+|fichier_attache|Fichier lié|text| |
+|date_creation|Date de création du signelement|date| |
+|date_modif|Date de modification du signalement|date| |
+|date_cloture|Date de cloture du signalement|date| |
+|reponse|Réponse au signalement|text| |
+|croquis_xml|Contenue du croquis au format XML|text| |
+|croquis|Contenu json du croquis|text| |
+|traite_sig|Information du traitement du signalement par le service SIG|boolean|false|
+|geom|Géométrie du signalement (point)|point(2154)| |
+|geom1|Géométrie du croquis (ligne)|multilinestring(2154)| |
+|geom2|Géométrie du croquis (point)|multipoint(2154)| |
+
+Particularité(s) à noter :
+* Une clé primaire existe sur le champ `signalement_id` : identifiant de signalement interne l'IGN (et unique)
+* 1 trigger :
+  * `t_t1_signal_rva` : avant la mise à jour sur l'attribut `traite_sig`. Cette fonction permet de générer un signalement classique sur la base de "voie-adresse" comme traité. Ce signalement est généré dans la classe d'objets `m_signalement.geo_rva_signal`. Celui-ci remonte dans les statistiques internes au service. L'activitation de ce processus est dépendant de l'opérateur de saisie à travers l'application GEO "Voie-Adresse" dans la fiche d'informations des signalements IGN.
+ 
+![qgis](img/GEO_ign_sign_traite.png)
 
 ### classes d'objets applicatives métiers sont classés dans le schéma x_apps :
  
