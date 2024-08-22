@@ -138,7 +138,7 @@ Sans objet
 
 ### Récupération des signalements de la base Route de l'IGN
 
-* `voie_ign_api_signalement_upload.fmw` : ce traitement permet de récupérer l'ensemble des signalements fait à l'IGN sur la base Route (hors ceux réalisés par GeoCompiégnois). Ces signalements sont stockés dans la table `m_signalement.geo_ign_signalement_upload. Ces informations sont affichées dans le projet QGIS et dans l'application "Voie-Adresse".
+* `voie_ign_api_signalement_upload.fmw` : ce traitement permet de récupérer l'ensemble des signalements fait à l'IGN sur la base Route (hors ceux réalisés par GeoCompiégnois). Ces signalements sont stockés dans la table `m_signalement.geo_ign_signalement_upload`. Ces informations sont affichées dans le projet QGIS et dans l'application "Voie-Adresse".
 
 Ce traitement a été automatisé dans FME-Flow et s'éxécute tous les jours.
 
