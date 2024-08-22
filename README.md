@@ -30,7 +30,7 @@ Spécification du fichier d’échange relatif aux données concernant le réfé
 - [Règles de saisies des voies](gabarit/livrables.md)
 - Règles de saisies des adresses(à venir)
 - Signalement IGN - base de voies
-- [Suivi des modifications](ign/ign_sign_00_trace.sql)
+ * [Suivi des modifications](ign/ign_sign_00_trace.sql)
   
 ## Contexte
 
