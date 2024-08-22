@@ -11,7 +11,7 @@ L'objectif n'est pas de créér des signalements "manuels" comme pour les adress
 
 ## Schéma fonctionnel
 
-![schema_fonctionnel](schema_fonctionnel_ign_sign.png)
+![schema_fonctionnel](img/schema_fonctionnel_ign_sign.png)
 
 ## Modèle conceptuel simplifié
 
