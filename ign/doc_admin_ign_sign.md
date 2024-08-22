@@ -35,6 +35,8 @@ Cette fonction permet d'écrire l'ensemble des traces selon les paramètres déf
  - en géométrie : filtre sur les ajustements de tracés inférieur à 6m non tracé
  - attribut : filtre uniquement sur les modifications des attributs suivants (`date_ouv`, `type_tronc`, `id_voie`,`sens_circu`,`nb_voie`,`projet`,`statut_jur`,`num_statut`)
 
+Concernant l'attribut franchissements, celui-ci est envoyé si il correspond à un passage à niveau ou un pont.
+
 Le fonctionnel mis en place à travers un workflow FME (envoi mensuel pour rappel), permet de post-traiter l'ensemble des traces du mois enregistrés. Se référer à la partie des traitements FME (ci-après) pour plus de précisions.
 
 
@@ -162,6 +164,10 @@ R:\Ressources\4-Partage\3-Procedures\QGIS\RVA_3.x.qgs
 Dans ce projet, sont visibles les signalements uploadés de l'IGN et ceux du mois en cours qui seront envoyés le 1er jour du mois suivant.
 
 ![qgis](img/QGIS_ign_sign.png)
+
+Il est possible de forcer un non-signalement à l'IGN, à savoir ne pas générer une trace depuis ce projet si un besoin particulier de modification de la base de voies est nécessaire. Il suffit de cocher la case présente dans l'ongler `Divers` de la fiche du tronçon.
+
+![qgis](img/QGIS_ign_sign_non.png)
 
 ## Export Open Data
 
