@@ -691,9 +691,9 @@ R:\Ressources\4-Partage\3-Procedures\QGIS\RVA_1.2_3.10.qgs
 
 ### Gestion des procédures de contrôle des données Adresse
 
-L'ensemble des fichiers a utilisé est placé ici `R:\Ressources\4-Partage\3-Procedures\FME\prod\RVA`.
+L'ensemble des fichiers a utilisé est placé ici `R:\Ressources\4-Partage\3-Procedures\FME\referentiel\adresse`.
 
-**Vérification de la qualité des adresse** `RVA_ctrl_qualite_adresse.fmw`
+**Vérification de la qualité des adresse** `adresse_ctrl_qualite.fmw`
 
 Ce traitement permet de :
 - croiser plusieurs sources de données Adresse pour évaluer d'éventuels oublis d'adresse,
@@ -704,9 +704,9 @@ Ce traitement permet de :
 
 ## Export Open Data
 
-L'ensemble des fichiers a utilisé est placé ici `Y:\Ressources\4-Partage\3-Procedures\FME\prod\OPEN-DATA`.
+L'ensemble des fichiers a utilisé est placé ici `R:\Ressources\4-Partage\3-Procedures\FME\open_data`.
 
- - `RVA_adresse_metadonnees.fmw` : ce traitement exporte l'ensemble des données Adresse à de multiples formats téléchargeables via la fiche de métadonnées (csv, shape, kml, geojson, excel) et il est exécuté tous les jours à 19h00 avec FMEServer.
+ - `open-data_adresse_fmeflow.fmw` : ce traitement exporte l'ensemble des données Adresse à de multiples formats téléchargeables via la fiche de métadonnées (csv, shape, kml, geojson, excel) et il est exécuté tous les jours à 19h00 avec FMEFlow.
 
 
 ## Téléversement dans l'API de dépôt de la BAL
