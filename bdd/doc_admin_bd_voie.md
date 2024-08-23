@@ -518,9 +518,9 @@ Valeurs possibles :
 
 ### Gestion des procédures de contrôle des données Adresse
 
-L'ensemble des fichiers a utilisé est placé ici `Y:\Ressources\4-Partage\3-Procedures\FME\prod\RVA`.
+L'ensemble des fichiers a utilisé est placé ici `R:\Ressources\4-Partage\3-Procedures\FME\referentiel\voie`.
 
-**Vérification de la qualité des adresse** `RVA_ctrl_qualite_voie.fmw`
+**Vérification de la qualité des adresse** `voie_ctrl_qualite.fmw`
 
 Une table d'erreur a été initiée pour l'ensemble de ces contrôles `public.lt_erreur`
 |code|Code de la liste des erreurs suite à un contrôle qualité des données gérées par le service SIG|character varying(5)| |
