@@ -141,13 +141,13 @@ Sans objet
 
 ### Récupération des signalements de la base Route de l'IGN
 
-* `voie_ign_api_signalement_upload.fmw` : ce traitement permet de récupérer l'ensemble des signalements fait à l'IGN sur la base Route (hors ceux réalisés par GeoCompiégnois). Ces signalements sont stockés dans la table `m_signalement.geo_ign_signalement_upload`. Ces informations sont affichées dans le projet QGIS et dans l'application "Voie-Adresse".
+* `R:\Ressources\4-Partage\3-Procedures\FME\referentiel\voie\voie_ign_api_signalement_upload.fmw` : ce traitement permet de récupérer l'ensemble des signalements fait à l'IGN sur la base Route (hors ceux réalisés par GeoCompiégnois). Ces signalements sont stockés dans la table `m_signalement.geo_ign_signalement_upload`. Ces informations sont affichées dans le projet QGIS et dans l'application "Voie-Adresse".
 
 Ce traitement a été automatisé dans FME-Flow et s'éxécute tous les jours.
 
 ### Envoie des signalements à la base Route de l'IGN
 
-* `voie_ign_api_signalement_send.fmw` : post-traitement FME des traces enregistrées dans le mois. Une synthèse est réalisée sur l'ensemble des traces d'un même tronçon (pour éviter des envois multiples)
+* `R:\Ressources\4-Partage\3-Procedures\FME\referentiel\voie\voie_ign_api_signalement_send.fmw` : post-traitement FME des traces enregistrées dans le mois. Une synthèse est réalisée sur l'ensemble des traces d'un même tronçon (pour éviter des envois multiples)
    - filtre sur les tronçons supprimés inférieurs à 25m
    - un delete, un insert ou un update unique par tronçon n'est pas filtré. Un paramétrage particulier est réalisé pour ajouter la liste des attributs éventuellement modifiés à la description du signalement
    - un insert / delete d'un même tronçon n'est pas envoyé
@@ -166,6 +166,8 @@ Le projet QGIS utilisé est celui de la gestion de la base de voie. Il est stock
 `R:\Ressources\4-Partage\3-Procedures\QGIS\RVA_3.x.qgs`
 
 Dans ce projet, sont visibles les signalements uploadés de l'IGN (comme dans l'application GEO) et ceux du mois en cours (non présent dans l'application GEO) qui seront envoyés le 1er jour du mois suivant.
+
+**ATTENTION : pour optimiser la bonne gestion des traces, il est prtéférable d'enregistrer chaque modification au fur et à mesure. Eviter de saisir en masse puis d'enregistrer, surtout si il est indiqué de ne pas tracer la modification.**
 
 ![qgis](img/QGIS_ign_sign.png)
 
