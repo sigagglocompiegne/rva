@@ -584,9 +584,9 @@ R:\Ressources\4-Partage\3-Procedures\QGIS\RVA_3.x.qgs
 
 ## Export Open Data
 
-L'ensemble des fichiers a utilisé est placé ici `R:\Ressources\4-Partage\3-Procedures\FME\prod\OPEN-DATA`.
+L'ensemble des fichiers a utilisé est placé ici `R:\Ressources\4-Partage\3-Procedures\FME\open_data`.
 
- - `RVA_voie_metadonnees.fmw` : ce traitement exporte l'ensemble des données Voie à de multiples formats téléchargeables via la fiche de métadonnées (csv, shape, kml, geojson, excel) et il est exécuté tous les jours à 22h30 via FMEServer.
+ - `open-data_voie_fmeflow.fmw` : ce traitement exporte l'ensemble des données Voie à de multiples formats téléchargeables via la fiche de métadonnées (csv, shape, kml, geojson, excel) et il est exécuté tous les jours à 22h30 via FMEServer.
 
 ---
 
