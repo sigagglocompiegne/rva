@@ -33,7 +33,7 @@ Les tronçons de voies doivent représenter l'ensemble des circulations possible
 
 Les mises à jour des données est réalisées à la fois par des signalements des communes, l'intégration par des mises à jour de référentiels extérieurs ou par des applications tierces utilisant la donnée des adresses.
 
-**ATTENTION : afin d'optimiser l'envoi automatique des signalements à l'IGN, il faut préviligier l'enregistrement des données à chaque modification opérée.**
+**ATTENTION : afin d'optimiser l'envoi automatique des signalements à l'IGN, il faut prévilégier l'enregistrement des données à chaque modification opérée.**
 
 ## Règles de modélisation des tronçons de voies
 
