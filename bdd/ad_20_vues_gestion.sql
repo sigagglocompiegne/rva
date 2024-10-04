@@ -243,6 +243,16 @@ IF (NEW.diag_adr = '11'::text OR left(NEW.diag_adr, 1) = '2') AND
 RAISE EXCEPTION USING MESSAGE = 'Cette adresse "conforme" existe déjà dans la base de données avec cette clé : ' || v_cle_interop  ;
 END IF;
 
+-- contrôle sur l'existance de l'identifiant de voie
+if new.id_voie not in (select id_voie from r_voie.an_voie where insee IN (select c.insee from r_osm.geo_vm_osm_commune_grdc_plus c where st_intersects(c.geom,st_buffer(new.geom,50)))) then
+RAISE EXCEPTION USING MESSAGE = '<font color="#ff0000">L''identifiant de voie que vous avez saisi n''existe pas dans la commune.</font><br><br>'  ;
+end if;
+
+-- contrôle sur l'existance du tronçon
+if new.id_tronc not in (select id_tronc from r_objet.geo_objet_troncon) then
+RAISE EXCEPTION USING MESSAGE = '<font color="#ff0000">L''identifiant de tronçon que vous avez saisi n''existe pas.</font><br><br>'  ;
+end if;
+
 IF NEW.diag_adr = '32' AND NEW.numero IS NOT NULL AND NEW.numero <> '00000' AND NEW.numero <> '99999' THEN
 RAISE EXCEPTION USING MESSAGE = 'Vous ne pouvez pas indiquer une adresse non numérotée et saisir un numéro.'  ;
 END IF;
@@ -397,6 +407,16 @@ IF (NEW.diag_adr = '11'::text OR left(NEW.diag_adr, 1) = '2') AND
 RAISE EXCEPTION USING MESSAGE = 'Cette adresse "conforme" existe déjà dans la base de données avec cette clé : ' || v_cle_interop  ;
 END IF;
 END IF;
+
+-- contrôle sur l'existance de l'identifiant de voie
+if new.id_voie not in (select id_voie from r_voie.an_voie where insee IN (select c.insee from r_osm.geo_vm_osm_commune_grdc_plus c where st_intersects(c.geom,st_buffer(new.geom,50)))) then
+RAISE EXCEPTION USING MESSAGE = '<font color="#ff0000">L''identifiant de voie que vous avez saisi n''existe pas dans la commune.</font><br><br>'  ;
+end if;
+
+-- contrôle sur l'existance du tronçon
+if new.id_tronc not in (select id_tronc from r_objet.geo_objet_troncon) then
+RAISE EXCEPTION USING MESSAGE = '<font color="#ff0000">L''identifiant de tronçon que vous avez saisi n''existe pas.</font><br><br>'  ;
+end if;
 
 IF NEW.diag_adr = '32' AND NEW.numero IS NOT NULL AND NEW.numero <> '00000' AND NEW.numero <> '99999' THEN
 RAISE EXCEPTION USING MESSAGE = 'Vous ne pouvez pas indiquer une adresse non numérotée et saisir un numéro.'  ;
