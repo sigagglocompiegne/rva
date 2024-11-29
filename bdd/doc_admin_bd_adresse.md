@@ -471,7 +471,7 @@ Valeurs possibles :
 |25|Adresse à améliorer (état)|
 |32|Adresse non numérotée|
 |33|Adresse à confirmer (existence, numéro ...)|
-|99|Autre|
+|99|Autre (Voies et lieux-dits sans adresses, ...)|
 
 Précisions :
 -------------
