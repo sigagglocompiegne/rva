@@ -12,12 +12,15 @@ Contact : sig@agglo-compiegne.fr
 
 ## Changelog
 
+ * --/02/2025 : Version 1.5 - téléversement d'un lot de données communal au format BAL 1.4 avec la nouvelle API de dépôt BAL avec vérification d'une BAL existante, vérification des mises à jour d'adresses intégrant un état ou un objet adresse supprimé (par lecture de la variable `rowCount`) (à venir)
+ * 07/02/2025 : Version 1.4 - téléversement d'un lot de données communal au format BAL 1.4 dans la nouvelle API de dépôt BAL avec vérification d'une BAL existante (mode test)
  * 09/04/2024 : Version 1.3 - téléversement d'un lot de données communal au format BAL 1.4 dans l'API de dépôt BAL avec vérification d'une BAL existante, vérification des mises à jour d'adresses intégrant un état ou un objet adresse supprimé (par lecture de la variable `rowCount`)
  * 06/12/2021 : Version 1.2 - téléversement d'un lot de données communal au format BAL 1.3 dans l'API de dépôt BAL avec vérification d'une BAL existante et vérification des mises à jour d'adresses
  * 21/09/2021 : Version 1 - téléversement d'un fichier ou d'un lot de données communal au format BAL 1.2 dans l'API de démo BAL
  
 ## Gabarit
 
+- [Téléchargement du projet FME version 1.4 - traitement par lot Nouvelle API (démo en test jusqu'au 10 février 2025](https://geo.compiegnois.fr/documents/metiers/rva/API_BAL_LOT_FME_v14_demo_test_csv_github)
 - [Téléchargement du projet FME version 1.3 - traitement par lot + mise à jour des adresses supprimées par lecture de la variable `rowsCount` ](https://geo.compiegnois.fr/documents/metiers/rva/API_BAL_LOT_FME_v13_csv_github.zip)
 - [Téléchargement du projet FME version 1.2 - traitement par lot + mise à jour des adresses supprimées par lecture des fichies CSV](https://geo.compiegnois.fr/documents/metiers/rva/API_BAL_LOT_FME_v12_csv_github.zip)
 - [Téléchargement du projet FME version 1.1 - traitement par lot](https://geo.compiegnois.fr/documents/metiers/rva/API_BAL_LOT_FME_v11_github.zip)
