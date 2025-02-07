@@ -20,7 +20,7 @@ Contact : sig@agglo-compiegne.fr
  
 ## Gabarit
 
-- [Téléchargement du projet FME version 1.4 - traitement par lot Nouvelle API (démo en test jusqu'au 10 février 2025](https://geo.compiegnois.fr/documents/metiers/rva/API_BAL_LOT_FME_v14_demo_test_csv_github)
+- [Téléchargement du projet FME version 1.4 - traitement par lot Nouvelle API (démo en test jusqu'au 10 février 2025)](https://geo.compiegnois.fr/documents/metiers/rva/API_BAL_LOT_FME_v14_demo_test_csv_github)
 - [Téléchargement du projet FME version 1.3 - traitement par lot + mise à jour des adresses supprimées par lecture de la variable `rowsCount` ](https://geo.compiegnois.fr/documents/metiers/rva/API_BAL_LOT_FME_v13_csv_github.zip)
 - [Téléchargement du projet FME version 1.2 - traitement par lot + mise à jour des adresses supprimées par lecture des fichies CSV](https://geo.compiegnois.fr/documents/metiers/rva/API_BAL_LOT_FME_v12_csv_github.zip)
 - [Téléchargement du projet FME version 1.1 - traitement par lot](https://geo.compiegnois.fr/documents/metiers/rva/API_BAL_LOT_FME_v11_github.zip)
