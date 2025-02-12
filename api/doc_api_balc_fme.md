@@ -138,9 +138,9 @@ L'attribut `@Value(jeton)` correspond au jeton contenant la clé fournie par la 
  
  Laisser les autres paramètres par défaut. L'attribut de réponse `_response_body` sera utilisé dans la suite du traitement et correspond au code de retour de l'API.
  
-#### 2.6 - Récupération de l'attribut `_ID` dans la requête de réponse de `REVISION` pour lancer la 2nd requête nommée `TELEVERSEMENT`
+#### 2.6 - Récupération de l'attribut `ID` dans la requête de réponse de `REVISION` pour lancer la 2nd requête nommée `TELEVERSEMENT`
   
-La réponse de l'API s'effectue au format JSON, il faut donc récupérer les différents attributs utiles pour la suite du traitement et notamment l'`_ID`.
+La réponse de l'API s'effectue au format JSON, il faut donc récupérer les différents attributs utiles pour la suite du traitement et notamment l'`ID`.
 
  - Extraction des attributs JSON avec le transformer `JSONFragmenter`
 
@@ -158,11 +158,11 @@ La réponse de l'API s'effectue au format JSON, il faut donc récupérer les dif
  
  ![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_4.png) **JSON**
  
-  - Conserver uniquement l'attribut `_ID` avec un simple transformer `Tester`
+  - Conserver uniquement l'attribut `ID` avec un simple transformer `Tester`
 
  ![creator](img/tester_televerse.png)
  
- L'attribut `json_index` liste l'ensemble des attributs de la requête de réponse. Il suffit de filter avec le nom `_id` pour récupérer en sortie uniquement la valeur de celui-ci dans l'attribut `_response_body`.
+ L'attribut `json_index` liste l'ensemble des attributs de la requête de réponse. Il suffit de filter avec le nom `id` pour récupérer en sortie uniquement la valeur de celui-ci dans l'attribut `_response_body`.
 
 #### 2.7 - Paramétrer un HttpCaller pour lancer la 2nd requête nommée `TELEVERSEMENT`
  
@@ -226,9 +226,9 @@ L'attribut `@Value(jeton)` correspond au jeton contenant la clé fournie par la 
  
 Laisser les autres paramètres par défaut. L'attribut de réponse `_response_body` sera utilisé dans la suite du traitement et correspond au code de retour de l'API.
 
-#### 2.10 - Récupération de l'attribut `_id` dans la requête de réponse de `VALIDATION` pour lancer la 4ème requête nommée `PUBLICATION`
+#### 2.10 - Récupération de l'attribut `id` dans la requête de réponse de `VALIDATION` pour lancer la 4ème requête nommée `PUBLICATION`
   
-La réponse de l'API s'effectue au format JSON, il faut donc récupérer les différents attributs utiles pour la suite du traitement et notamment l'`_id`.
+La réponse de l'API s'effectue au format JSON, il faut donc récupérer les différents attributs utiles pour la suite du traitement et notamment l'`id`.
 
  - Extraction des attributs JSON avec le transformer `JSONFragmenter`
 
@@ -238,7 +238,7 @@ Reprendre la méthode indiquée au point **3**.
  
 Reprendre la méthode indiquée au point **3**.
 
- L'attribut `json_index` liste l'ensemble des attributs de la requête de réponse. Il suffit de filter avec le nom `_id` pour récupérer en sortie uniquement la valeur de celui-ci dans l'attribut `_response_body`.
+ L'attribut `json_index` liste l'ensemble des attributs de la requête de réponse. Il suffit de filter avec le nom `id` pour récupérer en sortie uniquement la valeur de celui-ci dans l'attribut `_response_body`.
 
 #### 2.11 - Paramétrer un HttpCaller pour lancer la 4ème requête nommée `PUBLICATION`
  
