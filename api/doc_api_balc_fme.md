@@ -91,8 +91,6 @@ Le versement des BAL, via l'API de dépôt, est réalisé à partir des fichiers
 
 (1) l'Agglomération de la Région de Compiègne a développé un [modèle de données local](https://github.com/sigagglocompiegne/rva/blob/master/bdd/doc_admin_bd_adresse.md) permettant de gérer plus finement les adresses que le format BAL. Ce modèle intègre un "état". Cet attribut permet de ne pas supprimer un point d'adresse si celle-ci n'est plus utilisée (démolition ...).
 
-![maj](img/fme_adresse_etat_supprime.png)
-
 Le traitement intègre une passe de lecture de la base source pour sélectionner les adresses avec un état "supprimée" avec leur date de mise à jour. Ce dernier attribut est renommé afin d'être envoyé dans le traitement global. Si une adresse ressort et que sa mise à jour est intervenue dans la journée, l'ensemble de la BAL communale est envoyée dans le traitement principale de l'API de dépôt pour mise à jour.
 
 (2) l'objet "adresse", à savoir le point localisant l'adresse est supprimé. Cette vérification est réalisée à partir de la lecture des derniers fichiers CSV exportés et comparés avec la dernière version de la BAL publiée via l'API de dépôt (on compare le nombre d'adresses).
