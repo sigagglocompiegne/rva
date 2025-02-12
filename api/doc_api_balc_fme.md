@@ -21,8 +21,8 @@ Contact : sig@agglo-compiegne.fr
  
 ## Gabarit
 
-- [Téléchargement du projet FME version 1.5.1 - traitement par lot sans contrôle)](https://geo.compiegnois.fr/documents/metiers/rva/API_BAL_LOT_FME_v151.zip)
-- [Téléchargement du projet FME version 1.5 - traitement par lot avec contrôle)](https://geo.compiegnois.fr/documents/metiers/rva/API_BAL_LOT_FME_v15.zip)
+- [Téléchargement du projet FME version 1.5.1 - traitement par lot sans contrôle](https://geo.compiegnois.fr/documents/metiers/rva/API_BAL_LOT_FME_v151.zip)
+- [Téléchargement du projet FME version 1.5 - traitement par lot avec contrôle](https://geo.compiegnois.fr/documents/metiers/rva/API_BAL_LOT_FME_v15.zip)
 
 
 ## Paramétrage
