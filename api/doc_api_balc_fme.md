@@ -95,11 +95,11 @@ Le traitement intègre une passe de lecture de la base source pour sélectionner
 
 ![maj](img/bal_traitement_supp.png)
 
-(2) l'objet "adresse", à savoir le point localisant l'adresse est supprimé. Cette vérification est réalisée à partir de la lecture des derniers fichiers CSV exportés et comparés avec la dernière version de la BAL publiée via l'API de dépôt (on compare le nombre d'adresses).
+(2) Le traitement effectue également une récupération de l'attribut "RowCount" depuis l'API et le compare au total des adresses présentes dans la base de données avant publication (via une vue au format BAL 1.4). Cette comparaison permet de déterminer une éventuelle différence du nombre d'adresses. Dans ce cas, la commune est republiée.
 
 ![maj](img/bal_traitement_verif.png)
 
-Le traitement effectue une récupération de l'attribut "RowCount" depuis l'API et compare au total des adresses présentes dans la base de données avant publication (via une vue au format BAL 1.4). Cette comparaison permet de déterminer une éventuelle différence du nombre d'adresses. Dans ce cas, la commune est republiée.
+
 
  
 #### 2.5 - Paramétrer un HttpCaller pour lancer la 1er requête nommée `REVISION`
