@@ -93,11 +93,14 @@ Le versement des BAL, via l'API de dépôt, est réalisé à partir des fichiers
 
 Le traitement intègre une passe de lecture de la base source pour sélectionner les adresses avec un état "supprimée" avec leur date de mise à jour. Ce dernier attribut est renommé afin d'être envoyé dans le traitement global. Si une adresse ressort et que sa mise à jour est intervenue dans la journée, l'ensemble de la BAL communale est envoyée dans le traitement principale de l'API de dépôt pour mise à jour.
 
+![maj](img/bal_traitement_supp.png)
+
 (2) l'objet "adresse", à savoir le point localisant l'adresse est supprimé. Cette vérification est réalisée à partir de la lecture des derniers fichiers CSV exportés et comparés avec la dernière version de la BAL publiée via l'API de dépôt (on compare le nombre d'adresses).
 
-Le traitement effectue une récupération des dernières BAL publiées au format .csv (comptage des adresses) pour une comparaison avec la dernière version des fichiers BAL CSV exportés avant mise à jour vers l'API de dépôt. Si cette comparaison est différente, alors l'ensemble de la BAL communale concernée est envoyée dans le traitement principale de l'API de dépôt pour mise à jour. Cette passe pourra être remplacée par un appel à l'API lorsque celle-ci intégrera une variable décomptant le nombre d'adresses de la dernière version publiée (évolution de l'API de dépôt à venir). 
+![maj](img/bal_traitement_verif.png)
 
-Ce traitement par récupération des BAL publiées sur l'API et la comparaison avec les futurs BAL à publier est transitoire, dans l'attente de l'évolution de l'API par la mise à disposition d'un attribut de décompte.
+Le traitement effectue une récupération de l'attribut "RowCount" depuis l'API et compare au total des adresses présentes dans la base de données avant publication (via une vue au format BAL 1.4). Cette comparaison permet de déterminer une éventuelle différence du nombre d'adresses. Dans ce cas, la commune est republiée.
+
  
 #### 2.5 - Paramétrer un HttpCaller pour lancer la 1er requête nommée `REVISION`
  
