@@ -12,27 +12,28 @@ Contact : sig@agglo-compiegne.fr
 
 ## Changelog
 
- * --/02/2025 : Version 1.5 - téléversement d'un lot de données communal au format BAL 1.4 avec la nouvelle API de dépôt BAL avec vérification d'une BAL existante, vérification des mises à jour d'adresses intégrant un état ou un objet adresse supprimé (par lecture de la variable `rowCount`) (à venir)
- * 07/02/2025 : Version 1.4 - téléversement d'un lot de données communal au format BAL 1.4 dans la nouvelle API de dépôt BAL avec vérification d'une BAL existante (mode test)
- * 09/04/2024 : Version 1.3 - téléversement d'un lot de données communal au format BAL 1.4 dans l'API de dépôt BAL avec vérification d'une BAL existante, vérification des mises à jour d'adresses intégrant un état ou un objet adresse supprimé (par lecture de la variable `rowCount`)
- * 06/12/2021 : Version 1.2 - téléversement d'un lot de données communal au format BAL 1.3 dans l'API de dépôt BAL avec vérification d'une BAL existante et vérification des mises à jour d'adresses
- * 21/09/2021 : Version 1 - téléversement d'un fichier ou d'un lot de données communal au format BAL 1.2 dans l'API de démo BAL
+ * 12/02/2025 : Version 1.5.1 - téléversement d'un lot de données communal au format BAL 1.4 avec la nouvelle API de dépôt BAL (depuis le 11/02/2025), traitement de base sans contrôle
+ * 12/02/2025 : Version 1.5 - téléversement d'un lot de données communal au format BAL 1.4 avec la nouvelle API de dépôt BAL (depuis le 11/02/2025) avec vérification d'une BAL existante, vérification des mises à jour d'adresses intégrant un état ou un objet adresse supprimé (par lecture de la variable `rowCount`)
+ * 07/02/2025 : Version 1.4 (obsolète) - téléversement d'un lot de données communal au format BAL 1.4 dans la nouvelle API de dépôt BAL avec vérification d'une BAL existante (mode démo)
+ * 09/04/2024 : Version 1.3 (obsolète) - téléversement d'un lot de données communal au format BAL 1.4 dans l'API de dépôt BAL avec vérification d'une BAL existante, vérification des mises à jour d'adresses intégrant un état ou un objet adresse supprimé (par lecture de la variable `rowCount`)
+ * 06/12/2021 : Version 1.2 (obsolète) - téléversement d'un lot de données communal au format BAL 1.3 dans l'API de dépôt BAL avec vérification d'une BAL existante et vérification des mises à jour d'adresses
+ * 21/09/2021 : Version 1 (obsolète) - téléversement d'un fichier ou d'un lot de données communal au format BAL 1.2 dans l'API de démo BAL
  
 ## Gabarit
 
-- [Téléchargement du projet FME version 1.4 - traitement par lot Nouvelle API (démo en test jusqu'au 10 février 2025)](https://geo.compiegnois.fr/documents/metiers/rva/API_BAL_LOT_FME_v14_demo_test_csv_github)
-- [Téléchargement du projet FME version 1.3 - traitement par lot + mise à jour des adresses supprimées par lecture de la variable `rowsCount` ](https://geo.compiegnois.fr/documents/metiers/rva/API_BAL_LOT_FME_v13_csv_github.zip)
-- [Téléchargement du projet FME version 1.2 - traitement par lot + mise à jour des adresses supprimées par lecture des fichies CSV](https://geo.compiegnois.fr/documents/metiers/rva/API_BAL_LOT_FME_v12_csv_github.zip)
-- [Téléchargement du projet FME version 1.1 - traitement par lot](https://geo.compiegnois.fr/documents/metiers/rva/API_BAL_LOT_FME_v11_github.zip)
+- [Téléchargement du projet FME version 1.5.1 - traitement par lot sans contrôle)](https://geo.compiegnois.fr/documents/metiers/rva/API_BAL_LOT_FME_v151.zip)
+- [Téléchargement du projet FME version 1.5 - traitement par lot avec contrôle)](https://geo.compiegnois.fr/documents/metiers/rva/API_BAL_LOT_FME_v15.zip)
 
 
 ## Paramétrage
 
-La version 1.3 supprime la partie de vérification des adresses par des fichiers CSV historisés. Cette vérification se fait désormais par la comparaison du nombre d'adresses présent dans la base de données avant le téléversement et la variable de l'API `rowCount` qui compte le nombre d'adresses présent dans la dernière version de la BAL téléversée.
+La version 1.5 supprime la partie de vérification des adresses par des fichiers CSV historisés. Cette vérification se fait désormais par la comparaison du nombre d'adresses présent dans la base de données avant le téléversement et la variable de l'API `rowCount` qui compte le nombre d'adresses présent dans la dernière version de la BAL téléversée.
 
-Cette version 1.2 est une version permettant le téléversement en masse de x communes, avec une vérification de la présence d'une BAL existante (pour un autre client),  des dates de mises à jour et la suppression d'adresses (par un état ou par suppression des objets) par rapport à l'API de dépôt de la BAL. La version de FME utilisée est la 2021.1.1.0.
+La verison 1.5.1 est une version brute sans contrôle, qui contient uniquement le parcours d'interrogation de l'API au téléversement des BAL.
 
 Les paramètres passés dans le traitement sont tous issus de la [documentation de l'API BAL de la BaseAdresseNationale](https://github.com/etalab/ban-api-depot/wiki/Documentation).
+
+Ces traitements ont été réalisées à partir de la version 2023.2.3.0 de FMEForm.
 
 #### 1 - Création du fichier de configuration
 
