@@ -185,7 +185,6 @@ update
 
 -- #################################################################### FONCTION TRIGGER - ft_m_geo_adresse_gestion ###################################################
 
-
 -- DROP FUNCTION r_adresse.ft_m_geo_adresse_gestion();
 
 CREATE OR REPLACE FUNCTION r_adresse.ft_m_geo_adresse_gestion()
@@ -200,6 +199,8 @@ BEGIN
 
 -- INSERT
 IF (TG_OP = 'INSERT') THEN
+
+
 
 -- récupération de l'identiant adresse dans une variable
 v_id_adresse := nextval('r_objet.geo_objet_pt_adresse_id_seq'::regclass);
@@ -228,7 +229,7 @@ IF (NEW.diag_adr = '11'::text OR left(NEW.diag_adr, 1) = '2') AND
      LEFT JOIN r_voie.an_voie v ON v.id_voie = p.id_voie
      LEFT JOIN r_osm.geo_osm_commune c ON v.insee = c.insee::bpchar
   WHERE 
-    a.diag_adr <> '12' and a.diag_adr <> '33'
+      a.diag_adr <> '12' and a.diag_adr <> '33'
   and
   lower(
         CASE
@@ -473,8 +474,8 @@ maj_bal=case when (new.id_voie <> old.id_voie) or (new.numero <> old.numero)
 		or (new.repet <> old.repet) or (new.repet is not null and old.repet is null) or (old.repet is not null and new.repet is null)
 		or (new.ld_compl <> old.ld_compl) or (new.ld_compl is not null and old.ld_compl is null) or (old.ld_compl is not null and new.ld_compl is null)
 		or (new.position <> old.position) 
-		or (old.diag_adr IN ('11','99') and new.diag_adr IN ('12','32','33','00')) or (old.diag_adr IN ('12','32','33','00') and new.diag_adr IN ('11','99')) 
-		or (old.diag_adr IN ('12','32','33','00') and left(new.diag_adr,1) = '2') 
+		or (old.diag_adr IN ('11','99') and new.diag_adr IN ('12','32','33','00')) 
+		or (old.diag_adr IN ('12','32','33','00') and new.diag_adr IN ('11','20','21','22','23','24','25','99')) 
 		or (left(old.diag_adr,1) = '2' and new.diag_adr IN ('12','32','33','00'))
 		-- si une parcelle est modifiée, supprimée ou insérée, l'attribut maj_bal est géré par le trigger de contrôle sur la table an_cadastre_cad
 		then 
@@ -567,7 +568,6 @@ $function$
 ;
 
 COMMENT ON FUNCTION r_adresse.ft_m_geo_adresse_gestion() IS 'Fonction trigger pour gérer l''insertion et la mise à jour des données adresse';
-
 
 
 
