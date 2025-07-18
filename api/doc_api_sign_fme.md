@@ -87,7 +87,7 @@ Ce traitement est plus simple, puisqu'il utilise simplement la classe d'objets d
 
 ![put](https://github.com/sigagglocompiegne/rva/blob/master/api/img/API_SIGNALEMENT_FME_PARAMETRAGE_PUT.png)
 
-Le test consiste a récupérer les signalements avec un traitement codé 3 (demande traitée) ou 5 (demande rejetée) et un statut d'origine (provenant du GET), différent du statut renvoyé (
+Le test consiste a récupérer les signalements avec un traitement codé 3 (demande traitée) ou 5 (demande rejetée) et un statut d'origine (provenant du GET), différent du statut renvoyé également par le GET. Ici, le transformer GET a une double fonction. Comme il récupère tous les signalements (traités ou non), une comparaison est faite avecl a base de données pour trier les nouveaux et anciens signalements. Pour les anciens signalements, le statut est récupéré dans un attribut double, et il est mis à jour dans la base de données. Le PUT etant lancé après, ce statut est comparé au statut local. Si il est différent, cela signifie qiue le signalement doit être envoyé à l'API en retour.
 
 Ce traitement est exécuté via FME tous les soirs avant le traitement exécutant le GET.
 
