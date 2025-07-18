@@ -40,9 +40,9 @@ Le service SIG de l'ARC a mis en place une gestion des statuts du signalement pa
 
 ## Fonctionnement du site "Mes Signalements"
 
-Les signalements réalisés par les extérieurs peuvent l'être via "Mes Adresses" ou directement via le site "Mes signalements" `https://signalement.adresse.data.gouv.fr/#/`.
+Les signalements réalisés par les extérieurs peuvent l'être via "Mes Adresses" ou directement via le site "Mes signalements" [https://signalement.adresse.data.gouv.fr/#/](https://signalement.adresse.data.gouv.fr/#/).
 
-Pour voir tous les signalements et leurs statutes ! `https://signalement.adresse.data.gouv.fr/#/all`
+Pour voir tous les signalements et leurs statutes : [https://signalement.adresse.data.gouv.fr/#/all](https://signalement.adresse.data.gouv.fr/#/all)
 
 #### Déposer un signalement sur une adresse existante
 
