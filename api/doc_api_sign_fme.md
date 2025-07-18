@@ -75,6 +75,8 @@ Un transformer personnalisé a été créé pour gérer la boucle de renvoie à 
 Ce traitement est exécuté via FME tous les soirs.
 
 Ce traitement intègre également la notion de "double vie" du signalement par rapport au fonctionnel du GéoCompiégnois. Afin de mettre en oeuvre les automatismes de mise à jour interne et de renvoie à l'API, il a été intégré dans la base de données des attributs parallèles aux attributs de l'API pour effectuer des comparaisons, notamment sur la notion de statuts.
+
+**Le statut des signalements de l'API 'Mes Adresses' a été intégré dans la liste de domaines des statuts des signalements du GéoCompiégnois. Une harmonisation a été intégrée afin de gérer les signalements dans le fonctionnel applicatif. Le retour en mode GET transforme le statut local en statut API.**
     
 
 #### Le mode PUT : envoi des signalements traités
@@ -85,7 +87,7 @@ Ce traitement est plus simple, puisqu'il utilise simplement la classe d'objets d
 
 ![put](https://github.com/sigagglocompiegne/rva/blob/master/api/img/API_SIGNALEMENT_FME_PARAMETRAGE_PUT.png)
 
-
+Le test consiste a récupérer les signalements avec un traitement codé 3 (demande traitée) ou 5 (demande rejetée) et un statut d'origine (provenant du GET), différent du statut renvoyé (
 
 Ce traitement est exécuté via FME tous les soirs avant le traitement exécutant le GET.
 
