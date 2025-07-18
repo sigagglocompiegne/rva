@@ -42,7 +42,7 @@ Le service SIG de l'ARC a mis en place une gestion des statuts du signalement pa
 
 Les signalements réalisés par les extérieurs peuvent l'être via "Mes Adresses" ou directement via le site "Mes signalements" [https://signalement.adresse.data.gouv.fr/#/](https://signalement.adresse.data.gouv.fr/#/).
 
-Pour voir tous les signalements et leurs statutes : [https://signalement.adresse.data.gouv.fr/#/all](https://signalement.adresse.data.gouv.fr/#/all)
+Pour voir tous les signalements et leurs statuts : [https://signalement.adresse.data.gouv.fr/#/all](https://signalement.adresse.data.gouv.fr/#/all)
 
 #### Déposer un signalement sur une adresse existante
 
@@ -54,8 +54,15 @@ Pour voir tous les signalements et leurs statutes : [https://signalement.adresse
 
 [Accès à la documentation détaillée.] A venir
 
+Le signalement est ensuite moissonné par l'API depuis les outils du GéoCompiégnois tous les soirs.
+
+## Paramétrage de l'API via l'ETL FME
+
+#### Le mode GET : récupération des signalements
 
 
-## Paramétrage
+#### Le mode PUT : envoi des signalements traités
 
-(en développement)
+## Paramétrage de la base de données
+
+## Paramétrage de l'application GEO "Voie et Adresse"
