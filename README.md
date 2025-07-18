@@ -47,7 +47,7 @@ L’ARC privilégie donc une organisation dans laquelle l’Interface Homme Mach
 - [Ressources nationales (dont spécification du format d'échange BAL version 1.4)](https://aitf-sig-topo.github.io/voies-adresses/#format-bal)
 - [Documentation de l'API BAL de la BaseAdresseNationale](https://doc.adresse.data.gouv.fr/naviguer-sur-le-site/les-api)
 - [Paramétrage de l'API de dépôt Mes Adresses pour FME](https://github.com/sigagglocompiegne/rva/blob/master/api/doc_api_balc_fme.md)
-- [Paramétrage de l'API de signalement "Mes Adresses" pour FME](https://github.com/sigagglocompiegne/rva/blob/master/api/doc_api_sign_fme.md)
+- [Gestion des signalements sur "Mes adresses" via l'API "Mes signalements" pour FME](https://github.com/sigagglocompiegne/rva/blob/master/api/doc_api_sign_fme.md)
 
 
 ## Jeu de données consolidé
