@@ -132,3 +132,16 @@ Particularité(s) à noter :
  
 
 ## Paramétrage de l'application GEO "Voie et Adresse"
+
+La classe d'objets `geo_rva_apisignal` a été ajouté à l'application "Voies et Adresses", avec un système de symbologie spécifique.
+
+![put](https://github.com/sigagglocompiegne/rva/blob/master/api/img/GEO_carte_api_signalement.png)
+
+Les signalements chargés via l'API apparaîtront sur la carte avec cette nouvelle symbologie.
+
+![put](https://github.com/sigagglocompiegne/rva/blob/master/api/img/GEO_tab_api_signalement.png)
+
+Les signalements sont également disponibles dans les différents onglets du tableau bord avec la symbologie de la Base Adresse Locale pour les différenciés de ceux des communes du GéoCompiégnois.
+
+
+
