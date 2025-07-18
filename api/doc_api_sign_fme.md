@@ -155,7 +155,7 @@ Comme pour les signalements du GéoCompiègnois, il est possible de cliquer dess
 
 ![put](https://github.com/sigagglocompiegne/rva/blob/master/api/img/GEO_fiche_api_signalement.png)
 
-Une fiche d'information est accéssible pour modifier le signalement et apporter une réponse qui sera renvoyée par l'API en mode PUT.
+Une fiche d'information est accéssible pour modifier le signalement et apporter une réponse qui sera renvoyée par l'API en mode PUT. La partie justification peut être rmeplie, seule le statut rejeté sera transmis au demandeur. Si le signalement est accepté, cette partie ne sera pas transmise.
 
 **ATTENTION : la saisie du statut est primordial à ce stade pour une bonne compréhension via l'API**
 
