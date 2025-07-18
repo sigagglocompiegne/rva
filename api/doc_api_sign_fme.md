@@ -20,12 +20,15 @@ Contact : sig@agglo-compiegne.fr
 
 ### Changelog
 
- * 19/02/2025 : Version 0.1 - récupération des signalements "Mes Adresses" en GET et renvoie d'une réponse en PUT
+ * 18/07/2025 : Version 1.0 - récupération des signalements "Mes Adresses" en GET et renvoie d'une réponse en PUT en mode production
+ * 19/02/2025 : Version 0.1 - récupération des signalements "Mes Adresses" en GET et renvoie d'une réponse en PUT en mode test
  
 ### Gabarit
 
-- Téléchargement du projet FME version 0.1 - Mode GET (en cours de développement et test)
-- Téléchargement du projet FME version 0.1 - Mode PUT (en cours de développement et test)
+- Téléchargement du projet FME version 1.0 - Mode GET (mode production)
+- Téléchargement du projet FME version 1.0 - Mode PUT (mode production)
+- Téléchargement du projet FME version 0.1 - Mode GET (mode test)
+- Téléchargement du projet FME version 0.1 - Mode PUT (mode test)
 
 ## Schéma fonctionnel
 
