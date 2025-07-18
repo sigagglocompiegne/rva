@@ -61,6 +61,8 @@ Le signalement est ensuite moissonné par l'API depuis les outils du GéoCompié
 #### Le mode GET : récupération des signalements
 
 
+![schema](img/API_SIGNALEMENT_FME_PARAMETRAGE.png)
+
 #### Le mode PUT : envoi des signalements traités
 
 ## Paramétrage de la base de données
