@@ -25,10 +25,10 @@ Contact : sig@agglo-compiegne.fr
  
 ### Gabarit
 
-- Téléchargement du projet FME version 1.0 - Mode GET (mode production)
-- Téléchargement du projet FME version 1.0 - Mode PUT (mode production)
-- Téléchargement du projet FME version 0.1 - Mode GET (mode test)
-- Téléchargement du projet FME version 0.1 - Mode PUT (mode test)
+- Téléchargement du projet FME version 1.0 - Mode GET (mode production) (à venir)
+- Téléchargement du projet FME version 1.0 - Mode PUT (mode production) (à venir)
+- Téléchargement du projet FME version 0.1 - Mode GET (mode test) (à venir)
+- Téléchargement du projet FME version 0.1 - Mode PUT (mode test) (à venir)
 
 ## Schéma fonctionnel
 
