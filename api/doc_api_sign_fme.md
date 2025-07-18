@@ -77,7 +77,11 @@ Ce traitement est exécuté via FME tous les soirs.
 Ce traitement intègre également la notion de "double vie" du signalement par rapport au fonctionnel du GéoCompiégnois. Afin de mettre en oeuvre les automatismes de mise à jour interne et de renvoie à l'API, il a été intégré dans la base de données des attributs parallèles aux attributs de l'API pour effectuer des comparaisons, notamment sur la notion de statuts.
 
 **Le statut des signalements de l'API 'Mes Adresses' a été intégré dans la liste de domaines des statuts des signalements du GéoCompiégnois. Une harmonisation a été intégrée afin de gérer les signalements dans le fonctionnel applicatif. Le retour en mode GET transforme le statut local en statut API.**
-    
+
+Ce traitement génère des envois d'emails au Service Information Géographique :
+    . pour un nouveau signalement reçu
+    . pour confirmer les signalements renvoyés par l'API en mode PUT
+    . pour une erreur liée à l'API, une erreur d'un statut inconnu ou pour une erreur d'une type de signalement inconnu
 
 #### Le mode PUT : envoi des signalements traités
 
@@ -90,6 +94,8 @@ Ce traitement est plus simple, puisqu'il utilise simplement la classe d'objets d
 Le test consiste a récupérer les signalements avec un traitement codé 3 (demande traitée) ou 5 (demande rejetée) et un statut d'origine (provenant du GET), différent du statut renvoyé également par le GET. Ici, le transformer GET a une double fonction. Comme il récupère tous les signalements (traités ou non), une comparaison est faite avecl a base de données pour trier les nouveaux et anciens signalements. Pour les anciens signalements, le statut est récupéré dans un attribut double, et il est mis à jour dans la base de données. Le PUT etant lancé après, ce statut est comparé au statut local. Si il est différent, cela signifie qiue le signalement doit être envoyé à l'API en retour.
 
 Ce traitement est exécuté via FME tous les soirs avant le traitement exécutant le GET.
+
+Ce traitement ne génère pas d'envoi d'emails au Service Information Géographique.
 
 ## Paramétrage de la base de données
 
@@ -142,6 +148,21 @@ Les signalements chargés via l'API apparaîtront sur la carte avec cette nouvel
 ![put](https://github.com/sigagglocompiegne/rva/blob/master/api/img/GEO_tab_api_signalement.png)
 
 Les signalements sont également disponibles dans les différents onglets du tableau bord avec la symbologie de la Base Adresse Locale pour les différenciés de ceux des communes du GéoCompiégnois.
+
+![put](https://github.com/sigagglocompiegne/rva/blob/master/api/img/GEO_result_api_signalement.png)
+
+Comme pour les signalements du GéoCompiègnois, il est possible de cliquer dessus et ils apparaissent dans le menu "Résultats". Une information apparaît pour voir son état (GET, PUT, ...).
+
+![put](https://github.com/sigagglocompiegne/rva/blob/master/api/img/GEO_fiche_api_signalement.png)
+
+Une fiche d'information est accéssible pour modifier le signalement et apporter une réponse qui sera renvoyée par l'API en mode PUT.
+
+**ATTENTION : la saisie du statut est primordial à ce stade pour une bonne compréhension via l'API**
+
+**Un statut `demande traitée` version GéoCompiégnois sera considéré comme accepté par l'API. Si le signalement n'est pas accepté par nos services, il faudra indiquer `Demande rejetée`**
+
+Tous les autres statuts ne provoquerons pas de renvoi par l'API.
+
 
 
 
