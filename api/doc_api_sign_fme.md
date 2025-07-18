@@ -46,7 +46,7 @@ Pour voir tous les signalements et leurs statuts : [https://signalement.adresse.
 
 #### Déposer un signalement sur une adresse existante
 
-![schema](img/mes_signalements_saisies.png)
+![schema](https://github.com/sigagglocompiegne/rva/blob/master/api/img/mes_signalements_saisies.png)
 
 1 - Cliquer sur une adresse et indiquer dans la fiche la demande de modification. A la validation, une autre fenêtre vous demandera votre nom et email pour le retour.
 
@@ -61,7 +61,7 @@ Le signalement est ensuite moissonné par l'API depuis les outils du GéoCompié
 #### Le mode GET : récupération des signalements
 
 
-![schema](img/API_SIGNALEMENT_FME_PARAMETRAGE.png)
+![schema](https://github.com/sigagglocompiegne/rva/blob/master/api/img/API_SIGNALEMENT_FME_PARAMETRAGE.png)
 
 #### Le mode PUT : envoi des signalements traités
 
