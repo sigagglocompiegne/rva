@@ -12,9 +12,9 @@ Ces signalements sont gérés par le GéoCompiégnois. Pour cela, un processus a
     . Gestion du signalement dans l'application "Voies et Adresses"
     . Renvoi de la réponse via l'API depuis l'ETL FME
 
-# Paramétrage de l'API de signalement "Mes Adresses" pour FME #
+## Paramétrage de l'API de signalement "Mes Adresses" pour FME #
 
-## Principe
+### - Principe
 
 L'alimentation de la BaseAdresseLocale évolue. En 2025, l'intégration de signalements d'adresses sera introduit dans l'applicatif "Mes Adresses". Le service SIG de l'ARC, partenaire des 4 EPCI téléversant déjà ses adresses via l'API de dépôt, a développé un processus automatique, en complément de son application Web "Voies et Adresses", pour récupérer les signalements déposés, les traiter et renvoyer une réponse. Les communes ne seront pas destinaires des signalements directement déposés sur "Mes Adresses".
 
@@ -24,11 +24,11 @@ Le développment de l'API étant toujours en cours au niveau national, les trait
 
 Contact : sig@agglo-compiegne.fr
 
-## Changelog
+### Changelog
 
  * 19/02/2025 : Version 0.1 - récupération des signalements "Mes Adresses" en GET et renvoie d'une réponse en PUT
  
-## Gabarit
+### Gabarit
 
 - Téléchargement du projet FME version 0.1 - Mode GET (en cours de développement et test)
 - Téléchargement du projet FME version 0.1 - Mode PUT (en cours de développement et test)
