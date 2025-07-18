@@ -60,7 +60,9 @@ Le signalement est ensuite moissonné par l'API depuis les outils du GéoCompié
 
 #### Le mode GET : récupération des signalements
 
-![schema](https://github.com/sigagglocompiegne/rva/blob/master/api/img/API_SIGNALEMENT_FME_PARAMETRAGE.png)
+Le traitement est stocké ici : `R:\Ressources\4-Partage\3-Procedures\FME\open_data\open-data_bal_signalement_get_fmeflow.fmw`
+
+![get](https://github.com/sigagglocompiegne/rva/blob/master/api/img/API_SIGNALEMENT_FME_PARAMETRAGE.png)
 
 Le premier bloc de traitement permet de fabriquer la requête qui sera envoyée. Récupération des codes Insee souhaitées et paramétrages de la requête.
 
@@ -70,10 +72,22 @@ Le premier bloc de traitement permet de fabriquer la requête qui sera envoyée.
 
 Un transformer personnalisé a été créé pour gérer la boucle de renvoie à l'API si le nombre de signalements dépassent les 100.
 
+Ce traitement est exécuté via FME tous les soirs.
 
+Ce traitement intègre également la notion de "double vie" du signalement par rapport au fonctionnel du GéoCompiégnois. Afin de mettre en oeuvre les automatismes de mise à jour interne et de renvoie à l'API, il a été intégré dans la base de données des attributs parallèles aux attributs de l'API pour effectuer des comparaisons, notamment sur la notion de statuts.
     
 
 #### Le mode PUT : envoi des signalements traités
+
+Le traitement est stocké ici : `R:\Ressources\4-Partage\3-Procedures\FME\open_data\open-data_bal_signalement_put_fmeflow.fmw`
+
+Ce traitement est plus simple, puisqu'il utilise simplement la classe d'objets des signalements présents dans la base de données et effectue une comparaison pour formater la requeête de retour.
+
+![put](https://github.com/sigagglocompiegne/rva/blob/master/api/img/API_SIGNALEMENT_FME_PARAMETRAGE_PUT.png)
+
+
+
+Ce traitement est exécuté via FME tous les soirs avant le traitement exécutant le GET.
 
 ## Paramétrage de la base de données
 
