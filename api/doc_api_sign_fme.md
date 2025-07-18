@@ -52,7 +52,7 @@ Pour voir tous les signalements et leurs statutes ! `https://signalement.adresse
 
 2 - Cliquer sur le nom de la voie pour uen demande concernant une adresse non présente dans la base "Adresse".
 
-[Accès à la documentation détaillée.]()
+[Accès à la documentation détaillée.] A venir
 
 
 
