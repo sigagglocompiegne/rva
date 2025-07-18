@@ -5,6 +5,7 @@
 Des signalements peuvent être déposés sur "Mes Adresses" depuis 2025. Un test est réalisé en cours sur la commune de Verberie, dans l'attente d'ouverture aux autres communes.
 
 Ces signalements sont gérés par le GéoCompiégnois. Pour cela, un processus a été mis en place à partir de l'API "Mes signalements" pour les récupérer et les gérer dans l'environnement applicatif actuel :
+
   . Récupération des signalements avec l'API depuis l'ETL FME
   . Intégration dans la base de données
   . Visibilité des signalements dans l'application "Voies et Adresses" avec un visuel et une fiche spécifiques
