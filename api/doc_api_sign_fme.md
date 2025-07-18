@@ -79,6 +79,7 @@ Ce traitement intègre également la notion de "double vie" du signalement par r
 **Le statut des signalements de l'API 'Mes Adresses' a été intégré dans la liste de domaines des statuts des signalements du GéoCompiégnois. Une harmonisation a été opérée afin de gérer les signalements dans le fonctionnel applicatif. Le retour en mode GET transforme le statut local en statut API.**
 
 Ce traitement génère des envois d'emails au Service Information Géographique :
+
     . pour un nouveau signalement reçu
     . pour confirmer les signalements renvoyés par l'API en mode PUT
     . pour une erreur liée à l'API, une erreur d'un statut inconnu ou pour une erreur d'une type de signalement inconnu
