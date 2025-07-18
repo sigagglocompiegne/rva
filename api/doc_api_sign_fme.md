@@ -60,8 +60,18 @@ Le signalement est ensuite moissonné par l'API depuis les outils du GéoCompié
 
 #### Le mode GET : récupération des signalements
 
-
 ![schema](https://github.com/sigagglocompiegne/rva/blob/master/api/img/API_SIGNALEMENT_FME_PARAMETRAGE.png)
+
+Le premier bloc de traitement permet de fabriquer la requête qui sera envoyée. Récupération des codes Insee souhaitées et paramétrages de la requête.
+
+    . adresse : https://plateforme-bal.adresse.data.gouv.fr/api-signalement/signalements
+    . variable : codeCommunes = [code insee]
+    . variable : limit = 100 et page = 1
+
+Un transformer personnalisé a été créé pour gérer la boucle de renvoie à l'API si le nombre de signalements dépassent les 100.
+
+
+    
 
 #### Le mode PUT : envoi des signalements traités
 
