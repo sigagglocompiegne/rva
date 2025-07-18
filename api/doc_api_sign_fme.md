@@ -83,7 +83,7 @@ Ce traitement intègre également la notion de "double vie" du signalement par r
 
 Le traitement est stocké ici : `R:\Ressources\4-Partage\3-Procedures\FME\open_data\open-data_bal_signalement_put_fmeflow.fmw`
 
-Ce traitement est plus simple, puisqu'il utilise simplement la classe d'objets des signalements présents dans la base de données et effectue une comparaison pour formater la requeête de retour.
+Ce traitement est plus simple, puisqu'il utilise simplement la classe d'objets des signalements présents dans la base de données et effectue une comparaison pour formater la requête de retour.
 
 ![put](https://github.com/sigagglocompiegne/rva/blob/master/api/img/API_SIGNALEMENT_FME_PARAMETRAGE_PUT.png)
 
@@ -92,5 +92,43 @@ Le test consiste a récupérer les signalements avec un traitement codé 3 (dema
 Ce traitement est exécuté via FME tous les soirs avant le traitement exécutant le GET.
 
 ## Paramétrage de la base de données
+
+Une classe d'objets spécifique au signalement reçu de "Mes adresses" a été créée.
+
+`m_signalement.geo_rva_apisignal` : table des points de signalements alimentée via le processus FME GET.
+
+   
+|Nom attribut | Définition | Type | Valeurs par défaut |
+|:---|:---|:---|:---|
+|idsignal|Identifiant du signalement via l'API|text| |
+|idban_adresse|Identifiant adresse|text| |
+|dcreate|Date de création du signalement|timestamp without time zone| |
+|dupdate|Date de modification du signalement|timestamp without time zone| |
+|ddelete|Date de suppression du signalement|timestamp without time zone| |
+|typ|Type de signalement|character varying(2)| |
+|statut|Statut du signalement|character varying(2)| |
+|statut_e|Statut du signalement en attente du retour API (permettra de vérifier la bonne mise à jour dans Mes Adresse|character varying(2)| |
+|insee|Code insee de la demande|character varying(5)| |
+|type_dem|type de demande déduite des informations présentes dans le signalement|text| |
+|numero|numéro de voie présente dans le signalement|smallint| |
+|suffixe|suffixe présent dans le signalement|text| |
+|nomvoie|nom de la voie présent dans le signalement|text| |
+|position|position présente dans le signalement|text| |
+|comment_s|commentaire présent dans le signalement|text| |
+|parcelle|Parcelle(s) présente dans le signalement|text| |
+|complt|complément ?|text| |
+|traite_sig|Niveau du traitement du signalement au sein du service SIG (lié à la liste de valeur lt_traite_sig)|character varying(1)|'1'::character varying|
+|bal_adresse|Adresse originelle sur laquelle a eu lieu le signalement|text| |
+|comment_r|commentaire de retour du service SIG|text| |
+|dbupdate|Date de mise à jour du signalement dans la base de données igeo_compiegnois|timestamp without time zone| |
+|op_maj|dernier opérateur ayant mis à jour le signalement|text| |
+|geom|Géométrie des objets|point(2154)| |
+
+Particularité(s) à noter :
+* Une clé primaire existe sur le champ `idsignal` 
+* 2 triggers :
+  * `t_t1_controle` : trigger permettant d'automatiser les contrôles de saisies
+  * `t_t3_date_maj` : trigger permettant d'automatiser la génération de la date de mise à jour 
+ 
 
 ## Paramétrage de l'application GEO "Voie et Adresse"
