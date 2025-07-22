@@ -142,7 +142,7 @@ Particularité(s) à noter :
 
 La classe d'objets `geo_rva_apisignal` a été ajouté à l'application "Voies et Adresses", avec un système de symbologie spécifique.
 
-![put](https://github.com/sigagglocompiegne/rva/blob/master/api/img/GEO_carte_api_signalement.png)
+![put](https://github.com/sigagglocompiegne/rva/blob/master/api/img/GEO_menucarte_api_signalement.png.png)
 
 Les signalements chargés via l'API apparaîtront sur la carte avec cette nouvelle symbologie.
 
@@ -152,15 +152,15 @@ Les signalements sont également disponibles dans les différents onglets du tab
 
 ![put](https://github.com/sigagglocompiegne/rva/blob/master/api/img/GEO_vie_signalement.png)
 
-Comme pour les signalements du GéoCompiègnois, il est possible de cliquer dessus et ils apparaissent dans le menu "Résultats". Le menu "Résultats" donne l'indication du niveau du traitement en cours (cf ci-dessus).
+Comme pour les signalements du GéoCompiègnois, il est possible de cliquer dessus et ils apparaissent dans le menu "Résultats". Ce menu donne l'indication du niveau du traitement en cours (cf ci-dessus).
 
 ![put](https://github.com/sigagglocompiegne/rva/blob/master/api/img/GEO_fiche_api_signalement.png)
 
-Une fiche d'information est accéssible pour modifier le signalement et apporter une réponse qui sera renvoyée par l'API en mode PUT. La partie justification peut être rmeplie, seule le statut rejeté sera transmis au demandeur. Si le signalement est accepté, cette partie ne sera pas transmise.
+Une fiche d'information est accéssible pour modifier le signalement et apporter une réponse qui sera renvoyée par l'API en mode PUT. La partie justification peut être remplie, mais seul le statut "Rejeté" en bénéficiera dans l'API. Si le signalement est accepté (traité), cette partie ne sera pas transmise.
 
 **ATTENTION : la saisie du statut est primordial à ce stade pour une bonne compréhension via l'API**
 
-**Un statut `demande traitée` version GéoCompiégnois sera considéré comme accepté par l'API. Si le signalement n'est pas accepté par nos services, il faudra indiquer `Demande rejetée`**
+**Un statut `demande traitée` version GéoCompiégnois sera considéré comme `accepté` par l'API. Si le signalement n'est pas accepté par nos services, il faudra indiquer `Demande rejetée`**
 
 Tous les autres statuts ne provoquerons pas de renvoi par l'API.
 
