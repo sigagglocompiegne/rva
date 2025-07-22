@@ -10,7 +10,7 @@ L'alimentation de la BaseAdresseLocale évolue. En 2025, l'intégration de signa
 
     . Récupération des signalements avec l'API depuis l'ETL FME
     . Intégration dans la base de données
-    . Visibilité des signalements dans l'application "Voies et Adresses" avec un visuel et une fiche spécifiques
+    . Visibilité des signalements dans l'application "Voies et Adresses" avec un visuel et une fiche spécifique
     . Gestion du signalement dans l'application "Voies et Adresses"
     . Renvoi de la réponse via l'API depuis l'ETL FME
 
@@ -72,7 +72,7 @@ Le premier bloc de traitement permet de fabriquer la requête qui sera envoyée.
 
 Un transformer personnalisé a été créé pour gérer la boucle de renvoie à l'API si le nombre de signalements dépassent les 100.
 
-Ce traitement est exécuté via FME tous les soirs.
+Ce traitement est exécuté via FMEFlow (FMEServer) tous les soirs.
 
 Ce traitement intègre également la notion de "double vie" du signalement par rapport au fonctionnel du GéoCompiégnois. Afin de mettre en oeuvre les automatismes de mise à jour interne et de renvoie à l'API, il a été intégré dans la base de données des attributs parallèles aux attributs de l'API pour effectuer des comparaisons, notamment sur la notion de statuts.
 
@@ -92,9 +92,9 @@ Ce traitement est plus simple, puisqu'il utilise simplement la classe d'objets d
 
 ![put](https://github.com/sigagglocompiegne/rva/blob/master/api/img/API_SIGNALEMENT_FME_PARAMETRAGE_PUT.png)
 
-Le test consiste a récupérer les signalements avec un traitement codé 3 (demande traitée) ou 5 (demande rejetée) et un statut d'origine (provenant du GET), différent du statut renvoyé également par le GET. Ici, le transformer GET a une double fonction. Comme il récupère tous les signalements (traités ou non), une comparaison est faite avecl a base de données pour trier les nouveaux et anciens signalements. Pour les anciens signalements, le statut est récupéré dans un attribut double, et il est mis à jour dans la base de données. Le PUT etant lancé après, ce statut est comparé au statut local. Si il est différent, cela signifie qiue le signalement doit être envoyé à l'API en retour.
+Le test consiste a récupérer les signalements avec un traitement codé 3 (demande traitée) ou 5 (demande rejetée) et un statut d'origine (provenant du GET), différent du statut renvoyé également par le GET. Ici, le transformer GET a une double fonction. Comme il récupère tous les signalements (traités ou non), une comparaison est faite avec la base de données pour trier les nouveaux et anciens signalements. Pour les anciens signalements, le statut est récupéré dans un attribut double, et il est mis à jour dans la base de données. Le PUT etant lancé avant, ce statut est comparé au statut local. Si il est différent, cela signifie que le signalement doit être envoyé à l'API en retour.
 
-Ce traitement est exécuté via FME tous les soirs avant le traitement exécutant le GET.
+Ce traitement est exécuté via FMEFlow (FMEServer) tous les soirs avant le traitement exécutant le GET.
 
 Ce traitement ne génère pas d'envoi d'emails au Service Information Géographique.
 
@@ -150,9 +150,9 @@ Les signalements chargés via l'API apparaîtront sur la carte avec cette nouvel
 
 Les signalements sont également disponibles dans les différents onglets du tableau bord avec la symbologie de la Base Adresse Locale pour les différenciés de ceux des communes du GéoCompiégnois.
 
-![put](https://github.com/sigagglocompiegne/rva/blob/master/api/img/GEO_result_api_signalement.png)
+![put](https://github.com/sigagglocompiegne/rva/blob/master/api/img/GEO_vie_signalement.png)
 
-Comme pour les signalements du GéoCompiègnois, il est possible de cliquer dessus et ils apparaissent dans le menu "Résultats". Une information apparaît pour voir son état (GET, PUT, ...).
+Comme pour les signalements du GéoCompiègnois, il est possible de cliquer dessus et ils apparaissent dans le menu "Résultats". Le menu "Résultats" donne l'indication du niveau du traitement en cours (cf ci-dessus).
 
 ![put](https://github.com/sigagglocompiegne/rva/blob/master/api/img/GEO_fiche_api_signalement.png)
 
