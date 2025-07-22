@@ -138,7 +138,7 @@ Particularité(s) à noter :
   * `t_t3_date_maj` : trigger permettant d'automatiser la génération de la date de mise à jour 
  
 
-## Paramétrage de l'application GEO "Voie et Adresse"
+## Paramétrage de l'application GEO "Voies et Adresses"
 
 La classe d'objets `geo_rva_apisignal` a été ajouté à l'application "Voies et Adresses", avec un système de symbologie spécifique.
 
