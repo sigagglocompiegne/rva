@@ -162,7 +162,17 @@ Une fiche d'information est accéssible pour modifier le signalement et apporter
 
 **Un statut `demande traitée` version GéoCompiégnois sera considéré comme `accepté` par l'API. Si le signalement n'est pas accepté par nos services, il faudra indiquer `Demande rejetée`**
 
-Tous les autres statuts ne provoquerons pas de renvoi par l'API.
+## Les retours
+
+Deux retours par emails de bonnes transmissions des signalements sont opérationnels.
+
+Le premier concerne directement l'application "Mes Adresses" qui renvoie un email lors de la réception d'une réponse à un signalement (API en mode PUT). Cet email (cf ci-dessous) indique la prise en compte ou non du signalement et dans le cas d'un rejet uniquement, mentionne la justification. Cette justification correspond au message indiqué dans la fiche d'information du signalement dans l'application `Voies et adresses`.
+
+![put](https://github.com/sigagglocompiegne/rva/blob/master/api/img/BAL_email_retour.png)
+
+Le second email est envoyé par le traitement FME de l'API en mode GET. Il détecte les signalements pris en compte par "Mes Adresses" et envoi une confirmation au service information géoégraphique parallèlement à l'email officiel de "Mes Adresses".
+
+![put](https://github.com/sigagglocompiegne/rva/blob/master/api/img/BAL_email_retour_sig.png)
 
 
 
