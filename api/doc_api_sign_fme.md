@@ -72,14 +72,19 @@ Le premier bloc de traitement permet de fabriquer la requête qui sera envoyée.
 
 Un transformer personnalisé a été créé pour gérer la boucle de renvoie à l'API si le nombre de signalements dépassent les 100.
 
-Un second bloc 
+Ce traitement intègre également la notion de "double vie" du signalement par rapport au fonctionnel du GéoCompiégnois. Afin de mettre en oeuvre les automatismes de mise à jour interne et de renvoie à l'API, il a été intégré dans la base de données des attributs parallèles aux attributs de l'API pour effectuer des comparaisons, notamment sur la notion de statuts.
+
+Un second bloc permet de comparer les signalements récupérés via l'API et ceux stockés dans la base de données du GéoCompiégnois. La comparaison permet de ventiler les nouveaux signalements des autres. La branche des nouveaux signalements est alors redirigée vers le troisième bloc pour la récupération des données personnelles saisie par le demandeur.
 
 ![get](img/api_signal_bloc2.png)
 
 
+Un troisième bloc permet de réintéroger signalement par signalement et de récupérer les informations personnelles liées à chaque demandeur. Si le demandeur est un "public", le nom, prénom et l'email sont récupérés, si il s'agit d'un institutionnel ('prive'), seul le nom de l'organisme est disponible.
+
+![get](img/api_signal_bloc3.png)
+
 Ce traitement est exécuté via FMEFlow (FMEServer) tous les soirs.
 
-Ce traitement intègre également la notion de "double vie" du signalement par rapport au fonctionnel du GéoCompiégnois. Afin de mettre en oeuvre les automatismes de mise à jour interne et de renvoie à l'API, il a été intégré dans la base de données des attributs parallèles aux attributs de l'API pour effectuer des comparaisons, notamment sur la notion de statuts.
 
 **Le statut des signalements de l'API 'Mes Adresses' a été intégré dans la liste de domaines des statuts des signalements du GéoCompiégnois. Une harmonisation a été opérée afin de gérer les signalements dans le fonctionnel applicatif. Le retour en mode GET transforme le statut local en statut API.**
 
