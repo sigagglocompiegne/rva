@@ -51,7 +51,9 @@ L’ARC privilégie donc une organisation dans laquelle l’Interface Homme Mach
 
 
 ## Jeu de données consolidé
-
-Retrouvez bientôt un jeu de données sur les adresses à l'échelle de chaque EPCI du Grand Compiégnois sur le catalogue GéoCompiégnois.
+- [Assemblage des bases Adresses sur la Communauté de Communes des Deux Vallées](https://geo.compiegnois.fr/portail/dataset/64f418ca-c876-4604-be7b-8f3a19fea7b8)
+- [Assemblage des bases Adresses sur la Communauté de Communes des Lisières de l'Oise](https://geo.compiegnois.fr/portail/dataset/8ab1d178-84ad-46bb-b2ff-69b713918fca)
+- [Assemblage des bases Adresses sur la Communauté de Communes de la Plaine d'Estrées](https://geo.compiegnois.fr/portail/dataset/a086c4bf-1b92-4d1c-92f6-da259d516ade)
+- [Assemblage des bases Adresses sur l'Agglomération de la Région de Compiègne](https://geo.compiegnois.fr/portail/dataset/6819c17b-f3fd-4ecd-8074-38ef92a9a815)
 
 
