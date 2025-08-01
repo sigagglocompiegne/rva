@@ -64,7 +64,7 @@ Le traitement est stocké ici : `R:\Ressources\4-Partage\3-Procedures\FME\open_d
 
 ![get](https://github.com/sigagglocompiegne/rva/blob/master/api/img/API_SIGNALEMENT_FME_PARAMETRAGE.png)
 
-Le premier bloc de traitement permet de fabriquer la requête qui sera envoyée. Récupération des codes Insee souhaitées et paramétrages de la requête.
+**Le premier bloc** de traitement permet de fabriquer la requête qui sera envoyée. Récupération des codes Insee souhaitées et paramétrages de la requête.
 
     . adresse : https://plateforme-bal.adresse.data.gouv.fr/api-signalement/signalements
     . variable : codeCommunes = [code insee]
@@ -74,14 +74,18 @@ Un transformer personnalisé a été créé pour gérer la boucle de renvoie à 
 
 Ce traitement intègre également la notion de "double vie" du signalement par rapport au fonctionnel du GéoCompiégnois. Afin de mettre en oeuvre les automatismes de mise à jour interne et de renvoie à l'API, il a été intégré dans la base de données des attributs parallèles aux attributs de l'API pour effectuer des comparaisons, notamment sur la notion de statuts.
 
-Un second bloc permet de comparer les signalements récupérés via l'API et ceux stockés dans la base de données du GéoCompiégnois. La comparaison permet de ventiler les nouveaux signalements des autres. La branche des nouveaux signalements est alors redirigée vers le troisième bloc pour la récupération des données personnelles saisie par le demandeur.
+**Un second bloc** permet de comparer les signalements récupérés via l'API et ceux stockés dans la base de données du GéoCompiégnois. La comparaison permet de ventiler les nouveaux signalements des autres. La branche des nouveaux signalements est alors redirigée vers le troisième bloc pour la récupération des données personnelles saisie par le demandeur.
 
 ![get](img/api_signal_bloc2.png)
 
 
-Un troisième bloc permet de réintéroger signalement par signalement et de récupérer les informations personnelles liées à chaque demandeur. Si le demandeur est un "public", le nom, prénom et l'email sont récupérés, si il s'agit d'un institutionnel ('prive'), seul le nom de l'organisme est disponible.
+**Un troisième bloc** permet de réintéroger signalement par signalement et de récupérer les informations personnelles liées à chaque demandeur. Si le demandeur est un "public", le nom, prénom et l'email sont récupérés, si il s'agit d'un institutionnel ('prive'), seul le nom de l'organisme est disponible.
 
 ![get](img/api_signal_bloc3.png)
+
+**Cette récupération n'est possible qu'en passant le token (authorisation) dans l'en-tête de la requête (cf commentaire dans le traitement FME)**. 
+
+Les données personnelles récupérées sont de nouveaux agrégées avec les données des autres blocs du JSON pour poursuivre le traitement.
 
 Ce traitement est exécuté via FMEFlow (FMEServer) tous les soirs.
 
