@@ -72,6 +72,11 @@ Le premier bloc de traitement permet de fabriquer la requête qui sera envoyée.
 
 Un transformer personnalisé a été créé pour gérer la boucle de renvoie à l'API si le nombre de signalements dépassent les 100.
 
+Un second bloc 
+
+![get](img/api_signal_bloc2.png)
+
+
 Ce traitement est exécuté via FMEFlow (FMEServer) tous les soirs.
 
 Ce traitement intègre également la notion de "double vie" du signalement par rapport au fonctionnel du GéoCompiégnois. Afin de mettre en oeuvre les automatismes de mise à jour interne et de renvoie à l'API, il a été intégré dans la base de données des attributs parallèles aux attributs de l'API pour effectuer des comparaisons, notamment sur la notion de statuts.
