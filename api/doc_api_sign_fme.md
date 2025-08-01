@@ -83,9 +83,9 @@ Ce traitement intègre également la notion de "double vie" du signalement par r
 
 ![get](img/api_signal_bloc3.png)
 
-**Cette récupération n'est possible qu'en passant le token (authorisation) dans l'en-tête de la requête (cf commentaire dans le traitement FME)**. 
+**Cette récupération n'est possible qu'en passant le token (authorisation) dans l'en-tête de la requête (cf commentaire dans le traitement FME)**. Les données personnelles récupérées sont de nouveaux agrégées avec les données des autres blocs du JSON pour poursuivre le traitement.
 
-Les données personnelles récupérées sont de nouveaux agrégées avec les données des autres blocs du JSON pour poursuivre le traitement.
+Le suite du traitement n'est qu'une mise en forme des données pour les préparer à l'enregistrement dans la classe d'objets correspondante dans la base de données (en update et.ou en insert) en utilisant la fonction `UPSERT` de FME et préparer les emails d'informations envoyés au service.
 
 Ce traitement est exécuté via FMEFlow (FMEServer) tous les soirs.
 
