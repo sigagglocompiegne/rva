@@ -1,6 +1,6 @@
 ![picto](https://github.com/sigagglocompiegne/orga_gest_igeo/blob/master/doc/img/geocompiegnois_2020_reduit_v2.png)
 
-# Gestion des signalements sur "Mes adresses" via l'API "Mes signalements"
+# Gestion des signalements de la base adresse via l'API "Mes signalements"
 
 ## Paramétrage de l'API de signalement "Mes Adresses" pour FME #
 
