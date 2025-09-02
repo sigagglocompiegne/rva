@@ -2,7 +2,7 @@
 
 # Gestion des signalements de la base adresse via l'API "Mes signalements"
 
-## Paramétrage de l'API de signalement "Mes Adresses" pour FME #
+## Paramétrage de l'API de signalement pour FME #
 
 ### Principe
 
