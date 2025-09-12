@@ -521,35 +521,34 @@ ALTER TABLE x_apps.xapps_geo_vmr_troncon_voirie
 COMMENT ON MATERIALIZED VIEW x_apps.xapps_geo_vmr_troncon_voirie
     IS 'Vue matérilaisée complète et décodée des données relatives au troncon et à ses propriétés métiers de circulation et de gestion, destinée à l''exploitation applicative (générateur d''apps). Cette vue est rafraîchie automatiquement toutes les nuits. Au besoin un rafraîchissement ponctuel est possible.';
 
--- Materialized View: x_apps.xapps_geo_vmr_voie
-
--- DROP MATERIALIZED VIEW x_apps.xapps_geo_vmr_voie;
-
-CREATE MATERIALIZED VIEW x_apps.xapps_geo_vmr_voie AS 
- WITH req_v AS (
+-- r_voie.xapps_geo_vmr_voie source
+drop MATERIALIZED VIEW if exists r_voie.xapps_geo_vmr_voie;
+CREATE MATERIALIZED VIEW r_voie.xapps_geo_vmr_voie
+TABLESPACE pg_default
+AS WITH req_v AS (
          SELECT t.id_voie_g AS id_voie,
             t.geom
            FROM r_objet.geo_objet_troncon t,
             r_voie.an_troncon tr
-          WHERE t.id_tronc = tr.id_tronc AND t.id_voie_g = t.id_voie_d
+          WHERE t.id_tronc = tr.id_tronc AND t.id_voie_g = t.id_voie_d AND tr.fictif = false
         UNION ALL
          SELECT t.id_voie_g AS id_voie,
             t.geom
            FROM r_objet.geo_objet_troncon t,
             r_voie.an_troncon tr
-          WHERE t.id_tronc = tr.id_tronc AND t.id_voie_g <> t.id_voie_d
+          WHERE t.id_tronc = tr.id_tronc AND (t.id_voie_g <> t.id_voie_d OR t.id_voie_d IS NULL) AND tr.fictif = false
         UNION ALL
          SELECT t.id_voie_d AS id_voie,
             t.geom
            FROM r_objet.geo_objet_troncon t,
             r_voie.an_troncon tr
-          WHERE t.id_tronc = tr.id_tronc AND t.id_voie_g <> t.id_voie_d
+          WHERE t.id_tronc = tr.id_tronc AND (t.id_voie_g <> t.id_voie_d OR t.id_voie_g IS NULL) AND tr.fictif = false
         UNION ALL
          SELECT t.id_voie_d AS id_voie,
             t.geom
            FROM r_objet.geo_objet_troncon t,
             r_voie.an_troncon tr
-          WHERE t.id_tronc = tr.id_tronc AND t.id_voie_g IS NULL AND t.id_voie_d IS NULL
+          WHERE t.id_tronc = tr.id_tronc AND t.id_voie_g IS NULL AND t.id_voie_d IS NULL AND tr.fictif = false
         ), req_nv AS (
          SELECT an_voie.insee,
             an_voie.id_voie,
@@ -566,13 +565,13 @@ CREATE MATERIALIZED VIEW x_apps.xapps_geo_vmr_voie AS
             t.geom
            FROM r_objet.geo_objet_troncon t,
             r_voie.an_troncon tr
-          WHERE t.id_tronc = tr.id_tronc AND t.id_voie_g <> t.id_voie_d AND tr.fictif = false
+          WHERE t.id_tronc = tr.id_tronc AND (t.id_voie_g <> t.id_voie_d OR t.id_voie_d IS NULL) AND tr.fictif = false
         UNION ALL
          SELECT t.id_voie_d AS id_voie,
             t.geom
            FROM r_objet.geo_objet_troncon t,
             r_voie.an_troncon tr
-          WHERE t.id_tronc = tr.id_tronc AND t.id_voie_g <> t.id_voie_d AND tr.fictif = false
+          WHERE t.id_tronc = tr.id_tronc AND (t.id_voie_g <> t.id_voie_d OR t.id_voie_g IS NULL) AND tr.fictif = false
         UNION ALL
          SELECT t.id_voie_d AS id_voie,
             t.geom
@@ -592,15 +591,32 @@ CREATE MATERIALIZED VIEW x_apps.xapps_geo_vmr_voie AS
      LEFT JOIN req_l ON req_l.id_voie = req_v.id_voie
   WHERE req_v.id_voie IS NOT NULL
   GROUP BY req_v.id_voie, req_nv.libvoie_c, req_nv.insee
-WITH DATA;
+UNION ALL
+ SELECT row_number() OVER () AS gid,
+    now() AS date_extract,
+    geo_v_adresse.id_voie,
+    geo_v_adresse.insee,
+    0 AS long,
+    geo_v_adresse.libvoie_c,
+    geo_v_adresse.geom
+   FROM r_adresse.geo_v_adresse
+  WHERE geo_v_adresse.numero::text = '99999'::text AND geo_v_adresse.libvoie_c IS NOT null and
+ ( geo_v_adresse.id_voie not in (select id_voie_d from r_objet.geo_objet_troncon where id_voie_d is not null) or
+   geo_v_adresse.id_voie not in (select id_voie_g from r_objet.geo_objet_troncon where id_voie_g is not null))
 
-ALTER TABLE x_apps.xapps_geo_vmr_voie
-    OWNER TO create_sig;
+  WITH DATA;
 
-						  
-COMMENT ON MATERIALIZED VIEW x_apps.xapps_geo_vmr_voie
-    IS 'Vue de synthèse des voies (agréagation des tronçons pour calcul) (générateur d''apps)
-Cette vue est rafraichie toutes les nuits par une tache CRON sur le serveur sig-sgbd.';
+
+
+-- View indexes:
+CREATE INDEX xapps_geo_vmr_voie_idvoie_idx ON r_voie.xapps_geo_vmr_voie USING btree (id_voie);
+CREATE INDEX xapps_geo_vmr_voie_libvoie_c_idx ON r_voie.xapps_geo_vmr_voie USING btree (libvoie_c);
+
+
+COMMENT ON MATERIALIZED VIEW r_voie.xapps_geo_vmr_voie IS 'Vue de synthèse des voies (agréagation des tronçons pour calcul, hors tronçon fictif) (générateur d''apps)
+Cette vue est rafraichie toutes les nuits par une tache CRON sur le serveur sig-sgbd20.';
+
+
 
 -- Index: x_apps.idx_xapps_v_voie_id_voie
 
