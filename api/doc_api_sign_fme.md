@@ -156,7 +156,7 @@ Particularité(s) à noter :
 
 La classe d'objets `geo_rva_apisignal` a été ajouté à l'application "Voies et Adresses", avec un système de symbologie spécifique.
 
-![put](https://github.com/sigagglocompiegne/rva/blob/master/api/img/GEO_menucarte_api_signalement.png.png)
+![put](https://github.com/sigagglocompiegne/rva/blob/master/api/img/GEO_menucarte_api_signalement.png)
 
 Les signalements chargés via l'API apparaîtront sur la carte avec cette nouvelle symbologie.
 
