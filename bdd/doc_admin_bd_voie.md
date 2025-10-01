@@ -42,6 +42,7 @@ L'ensemble des classes d'objets de gestion sont stockés dans plusieurs schémas
 |noeud_d|Identifiant du noeud de début du tronçon|bigint| |
 |noeud_f|Identifiant du noeud de fin de tronçon|bigint| |
 |pente|Pente exprimée en % et calculée à partir des altimétries des extrémités du tronçon|numeric| |
+|larg|Largeur de la chaussée (hors accotement)|integer||
 |observ|Observations|character varying(254)| |
 |src_geom|Référentiel de saisie|character varying(5)|'00'::bpchar|
 |src_date|Année du millésime du référentiel de saisie|character varying(4)|'0000'::bpchar|
@@ -191,6 +192,26 @@ Particularité(s) à noter :
 * Un index est présent sur les attributs doman, gestion, num_statut, proprio
 ---
 
+`m_voirie.an_voirie_hivernale` : Table alphanumérique des éléments de gestion de la viabilité hivernale
+
+|Nom attribut | Définition | Type  | Valeurs par défaut |
+|:---|:---|:---|:---|
+|id_tronc|Identifiant du tronçon|bigint| |
+|hierarch|Niveau de priorité de la voie en terme de déneigement|character varying(2)|'ZZ'::bpchar|
+|nserv|Niveau de service de la voie en terme de déneigement|character varying(2)|'ZZ'::character varying|
+|observ|Observations|character varying(254)| |
+|dbinsert|Date de saisie dans la base de données (tous les tronçons initialisés à la première insertion ont la même date de saisie)|timestamp without time zone|now()|
+|dbupdate|Date de la dernière mise à jour dans la base de données|timestamp without time zone| |
+
+
+Particularité(s) à noter :
+* Une clé primaire existe sur le champ `id_tronc`
+* Une clé étrangère exsiste sur la table de valeur `id_tronc` (classe d'objets `geo_objet_troncon`)
+* Une clé étrangère exsiste sur la table de valeur `hierarch` (liste de valeur `lt_hiver_hierarch` définissant la hiérarchie)
+* Une clé étrangère exsiste sur la table de valeur `nserv` (liste de valeur `lt_statut_nserv` définissant le niveau de service)
+
+---
+
 `m_voirie.geo_v_troncon_voirie` : Vue éditable destinée à la modification des données relatives au troncon et à ses propriétés métiers de circulation et de gestion
 
 * 5 triggers :
@@ -198,6 +219,7 @@ Particularité(s) à noter :
   * `t_t2_an_troncon` : pour une instance d'insertion, de mise à jour ou de suppression écriture des informations saisies dans la table des données métiers tronçons
   * `t_t2_an_voirie_circu` : pour une instance d'insertion, de mise à jour ou de suppression écriture des informations saisies dans la table des données de circulation
   * `t_t2_an_voirie_gest` : pour une instance d'insertion, de mise à jour ou de suppression écriture des informations saisies dans la table des données de gestion
+  * `t_t2_an_voirie_hiver` : pour une instance d'insertion, de mise à jour ou de suppression écriture des informations saisies dans la table des données de viabilisation hivernale
   * `t_t3_an_troncon_h` : pour une instance de mise à jour écriture des informations dans la table des données historique
 
 `r_voie.geo_v_troncon_voirie` : Vue de synthèse de la base de voie (pas d''information métier voirie)
@@ -511,6 +533,54 @@ Valeurs possibles :
 |130|130 km/h|
 |999|Autre vitesse|
 |ZZZ|Non concerné|
+
+---
+
+`m_voirie.lt_hiver_hierarch` : Liste des valeurs permettant de décrire la hiérarchie des tronçons en terme de viabilisation hivernale
+
+|Nom attribut | Définition | Type  | Valeurs par défaut |
+|:---|:---|:---|:---|    
+|code|Code de la liste énumérée relative à la viabilité hivernale|character varying(2)| |
+|valeur|Valeur de la liste énumérée relative à la viabilité hivernale|character varying(80)| |
+
+Particularité(s) à noter :
+* Une clé primaire existe sur le champ code 
+
+Valeurs possibles :
+
+|Code|Valeur|
+|:---|:---|
+|00|Non renseigné|
+|10|Priorité 1|
+|11|Priorité 2|
+|12|Priorité 3|
+|20|Secondaire|
+|30|Non traité|
+|ZZ|Non concerné|
+
+---
+
+
+`m_voirie.lt_hiver_nserv` : Liste de valeurs permettant de décrire le niveau de service attendu
+
+|Nom attribut | Définition | Type  | Valeurs par défaut |
+|:---|:---|:---|:---|    
+|code|Code de la liste énumérée relative au niveau de service attendu|character varying(2)| |
+|valeur|Valeur de la liste énumérée relative au niveau de service attendu|character varying(80)| |
+
+Particularité(s) à noter :
+* Une clé primaire existe sur le champ code 
+
+Valeurs possibles :
+
+|Code|Valeur|
+|:---|:---|
+|00|Non renseigné|
+|10|C1|
+|20|C2|
+|30|C3|
+|40|C4|
+|ZZ|Non concerné|
 
 ---
 
