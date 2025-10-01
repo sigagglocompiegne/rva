@@ -38,27 +38,57 @@ ALTER TABLE r_voie.geo_v_troncon_voie
 COMMENT ON VIEW r_voie.geo_v_troncon_voie
     IS 'Vue de synthèse de la base de voie (pas d''information métier voirie)';
 
--- View: m_voirie.geo_v_troncon_voirie
+-- m_voirie.geo_v_troncon_voirie source
 
--- DROP VIEW m_voirie.geo_v_troncon_voirie;
-
-CREATE OR REPLACE VIEW m_voirie.geo_v_troncon_voirie AS 
- SELECT t.id_tronc,t.id_voie_g,t.id_voie_d, t.insee_g,t.insee_d,t.noeud_d,t.noeud_f,
-        false as h_troncon,
-        a.type_tronc,a.hierarchie,a.franchiss,a.nb_voie,a.projet,a.fictif,g.statut_jur,
-        g.num_statut,g.gestion,g.doman,g.proprio,g.date_rem,c.type_circu,c.sens_circu,c.c_circu,c.c_observ,c.date_ouv,c.v_max,t.pente,t.observ, t.src_geom, t.src_date, t.src_tronc, false as ign_s,
-	t.geom
+CREATE OR REPLACE VIEW m_voirie.geo_v_troncon_voirie
+AS SELECT t.id_tronc,
+    t.id_voie_g,
+    t.id_voie_d,
+    t.insee_g,
+    t.insee_d,
+    t.noeud_d,
+    t.noeud_f,
+    false AS h_troncon,
+    a.type_tronc,
+    a.hierarchie,
+    a.franchiss,
+    a.nb_voie,
+    a.projet,
+    a.fictif,
+    g.statut_jur,
+    g.num_statut,
+    g.gestion,
+    g.doman,
+    g.proprio,
+    g.date_rem,
+    c.type_circu,
+    c.sens_circu,
+    c.c_circu,
+    c.c_observ,
+    c.date_ouv,
+    c.v_max,
+    t.larg,
+    t.pente,
+    t.observ,
+    t.src_geom,
+    t.src_date,
+    t.src_tronc,
+    false AS ign_s,
+    h.hierarch,
+    h.nserv,
+    h.observ AS obs_hiver,
+    t.geom
    FROM r_objet.geo_objet_troncon t
-   LEFT JOIN r_voie.an_troncon a ON a.id_tronc = t.id_tronc
-   LEFT JOIN m_voirie.an_voirie_gest g ON g.id_tronc = t.id_tronc
-   LEFT JOIN m_voirie.an_voirie_circu c ON c.id_tronc = t.id_tronc;
+     LEFT JOIN r_voie.an_troncon a ON a.id_tronc = t.id_tronc
+     LEFT JOIN m_voirie.an_voirie_gest g ON g.id_tronc = t.id_tronc
+     LEFT JOIN m_voirie.an_voirie_circu c ON c.id_tronc = t.id_tronc
+     LEFT JOIN m_voirie.an_voirie_hivernale h ON h.id_tronc = t.id_tronc;
+
+COMMENT ON VIEW m_voirie.geo_v_troncon_voirie IS 'Vue éditable destinée à la modification des données relatives au troncon et à ses propriétés métiers de circulation et de gestion';
 
 
 
-ALTER TABLE m_voirie.geo_v_troncon_voirie
-    OWNER TO create_sig;
-COMMENT ON VIEW m_voirie.geo_v_troncon_voirie
-    IS 'Vue éditable destinée à la modification des données relatives au troncon et à ses propriétés métiers de circulation et de gestion';
+
 
 
 
@@ -1026,6 +1056,67 @@ CREATE TRIGGER t_t2_an_voirie_gest
   EXECUTE PROCEDURE m_voirie.ft_m_an_voirie_gest();
 
 
+-- #################################################################### FONCTION TRIGGER - ft_m_an_voirie_hiver ###################################################
+
+-- DROP FUNCTION m_voirie.ft_m_an_voirie_hiver();
+
+CREATE OR REPLACE FUNCTION m_voirie.ft_m_an_voirie_hiver()
+ RETURNS trigger
+ LANGUAGE plpgsql
+AS $function$
+
+DECLARE v_id_tronc integer;
+
+BEGIN
+
+-- INSERT
+IF (TG_OP = 'INSERT') THEN
+
+v_id_tronc := currval('r_objet.geo_objet_troncon_id_seq'::regclass);
+INSERT INTO m_voirie.an_voirie_hivernale (id_tronc, hierarch, nserv, observ, dbinsert)
+SELECT v_id_tronc,
+NEW.hierarch,
+CASE 
+	WHEN NEW.hierarch in ('ZZ','30') THEN 'ZZ' 
+	WHEN NEW.hierarch IN ('00','10','11','12','20') AND NEW.nserv NOT IN ('10','20','30','40') THEN '00'  
+ELSE NEW.nserv
+END,
+NEW.obs_hiver,
+now();
+
+NEW.id_tronc := v_id_tronc;
+
+RETURN NEW;
+
+-- UPDATE
+ELSIF (TG_OP = 'UPDATE') THEN
+UPDATE
+m_voirie.an_voirie_hivernale
+SET
+hierarch=NEW.hierarch,
+nserv=
+CASE 
+	WHEN NEW.hierarch in ('ZZ','30') THEN 'ZZ' 
+	WHEN NEW.hierarch IN ('00','10','11','12','20') AND NEW.nserv NOT IN ('10','20','30','40') THEN '00' 
+ELSE NEW.nserv END
+,
+observ=NEW.obs_hiver,
+dbupdate=now()
+WHERE m_voirie.an_voirie_hivernale.id_tronc = OLD.id_tronc;
+RETURN NEW;
+
+-- DELETE
+ELSIF (TG_OP = 'DELETE') THEN
+DELETE FROM m_voirie.an_voirie_hivernale where id_tronc = OLD.id_tronc;
+RETURN OLD;
+
+END IF;
+
+END;
+$function$
+;
+
+COMMENT ON FUNCTION m_voirie.ft_m_an_voirie_hiver() IS 'Fonction trigger pour mise à jour de la classe métier viabilité hivernale de la voirie';
 
 
 
@@ -1254,7 +1345,74 @@ CREATE TRIGGER t2_date_maj
   FOR EACH ROW
   EXECUTE PROCEDURE public.r_timestamp_maj();
 
+-- View Triggers
 
+create trigger t_t0_controle_saisie instead of
+insert
+    or
+update
+    on
+    m_voirie.geo_v_troncon_voirie for each row execute procedure m_voirie.ft_m_controle_saisie();
+create trigger t_t1_geo_objet_troncon instead of
+insert
+    or
+delete
+    or
+update
+    on
+    m_voirie.geo_v_troncon_voirie for each row execute procedure r_objet.ft_m_geo_objet_troncon();
+create trigger t_t2_an_troncon instead of
+insert
+    or
+delete
+    or
+update
+    on
+    m_voirie.geo_v_troncon_voirie for each row execute procedure r_voie.ft_m_an_troncon();
+create trigger t_t2_an_voirie_circu instead of
+insert
+    or
+delete
+    or
+update
+    on
+    m_voirie.geo_v_troncon_voirie for each row execute procedure m_voirie.ft_m_an_voirie_circu();
+create trigger t_t2_an_voirie_gest instead of
+insert
+    or
+delete
+    or
+update
+    on
+    m_voirie.geo_v_troncon_voirie for each row execute procedure m_voirie.ft_m_an_voirie_gest();
+create trigger t_t2_an_voirie_hiver instead of
+insert
+    or
+delete
+    or
+update
+    on
+    m_voirie.geo_v_troncon_voirie for each row execute procedure m_voirie.ft_m_an_voirie_hiver();
+create trigger t_t3_an_troncon_h instead of
+update
+    on
+    m_voirie.geo_v_troncon_voirie for each row execute procedure m_voirie.ft_m_an_troncon_h();
+create trigger t_t4_sign_ign instead of
+insert
+    or
+delete
+    or
+update
+    on
+    m_voirie.geo_v_troncon_voirie for each row execute procedure m_voirie.ft_m_signal_ign();
+create trigger t_t5_refresh_plan instead of
+insert
+    or
+delete
+    or
+update
+    on
+    m_voirie.geo_v_troncon_voirie for each row execute procedure m_voirie.ft_m_refresh_plan();
 				    
 				 
 
