@@ -22,6 +22,7 @@ DROP TABLE IF EXISTS r_voie.an_troncon_h;
 DROP TABLE IF EXISTS r_voie.an_voie;
 DROP TABLE IF EXISTS m_voirie.an_voirie_gest;
 DROP TABLE IF EXISTS m_voirie.an_voirie_circu;
+DROP TABLE IF EXISTS m_voirie.an_voirie_hivernale;
 --DROP TABLE IF EXISTS r_objet.lt_src_geom;
 DROP TABLE IF EXISTS r_voie.lt_type_tronc;
 DROP TABLE IF EXISTS r_voie.lt_hierarchie;
@@ -91,6 +92,7 @@ CREATE TABLE r_objet.geo_objet_troncon
   noeud_d bigint NOT NULL, -- Identifiant du noeud de début du tronçon
   noeud_f bigint NOT NULL, -- Identifiant du noeud de fin de tronçon
   pente numeric(5,2), -- Pente exprimée en % et calculée à partir des altimétries des extrémités du tronçon
+  larg int4 NULL, -- Largeur en mètre de la chaussée (hors accotement)
   observ character varying(254), -- Observations
   src_geom character varying(5) NOT NULL DEFAULT '00' ::bpchar, -- Référentiel de saisie
   src_date character varying(4) NOT NULL DEFAULT '0000' ::bpchar, -- Année du millésime du référentiel de saisie
@@ -118,6 +120,7 @@ COMMENT ON COLUMN r_objet.geo_objet_troncon.insee_d IS 'Code INSEE à droite du 
 COMMENT ON COLUMN r_objet.geo_objet_troncon.noeud_d IS 'Identifiant du noeud de début du tronçon';
 COMMENT ON COLUMN r_objet.geo_objet_troncon.noeud_f IS 'Identifiant du noeud de fin de tronçon';
 COMMENT ON COLUMN r_objet.geo_objet_troncon.pente IS 'Pente exprimée en % et calculée à partir des altimétries des extrémités du tronçon';
+COMMENT ON COLUMN r_objet.geo_objet_troncon.larg IS 'Largeur en mètre de la chaussée (hors accotement)';
 COMMENT ON COLUMN r_objet.geo_objet_troncon.observ IS 'Observations';
 COMMENT ON COLUMN r_objet.geo_objet_troncon.src_geom IS 'Référentiel de saisie';
 COMMENT ON COLUMN r_objet.geo_objet_troncon.src_date IS 'Année du millésime du référentiel de saisie';
@@ -468,6 +471,34 @@ COMMENT ON COLUMN m_voirie.an_voirie_circu.c_circu IS 'Liste des codes des contr
 COMMENT ON COLUMN m_voirie.an_voirie_circu.c_observ IS 'Champ libre pour détailler le type de restriction (ex : hauteur de 4,10 m, ...)';
 COMMENT ON COLUMN m_voirie.an_voirie_circu.date_ouv IS 'Date d''ouverture du tronçon à la circulation (soit l''année entière est saisie soit une partie en remplaçant les 0 par des x)';
 
+-- #################################################################### an_voirie_hivernale  ###############################################
+
+-- m_voirie.an_voirie_hivernale definition
+
+-- Drop table
+
+-- DROP TABLE m_voirie.an_voirie_hivernale;
+
+CREATE TABLE m_voirie.an_voirie_hivernale (
+	id_tronc int8 NOT NULL, -- Identifiant du tronçon
+	hierarch varchar(2) DEFAULT 'ZZ'::bpchar NULL, -- Niveau de priorité de la voie en terme de déneigement
+	nserv varchar(2) DEFAULT 'ZZ'::character varying NULL, -- Niveau de service de la voie en terme de déneigement
+	observ varchar(254) NULL, -- Observations
+	dbinsert timestamp DEFAULT now() NOT NULL, -- Date de saisie dans la base de données (tous les tronçons initialisés à la première insertion ont la même date de saisie)
+	dbupdate timestamp NULL, -- Date de la dernière mise à jour dans la base de données
+	CONSTRAINT an_voirie_hivernale_pkey PRIMARY KEY (id_tronc),
+
+);
+COMMENT ON TABLE m_voirie.an_voirie_hivernale IS 'Table alphanumérique des éléments de gestion de la viabilité hivernale sur la ville de Compiègne';
+
+-- Column comments
+
+COMMENT ON COLUMN m_voirie.an_voirie_hivernale.id_tronc IS 'Identifiant du tronçon';
+COMMENT ON COLUMN m_voirie.an_voirie_hivernale.hierarch IS 'Niveau de priorité de la voie en terme de déneigement';
+COMMENT ON COLUMN m_voirie.an_voirie_hivernale.nserv IS 'Niveau de service de la voie en terme de déneigement';
+COMMENT ON COLUMN m_voirie.an_voirie_hivernale.observ IS 'Observations';
+COMMENT ON COLUMN m_voirie.an_voirie_hivernale.dbinsert IS 'Date de saisie dans la base de données (tous les tronçons initialisés à la première insertion ont la même date de saisie)';
+COMMENT ON COLUMN m_voirie.an_voirie_hivernale.dbupdate IS 'Date de la dernière mise à jour dans la base de données';
 
 
 -- ####################################################################################################################################################
@@ -1018,6 +1049,69 @@ INSERT INTO m_voirie.lt_v_max(
     ('ZZZ','Non concerné');
 
 
+-- ################################################################# Domaine valeur - lt_hiver_hierarch  ###############################################
+
+-- m_voirie.lt_hiver_hierarch definition
+
+-- Drop table
+
+-- DROP TABLE m_voirie.lt_hiver_hierarch;
+
+CREATE TABLE m_voirie.lt_hiver_hierarch (
+	code varchar(2) NOT NULL, -- Code de la liste énumérée relative à la viabilité hivernale
+	valeur varchar(80) NOT NULL, -- Valeur de la liste énumérée relative à la viabilité hivernale
+	CONSTRAINT lt_hiver_hierarch_pkey PRIMARY KEY (code)
+);
+COMMENT ON TABLE m_voirie.lt_hiver_hierarch IS 'Liste de valeurs permettant de décrire la viabilité hivernale';
+
+-- Column comments
+
+COMMENT ON COLUMN m_voirie.lt_hiver_hierarch.code IS 'Code de la liste énumérée relative à la viabilité hivernale';
+COMMENT ON COLUMN m_voirie.lt_hiver_hierarch.valeur IS 'Valeur de la liste énumérée relative à la viabilité hivernale';
+
+INSERT INTO m_voirie.lt_hiver_hierarch(
+            code, valeur)
+    VALUES
+  ('00','Non renseigné'),
+  ('10','Priorité 1'),
+  ('11','Priorité 2'),
+  ('12','Priorité 3'),
+  ('20','Secondaire'),
+  ('30','Non traité'),
+  ('ZZ','Non concerné')
+  ;
+
+-- ################################################################# Domaine valeur - lt_hiver_nserv  ###############################################
+
+-- m_voirie.lt_hiver_nserv definition
+
+-- Drop table
+
+-- DROP TABLE m_voirie.lt_hiver_nserv;
+
+CREATE TABLE m_voirie.lt_hiver_nserv (
+	code varchar(2) NOT NULL, -- Code de la liste énumérée relative au niveau de service attendu
+	valeur varchar(80) NOT NULL, -- Valeur de la liste énumérée relative au niveau de service attendu
+	CONSTRAINT lt_hiver_nserv_pkey PRIMARY KEY (code)
+);
+COMMENT ON TABLE m_voirie.lt_hiver_nserv IS 'Liste de valeurs permettant de décrire le niveau de service attendu';
+
+-- Column comments
+
+COMMENT ON COLUMN m_voirie.lt_hiver_nserv.code IS 'Code de la liste énumérée relative au niveau de service attendu';
+COMMENT ON COLUMN m_voirie.lt_hiver_nserv.valeur IS 'Valeur de la liste énumérée relative au niveau de service attendu';
+
+INSERT INTO m_voirie.lt_hiver_nserv(
+            code, valeur)
+    VALUES
+  ('00','Non renseigné'),
+  ('10','C1'),
+  ('20','C2'),
+  ('30','C3'),
+  ('40','C4'),
+  ('ZZ','Non concerné')
+  ;
+
 -- ####################################################################################################################################################
 -- ###                                                                                                                                              ###
 -- ###                                                                        FKEY                                                                  ###
@@ -1214,4 +1308,17 @@ ALTER TABLE r_voie.an_voie
   ADD CONSTRAINT lt_type_voie_fkey FOREIGN KEY (type_voie)
       REFERENCES r_voie.lt_type_voie (code) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION;
+
+ALTER TABLE m_voirie.an_voirie_hivernale
+	ADD CONSTRAINT an_voirie_hivernale_id_tronc_fkey FOREIGN KEY (id_tronc) 
+    REFERENCES r_objet.geo_objet_troncon(id_tronc) 
+    ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE m_voirie.an_voirie_hivernale
+  ADD	CONSTRAINT lt_hiver_hierarch_fkey FOREIGN KEY (hierarch) 
+  REFERENCES m_voirie.lt_hiver_hierarch(code);
+
+ALTER TABLE m_voirie.an_voirie_hivernale
+  ADD CONSTRAINT lt_hiver_nserv_fkey FOREIGN KEY (nserv) 
+  REFERENCES m_voirie.lt_hiver_nserv(code);
 
