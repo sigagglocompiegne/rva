@@ -184,7 +184,6 @@ update
     r_adresse.geo_v_adresse for each row execute procedure r_adresse.ft_m_an_adresse_h()
 
 -- #################################################################### FONCTION TRIGGER - ft_m_geo_adresse_gestion ###################################################
-
 -- DROP FUNCTION r_adresse.ft_m_geo_adresse_gestion();
 
 CREATE OR REPLACE FUNCTION r_adresse.ft_m_geo_adresse_gestion()
@@ -193,7 +192,9 @@ CREATE OR REPLACE FUNCTION r_adresse.ft_m_geo_adresse_gestion()
 AS $function$
 
 DECLARE v_id_adresse integer;
-DECLARE v_cle_interop text;
+--DECLARE v_cle_interop text;
+DECLARE verif_adresse text;
+DECLARE v_poi text;
 
 BEGIN
 
@@ -206,7 +207,7 @@ IF (TG_OP = 'INSERT') THEN
 v_id_adresse := nextval('r_objet.geo_objet_pt_adresse_id_seq'::regclass);
 
 -- verification des doublons des adresses conformes avant
-
+/*
 v_cle_interop := 
 (
 lower(
@@ -219,29 +220,25 @@ lower(
         END)
 );
 
+*/
+verif_adresse := (select 
+new.numero || case when new.repet is null or new.repet = '' then '' else new.repet end || ' ' || new.id_voie
+);
+/*
+RAISE EXCEPTION 'Id -->%',  (select 
+new.numero || case when new.repet is null or new.repet = '' then '' else new.repet end || ' ' || new.id_voie
+);
+*/
+
 IF (NEW.diag_adr = '11'::text OR left(NEW.diag_adr, 1) = '2') AND
 
 (SELECT COUNT(*)
 		  FROM r_objet.geo_objet_pt_adresse p
      LEFT JOIN r_adresse.an_adresse a ON a.id_adresse = p.id_adresse
-     LEFT JOIN r_adresse.an_adresse_info af ON af.id_adresse = p.id_adresse
-     LEFT JOIN r_objet.lt_position lt_p ON lt_p.code::text = p."position"::text
-     LEFT JOIN r_voie.an_voie v ON v.id_voie = p.id_voie
-     LEFT JOIN r_osm.geo_osm_commune c ON v.insee = c.insee::bpchar
   WHERE 
-      a.diag_adr <> '12' and a.diag_adr <> '33'
-  and
-  lower(
-        CASE
-            WHEN a.repet IS NULL AND a.complement IS NULL THEN concat(v.insee, '_', v.rivoli, '_', lpad(a.numero::text, 5, '0'::text))
-            WHEN a.repet IS NOT NULL AND a.complement IS NULL THEN concat(v.insee, '_', v.rivoli, '_', lpad(a.numero::text, 5, '0'::text), lower(btrim(concat('_', "left"(a.repet::text, 3)))))
-            WHEN a.repet IS NULL AND a.complement IS NOT NULL THEN concat(v.insee, '_', v.rivoli, '_', lpad(a.numero::text, 5, '0'::text), lower(btrim(concat('_', replace(a.complement::text, ' '::text, ''::text)))))
-            WHEN a.repet IS NOT NULL AND a.complement IS NOT NULL THEN concat(v.insee, '_', v.rivoli, '_', lpad(a.numero::text, 5, '0'::text), lower(btrim(concat('_', "left"(a.repet::text, 3), '_', replace(a.complement::text, ' '::text, ''::text)))))
-            ELSE NULL::text
-        END
-  ) = v_cle_interop) > 0
+	(numero || case when repet is null or repet = '' then '' else repet end || ' ' || id_voie) = verif_adresse) > 0
 		 THEN
-RAISE EXCEPTION USING MESSAGE = 'Cette adresse "conforme" existe déjà dans la base de données avec cette clé : ' || v_cle_interop  ;
+RAISE EXCEPTION USING MESSAGE = '<font color="#ff0000"><b>Cette adresse "conforme" existe déjà dans la base de données</b></font><br><br>';
 END IF;
 
 -- contrôle sur l'existance de l'identifiant de voie
@@ -369,8 +366,8 @@ RETURN NEW;
 ELSIF (TG_OP = 'UPDATE') THEN
 
 -- verification des doublons des adresses conformes avant si des changements de n° ....
-IF NEW.repet <> OLD.repet OR NEW.complement <> OLD.complement OR NEW.id_voie <> OLD.id_voie OR NEW.numero <> OLD.numero OR NEW.diag_adr <> OLD.diag_adr THEN
-
+--IF NEW.repet <> OLD.repet OR NEW.complement <> OLD.complement OR NEW.id_voie <> OLD.id_voie OR NEW.numero <> OLD.numero OR NEW.diag_adr <> OLD.diag_adr THEN
+/*
 v_cle_interop := 
 (
 lower(
@@ -382,32 +379,23 @@ lower(
             ELSE NULL::text
         END)
 );
+*/
+
+verif_adresse := (select 
+new.numero || case when new.repet is null or new.repet = '' then '' else new.repet end || ' ' || new.id_voie
+);
 
 IF (NEW.diag_adr = '11'::text OR left(NEW.diag_adr, 1) = '2') AND
 
 (SELECT COUNT(*)
 		  FROM r_objet.geo_objet_pt_adresse p
      LEFT JOIN r_adresse.an_adresse a ON a.id_adresse = p.id_adresse
-     LEFT JOIN r_adresse.an_adresse_info af ON af.id_adresse = p.id_adresse
-     LEFT JOIN r_objet.lt_position lt_p ON lt_p.code::text = p."position"::text
-     LEFT JOIN r_voie.an_voie v ON v.id_voie = p.id_voie
-     LEFT JOIN r_osm.geo_osm_commune c ON v.insee = c.insee::bpchar
   WHERE 
-      a.diag_adr <> '12' and a.diag_adr <> '33'
-  and
-  lower(
-        CASE
-            WHEN a.repet IS NULL AND a.complement IS NULL THEN concat(v.insee, '_', v.rivoli, '_', lpad(a.numero::text, 5, '0'::text))
-            WHEN a.repet IS NOT NULL AND a.complement IS NULL THEN concat(v.insee, '_', v.rivoli, '_', lpad(a.numero::text, 5, '0'::text), lower(btrim(concat('_', "left"(a.repet::text, 3)))))
-            WHEN a.repet IS NULL AND a.complement IS NOT NULL THEN concat(v.insee, '_', v.rivoli, '_', lpad(a.numero::text, 5, '0'::text), lower(btrim(concat('_', replace(a.complement::text, ' '::text, ''::text)))))
-            WHEN a.repet IS NOT NULL AND a.complement IS NOT NULL THEN concat(v.insee, '_', v.rivoli, '_', lpad(a.numero::text, 5, '0'::text), lower(btrim(concat('_', "left"(a.repet::text, 3), '_', replace(a.complement::text, ' '::text, ''::text)))))
-            ELSE NULL::text
-        END
-  ) = v_cle_interop) > 1
+	(numero || case when repet is null or repet = '' then '' else repet end || ' ' || id_voie) = verif_adresse) > 0
 		 THEN
-RAISE EXCEPTION USING MESSAGE = 'Cette adresse "conforme" existe déjà dans la base de données avec cette clé : ' || v_cle_interop  ;
+RAISE EXCEPTION USING MESSAGE = '<font color="#ff0000"><b>Cette adresse "conforme" existe déjà dans la base de données</b></font><br><br>';
 END IF;
-END IF;
+
 
 -- contrôle sur l'existance de l'identifiant de voie
 if new.id_voie not in (select id_voie from r_voie.an_voie where insee IN (select c.insee from r_osm.geo_vm_osm_commune_grdc_plus c where st_intersects(c.geom,st_buffer(new.geom,50)))) then
@@ -473,7 +461,7 @@ date_maj=now(),
 maj_bal=case when (new.id_voie <> old.id_voie) or (new.numero <> old.numero) 
 		or (new.repet <> old.repet) or (new.repet is not null and old.repet is null) or (old.repet is not null and new.repet is null)
 		or (new.ld_compl <> old.ld_compl) or (new.ld_compl is not null and old.ld_compl is null) or (old.ld_compl is not null and new.ld_compl is null)
-		or (new.position <> old.position) 
+		or (new.position <> old.position) or (st_equals(new.geom,old.geom) is false)
 		or (old.diag_adr IN ('11','99') and new.diag_adr IN ('12','32','33','00')) 
 		or (old.diag_adr IN ('12','32','33','00') and new.diag_adr IN ('11','20','21','22','23','24','25','99')) 
 		or (left(old.diag_adr,1) = '2' and new.diag_adr IN ('12','32','33','00'))
@@ -555,6 +543,11 @@ IF (SELECT count(*) FROM m_reseau_humide.an_euep_cc WHERE id_adresse = OLD.id_ad
 RAISE EXCEPTION 'Vous ne pouvez pas supprimer un point d''adresse rattaché à un contrôle ANC. Contactez l''administrateur SIG.';
 END IF;
 
+IF (SELECT count(*) FROM r_equipement.lk_poi_adresse WHERE idadresse = OLD.id_adresse) >= 1 THEN
+v_poi := (SELECT string_agg(idpoi::text,',') FROM r_equipement.lk_poi_adresse WHERE idadresse = OLD.id_adresse);
+RAISE EXCEPTION 'Vous ne pouvez pas supprimer un point d''adresse. Celui-ci est associé à un POI. Modifiez l''adresse du POI n° %',v_poi;
+END IF;
+
 DELETE FROM r_objet.geo_objet_pt_adresse where id_adresse = OLD.id_adresse;
 DELETE FROM r_adresse.an_adresse where id_adresse = OLD.id_adresse;
 DELETE FROM r_adresse.an_adresse_info where id_adresse = OLD.id_adresse;
@@ -568,6 +561,8 @@ $function$
 ;
 
 COMMENT ON FUNCTION r_adresse.ft_m_geo_adresse_gestion() IS 'Fonction trigger pour gérer l''insertion et la mise à jour des données adresse';
+
+
 
 
 
