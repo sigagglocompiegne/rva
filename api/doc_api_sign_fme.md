@@ -45,7 +45,7 @@ Le SIG de l'Agglomération de la Région de Compiègne est structuré autour d'u
 
 Le service SIG de l'ARC a mis en place une gestion des statuts du signalement parallèle à celui issu des signalements. Ce mode paralèlle de gestion permet de vérifier, si une fois le signalement retourné (en mode PUT) celui-ci est bien pris en compte dans "Mes Adresses" par récupération de la nouvelle valeur du statut renvoyé par l'API GET.
 
-![schema](img/schema_fonctionnel.png.png)
+![schema](img/schema_fonctionnel.png)
 
 ## Fonctionnement du site "Mes Signalements"
 
