@@ -34,6 +34,11 @@ Contact : sig@agglo-compiegne.fr
 
 ![principe](img/principe_technique_api_sign.png)
 
+## Brique technologique
+
+![principe](img/brique_technologique_api_sign.png)
+
+
 ## Schéma fonctionnel
 
 Le SIG de l'Agglomération de la Région de Compiègne est structuré autour d'une base de données Postgres/Gis sur laquelle repose des applicatifs métiers WEB sous GEO. La méthode de récupération et de traitement des données de signalements est propre à cette structure. Néanmoins, ce fonctionnel peut-être repris et adapté pour d'autres territoires car la première partie des traitements est la lecture de l'API en mode GET. Le traitement du PUT est quant à lui commun dans sa partie finale (envoie des variables de retour).
