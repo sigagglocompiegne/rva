@@ -27,8 +27,8 @@ Contact : sig@agglo-compiegne.fr
 
 - Téléchargement du projet FME version 1.0 - Mode GET (mode production) (à venir)
 - Téléchargement du projet FME version 1.0 - Mode PUT (mode production) (à venir)
-- [Téléchargement du projet FME version 0.1 - Mode GET (mode test)](https://geo.compiegnois.fr/documents/metiers/rva/API_SIGNALEMENT_MES_ADRESSES_MODE_GET_v0.1.zip.zip)
-- [Téléchargement du projet FME version 0.1 - Mode PUT (mode test)](https://geo.compiegnois.fr/documents/metiers/rva/API_SIGNALEMENT_MES_ADRESSES_MODE_PUT_v0.1.zip.zip)
+- [Téléchargement du projet FME version 0.1 - Mode GET (mode test)](https://geo.compiegnois.fr/documents/metiers/rva/API_SIGNALEMENT_MES_ADRESSES_MODE_GET_v0.1.zip)
+- [Téléchargement du projet FME version 0.1 - Mode PUT (mode test)](https://geo.compiegnois.fr/documents/metiers/rva/API_SIGNALEMENT_MES_ADRESSES_MODE_PUT_v0.1.zip)
 
 ## Principe technique
 
