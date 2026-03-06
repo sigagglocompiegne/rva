@@ -46,6 +46,7 @@ L’ARC privilégie donc une organisation dans laquelle l’Interface Homme Mach
 - [Validateur en ligne du format BAL](https://adresse.data.gouv.fr/bases-locales/validateur)
 - [Ressources nationales (dont spécification du format d'échange BAL version 1.4)](https://aitf-sig-topo.github.io/voies-adresses/#format-bal)
 - [Documentation de l'API BAL de la BaseAdresseNationale](https://github.com/BaseAdresseNationale/mes-adresses-api/wiki/)
+- [Documentation de l'API DE DEPOT BAL de la BaseAdresseNationale](https://github.com/BaseAdresseNationale/api-depot/wiki/04_Publication_BAL)
 - [Paramétrage de l'API de dépôt Mes Adresses pour FME](https://github.com/sigagglocompiegne/rva/blob/master/api/doc_api_balc_fme.md)
 - [Gestion des signalements de la base adresse via l'API "Mes signalements" pour FME](https://github.com/sigagglocompiegne/rva/blob/master/api/doc_api_sign_fme.md)
 
