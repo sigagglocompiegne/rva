@@ -110,7 +110,7 @@ Le traitement intègre une passe de lecture de la base source pour sélectionner
  
  Paramètres à indiquer dans ce transformer :
  
-![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_1.png) https://plateforme.adresse.data.gouv.fr/api-depot/communes/@Value(insee)/revisions
+![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_1.png) https://plateforme-bal.adresse.data.gouv.fr/api-depot/communes/@Value(insee)/revisions
 
 L'attribut `@Value(insee)` correspond au code insee de la commune à téléverser et présent dans le fichier de conf.
 
