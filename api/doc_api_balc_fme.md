@@ -12,6 +12,7 @@ Contact : sig@agglo-compiegne.fr
 
 ## Changelog
 
+ * 13/07/2026 : Version 1.6 - téléversement d'un lot de données communal au format BAL 1.4 (intégrant la nouvelle adresse API depuis juillet 2026), traitement de base avec contrôle à paramétrer
  * 12/02/2025 : Version 1.5.1 - téléversement d'un lot de données communal au format BAL 1.4 avec la nouvelle API de dépôt BAL (depuis le 11/02/2025), traitement de base sans contrôle
  * 12/02/2025 : Version 1.5 - téléversement d'un lot de données communal au format BAL 1.4 avec la nouvelle API de dépôt BAL (depuis le 11/02/2025) avec vérification d'une BAL existante, vérification des mises à jour d'adresses intégrant un état ou un objet adresse supprimé (par lecture de la variable `rowCount`)
  * 07/02/2025 : Version 1.4 (obsolète) - téléversement d'un lot de données communal au format BAL 1.4 dans la nouvelle API de dépôt BAL avec vérification d'une BAL existante (mode démo)
