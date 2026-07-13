@@ -170,7 +170,7 @@ La réponse de l'API s'effectue au format JSON, il faut donc récupérer les dif
  
  Paramètres à indiquer dans ce transformer :
  
-![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_1.png) https://plateforme.adresse.data.gouv.fr/api-depot/revisions/@Value(_response_body)/files/bal
+![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_1.png) https://plateforme-bal.adresse.data.gouv.fr/api-depot/revisions/@Value(_response_body)/files/bal
 
 L'attribut `@Value(_response_body)` contient la valeur de l'ID récupérée précédemment et à passer dans cette requête.
 
@@ -212,7 +212,7 @@ Reprendre la méthode indiquée au point **3**.
  
  Paramètres à indiquer dans ce transformer :
  
-![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_1.png) https://plateforme.adresse.data.gouv.fr/api-depot/revisions/@Value(_response_body)/compute
+![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_1.png) https://plateforme-bal.adresse.data.gouv.fr/api-depot/revisions/@Value(_response_body)/compute
 
 L'attribut `@Value(_response_body)` contient la valeur de l'ID récupérée précédemment et à passer dans cette requête.
 
@@ -246,7 +246,7 @@ Reprendre la méthode indiquée au point **3**.
  
  Paramètres à indiquer dans ce transformer :
  
-![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_1.png) https://plateforme.adresse.data.gouv.fr/api-depot/revisions/@Value(_response_body)/publish
+![picto](https://github.com/sigagglocompiegne/orga_proc_igeo/blob/main/img/tuto_1.png) https://plateforme-bal.adresse.data.gouv.fr/api-depot/revisions/@Value(_response_body)/publish
 
 L'attribut `@Value(_response_body)` contient la valeur de l'ID récupérée précédemment et à passer dans cette requête.
 
