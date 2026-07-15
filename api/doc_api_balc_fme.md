@@ -33,7 +33,7 @@ La verison 1.5.1 est une version brute sans contrôle, qui contient uniquement l
 
 Les paramètres passés dans le traitement sont tous issus de la [documentation de l'API BAL de la BaseAdresseNationale](https://github.com/etalab/ban-api-depot/wiki/Documentation).
 
-Ces traitements ont été réalisées à partir de la version 2023.2.3.0 de FMEForm.
+Ces traitements ont été réalisées à partir de la version 2025.2 de FMEForm.
 
 #### 1 - Création du fichier de configuration
 
