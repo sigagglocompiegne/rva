@@ -49,6 +49,7 @@ L’ARC privilégie donc une organisation dans laquelle l’Interface Homme Mach
 - [Paramétrage de l'API de dépôt Mes Adresses pour FME](https://github.com/sigagglocompiegne/rva/blob/master/api/doc_api_balc_fme.md)
 - [Gestion des signalements de la base adresse via l'API "Mes signalements" pour FME](https://github.com/sigagglocompiegne/rva/blob/master/api/doc_api_sign_fme.md)
 - [Swagger de l'API de signalement et des alertes](https://plateforme-bal.adresse.data.gouv.fr/api-signalement/api#/)
+- Gestion des Signalements-Demandes-Interventions multi-vecteur (y compris Mes Signalements) (à venir)
 
 
 ## Jeu de données consolidé
